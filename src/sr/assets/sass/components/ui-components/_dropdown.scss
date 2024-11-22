@@ -1,0 +1,22 @@
+@import "../../core/base/mixins/theme-variables";
+.ui_dropdown {
+    @include themify($themes) {
+        color: themed("InputTextColor");
+    }
+    padding: 0.5rem 0.5rem;
+    border-radius: 0.3rem;
+    border: none;
+    font-size: 1rem;
+}
+
+.ui_dropdown:active,
+.ui_dropdown:hover,
+.ui_dropdown:focus {
+    @include themify($themes) {
+        color: themed("InputTextColor");
+        box-shadow: themed("boxShadowPrimary");
+    }
+    outline: none;
+    border: none;
+    border-radius: 0.25rem;
+}

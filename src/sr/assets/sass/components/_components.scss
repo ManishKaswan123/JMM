@@ -1,0 +1,14 @@
+// Import Dependencies
+@import "layout/base/master-layout";
+@import "layout/aside/aside";
+@import "layout/header/header";
+// component pages scss
+@import "component-pages/dashboard";
+@import "component-pages/auth";
+// ui components
+@import "ui-components/button";
+@import "ui-components/input";
+@import "ui-components/table";
+@import "ui-components/dropdown";
+@import "ui-components/helper";
+@import "ui-components/tabel-widget-2";

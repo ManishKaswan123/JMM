@@ -1,0 +1,10 @@
+.ui_table {
+    margin: 0px !important;
+    thead tr {
+        height: 3rem;
+    }
+    thead tr th:first-child,
+    tbody tr td:first-child {
+        padding-left: 1rem;
+    }
+}

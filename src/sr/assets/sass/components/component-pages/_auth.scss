@@ -1,0 +1,14 @@
+.uw_011 {
+    .auth_left {
+        background-color: $primary;
+    }
+    .auth_right {
+        input {
+            background-color: $bg_color;
+        }
+        .signin_button {
+            background-color: $primary;
+            color: #fff;
+        }
+    }
+}

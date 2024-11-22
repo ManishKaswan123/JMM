@@ -1,0 +1,21 @@
+@import "../variables/variables-custom";
+$themes: ( light: ( bgGreen: $primary, bgColorPrimary50: $bg_color_primary_50, textGreen: $primary, bgColor: $bg_color, bgColorSecondary: $bg_color_secondary, ButtonBgColor: $primary, ButtonTextColor: $button-text-light, bodyBackgroundColor: $body-color-light, headerFooterBackground: $header-light, asideBackground: $aside-light, textColor: $text_color_light, hoverTextColor: $primary, iconTextColor: $primary, iconColor: $primary, boxShadowPrimary: $uw_primary_shadow, toggleBackground: #dfe4ea, InputTextColor: $input_text_color, hoverBackgroundColor: $active_background_link_light, ), dark: ( bgGreen: $primary, bgColorPrimary50: $bg_color_primary_50, textGreen: $primary, bgColor: $bg_color, bgColorSecondary: $bg_color_secondary, bodyBackgroundColor: $body-color-dark, ButtonBgColor: $primary, ButtonTextColor: $button-text-dark, headerFooterBackground: $header-dark, asideBackground: $aside-dark, textColor: $text_color_dark, hoverTextColor: $primary, iconTextColor: $primary, iconColor: $success, boxShadowPrimary: $uw_primary_shadow, toggleBackground: #606071, InputTextColor: $input_text_color, hoverBackgroundColor: $active_background_link_dark, ), );
+@mixin themify($themes) {
+    @each $theme,
+    $map in $themes {
+        .theme-#{$theme} & {
+            $theme-map: () !global;
+            @each $key,
+            $submap in $map {
+                $value: map-get(map-get($themes, $theme), "#{$key}");
+                $theme-map: map-merge( $theme-map, ( $key: $value, )) !global;
+            }
+            @content;
+            $theme-map: null !global;
+        }
+    }
+}
+
+@function themed($key) {
+    @return map-get($theme-map, $key);
+}

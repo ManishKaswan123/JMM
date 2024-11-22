@@ -1,0 +1,12 @@
+//
+// Main init file of global bootstrap and theme functions, mixins, variables and config
+//
+// Bootstrap initializaton
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/maps";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/utilities";
+// core base scss
+@import "./core/core";
+@import "./components/components";

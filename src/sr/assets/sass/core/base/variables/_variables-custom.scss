@@ -1,0 +1,100 @@
+//
+// To make future updates easier consider overriding the global variables from _variables.bootstrap.scss and _variables.custom.scss for current demo in this file.
+// Note that this file is included first and variables defined in _variables.bootstrap.scss and _variables.custom.scss
+// are not accessible in this file but you can override any global variable as shown below:
+//
+// unwind color variables
+$uw_primary: #b0dc00;
+// Primary
+$primary_active: #0095e8;
+$primary_light: #f1faff;
+$primary_light_dark: #212e48;
+$primary_inverse: #ffffff;
+// Success
+$success: #50cd89;
+$success_active: #47be7d;
+$success_light: #e8fff3;
+$success_light_dark: #1c3238;
+$success_inverse: #ffffff;
+// Info
+$info: #7239ea;
+$info_active: #5014d0;
+$info_light: #f8f5ff;
+$info_light_dark: #2f264f;
+$info_inverse: #ffffff;
+// Danger
+$danger: #f1416c;
+$danger_active: #d9214e;
+$danger_light: #fff5f8;
+$danger_light_dark: #3a2434;
+$danger_inverse: #ffffff;
+// Warning
+$warning: #ffc700;
+$warning_active: #f1bc00;
+$warning_light: #fff8dd;
+$warning_light_dark: #392f28;
+$warning_inverse: #ffffff;
+//
+// Card Box Shadow
+//
+$card_box_shadow: 0px 0px 20px 0px rgba(76, 87, 125, 0.02);
+$card_box_shadow_dark: 0px 0px 20px 0px rgba(76, 87, 125, 0.02);
+//
+// custom button color
+//
+$primary: #b0dc00;
+$primary_10: #e5edd3;
+$primary_30: #b0dc00;
+$primary_50: #b0dc00;
+$primary_75: #b0dc00;
+//
+$active_background_link_light: rgba(245, 248, 250, 0.7);
+$active_background_link_dark: #4e4e4eb3;
+$active_backgroud_link: #4e4e4eb3;
+//
+// custom colors
+//
+// $bg_color: #d5d9e2;
+$bg_color: #edf0f3;
+//
+$bg_color_primary_50: #f3f6f9;
+//
+$bg_color_secondary: #dae1e5;
+//
+$body_color_light: #f9fafb;
+//
+$header_light: #fff;
+//
+$aside_light: #fff;
+//
+$text_color_dark: #fff;
+$text_color_light: #000;
+$text_color_75: #151521;
+//
+$button_text_light: #fff;
+$button_text_dark: #fff;
+//
+$body_color_dark: #151521;
+//
+$aside_dark: #1e1e2d;
+//
+$header_dark: #1e1e2d;
+//
+$hover_text_color_light: #b0dc00;
+$hover_text_color_dark: #b0dc00;
+//
+$input_text_color: #000;
+//
+$uw_orange_20: #fff4de;
+$uw_orange_50: #ffc140;
+$uw_orange: #ffad00;
+//
+//
+$uw_green_50: #b5f4b0;
+$uw_green: #3fb117;
+//
+// box shadow
+//
+$uw_primary_shadow: 0px 5px 8px -3px rgb(16 16 15 / 57%);
+// $uw_primary_shadow: 0px 2px 5px 2px #b0dc008a;
+$uw_secondary_shadow: 0px 2px 5px 2px #d5d9e2;

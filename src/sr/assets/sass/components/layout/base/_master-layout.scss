@@ -1,0 +1,25 @@
+.master_layout_main {
+    // @include important-text;
+    @include themify($themes) {
+        background-color: themed("headerFooterBackground");
+    }
+}
+
+.aside_layout_main {
+    width: 140px;
+    // @include important-text;
+    @include themify($themes) {
+        background-color: themed("asideBackground");
+    }
+}
+
+.page_background {
+    @include themify($themes) {
+        background-color: themed("bodyBackgroundColor");
+    }
+}
+
+.page_background {
+    min-height: 90vh;
+    padding: 1rem;
+}

@@ -1,0 +1,31 @@
+.menu-link.active {
+    .menu-icon i,
+    .menu-title {
+        @include themify($themes) {
+            color: themed("hoverTextColor") !important;
+        }
+    }
+    @include themify($themes) {
+        background-color: themed("hoverBackgroundColor");
+    }
+}
+
+.menu-link.topbar {
+    @include themify($themes) {
+        border: solid 2px $bg_color_secondary;
+    }
+}
+
+.menu-link:hover {
+    color: $primary;
+    @include themify($themes) {
+        background-color: themed("hoverBackgroundColor");
+    }
+}
+
+.menu-title:hover {
+    cursor: pointer;
+    @include themify($themes) {
+        color: themed("textColor");
+    }
+}

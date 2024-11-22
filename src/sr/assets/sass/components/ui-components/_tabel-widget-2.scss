@@ -1,0 +1,23 @@
+@import "../../core/base/variables/variables-custom";
+.action_color {
+    .success {
+        background: $uw_green_50;
+        color: $uw_green;
+        font-weight: 600;
+        padding: 0.25rem 0.3rem;
+        width: fit-content;
+        height: 100%;
+        border-radius: 0.5rem;
+        font-size: 0.75rem;
+    }
+    .progress {
+        background: $uw_orange_20;
+        color: $uw_orange;
+        font-weight: 600;
+        padding: 0.25rem 0.3rem;
+        width: fit-content;
+        height: 100%;
+        font-size: 0.75rem;
+        border-radius: 0.5rem;
+    }
+}

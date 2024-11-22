@@ -1,0 +1,13 @@
+.uw_004 {
+    input {
+        position: absolute;
+        visibility: hidden;
+    }
+    .uw_005 {
+        svg {
+            @include themify($themes) {
+                color: themed("textColor");
+            }
+        }
+    }
+}

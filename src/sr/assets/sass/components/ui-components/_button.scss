@@ -1,0 +1,42 @@
+@import "../../core/base/mixins/theme-variables";
+.ui-button {
+    @include themify($themes) {
+        color: themed("ButtonTextColor");
+        background-color: themed("ButtonBgColor");
+    }
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.3rem;
+    border: none;
+    font-size: 1rem;
+}
+
+.ui-button:active,
+.ui-button:hover,
+.ui-button:focus {
+    @include themify($themes) {
+        color: themed("ButtonTextColor");
+        background-color: themed("ButtonBgColor");
+        box-shadow: themed("boxShadowPrimary");
+    }
+    border-radius: 0.25rem;
+}
+
+.ui-button.danger {
+    background-color: rgb(254, 97, 97);
+    color: white;
+}
+
+.ui-button.success {
+    background-color: green;
+    color: white;
+}
+
+.ui-button.initial {
+    background-color: gray;
+    color: white;
+}
+
+.ui-button.initial:hover {
+    background-color: gray;
+    color: white;
+}

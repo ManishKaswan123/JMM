@@ -1,0 +1,117 @@
+@import "../base/mixins/theme-variables";
+li {
+    list-style-type: none;
+}
+
+ul {
+    padding: 0px !important;
+}
+
+p {
+    margin: 0px !important;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.w-50 {
+    width: 50%;
+}
+
+.w-25 {
+    width: 25%;
+}
+
+.w-auto {
+    width: auto;
+}
+
+.h-auto {
+    height: auto;
+}
+
+.h-100 {
+    height: 100%;
+}
+
+.h-50 {
+    height: 50%;
+}
+
+.h-25 {
+    height: 25%;
+}
+
+.min-h-screen {
+    min-height: 100vh;
+}
+
+.font {
+    font-size: 1vw;
+}
+
+a,
+a:hover,
+a:focus,
+a:active {
+    text-decoration: none !important;
+    color: inherit;
+}
+
+.text-theme,
+.menu-title,
+p,
+h1,
+h2,
+h3,
+h4,
+h5 {
+    margin: 0px !important;
+    @include themify($themes) {
+        color: themed("textColor");
+    }
+}
+
+.text-theme:hover,
+.menu-title:hover {
+    @include themify($themes) {
+        color: themed("hoverTextColor");
+    }
+}
+
+.icon-theme {
+    @include themify($themes) {
+        color: themed("textColor");
+    }
+}
+
+.icon-theme:hover {
+    @include themify($themes) {
+        color: themed("hoverTextColor");
+    }
+}
+
+.bg-uw-primary {
+    @include themify($themes) {
+        background-color: themed("bgColor");
+    }
+}
+
+.bg-uw-primary-50 {
+    @include themify($themes) {
+        background-color: themed("bgColorPrimary50");
+    }
+}
+
+.bg-uw-secondary {
+    @include themify($themes) {
+        background-color: themed("bgColorSecondary");
+    }
+}
+
+.bg-uw-green {
+    @include themify($themes) {
+        background-color: themed("bgGreen");
+    }
+}
