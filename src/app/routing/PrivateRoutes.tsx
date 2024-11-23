@@ -37,6 +37,7 @@ const ChangePassword = lazy(async () => import('app/pages/module/userProfile/Cha
 const EightSix = lazy(async () => import('app/pages/module/86/86'))
 const EightySixResponse = lazy(async () => import('app/pages/module/86Response/86Response'))
 const Chats = lazy(async () => import('app/pages/module/chats/Chats'))
+const Jobs = lazy(async () => import('app/pages/module/jobs/Jobs'))
 const EightySixResponseDetailsCard = lazy(
   async () => import('app/pages/module/86Response/components/86ResponseDetailsCard')
 )
@@ -83,6 +84,7 @@ const routeConfigs: RouteConfig[] = [
   {path: '/86-response', element: <EightySixResponse />},
   {path: '/86-response/:responseId', element: <EightySixResponseDetailsCard />},
   {path: '/chats', element: <Chats />},
+  {path: '/jobs', element: <Jobs />},
   {path: '/reward-point-plan', element: <RewardPointPlan />},
   {path: '/reward-earning', element: <RewardPoint />},
   {path: '/reward-uses-history', element: <RewardUsageHistory />},
