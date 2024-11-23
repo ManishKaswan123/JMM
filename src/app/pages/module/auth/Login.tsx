@@ -9,13 +9,15 @@ import handleSignIn from 'sr/utils/api/handleLogin'
 import {Button} from 'sr/helpers'
 
 type FormFields = {
-  email: string
+  // email: string
+  username: string
   password: string
 }
 
 export default function Signin() {
   const [formValues, setFormValues] = useState({
-    email: '',
+    // email: '',
+    username: '',
     password: '',
   })
 
@@ -28,12 +30,12 @@ export default function Signin() {
   const handleSubmitForm = async (formData: any, e: any) => {
     let payload = {
       ...formData,
-      source: 'email',
+      // source: 'email',
     }
 
     try {
       const res = await handleSignIn(payload)
-      if (res.user) {
+      if (res.data.user) {
         toast.success('User logged in successfully')
         setTimeout(() => {
           window.location.href = '/dashboard'
@@ -66,21 +68,33 @@ export default function Signin() {
           <form onSubmit={handleSubmit(handleSubmitForm)}>
             <TextField
               type='text'
-              label={'Email'}
+              // label={'Email'}
+              label={'username'}
               // className='p-2 border w-full border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500'
               // wrapperClassName='text-sm font-medium text-left py-2 seller'
               required={true}
-              id='email'
-              name='email'
-              register={register('email', {
+              // id='email'
+              // name='email'
+              id='username'
+              name='username'
+              // register={register('email', {
+              //   required: true,
+              //   pattern: {
+              //     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              //     message: 'Invalid email address',
+              //   },
+              // })}
+              register={register('username', {
                 required: true,
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: 'Invalid email address',
-                },
+                // pattern: {
+                //   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                //   message: 'Invalid username address',
+                // },
               })}
-              error={errors.email}
-              errorText={errors.email?.message || 'Please enter a valid email'}
+              // error={errors.email}
+              error={errors.username}
+              // errorText={errors.email?.message || 'Please enter a valid email'}
+              errorText={errors.username?.message || 'Please enter a valid email'}
             />
             <TextField
               type='password'
@@ -94,11 +108,11 @@ export default function Signin() {
               register={register('password', {
                 required: 'Password is required',
                 minLength: {value: 8, message: 'Password must be at least 8 characters long'},
-                pattern: {
-                  value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                  message:
-                    'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character',
-                },
+                // pattern: {
+                //   value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                //   message:
+                //     'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character',
+                // },
               })}
               error={errors.password}
               errorText={errors.password?.message || 'Please enter a valid password'}
