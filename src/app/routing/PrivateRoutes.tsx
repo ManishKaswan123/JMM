@@ -3,14 +3,14 @@ import {lazy, FC, Suspense} from 'react'
 import {Route, Routes, Navigate} from 'react-router-dom'
 import {MasterLayout} from 'sr/layout/MasterLayout'
 import TopBarProgress from 'react-topbar-progress-indicator'
-import RewardPointPlan from 'app/pages/module/masterData/rewardPaymentPlan/RewardPointPlan'
-import RewardPoint from 'app/pages/module/masterData/rewardPoint/RewardPoint'
-import RewardUsageHistory from 'app/pages/module/masterData/rewardUsageHistory/RewardUsageHistory'
-import CheckWalletBalance from 'app/pages/module/masterData/checkWalletBalance/checkWalletBalance'
+//import RewardPointPlan from 'app/pages/module/masterData/rewardPaymentPlan/RewardPointPlan'
+//import RewardPoint from 'app/pages/module/masterData/rewardPoint/RewardPoint'
+//import RewardUsageHistory from 'app/pages/module/masterData/rewardUsageHistory/RewardUsageHistory'
+//import CheckWalletBalance from 'app/pages/module/masterData/checkWalletBalance/checkWalletBalance'
 // import EightySixResponseDetailsCard from 'app/pages/module/86Response/components/86ResponseDetailsCard'
 
 // Lazy loading components
-const Dashboard = lazy(async () => import('app/pages/module/dashboard/Dashboard'))
+/*const Dashboard = lazy(async () => import('app/pages/module/dashboard/Dashboard'))
 const Categories = lazy(async () => import('app/pages/module/masterData/categories/Categories'))
 const BusinessCategory = lazy(async () => import('app/pages/module/masterData/business/Business'))
 const SubCategory = lazy(
@@ -40,7 +40,8 @@ const Chats = lazy(async () => import('app/pages/module/chats/Chats'))
 const Jobs = lazy(async () => import('app/pages/module/jobs/Jobs'))
 const EightySixResponseDetailsCard = lazy(
   async () => import('app/pages/module/86Response/components/86ResponseDetailsCard')
-)
+)*/
+const Jobs = lazy(async () => import('app/pages/module/jobs/Jobs'))
 
 type RouteConfig = {
   path: string
@@ -63,7 +64,7 @@ const SuspensedView: FC<WithChildren> = ({children}) => {
 }
 
 const routeConfigs: RouteConfig[] = [
-  {path: '/dashboard', element: <Dashboard />},
+ /* {path: '/dashboard', element: <Dashboard />},
   {path: '/dashboard/:type', element: <Dashboard />},
   {path: '/business-category', element: <BusinessCategory />},
   {path: '/sub-category', element: <SubCategory />},
@@ -84,11 +85,12 @@ const routeConfigs: RouteConfig[] = [
   {path: '/86-response', element: <EightySixResponse />},
   {path: '/86-response/:responseId', element: <EightySixResponseDetailsCard />},
   {path: '/chats', element: <Chats />},
-  {path: '/jobs', element: <Jobs />},
+  
   {path: '/reward-point-plan', element: <RewardPointPlan />},
   {path: '/reward-earning', element: <RewardPoint />},
   {path: '/reward-uses-history', element: <RewardUsageHistory />},
-  {path: '/users/checkWalletBalance', element: <CheckWalletBalance />},
+  {path: '/users/checkWalletBalance', element: <CheckWalletBalance />}, */
+  {path: '/jobs', element: <Jobs />},
 ]
 
 const PrivateRoutes: FC = () => {
@@ -96,11 +98,11 @@ const PrivateRoutes: FC = () => {
   return (
     <Routes>
       <Route element={<MasterLayout />}>
-        <Route path='auth/*' element={<Navigate to='/dashboard' />} />
+        <Route path='auth/*' element={<Navigate to='/jobs' />} />
         {routeConfigs.map(({path, element}) => (
           <Route key={path} path={path} element={<SuspensedView>{element}</SuspensedView>} />
         ))}
-        <Route path='*' element={<Navigate to='/dashboard' />} />
+        <Route path='*' element={<Navigate to='/jobs' />} />
       </Route>
     </Routes>
   )
