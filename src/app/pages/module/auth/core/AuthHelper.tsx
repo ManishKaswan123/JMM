@@ -27,6 +27,7 @@ const setAuth = (auth: AuthModel) => {
   }
 
   try {
+    console.log("this is auth");
     const lsValue = JSON.stringify(auth)
     localStorage.setItem(AUTH_LOCAL_STORAGE_KEY, lsValue)
   } catch (error) {
