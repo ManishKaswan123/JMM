@@ -42,6 +42,7 @@ const EightySixResponseDetailsCard = lazy(
   async () => import('app/pages/module/86Response/components/86ResponseDetailsCard')
 )*/
 const Jobs = lazy(async () => import('app/pages/module/jobs/Jobs'))
+const WorkOrder = lazy(async () => import('app/pages/module/workOrder/WorkOrder'))
 
 type RouteConfig = {
   path: string
@@ -91,6 +92,7 @@ const routeConfigs: RouteConfig[] = [
   {path: '/reward-uses-history', element: <RewardUsageHistory />},
   {path: '/users/checkWalletBalance', element: <CheckWalletBalance />}, */
   {path: '/jobs', element: <Jobs />},
+  {path: '/workorder', element: <WorkOrder />},
 ]
 
 const PrivateRoutes: FC = () => {

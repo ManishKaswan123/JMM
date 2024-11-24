@@ -815,6 +815,36 @@ export default function AsideMenuMain({getScenarios, AdjustWidth}: Props) {
                         </button>
                       </Link>
                     </li>
+                    <li className='items-center'>
+                      <Link to='/workorder' replace>
+                        <button
+                          className={`flex md:text-xs lg:text-sm uppercase py-3 font-semibold hover:text-rose-600 text-left text-gray-500 ${
+                            path === 'workorder' && subPath === undefined ? 'text-rose-600' : ''
+                          }`}
+                        >
+                          <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            className='h-5 w-5 mr-2'
+                            fill='none'
+                            viewBox='0 0 24 24'
+                            stroke='currentColor'
+                            strokeWidth='2'
+                          >
+                            <path
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              d='M9 17v-2a4 4 0 00-8 0v2h8zm13 0v-2a4 4 0 00-8 0v2h8zm-13 4h8m-8-2h8m0-2H6'
+                            />
+                          </svg>
+
+                          {sideCollapseItem === 'show' ? (
+                            <span className='text-left'>Work Order</span>
+                          ) : (
+                            ''
+                          )}
+                        </button>
+                      </Link>
+                    </li>
                   </ul>
                 </div>
               </div>
