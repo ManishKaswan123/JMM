@@ -18,9 +18,9 @@ import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import { fetchJobs } from 'sr/utils/api/fetchJobs'
-import SkeletonWorkOrderTable from './SkeletonWorkOrder'
-import WorkOrderTable from './WorkOrderTable'
-import { fetchWorkOrder } from 'sr/utils/api/fetchWorkOrder'
+import TaskListTable from './TaskListTable'
+import SkeletonTaskListTable from './SkeletonTaskListTable'
+import { fetchTaskList } from 'sr/utils/api/fetchTaskList'
 
 
 interface chatApiResponse {
@@ -216,15 +216,15 @@ const Custom: React.FC = () => {
   )
 
   const {data, error, isLoading, isError, refetch} = useQuery({
-    queryKey: ['workorder', {limit: itemsPerPage, page: currentPage, ...filters}],
-    queryFn: async () => fetchWorkOrder({limit: itemsPerPage, page: currentPage, ...filters}),
+    queryKey: ['tasklist', {limit: itemsPerPage, page: currentPage, ...filters}],
+    queryFn: async () => fetchTaskList({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
   useEffect(() => {
     fetchUserDataIfNeeded()
   }, [])
 
-  console.log("This is the data :- ", data);
+  console.log("This is the tasklist data in tasklist :- ", data);
 
   const defaultValues: defaultData | undefined = useMemo(() => {
     if (!selectedData) return undefined
@@ -296,7 +296,7 @@ const Custom: React.FC = () => {
       <div className='container mx-auto px-4 sm:px-8'>
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
-            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>Work Orders</h2>
+            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>TaskList</h2>
             <div className='flex items-center'>
               <Button
                 label='Create new'
@@ -323,9 +323,9 @@ const Custom: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonWorkOrderTable />
+            <SkeletonTaskListTable />
           ) : (
-            <WorkOrderTable
+            <TaskListTable
             //   setSelectedData={setSelectedData}
             //   setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
@@ -343,7 +343,7 @@ const Custom: React.FC = () => {
             totalResults={data?.pagination?.total}
             onPageChange={onPageChange}
             itemsPerPage={itemsPerPage}
-            name='Work Order'
+            name='TaskList'
             onLimitChange={onLimitChange}
             disabled={isLoading}
           />
@@ -351,7 +351,7 @@ const Custom: React.FC = () => {
       </div>
       {isCreateModalOpen && (
         <DynamicModal
-          label='Create Work Order'
+          label='Create TaskList'
           imageType='images'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
@@ -362,7 +362,7 @@ const Custom: React.FC = () => {
       {isUpdateModalOpen && (
         <DynamicModal
           imageType='images'
-          label='Update Job'
+          label='Update TaskList'
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
           fields={updateFields}
@@ -373,7 +373,7 @@ const Custom: React.FC = () => {
     </>
   )
 }
-const WorkOrder: React.FC = () => {
+const TaskList: React.FC = () => {
   return (
     <>
       <DashboardWrapper customComponent={Custom} selectedItem={'/chat'}></DashboardWrapper>
@@ -381,4 +381,4 @@ const WorkOrder: React.FC = () => {
   )
 }
 
-export default WorkOrder
+export default TaskList
