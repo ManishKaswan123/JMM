@@ -43,6 +43,8 @@ const EightySixResponseDetailsCard = lazy(
 )*/
 const Jobs = lazy(async () => import('app/pages/module/jobs/Jobs'))
 const WorkOrder = lazy(async () => import('app/pages/module/workOrder/WorkOrder'))
+const Cleaner = lazy(async () => import('app/pages/module/cleaner/Cleaner'))
+const TaskList = lazy(async () => import('app/pages/module/taskList/TaskList'))
 
 type RouteConfig = {
   path: string
@@ -93,6 +95,8 @@ const routeConfigs: RouteConfig[] = [
   {path: '/users/checkWalletBalance', element: <CheckWalletBalance />}, */
   {path: '/jobs', element: <Jobs />},
   {path: '/workorder', element: <WorkOrder />},
+  {path: '/cleaner', element: <Cleaner />},
+  {path: '/tasklist', element: <TaskList />}
 ]
 
 const PrivateRoutes: FC = () => {

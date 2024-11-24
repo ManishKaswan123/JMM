@@ -816,6 +816,66 @@ export default function AsideMenuMain({getScenarios, AdjustWidth}: Props) {
                       </Link>
                     </li>
                     <li className='items-center'>
+                      <Link to='/cleaner' replace>
+                        <button
+                          className={`flex md:text-xs lg:text-sm uppercase py-3 font-semibold hover:text-rose-600 text-left text-gray-500 ${
+                            path === 'cleaner' && subPath === undefined ? 'text-rose-600' : ''
+                          }`}
+                        >
+                          <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            className='h-5 w-5 mr-2'
+                            fill='none'
+                            viewBox='0 0 24 24'
+                            stroke='currentColor'
+                            strokeWidth='2'
+                          >
+                            <path
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              d='M16.5 4.5l3 3m-2.121-2.121L8.25 16.5m5.25-11.25l-2.121 2.121M9.5 20.5H6l1.5-4.5 7.121-7.121 2.121 2.121L9.5 20.5z'
+                            />
+                          </svg>
+
+                          {sideCollapseItem === 'show' ? (
+                            <span className='text-left'>Cleaner</span>
+                          ) : (
+                            ''
+                          )}
+                        </button>
+                      </Link>
+                    </li>
+                    <li className="items-center">
+                      <Link to="/tasklist" replace>
+                        <button
+                          className={`flex md:text-xs lg:text-sm uppercase py-3 font-semibold hover:text-rose-600 text-left text-gray-500 ${
+                            path === "tasklist" && subPath === undefined ? "text-rose-600" : ""
+                          }`}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 mr-2"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M5 13l4 4L19 7M5 3v6m0 0h6"
+                            />
+                          </svg>
+
+                          {sideCollapseItem === "show" ? (
+                            <span className="text-left">Tasklist</span>
+                          ) : (
+                            ""
+                          )}
+                        </button>
+                      </Link>
+                    </li>
+                    <li className='items-center'>
                       <Link to='/workorder' replace>
                         <button
                           className={`flex md:text-xs lg:text-sm uppercase py-3 font-semibold hover:text-rose-600 text-left text-gray-500 ${
