@@ -936,6 +936,37 @@ export default function AsideMenuMain({getScenarios, AdjustWidth}: Props) {
                         </button>
                       </Link>
                     </li>
+                    <li className="items-center">
+                      <Link to="/task" replace>
+                        <button
+                          className={`flex md:text-xs lg:text-sm uppercase py-3 font-semibold hover:text-rose-600 text-left text-gray-500 ${
+                            path === "task" && subPath === undefined ? "text-rose-600" : ""
+                          }`}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 mr-2"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            {/* New SVG icon for Task */}
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M8 7h8M8 11h8M8 15h8M8 19h8"
+                            />
+                          </svg>
+
+                          {sideCollapseItem === "show" ? (
+                            <span className="text-left">Task</span>
+                          ) : (
+                            ""
+                          )}
+                        </button>
+                      </Link>
+                    </li>
                   </ul>
                 </div>
               </div>

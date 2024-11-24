@@ -47,6 +47,8 @@ const Cleaner = lazy(async () => import('app/pages/module/cleaner/Cleaner'))
 const TaskList = lazy(async () => import('app/pages/module/taskList/TaskList'))
 const Company = lazy(async () => import('app/pages/module/company/Company'))
 const CompanyDetail = lazy(async () => import('app/pages/module/company/CompanyDetail'))
+const Task = lazy(async () => import('app/pages/module/task/Task'))
+
 
 
 type RouteConfig = {
@@ -101,7 +103,9 @@ const routeConfigs: RouteConfig[] = [
   {path: '/cleaner', element: <Cleaner />},
   {path: '/tasklist', element: <TaskList />},
   {path: '/company', element: <Company />},
-  {path: '/company/:id', element: <CompanyDetail />}
+  {path: '/company/:id', element: <CompanyDetail />},
+  {path: '/task', element: <Task />},
+
 
 ]
 
