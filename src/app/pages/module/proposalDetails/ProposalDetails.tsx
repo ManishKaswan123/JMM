@@ -18,9 +18,11 @@ import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import { fetchJobs } from 'sr/utils/api/fetchJobs'
-import SkeletonCompanyTable from './SkeletonCompanyTable'
-import CompanyTable from './CompanyTable'
-import { fetchCompany } from 'sr/utils/api/fetchCompany'
+import { fetchTaskList } from 'sr/utils/api/fetchTaskList'
+import { fetchTask } from 'sr/utils/api/fetchTask'
+import ProposalDetailsTable from './ProposalDetailsTable'
+import SkeletonProposalDetailsTable from './SkeletonProposalDetailsTable'
+import { fetchProposalDetails } from 'sr/utils/api/fetchProposalDetails'
 
 
 interface chatApiResponse {
@@ -216,15 +218,15 @@ const Custom: React.FC = () => {
   )
 
   const {data, error, isLoading, isError, refetch} = useQuery({
-    queryKey: ['jobs', {limit: itemsPerPage, page: currentPage, ...filters}],
-    queryFn: async () => fetchCompany({limit: itemsPerPage, page: currentPage, ...filters}),
+    queryKey: ['tasklist', {limit: itemsPerPage, page: currentPage, ...filters}],
+    queryFn: async () => fetchProposalDetails({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
   useEffect(() => {
     fetchUserDataIfNeeded()
   }, [])
 
-  console.log("This is the data :- ", data);
+  console.log("This is the tasklist data in tasklist :- ", data);
 
   const defaultValues: defaultData | undefined = useMemo(() => {
     if (!selectedData) return undefined
@@ -296,7 +298,7 @@ const Custom: React.FC = () => {
       <div className='container mx-auto px-4 sm:px-8'>
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
-            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>Company</h2>
+            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>Proposal Details</h2>
             <div className='flex items-center'>
               <Button
                 label='Create new'
@@ -323,9 +325,9 @@ const Custom: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonCompanyTable />
+            <SkeletonProposalDetailsTable />
           ) : (
-            <CompanyTable
+            <ProposalDetailsTable
             //   setSelectedData={setSelectedData}
             //   setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
@@ -343,7 +345,7 @@ const Custom: React.FC = () => {
             totalResults={data?.pagination?.total}
             onPageChange={onPageChange}
             itemsPerPage={itemsPerPage}
-            name='Jobs'
+            name='Proposal Details'
             onLimitChange={onLimitChange}
             disabled={isLoading}
           />
@@ -351,7 +353,7 @@ const Custom: React.FC = () => {
       </div>
       {isCreateModalOpen && (
         <DynamicModal
-          label='Create Job'
+          label='Create Proposal Details'
           imageType='images'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
@@ -362,7 +364,7 @@ const Custom: React.FC = () => {
       {isUpdateModalOpen && (
         <DynamicModal
           imageType='images'
-          label='Update Job'
+          label='Update Proposal Details'
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
           fields={updateFields}
@@ -373,12 +375,12 @@ const Custom: React.FC = () => {
     </>
   )
 }
-const Company: React.FC = () => {
+const ProposalDetails: React.FC = () => {
   return (
     <>
-      <DashboardWrapper customComponent={Custom} selectedItem={'/chat'}></DashboardWrapper>
+      <DashboardWrapper customComponent={Custom} selectedItem={'/cleaner/proposaldetails'}></DashboardWrapper>
     </>
   )
 }
 
-export default Company
+export default ProposalDetails

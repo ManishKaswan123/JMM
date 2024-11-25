@@ -967,6 +967,38 @@ export default function AsideMenuMain({getScenarios, AdjustWidth}: Props) {
                         </button>
                       </Link>
                     </li>
+                    <li className="items-center">
+                      <Link to="/proposaldetails" replace>
+                        <button
+                          className={`flex md:text-xs lg:text-sm uppercase py-3 font-semibold hover:text-rose-600 text-left text-gray-500 ${
+                            path === "proposaldetails" && subPath === undefined ? "text-rose-600" : ""
+                          }`}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 mr-2"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            {/* Updated SVG icon for ProposalDetails */}
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M6 5h12M6 10h12M6 15h8M6 20h4"
+                            />
+                          </svg>
+
+                          {sideCollapseItem === "show" ? (
+                            <span className="text-left">Proposal Details</span>
+                          ) : (
+                            ""
+                          )}
+                        </button>
+                      </Link>
+                    </li>
+
                   </ul>
                 </div>
               </div>

@@ -73,9 +73,8 @@ const CompanyTable: React.FC<Props> = ({ data }) => {
                     <p className="text-gray-900 whitespace-no-wrap">{company?.email}</p>
                   </td>
                   <td className="px-5 py-5 border-b border-gray-200 text-sm">
-  <p className="text-gray-900 whitespace-nowrap">{company?.mobile_number}</p>
-</td>
-
+                    <p className="text-gray-900 whitespace-nowrap">{company?.mobile_number}</p>
+                  </td>
                   <td className="px-5 py-5 border-b border-gray-200 text-sm">
                     <p className="text-gray-900 whitespace-no-wrap">
                       {company?.business_type?.join(', ')}
