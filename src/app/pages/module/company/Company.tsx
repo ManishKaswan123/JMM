@@ -7,7 +7,6 @@ import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {fetchChats} from 'sr/utils/api/fetchChats'
 import {deleteChat} from 'sr/utils/api/deleteChat'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {createChat} from 'sr/utils/api/createChat'
@@ -17,11 +16,10 @@ import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import { fetchJobs } from 'sr/utils/api/fetchJobs'
+import {fetchJobs} from 'sr/utils/api/fetchJobs'
 import SkeletonCompanyTable from './SkeletonCompanyTable'
 import CompanyTable from './CompanyTable'
-import { fetchCompany } from 'sr/utils/api/fetchCompany'
-
+import {fetchCompany} from 'sr/utils/api/fetchCompany'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -72,148 +70,76 @@ const Custom: React.FC = () => {
   const {fetchUserData} = useActions()
   const [itemsPerPage, setItemsPerPage] = useState(8)
 
-  const eightySixResponse = useMemo(
-    () => [
-      {firstName: 'Devid', id: '65bbf2df9aa9785b019d87b2'},
-      {firstName: 'Devid', id: '65bbf2df9aa9785b019d87b2'},
-    ],
-    []
-  )
-  const msgType = useMemo(
-    () => [
-      {name: '1', id: 1},
-      {name: '2', id: 2},
-      {name: '3', id: 3},
-    ],
-    []
-  )
-
   const createFields: FieldsArray = useMemo(
     () => [
       {
-        type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
+        type: 'text',
+        label: 'Username',
+        name: 'username',
+        placeholder: 'Username',
         required: true,
       },
-      {
-        type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'msgType',
-        name: msgType,
-        topLabel: 'Msg Type',
-        placeholder: 'Select Msg Type',
-        required: true,
-      },
-      {type: 'text', label: 'Message', name: 'message', placeholder: 'Message', required: true},
       {
         type: 'text',
-        label: 'Source Type',
-        name: 'sourceType',
-        placeholder: 'Source Type',
+        label: 'Password',
+        name: 'password',
+        placeholder: 'Password',
         required: true,
       },
-      {
-        type: 'file',
-        label: 'Images',
-        name: 'images',
-        wrapperLabel: 'Upload image',
-        topLabel: 'Images',
-        placeholder: 'Select Images',
-        required: true,
-      },
-    ],
-    [userData, msgType, eightySixResponse]
-  )
-
-  const updateFields: FieldsArray = useMemo(
-    () => [
-      {
-        type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'msgType',
-        name: msgType,
-        topLabel: 'Msg Type',
-        placeholder: 'Select Msg Type',
-        required: true,
-      },
-      {type: 'text', label: 'Message', name: 'message', placeholder: 'Message', required: true},
       {
         type: 'text',
-        label: 'Source Type',
-        name: 'sourceType',
-        placeholder: 'Source Type',
+        label: 'Email',
+        name: 'email',
+        placeholder: 'Email',
         required: true,
       },
       {
-        type: 'file',
-        label: 'Images',
-        name: 'images',
-        wrapperLabel: 'Upload image',
-        topLabel: 'Images',
-        placeholder: 'Select Images',
+        type: 'text',
+        label: 'Mobile',
+        name: 'mobile_number',
+        placeholder: 'Mobile',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Company Name',
+        name: 'company_name',
+        placeholder: 'Company Name',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Username',
+        name: 'username',
+        placeholder: 'Username',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Business Type',
+        name: 'business_type',
+        placeholder: 'Business Type',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Intent',
+        name: 'intent',
+        placeholder: 'Intent',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Candidate Message',
+        name: 'candidate_msg',
+        placeholder: 'Candidate Message',
         required: true,
       },
     ],
-    [userData, msgType, eightySixResponse]
+    []
   )
 
-  const fields: FieldsArray = useMemo(
-    () => [
-      {
-        type: 'dropdown',
-        label: 'senderId',
-        name: userData?.results || [],
-        topLabel: 'Sender',
-        placeholder: 'Select Sender',
-        labelKey: 'firstName',
-        id: 'id',
-      },
-      {
-        type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
-        labelKey: 'firstName',
-        id: 'id',
-      },
-      {
-        type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
-        labelKey: 'firstName',
-      },
-      {type: 'text', label: 'Source Type', name: 'sourceType', placeholder: 'Source Type'},
-    ],
-    [userData?.results, eightySixResponse]
-  )
+  const fields: FieldsArray = useMemo(() => [], [])
 
   const {data, error, isLoading, isError, refetch} = useQuery({
     queryKey: ['jobs', {limit: itemsPerPage, page: currentPage, ...filters}],
@@ -224,7 +150,7 @@ const Custom: React.FC = () => {
     fetchUserDataIfNeeded()
   }, [])
 
-  console.log("This is the data :- ", data);
+  console.log('This is the data :- ', data)
 
   const defaultValues: defaultData | undefined = useMemo(() => {
     if (!selectedData) return undefined
@@ -326,11 +252,11 @@ const Custom: React.FC = () => {
             <SkeletonCompanyTable />
           ) : (
             <CompanyTable
-            //   setSelectedData={setSelectedData}
-            //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              //   setSelectedData={setSelectedData}
+              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
-            //   handleDelete={onDeleteChat}
-            //   handleView={handleView}
+              //   handleDelete={onDeleteChat}
+              //   handleView={handleView}
             />
           )}
         </div>
@@ -339,7 +265,9 @@ const Custom: React.FC = () => {
         ) : (
           <Pagination
             currentPage={currentPage}
-            totalPages={Math.ceil( (data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1) ) || 0}
+            totalPages={
+              Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
+            }
             totalResults={data?.pagination?.total}
             onPageChange={onPageChange}
             itemsPerPage={itemsPerPage}
@@ -359,7 +287,7 @@ const Custom: React.FC = () => {
           onSubmit={handleCreateChat}
         />
       )}
-      {isUpdateModalOpen && (
+      {/* {isUpdateModalOpen && (
         <DynamicModal
           imageType='images'
           label='Update Job'
@@ -369,7 +297,7 @@ const Custom: React.FC = () => {
           defaultValues={defaultValues}
           onSubmit={handleEditChat}
         />
-      )}
+      )} */}
     </>
   )
 }
