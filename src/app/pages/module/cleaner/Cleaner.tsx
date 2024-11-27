@@ -17,11 +17,10 @@ import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import { fetchJobs } from 'sr/utils/api/fetchJobs'
+import {fetchJobs} from 'sr/utils/api/fetchJobs'
 import SkeletonCleanerTable from './SkeletonCleanerTable'
 import CleanerTable from './CleanerTable'
-import { fetchCleaner } from 'sr/utils/api/fetchCleaner'
-
+import {fetchCleaner} from 'sr/utils/api/fetchCleaner'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -224,8 +223,6 @@ const Custom: React.FC = () => {
     fetchUserDataIfNeeded()
   }, [])
 
-  console.log("This is the data :- ", data);
-
   const defaultValues: defaultData | undefined = useMemo(() => {
     if (!selectedData) return undefined
     return {
@@ -326,11 +323,11 @@ const Custom: React.FC = () => {
             <SkeletonCleanerTable />
           ) : (
             <CleanerTable
-            //   setSelectedData={setSelectedData}
-            //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              //   setSelectedData={setSelectedData}
+              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
-            //   handleDelete={onDeleteChat}
-            //   handleView={handleView}
+              //   handleDelete={onDeleteChat}
+              //   handleView={handleView}
             />
           )}
         </div>
@@ -339,7 +336,9 @@ const Custom: React.FC = () => {
         ) : (
           <Pagination
             currentPage={currentPage}
-            totalPages={Math.ceil( (data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1) ) || 0}
+            totalPages={
+              Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
+            }
             totalResults={data?.pagination?.total}
             onPageChange={onPageChange}
             itemsPerPage={itemsPerPage}
