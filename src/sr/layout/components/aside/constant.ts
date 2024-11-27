@@ -148,5 +148,10 @@ export const normalMenuItems = [
     iconPath:
       'M4 2h12a2 2 0 012 2v16a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2zm0 2v16h12V4H4zm9 6a1 1 0 100-2 1 1 0 000 2zM6 5h6v1H6V5zm0 3h6v1H6V8zm0 3h6v1H6v-1zm8.5 8.793l3.207-3.207a1 1 0 000-1.414l-2-2a1 1 0 00-1.414 0l-3.207 3.207L14.5 18.793zM16 19.5V21h1.5l3.207-3.207-1.5-1.5L16 19.5z',
   },
+  {
+    label: 'Messages',
+    path: '/message',
+    iconPath: 'M6 5h12M6 10h12M6 15h8M6 20h4',
+  },
   // Add other menu items here
 ]
