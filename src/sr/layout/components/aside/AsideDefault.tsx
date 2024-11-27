@@ -246,37 +246,6 @@ export default function AsideDefault({getScenarios, AdjustWidth}: Props) {
                   </ul>
                 </div>
               </div>
-              <li className="items-center">
-  <Link to="/contractor" replace>
-    <button
-      className={`flex md:text-xs lg:text-sm uppercase py-3 font-semibold hover:text-rose-600 text-left text-gray-500 ${
-        path === "contractor" && subPath === undefined ? "text-rose-600" : ""
-      }`}
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-5 w-5 mr-2"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth="2"
-      >
-        {/* SVG icon for Contractor */}
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M9 12l2 2l4-4M7 7h.01M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z"
-        />
-      </svg>
-
-      {sideCollapseItem === "show" ? (
-        <span className="text-left">Contractors</span>
-      ) : (
-        ""
-      )}
-    </button>
-  </Link>
-</li>
 
               <div>
                 {/* Divider */}
