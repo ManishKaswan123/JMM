@@ -49,6 +49,8 @@ const Company = lazy(async () => import('app/pages/module/company/Company'))
 const CompanyDetail = lazy(async () => import('app/pages/module/company/CompanyDetail'))
 const Task = lazy(async () => import('app/pages/module/task/Task'))
 const ProposalDetails = lazy(async () => import('app/pages/module/proposalDetails/ProposalDetails'))
+const Notes = lazy(async () => import('app/pages/module/notes/Notes'))
+
 
 
 
@@ -106,8 +108,8 @@ const routeConfigs: RouteConfig[] = [
   {path: '/company', element: <Company />},
   {path: '/company/:id', element: <CompanyDetail />},
   {path: '/task', element: <Task />},
-  {path: '/proposaldetails' , element: <ProposalDetails />}
-
+  {path: '/proposaldetails' , element: <ProposalDetails />},
+  {path: '/notes' , element: <Notes />}
 
 ]
 
