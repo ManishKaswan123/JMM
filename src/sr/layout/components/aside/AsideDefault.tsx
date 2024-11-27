@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Link, useLocation, useNavigate} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 import {MenuItem} from './MenuItem'
 import {masterMenuItems, normalMenuItems} from './constant'
 
@@ -234,7 +234,7 @@ export default function AsideDefault({getScenarios, AdjustWidth}: Props) {
                       </ul>
                     )}
                     <ul>
-                      {normalMenuItems.map((item) => (
+                      {normalMenuItems.map((item: any) => (
                         <MenuItem
                           key={item.label}
                           item={item}
