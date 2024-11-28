@@ -52,6 +52,8 @@ const CompanyDetail = lazy(async () => import('app/pages/module/company/CompanyD
 const Task = lazy(async () => import('app/pages/module/task/Task'))
 const ProposalDetails = lazy(async () => import('app/pages/module/proposalDetails/ProposalDetails'))
 const Contractor = lazy(async () => import('app/pages/module/contractor/Contractor'))
+const Messages = lazy(async () => import('app/pages/module/messages/Messages'))
+const Notes = lazy(async () => import('app/pages/module/notes/Notes'))
 
 type RouteConfig = {
   path: string
@@ -110,6 +112,8 @@ const routeConfigs: RouteConfig[] = [
   {path: '/proposaldetails', element: <ProposalDetails />},
   {path: '/contractor', element: <Contractor />},
   {path: '/user', element: <User />},
+  {path: '/notes', element: <Notes /> },
+  { path: '/message', element: <Messages /> },
 ]
 
 const PrivateRoutes: FC = () => {
