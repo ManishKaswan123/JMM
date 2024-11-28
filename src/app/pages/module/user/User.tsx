@@ -18,14 +18,15 @@ import {useSelector} from 'react-redux'
 import {RootState} from 'sr/redux/store'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {updateUser} from 'sr/utils/api/rewardPointPlanApi'
+import {fetchIndividual, IndividaulApiResponse, Individual} from 'sr/utils/api/individualApi'
 
-interface fetchUserResponse {
-  results: UserInterface[]
-  page: number
-  limit: number
-  totalPages: number
-  totalResults: number
-}
+// interface fetchUserResponse {
+//   results: UserInterface[]
+//   page: number
+//   limit: number
+//   totalPages: number
+//   totalResults: number
+// }
 
 interface userFilters {
   role?: string
@@ -35,7 +36,7 @@ interface userFilters {
 
 const Custom: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [selectedUser, setSelectedUser] = useState<UserInterface>()
+  const [selectedUser, setSelectedUser] = useState<Individual>()
   const [selectedUserForUpdate, setSelectedUserForUpdate] = useState<UserInterface>()
   const [filters, setFilters] = useState<userFilters>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
@@ -143,9 +144,9 @@ const Custom: React.FC = () => {
     fetchDataIfNeeded()
   }, [fetchDataIfNeeded])
 
-  const {data, error, isLoading, isError, refetch} = useQuery<fetchUserResponse>({
-    queryKey: ['users', {limit: itemsPerPage, page: currentPage, ...filters}],
-    queryFn: async () => fetchUser({limit: itemsPerPage, page: currentPage, ...filters}),
+  const {data, error, isLoading, isError, refetch} = useQuery<IndividaulApiResponse>({
+    queryKey: ['individual', {limit: itemsPerPage, page: currentPage, ...filters}],
+    queryFn: async () => fetchIndividual({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
     retry: false,
   })
@@ -184,7 +185,7 @@ const Custom: React.FC = () => {
             {!selectedUser && (
               <>
                 <h2 className='text-2xl font-semibold leading-tight ml-1 mb-2 sm:mb-0 sm:mr-4'>
-                  Users
+                  Individuals
                 </h2>
                 <div className='flex items-center'>
                   {/* <Button
@@ -217,22 +218,15 @@ const Custom: React.FC = () => {
           )}
           {isLoading ? (
             <UserTableSkeleton />
-          ) : !selectedUser ? (
-            <UserTable
-              userData={data?.results}
-              onSelectUser={setSelectedUser}
-              setSelectedData={setSelectedUserForUpdate}
-              setIsUpdateModalOpen={setIsUpdateModalOpen}
-            />
           ) : (
-            <SellerDetailsCard
-              setReRender={async () => refetch()}
-              setSelectedUser={setSelectedUser}
-              selectedUser={selectedUser}
-              onGoBack={() => {
-                setSelectedUser(undefined)
-              }}
-            />
+            !selectedUser && (
+              <UserTable
+                userData={data?.data}
+                onSelectUser={setSelectedUser}
+                setSelectedData={setSelectedUserForUpdate}
+                setIsUpdateModalOpen={setIsUpdateModalOpen}
+              />
+            )
           )}
         </div>
         {isLoading || isError ? (
@@ -241,11 +235,11 @@ const Custom: React.FC = () => {
           !selectedUser && (
             <Pagination
               currentPage={currentPage}
-              totalPages={data?.totalPages || 0}
+              totalPages={data?.pagination.total || 0}
               onPageChange={onPageChange}
-              totalResults={data?.totalResults || 0}
+              totalResults={data?.pagination.pageSize || 0}
               itemsPerPage={itemsPerPage}
-              name='Users'
+              name='Individuals'
               onLimitChange={onLimitChange}
               disabled={isLoading}
             />
@@ -254,7 +248,7 @@ const Custom: React.FC = () => {
       </div>
       {isUpdateModalOpen && selectedUserForUpdate && (
         <DynamicModal
-          label='Update User'
+          label='Update Individual'
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
           fields={updateFields}
@@ -267,7 +261,7 @@ const Custom: React.FC = () => {
 }
 
 const User: React.FC = () => {
-  return <DashboardWrapper customComponent={Custom} selectedItem='/user' />
+  return <DashboardWrapper customComponent={Custom} selectedItem='/individual' />
 }
 
 export default User

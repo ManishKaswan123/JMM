@@ -3,6 +3,7 @@ import {lazy, FC, Suspense} from 'react'
 import {Route, Routes, Navigate} from 'react-router-dom'
 import {MasterLayout} from 'sr/layout/MasterLayout'
 import TopBarProgress from 'react-topbar-progress-indicator'
+
 //import RewardPointPlan from 'app/pages/module/masterData/rewardPaymentPlan/RewardPointPlan'
 //import RewardPoint from 'app/pages/module/masterData/rewardPoint/RewardPoint'
 //import RewardUsageHistory from 'app/pages/module/masterData/rewardUsageHistory/RewardUsageHistory'
@@ -41,6 +42,7 @@ const Jobs = lazy(async () => import('app/pages/module/jobs/Jobs'))
 const EightySixResponseDetailsCard = lazy(
   async () => import('app/pages/module/86Response/components/86ResponseDetailsCard')
 )*/
+const User = lazy(async () => import('app/pages/module/user/User'))
 const Jobs = lazy(async () => import('app/pages/module/jobs/Jobs'))
 const WorkOrder = lazy(async () => import('app/pages/module/workOrder/WorkOrder'))
 const Cleaner = lazy(async () => import('app/pages/module/cleaner/Cleaner'))
@@ -50,8 +52,6 @@ const CompanyDetail = lazy(async () => import('app/pages/module/company/CompanyD
 const Task = lazy(async () => import('app/pages/module/task/Task'))
 const ProposalDetails = lazy(async () => import('app/pages/module/proposalDetails/ProposalDetails'))
 const Contractor = lazy(async () => import('app/pages/module/contractor/Contractor'))
-
-
 
 type RouteConfig = {
   path: string
@@ -74,7 +74,7 @@ const SuspensedView: FC<WithChildren> = ({children}) => {
 }
 
 const routeConfigs: RouteConfig[] = [
- /* {path: '/dashboard', element: <Dashboard />},
+  /* {path: '/dashboard', element: <Dashboard />},
   {path: '/dashboard/:type', element: <Dashboard />},
   {path: '/business-category', element: <BusinessCategory />},
   {path: '/sub-category', element: <SubCategory />},
@@ -107,9 +107,9 @@ const routeConfigs: RouteConfig[] = [
   {path: '/company', element: <Company />},
   {path: '/company/:id', element: <CompanyDetail />},
   {path: '/task', element: <Task />},
-  {path: '/proposaldetails' , element: <ProposalDetails />},
-  { path: '/contractor', element: <Contractor /> },
-
+  {path: '/proposaldetails', element: <ProposalDetails />},
+  {path: '/contractor', element: <Contractor />},
+  {path: '/user', element: <User />},
 ]
 
 const PrivateRoutes: FC = () => {
