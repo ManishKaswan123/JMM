@@ -4,12 +4,10 @@ import {UserInterface} from 'sr/constants/User'
 interface PayloadType {
   limit?: number
   page?: number
-  role?: string
-  sellerStatus?: string
-  isEmailVerified?: boolean
-  sortBy?: string
-  projectBy?: string
+  
 }
+
+
 interface fetchUserResponse {
   results: UserInterface[]
   page: number
