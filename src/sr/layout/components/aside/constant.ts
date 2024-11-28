@@ -158,5 +158,11 @@ export const normalMenuItems = [
     path: '/message',
     iconPath: 'M6 5h12M6 10h12M6 15h8M6 20h4',
   },
+  {
+    label: 'Supervisor',
+    path: '/supervisor',
+    iconPath:
+      'M17 9V7a4 4 0 00-8 0v2M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z',
+  },
   // Add other menu items here
 ]
