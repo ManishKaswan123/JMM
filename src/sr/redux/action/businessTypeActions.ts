@@ -4,12 +4,12 @@ import {fetchBusinessCategory} from 'sr/utils/api/fetchBusinessCategory'
 export const fetchBusinessType = createAsyncThunk(
   'businessType/fetchBusinessType',
   async (payload: any) => {
-    const {totalResults} = await fetchBusinessCategory(payload)
-    const response = await fetchBusinessCategory({...payload, limit: totalResults})
+    const res = await fetchBusinessCategory(payload)
+    const response = await fetchBusinessCategory({...payload, limit: res.pagination.total})
     return {
       data: response,
-      totalBusinessTypes: totalResults,
-      businessTypeMap: response.results.reduce<Record<string, string>>(
+      totalBusinessTypes: res.pagination.total,
+      businessTypeMap: response.data.reduce<Record<string, string>>(
         (acc: any, businessType: any) => {
           acc[businessType.id] = businessType.name
           return acc

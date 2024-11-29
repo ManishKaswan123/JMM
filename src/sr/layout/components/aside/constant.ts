@@ -1,10 +1,10 @@
 // menuItems.js
 export const masterMenuItems = [
-  //   {
-  //     label: 'Business Category',
-  //     path: '/business-category',
-  //     iconPath: 'M9 12h6m2 4H7m12-8H5m16 8a9 9 0 11-18 0 9 9 0 0118 0z',
-  //   },
+  {
+    label: 'Business Category',
+    path: '/business-category',
+    iconPath: 'M9 12h6m2 4H7m12-8H5m16 8a9 9 0 11-18 0 9 9 0 0118 0z',
+  },
   //   {
   //     label: 'Category',
   //     path: '/category',
