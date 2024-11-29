@@ -11,8 +11,8 @@ import {post} from '../axios'
 // Define the function with correct typing
 const createBusinessCategory = async (payload: Record<string, any>): Promise<boolean> => {
   try {
-    const res = await post<any>(`/business-categories`, payload)
-    if (res) {
+    const res = await post<any>(`/businesstype`, payload)
+    if (res.success === true) {
       return true
     }
     throw new Error('Create failed')
