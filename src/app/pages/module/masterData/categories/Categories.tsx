@@ -196,7 +196,7 @@ const Custom: React.FC = () => {
               />
             </div>
           )}
-          {isLoading ? (
+          {/* {isLoading ? (
             <SkeletonTable title={'Category'} />
           ) : (
             <Table
@@ -207,7 +207,7 @@ const Custom: React.FC = () => {
               handleDelete={onDeleteCategory}
               topicName='Category'
             />
-          )}
+          )} */}
         </div>
         {/* Conditional rendering of Pagination component */}
         {isLoading ? (

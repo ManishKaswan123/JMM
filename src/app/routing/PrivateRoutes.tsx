@@ -42,6 +42,7 @@ const Jobs = lazy(async () => import('app/pages/module/jobs/Jobs'))
 const EightySixResponseDetailsCard = lazy(
   async () => import('app/pages/module/86Response/components/86ResponseDetailsCard')
 )*/
+const BusinessCategory = lazy(async () => import('app/pages/module/masterData/business/Business'))
 const User = lazy(async () => import('app/pages/module/user/User'))
 const Jobs = lazy(async () => import('app/pages/module/jobs/Jobs'))
 const WorkOrder = lazy(async () => import('app/pages/module/workOrder/WorkOrder'))
@@ -79,7 +80,7 @@ const SuspensedView: FC<WithChildren> = ({children}) => {
 const routeConfigs: RouteConfig[] = [
   /* {path: '/dashboard', element: <Dashboard />},
   {path: '/dashboard/:type', element: <Dashboard />},
-  {path: '/business-category', element: <BusinessCategory />},
+ 
   {path: '/sub-category', element: <SubCategory />},
   {path: '/category', element: <Categories />},
   {path: '/user', element: <User />},
@@ -103,6 +104,7 @@ const routeConfigs: RouteConfig[] = [
   {path: '/reward-earning', element: <RewardPoint />},
   {path: '/reward-uses-history', element: <RewardUsageHistory />},
   {path: '/users/checkWalletBalance', element: <CheckWalletBalance />}, */
+  {path: '/business-category', element: <BusinessCategory />},
   {path: '/jobs', element: <Jobs />},
   {path: '/workorder', element: <WorkOrder />},
   {path: '/cleaner', element: <Cleaner />},
@@ -113,9 +115,9 @@ const routeConfigs: RouteConfig[] = [
   {path: '/proposaldetails', element: <ProposalDetails />},
   {path: '/contractor', element: <Contractor />},
   {path: '/user', element: <User />},
-  {path: '/notes', element: <Notes /> },
-  {path: '/message', element: <Messages /> },
-  {path: '/supervisor' , element: <Supervisor />}
+  {path: '/notes', element: <Notes />},
+  {path: '/message', element: <Messages />},
+  {path: '/supervisor', element: <Supervisor />},
 ]
 
 const PrivateRoutes: FC = () => {

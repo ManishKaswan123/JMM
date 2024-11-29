@@ -1,5 +1,6 @@
 // import ApiResponse from 'sr/models/ApiResponse'
 import {get} from 'sr/utils/axios/index'
+import {JmmApiResponse} from './contant'
 // import {alertService} from 'sr/utils/services/alert.service'
 // import {toast} from 'react-toastify'
 
@@ -8,20 +9,16 @@ interface payloadType {
   page?: Number
   name?: string
 }
-interface businessTypeApiResponse {
-  name?: string
-  imagePath?: string
+
+export interface BusinessType {
+  type: string
+  company_count: number
   createdAt: string
   updatedAt: string
   id: string
 }
-interface fetchBusinessCategoryResponse {
-  results: businessTypeApiResponse[]
-  page: number
-  limit: number
-  totalPages: number
-  totalResults: number
-}
+export type BusinessTypeApiResponse = JmmApiResponse<BusinessType[]>
+
 const filterPayload = (payload: payloadType) => {
   return Object.fromEntries(
     Object.entries(payload).filter(([_, value]) => value !== undefined && value !== null)
@@ -30,13 +27,13 @@ const filterPayload = (payload: payloadType) => {
 
 export const fetchBusinessCategory = async (
   payload?: payloadType
-): Promise<fetchBusinessCategoryResponse> => {
+): Promise<BusinessTypeApiResponse> => {
   const filteredPayload = filterPayload(payload ?? {})
 
   try {
-    const res = await get<fetchBusinessCategoryResponse>(`/business-categories`, filteredPayload)
+    const res = await get<BusinessTypeApiResponse>(`/businesstype`, filteredPayload)
 
-    if (res.results && res.results.length > 0) {
+    if (res.success && res.data && res.data.length > 0) {
       return res // Return the fetched data
     } else {
       // Handle the case where results are not present

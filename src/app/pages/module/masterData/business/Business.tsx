@@ -3,7 +3,7 @@ import {AiOutlinePlus, AiOutlineFilter} from 'react-icons/ai'
 import Table from 'sr/helpers/ui-components/dashboardComponents/Table'
 import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {fetchBusinessCategory} from 'sr/utils/api/fetchBusinessCategory'
+import {BusinessType, fetchBusinessCategory} from 'sr/utils/api/fetchBusinessCategory'
 import {useDeleteBusinessCategory} from 'sr/utils/api/deleteBusinessCategory'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
@@ -15,14 +15,6 @@ import {getPreSignedURL} from 'sr/utils/api/media'
 import {useQuery} from '@tanstack/react-query'
 import SkeletonTable from 'sr/helpers/ui-components/dashboardComponents/SkeletonTable'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-
-interface businessTypeApiResponse {
-  name?: string
-  imagePath?: string
-  createdAt: string
-  updatedAt: string
-  id: string
-}
 
 interface businessTypeFilters {
   name?: string
@@ -41,7 +33,7 @@ const Custom: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
   const [itemsPerPage, setItemsPerPage] = useState<number>(8)
-  const [selectedData, setSelectedData] = useState<businessTypeApiResponse>()
+  const [selectedData, setSelectedData] = useState<BusinessType>()
   const createMutation = useCreateBusinessCategory()
   const updateMutation = useUpdateBusinessCategory()
   const deleteMutation = useDeleteBusinessCategory()
@@ -128,16 +120,16 @@ const Custom: React.FC = () => {
     )
   }
 
-  const defaultValues: businessTypeApiResponse | undefined = useMemo(() => {
-    if (!selectedData) return undefined
-    return {
-      name: selectedData?.name,
-      imagePath: selectedData?.imagePath,
-      createdAt: selectedData.createdAt,
-      updatedAt: selectedData.updatedAt,
-      id: selectedData.id,
-    }
-  }, [selectedData])
+  // const defaultValues: businessTypeApiResponse | undefined = useMemo(() => {
+  //   if (!selectedData) return undefined
+  //   return {
+  //     name: selectedData?.name,
+  //     imagePath: selectedData?.imagePath,
+  //     createdAt: selectedData.createdAt,
+  //     updatedAt: selectedData.updatedAt,
+  //     id: selectedData.id,
+  //   }
+  // }, [selectedData])
 
   return (
     <>
@@ -145,7 +137,7 @@ const Custom: React.FC = () => {
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
             <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>
-              Business Categories
+              Business Type
             </h2>
             <div className='flex items-center'>
               <Button
@@ -181,9 +173,9 @@ const Custom: React.FC = () => {
               handleView={handleView}
               setSelectedData={setSelectedData}
               setIsUpdateModalOpen={setIsUpdateModalOpen}
-              categoriesData={data?.results}
+              categoriesData={data?.data}
               handleDelete={onDeleteBussinessCategory}
-              topicName='Business Category'
+              topicName='Business Type'
             />
           )}
         </div>
@@ -192,13 +184,15 @@ const Custom: React.FC = () => {
         ) : (
           <Pagination
             currentPage={currentPage}
-            totalPages={data?.totalPages || 0}
+            totalPages={
+              Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
+            }
             onPageChange={onPageChange}
             itemsPerPage={itemsPerPage}
             name='Business'
             onLimitChange={onLimitChange}
             disabled={isLoading}
-            totalResults={data?.totalResults || 0}
+            totalResults={data?.pagination.total || 0}
           />
         )}
       </div>
@@ -212,7 +206,7 @@ const Custom: React.FC = () => {
           onSubmit={handleCreateBusinessType}
         />
       )}
-      {isUpdateModalOpen && defaultValues && (
+      {/* {isUpdateModalOpen && defaultValues && (
         <DynamicModal
           imageType='imagePath'
           label='Update Business Category'
@@ -222,7 +216,7 @@ const Custom: React.FC = () => {
           defaultValues={selectedData}
           onSubmit={handleEditBusinessType}
         />
-      )}
+      )} */}
     </>
   )
 }
