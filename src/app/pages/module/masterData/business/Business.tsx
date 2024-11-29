@@ -20,10 +20,14 @@ interface businessTypeFilters {
   name?: string
 }
 interface businessTypeCreatePayload {
-  name: string
-  imagePath: string
+  type: string
+  company_count: number
 }
-interface businessTypeUpdatePayload extends businessTypeCreatePayload {}
+interface businessTypeUpdatePayload {
+  type?: string
+  company_count?: number
+  id: string
+}
 
 const Custom: React.FC = () => {
   // const [loading, setLoading] = useState<Boolean>(false)
@@ -45,14 +49,12 @@ const Custom: React.FC = () => {
 
   const createFields: FieldsArray = useMemo(
     () => [
-      {type: 'text', label: 'Name', name: 'name', placeholder: 'Name', required: true},
+      {type: 'text', label: 'Type', name: 'type', placeholder: 'Type', required: true},
       {
-        type: 'file',
-        label: 'Images',
-        name: 'imagePath',
-        wrapperLabel: 'Upload image',
-        topLabel: 'Images',
-        placeholder: 'Select Images',
+        type: 'number',
+        label: 'Company Count',
+        name: 'company_count',
+        placeholder: 'Company Count',
         required: true,
       },
     ],
@@ -61,14 +63,12 @@ const Custom: React.FC = () => {
 
   const updateFields: FieldsArray = useMemo(
     () => [
-      {type: 'text', label: 'Name', name: 'name', placeholder: 'Name', required: true},
+      {type: 'text', label: 'Type', name: 'type', placeholder: 'Type', required: true},
       {
-        type: 'file',
-        label: 'Images',
-        name: 'imagePath',
-        wrapperLabel: 'Upload image',
-        topLabel: 'Images',
-        placeholder: 'Select Images',
+        type: 'number',
+        label: 'Company Count',
+        name: 'company_count',
+        placeholder: 'Company Count',
         required: true,
       },
     ],
@@ -115,21 +115,18 @@ const Custom: React.FC = () => {
       return
     }
     setIsUpdateModalOpen(false)
-    updateMutation.mutate(
-      {payload, id: selectedData.id} // Pass the payload and category ID
-    )
+    payload = {...payload, id: selectedData.id}
+    updateMutation.mutate({payload})
   }
 
-  // const defaultValues: businessTypeApiResponse | undefined = useMemo(() => {
-  //   if (!selectedData) return undefined
-  //   return {
-  //     name: selectedData?.name,
-  //     imagePath: selectedData?.imagePath,
-  //     createdAt: selectedData.createdAt,
-  //     updatedAt: selectedData.updatedAt,
-  //     id: selectedData.id,
-  //   }
-  // }, [selectedData])
+  const defaultValues: businessTypeUpdatePayload | undefined = useMemo(() => {
+    if (!selectedData) return undefined
+    return {
+      type: selectedData.type,
+      company_count: selectedData.company_count,
+      id: selectedData.id,
+    }
+  }, [selectedData])
 
   return (
     <>
@@ -198,7 +195,6 @@ const Custom: React.FC = () => {
       </div>
       {isCreateModalOpen && (
         <DynamicModal
-          imageType='imagePath'
           label='Create Business Category'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
@@ -206,9 +202,8 @@ const Custom: React.FC = () => {
           onSubmit={handleCreateBusinessType}
         />
       )}
-      {/* {isUpdateModalOpen && defaultValues && (
+      {isUpdateModalOpen && defaultValues && (
         <DynamicModal
-          imageType='imagePath'
           label='Update Business Category'
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
@@ -216,7 +211,7 @@ const Custom: React.FC = () => {
           defaultValues={selectedData}
           onSubmit={handleEditBusinessType}
         />
-      )} */}
+      )}
     </>
   )
 }

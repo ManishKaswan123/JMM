@@ -5,19 +5,15 @@ import {
   InvalidateQueryFilters,
 } from '@tanstack/react-query'
 import {toast} from 'react-toastify'
-import {patch} from '../axios'
+import {put} from '../axios'
 // Define the variables that the mutation expects
 interface UpdateBusinessCategoryVariables {
   payload: Record<string, any>
-  id: string
 }
 // Define the function with correct typing
-const updateBusinessCategory = async (
-  payload: Record<string, any>,
-  id: string
-): Promise<boolean> => {
+const updateBusinessCategory = async (payload: Record<string, any>): Promise<boolean> => {
   try {
-    const res = await patch<any>(`/business-categories/${id}`, payload)
+    const res = await put<any>(`/businesstype`, payload)
     if (res) {
       return true
     }
@@ -36,8 +32,8 @@ export const useUpdateBusinessCategory = (): UseMutationResult<
   const queryClient = useQueryClient()
 
   return useMutation<boolean, Error, UpdateBusinessCategoryVariables>({
-    mutationFn: async ({payload, id}: UpdateBusinessCategoryVariables) =>
-      updateBusinessCategory(payload, id),
+    mutationFn: async ({payload}: UpdateBusinessCategoryVariables) =>
+      updateBusinessCategory(payload),
 
     onSuccess: () => {
       queryClient.invalidateQueries(['businessCategories'] as InvalidateQueryFilters)
