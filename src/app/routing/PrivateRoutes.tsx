@@ -56,6 +56,8 @@ const Contractor = lazy(async () => import('app/pages/module/contractor/Contract
 const Messages = lazy(async () => import('app/pages/module/messages/Messages'))
 const Notes = lazy(async () => import('app/pages/module/notes/Notes'))
 const Supervisor = lazy(async () => import('app/pages/module/supervisor/Supervisor'))
+const Application = lazy(async () => import('app/pages/module/applications/Application'))
+
 
 type RouteConfig = {
   path: string
@@ -118,6 +120,7 @@ const routeConfigs: RouteConfig[] = [
   {path: '/notes', element: <Notes />},
   {path: '/message', element: <Messages />},
   {path: '/supervisor', element: <Supervisor />},
+  {path: '/application', element: <Application />}
 ]
 
 const PrivateRoutes: FC = () => {
