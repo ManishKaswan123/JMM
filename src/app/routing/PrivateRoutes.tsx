@@ -3,6 +3,7 @@ import {lazy, FC, Suspense} from 'react'
 import {Route, Routes, Navigate} from 'react-router-dom'
 import {MasterLayout} from 'sr/layout/MasterLayout'
 import TopBarProgress from 'react-topbar-progress-indicator'
+import UserDetailCard from 'app/pages/module/user/UserDetail'
 
 //import RewardPointPlan from 'app/pages/module/masterData/rewardPaymentPlan/RewardPointPlan'
 //import RewardPoint from 'app/pages/module/masterData/rewardPoint/RewardPoint'
@@ -58,7 +59,6 @@ const Messages = lazy(async () => import('app/pages/module/messages/Messages'))
 const Notes = lazy(async () => import('app/pages/module/notes/Notes'))
 const Supervisor = lazy(async () => import('app/pages/module/supervisor/Supervisor'))
 const Application = lazy(async () => import('app/pages/module/applications/Application'))
-
 
 type RouteConfig = {
   path: string
@@ -118,11 +118,12 @@ const routeConfigs: RouteConfig[] = [
   {path: '/proposaldetails', element: <ProposalDetails />},
   {path: '/contractor', element: <Contractor />},
   {path: '/user', element: <User />},
+  {path: '/user/:userId', element: <UserDetailCard />},
   {path: '/notes', element: <Notes />},
   {path: '/message', element: <Messages />},
   {path: '/supervisor', element: <Supervisor />},
   {path: '/address', element: <Address />},
-  {path: '/application', element: <Application />}
+  {path: '/application', element: <Application />},
 ]
 
 const PrivateRoutes: FC = () => {

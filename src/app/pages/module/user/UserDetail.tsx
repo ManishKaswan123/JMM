@@ -14,70 +14,72 @@ import {set} from 'react-hook-form'
 import {FieldsArray} from 'sr/constants/fields'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {updateUser} from 'sr/utils/api/rewardPointPlanApi'
+import {fetchSingleIndividual, Individual} from 'sr/utils/api/individualApi'
+import {Address} from 'sr/utils/api/addressApi'
 
 const Custom: React.FC<any> = () => {
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const [defaultUserData, setDefaultUserData] = useState<UserInterface>({} as UserInterface)
+  // const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
+  // const [defaultUserData, setDefaultUserData] = useState<UserInterface>({} as UserInterface)
   const navigate = useNavigate()
   const {userId} = useParams<{userId: string}>()
   // const [user, setUser] = useState<UserInterface>()
   // const [isLoading, setIsLoading] = useState<boolean>(false)
-  const businessTypeReduxData: Record<string, string> = useSelector(
-    (state: RootState) => state.businessType.businessTypeMap
-  )
-  const businessTypeReduxStatus: string = useSelector(
-    (state: RootState) => state.businessType.status
-  )
-  const categoryReduxData: Record<string, string> = useSelector(
-    (state: RootState) => state.categoryType.categoryMap
-  )
-  const categoryReduxStatus: string = useSelector((state: RootState) => state.categoryType.status)
-  const rewardPointPlanData = useSelector((state: RootState) => state.rewardPlanMap.data)
-  const rewardPointPlanStatus = useSelector((state: RootState) => state.rewardPlanMap.status)
-  const {fetchBusinessType, fetchCategoryType, fetchRewardPlanMap} = useActions()
+  // const businessTypeReduxData: Record<string, string> = useSelector(
+  //   (state: RootState) => state.businessType.businessTypeMap
+  // )
+  // const businessTypeReduxStatus: string = useSelector(
+  //   (state: RootState) => state.businessType.status
+  // )
+  // const categoryReduxData: Record<string, string> = useSelector(
+  //   (state: RootState) => state.categoryType.categoryMap
+  // )
+  // const categoryReduxStatus: string = useSelector((state: RootState) => state.categoryType.status)
+  // const rewardPointPlanData = useSelector((state: RootState) => state.rewardPlanMap.data)
+  // const rewardPointPlanStatus = useSelector((state: RootState) => state.rewardPlanMap.status)
+  // const {fetchBusinessType, fetchCategoryType, fetchRewardPlanMap} = useActions()
 
-  const {data, error, isLoading, isError, refetch} = useQuery<UserInterface>({
+  const {data, error, isLoading, isError, refetch} = useQuery<Individual>({
     queryKey: ['singleUser', userId],
-    queryFn: async () => fetchSingleUser(userId),
+    queryFn: async () => fetchSingleIndividual(userId || ''),
     // placeholderData: keepPreviousData,
     retry: false,
   })
 
-  useEffect(() => {
-    if (data) setDefaultUserData(data)
-  }, [data])
+  // useEffect(() => {
+  //   if (data) setDefaultUserData(data)
+  // }, [data])
 
-  const fetchDataIfNeeded = useCallback(() => {
-    if (businessTypeReduxStatus !== 'succeeded') fetchBusinessType({})
-    if (categoryReduxStatus !== 'succeeded') fetchCategoryType({})
-    if (rewardPointPlanStatus !== 'succeeded') fetchRewardPlanMap({})
-  }, [
-    businessTypeReduxStatus,
-    categoryReduxStatus,
-    fetchBusinessType,
-    fetchCategoryType,
-    fetchRewardPlanMap,
-    rewardPointPlanStatus,
-  ])
-  useEffect(() => {
-    fetchDataIfNeeded()
-  }, [fetchDataIfNeeded])
+  // const fetchDataIfNeeded = useCallback(() => {
+  //   if (businessTypeReduxStatus !== 'succeeded') fetchBusinessType({})
+  //   if (categoryReduxStatus !== 'succeeded') fetchCategoryType({})
+  //   if (rewardPointPlanStatus !== 'succeeded') fetchRewardPlanMap({})
+  // }, [
+  //   businessTypeReduxStatus,
+  //   categoryReduxStatus,
+  //   fetchBusinessType,
+  //   fetchCategoryType,
+  //   fetchRewardPlanMap,
+  //   rewardPointPlanStatus,
+  // ])
+  // useEffect(() => {
+  //   fetchDataIfNeeded()
+  // }, [fetchDataIfNeeded])
 
   const onGoBack = () => {
     navigate('/user')
   }
 
-  const handleUpdateUser = async (payload: UserInterface) => {
-    setIsUpdateModalOpen(false)
-    if (data) {
-      const userId = data.id
-      const res = await updateUser(userId, payload)
-      if (!res) {
-        return
-      }
-      refetch()
-    }
-  }
+  // const handleUpdateUser = async (payload: UserInterface) => {
+  //   setIsUpdateModalOpen(false)
+  //   if (data) {
+  //     const userId = data.id
+  //     const res = await updateUser(userId, payload)
+  //     if (!res) {
+  //       return
+  //     }
+  //     refetch()
+  //   }
+  // }
   return (
     <>
       {!isLoading ? (
@@ -88,59 +90,23 @@ const Custom: React.FC<any> = () => {
               <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                 <div>
                   <p className='mb-4'>
-                    <strong className='font-medium'>Name:</strong> {data.firstName} {data.lastName}
+                    <strong className='font-medium'>User Name:</strong> {data.username}
+                  </p>
+                  <p className='mb-4'>
+                    <strong className='font-medium'>Name:</strong> {data.first_name}{' '}
+                    {data.last_name}
                   </p>
                   <p className='mb-4'>
                     <strong className='font-medium'>Email:</strong> {data.email}
                   </p>
                   <p className='mb-4'>
-                    <strong className='font-medium'>Phone:</strong> {data.phone}
+                    <strong className='font-medium'>Phone:</strong> {data.mobile_number}
                   </p>
                   <p className='mb-4'>
-                    <strong className='font-medium'>Role:</strong> {data.role}
-                  </p>
-                  <p className='mb-4'>
-                    <strong className='font-medium'>Source:</strong> {data.source}
-                  </p>
-                  <p className='mb-4'>
-                    <strong className='font-medium'>Country:</strong> {data.country}
-                  </p>
-                  <p className='mb-4'>
-                    <strong className='font-medium'>Email Verified:</strong>{' '}
-                    {data.isEmailVerified ? 'Yes' : 'No'}
-                  </p>
-                  <p className='mb-4'>
-                    <strong className='font-medium'>Phone Verified:</strong>{' '}
-                    {data.isPhoneVerified ? 'Yes' : 'No'}
-                  </p>
-                  <p className='mb-4'>
-                    <strong className='font-medium'>Become Verified:</strong>{' '}
-                    {data.isBecomeVerified ? 'Yes' : 'No'}
-                  </p>
-                  <p className='mb-4'>
-                    <strong className='font-medium'>Seller Status:</strong> {data.sellerStatus}
+                    <strong className='font-medium'>Status:</strong> {data.status}
                   </p>
                 </div>
                 <div>
-                  <p className='mb-4'>
-                    <strong className='font-medium'>Location:</strong> Type: {data.location?.type},
-                    Coordinates: [{data.location?.coordinates.join(', ')}]
-                  </p>
-                  <p className='mb-4'>
-                    <strong className='font-medium'>Business Type:</strong>{' '}
-                    {data.businessType
-                      ?.map((id) => businessTypeReduxData[id])
-                      .filter((name) => name) // This filters out null or undefined values
-                      .join(', ')}
-                  </p>
-                  <p className='mb-4'>
-                    <strong className='font-medium'>Category:</strong>{' '}
-                    {/* {user.category?.map((id) => categoryReduxData[id]).join(', ')} */}
-                    {data.category
-                      ?.map((id) => categoryReduxData[id])
-                      .filter((name) => name) // This filters out null or undefined values
-                      .join(', ')}
-                  </p>
                   {/* <p className='mb-4'>
                     <strong className='font-medium'>Interest:</strong>{' '}
                     {user.interest?.map((id) => businessTypeReduxData[id]).join(', ')}
@@ -153,10 +119,7 @@ const Custom: React.FC<any> = () => {
                     <strong className='font-medium'>Updated At:</strong>{' '}
                     {data.updatedAt && new Date(data.updatedAt).toLocaleString()}
                   </p>
-                  <p className='mb-4'>
-                    <strong className='font-medium'>Seller Payment Plan ID:</strong>{' '}
-                    {data.sellerPaymentPlanId}
-                  </p>
+
                   <p className='mb-4'>
                     <strong className='font-medium'>ID:</strong> {data.id}
                   </p>

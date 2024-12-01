@@ -1,10 +1,10 @@
 import React from 'react'
-import {AddressData} from 'sr/utils/api/addressApi'
+import {FaEye} from 'react-icons/fa'
+import {Address, AddressData} from 'sr/utils/api/addressApi'
 
 interface AddressTableProps {
   addressData: AddressData[] | undefined
-  onSelectAddress: React.Dispatch<React.SetStateAction<AddressData | undefined>>
-  setSelectedData: React.Dispatch<React.SetStateAction<any>>
+  onSelectAddress: React.Dispatch<React.SetStateAction<Address | undefined>>
   setIsUpdateModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
@@ -33,6 +33,9 @@ const AddressTable: React.FC<AddressTableProps> = (props) => {
               <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
                 Status
               </th>
+              <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
+                View Address
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -55,6 +58,14 @@ const AddressTable: React.FC<AddressTableProps> = (props) => {
                 </td>
                 <td className='px-5 py-5 text-left border-b border-gray-200 text-sm'>
                   <p>{address.status}</p>
+                </td>
+                <td className='px-5 py-5 border-b border-gray-200 text-sm'>
+                  <FaEye
+                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                    onClick={() => {
+                      props.onSelectAddress(address.address)
+                    }}
+                  />
                 </td>
               </tr>
             ))}

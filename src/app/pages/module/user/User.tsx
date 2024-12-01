@@ -1,15 +1,12 @@
 import React, {useState, useEffect, useMemo, useCallback} from 'react'
 import UserTable from './UserTable'
 import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
-import {Spinner} from 'sr/helpers/ui-components/Spinner'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {fetchUser} from 'sr/utils/api/fetchUser'
 import {AiOutlineFilter, AiOutlinePlus, AiOutlineReload} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
 import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
-import SellerDetailsCard from './SellerDetailsCard'
 import {useQuery} from '@tanstack/react-query'
 import UserTableSkeleton from './UserTableSkeleton'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
@@ -182,13 +179,11 @@ const Custom: React.FC = () => {
       <div className='container mx-auto px-4 sm:px-8'>
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
-            {!selectedUser && (
-              <>
-                <h2 className='text-2xl font-semibold leading-tight ml-1 mb-2 sm:mb-0 sm:mr-4'>
-                  Individuals
-                </h2>
-                <div className='flex items-center'>
-                  {/* <Button
+            <h2 className='text-2xl font-semibold leading-tight ml-1 mb-2 sm:mb-0 sm:mr-4'>
+              Individuals
+            </h2>
+            <div className='flex items-center'>
+              {/* <Button
                     label='Update Reward Point Plan'
                     Icon={AiOutlineReload}
                     onClick={() => {
@@ -196,17 +191,15 @@ const Custom: React.FC = () => {
                     }}
                     className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
                   ></Button> */}
-                  <Button
-                    label='Filter'
-                    Icon={AiOutlineFilter}
-                    onClick={() => setIsFilterVisible(!isFilterVisible)}
-                    className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center'
-                  ></Button>
-                </div>
-              </>
-            )}
+              <Button
+                label='Filter'
+                Icon={AiOutlineFilter}
+                onClick={() => setIsFilterVisible(!isFilterVisible)}
+                className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center'
+              ></Button>
+            </div>
           </div>
-          {isFilterVisible && !selectedUser && (
+          {isFilterVisible && (
             <div className='relative'>
               <Filter
                 onApplyFilter={handleApplyFilter}
@@ -219,33 +212,29 @@ const Custom: React.FC = () => {
           {isLoading ? (
             <UserTableSkeleton />
           ) : (
-            !selectedUser && (
-              <UserTable
-                userData={data?.data}
-                onSelectUser={setSelectedUser}
-                setSelectedData={setSelectedUserForUpdate}
-                setIsUpdateModalOpen={setIsUpdateModalOpen}
-              />
-            )
+            <UserTable
+              userData={data?.data}
+              onSelectUser={setSelectedUser}
+              setSelectedData={setSelectedUserForUpdate}
+              setIsUpdateModalOpen={setIsUpdateModalOpen}
+            />
           )}
         </div>
         {isLoading || isError ? (
           <PaginationSkeleton />
         ) : (
-          !selectedUser && (
-            <Pagination
-              currentPage={currentPage}
-              totalPages={
-                Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
-              }
-              totalResults={data?.pagination?.total}
-              onPageChange={onPageChange}
-              itemsPerPage={itemsPerPage}
-              name='individual'
-              onLimitChange={onLimitChange}
-              disabled={isLoading}
-            />
-          )
+          <Pagination
+            currentPage={currentPage}
+            totalPages={
+              Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
+            }
+            totalResults={data?.pagination?.total}
+            onPageChange={onPageChange}
+            itemsPerPage={itemsPerPage}
+            name='individual'
+            onLimitChange={onLimitChange}
+            disabled={isLoading}
+          />
         )}
       </div>
       {isUpdateModalOpen && selectedUserForUpdate && (

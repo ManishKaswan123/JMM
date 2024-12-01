@@ -9,10 +9,12 @@ import {UserInterface} from 'sr/constants/User'
 
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import {AddressApiResponse, AddressData, fetchAddress} from 'sr/utils/api/addressApi'
+import {Address, AddressApiResponse, AddressData, fetchAddress} from 'sr/utils/api/addressApi'
 import AddressTableSkeleton from './AddressTableSkeleton'
 import AddressTable from './AddressTable'
 import {updateUser} from 'sr/utils/api/rewardPointPlanApi'
+import {AddressDetailsCard} from './AddressDetails'
+import {set} from 'react-hook-form'
 
 // interface fetchUserResponse {
 //   results: UserInterface[]
@@ -30,8 +32,7 @@ interface AddressFilters {
 
 const Custom: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [selectedUser, setSelectedUser] = useState<AddressData>()
-  const [selectedUserForUpdate, setSelectedUserForUpdate] = useState<AddressData>()
+  const [selectedAddress, setSelectedAddress] = useState<Address | undefined>()
   const [filters, setFilters] = useState<AddressFilters>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const [itemsPerPage, setItemsPerPage] = useState<number>(8)
@@ -58,16 +59,25 @@ const Custom: React.FC = () => {
     setCurrentPage(1)
     setIsFilterVisible(false) // Hide filter after applying
   }
-  const handleUpdateUser = async (payload: UserInterface) => {
-    setIsUpdateModalOpen(false)
-    if (selectedUserForUpdate) {
-      const userId = selectedUserForUpdate.id
-      const res = await updateUser(userId, payload)
-      if (!res) {
-        return
-      }
-      refetch()
-    }
+  // const handleUpdateUser = async (payload: UserInterface) => {
+  //   setIsUpdateModalOpen(false)
+  //   if (selectedUserForUpdate) {
+  //     const userId = selectedUserForUpdate.id
+  //     const res = await updateUser(userId, payload)
+  //     if (!res) {
+  //       return
+  //     }
+  //     refetch()
+  //   }
+  // }
+
+  if (selectedAddress) {
+    return (
+      <AddressDetailsCard
+        address={selectedAddress}
+        onGoBack={() => setSelectedAddress(undefined)}
+      />
+    )
   }
 
   return (
@@ -75,13 +85,11 @@ const Custom: React.FC = () => {
       <div className='container mx-auto px-4 sm:px-8'>
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
-            {!selectedUser && (
-              <>
-                <h2 className='text-2xl font-semibold leading-tight ml-1 mb-2 sm:mb-0 sm:mr-4'>
-                  Address
-                </h2>
-                <div className='flex items-center'>
-                  {/* <Button
+            <h2 className='text-2xl font-semibold leading-tight ml-1 mb-2 sm:mb-0 sm:mr-4'>
+              Address
+            </h2>
+            <div className='flex items-center'>
+              {/* <Button
                     label='Update Reward Point Plan'
                     Icon={AiOutlineReload}
                     onClick={() => {
@@ -89,17 +97,15 @@ const Custom: React.FC = () => {
                     }}
                     className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
                   ></Button> */}
-                  <Button
-                    label='Filter'
-                    Icon={AiOutlineFilter}
-                    onClick={() => setIsFilterVisible(!isFilterVisible)}
-                    className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center'
-                  ></Button>
-                </div>
-              </>
-            )}
+              <Button
+                label='Filter'
+                Icon={AiOutlineFilter}
+                onClick={() => setIsFilterVisible(!isFilterVisible)}
+                className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center'
+              ></Button>
+            </div>
           </div>
-          {isFilterVisible && !selectedUser && (
+          {isFilterVisible && (
             <div className='relative'>
               <Filter
                 onApplyFilter={handleApplyFilter}
@@ -112,33 +118,28 @@ const Custom: React.FC = () => {
           {isLoading ? (
             <AddressTableSkeleton />
           ) : (
-            !selectedUser && (
-              <AddressTable
-                addressData={data?.data}
-                onSelectAddress={setSelectedUser}
-                setSelectedData={setSelectedUserForUpdate}
-                setIsUpdateModalOpen={setIsUpdateModalOpen}
-              />
-            )
+            <AddressTable
+              addressData={data?.data}
+              onSelectAddress={setSelectedAddress}
+              setIsUpdateModalOpen={setIsUpdateModalOpen}
+            />
           )}
         </div>
         {isLoading || isError ? (
           <PaginationSkeleton />
         ) : (
-          !selectedUser && (
-            <Pagination
-              currentPage={currentPage}
-              totalPages={
-                Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
-              }
-              totalResults={data?.pagination?.total}
-              onPageChange={onPageChange}
-              itemsPerPage={itemsPerPage}
-              name='address'
-              onLimitChange={onLimitChange}
-              disabled={isLoading}
-            />
-          )
+          <Pagination
+            currentPage={currentPage}
+            totalPages={
+              Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
+            }
+            totalResults={data?.pagination?.total}
+            onPageChange={onPageChange}
+            itemsPerPage={itemsPerPage}
+            name='address'
+            onLimitChange={onLimitChange}
+            disabled={isLoading}
+          />
         )}
       </div>
       {/* {isUpdateModalOpen && selectedUserForUpdate && (
@@ -155,8 +156,8 @@ const Custom: React.FC = () => {
   )
 }
 
-const Address: React.FC = () => {
+const Addresses: React.FC = () => {
   return <DashboardWrapper customComponent={Custom} selectedItem='/address' />
 }
 
-export default Address
+export default Addresses
