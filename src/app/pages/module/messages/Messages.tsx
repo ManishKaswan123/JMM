@@ -216,7 +216,7 @@ const Custom: React.FC = () => {
   )
 
   const {data, error, isLoading, isError, refetch} = useQuery({
-    queryKey: ['jobs', {limit: itemsPerPage, page: currentPage, ...filters}],
+    queryKey: ['messages', {limit: itemsPerPage, page: currentPage, ...filters}],
     queryFn: async () => fetchMessages({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })

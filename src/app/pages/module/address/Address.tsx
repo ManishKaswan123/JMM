@@ -1,24 +1,18 @@
 import React, {useState, useEffect, useMemo, useCallback} from 'react'
-import UserTable from './UserTable'
 import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
-import {Spinner} from 'sr/helpers/ui-components/Spinner'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {fetchUser} from 'sr/utils/api/fetchUser'
-import {AiOutlineFilter, AiOutlinePlus, AiOutlineReload} from 'react-icons/ai'
+
+import {AiOutlineFilter} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
-import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
-import SellerDetailsCard from './SellerDetailsCard'
+
 import {useQuery} from '@tanstack/react-query'
-import UserTableSkeleton from './UserTableSkeleton'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
-import {useSelector} from 'react-redux'
-import {RootState} from 'sr/redux/store'
-import {useActions} from 'sr/utils/helpers/useActions'
+import {AddressApiResponse, AddressData, fetchAddress} from 'sr/utils/api/addressApi'
+import AddressTableSkeleton from './AddressTableSkeleton'
+import AddressTable from './AddressTable'
 import {updateUser} from 'sr/utils/api/rewardPointPlanApi'
-import {fetchIndividual, IndividaulApiResponse, Individual} from 'sr/utils/api/individualApi'
 
 // interface fetchUserResponse {
 //   results: UserInterface[]
@@ -28,125 +22,24 @@ import {fetchIndividual, IndividaulApiResponse, Individual} from 'sr/utils/api/i
 //   totalResults: number
 // }
 
-interface userFilters {
-  role?: string
-  sellerStatus?: string
-  isEmailVerified?: boolean
+interface AddressFilters {
+  limit?: number
+  page?: number
+  individual_id?: string
 }
 
 const Custom: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [selectedUser, setSelectedUser] = useState<Individual>()
-  const [selectedUserForUpdate, setSelectedUserForUpdate] = useState<UserInterface>()
-  const [filters, setFilters] = useState<userFilters>()
+  const [selectedUser, setSelectedUser] = useState<AddressData>()
+  const [selectedUserForUpdate, setSelectedUserForUpdate] = useState<AddressData>()
+  const [filters, setFilters] = useState<AddressFilters>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const [itemsPerPage, setItemsPerPage] = useState<number>(8)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const userData = useSelector((state: RootState) => state.user.data)
-  const userStatus = useSelector((state: RootState) => state.user.status)
-  const rewardPointPlanData = useSelector((state: RootState) => state.rewardPlanMap.data)
-  const rewardPointPlanStatus = useSelector((state: RootState) => state.rewardPlanMap.status)
-  const {fetchUserData, fetchRewardPlanMap} = useActions()
 
-  const role = useMemo(
-    () => [
-      {name: 'Retail User', id: 'retailUser'},
-      {name: 'Business User', id: 'businessUser'},
-    ],
-    []
-  )
-
-  const sellerStatus = useMemo(
-    () => [
-      {name: 'Pending', id: 'pending'},
-      {name: 'Submitted', id: 'submitted'},
-      {name: 'Approved', id: 'approved'},
-      {name: 'Rejected', id: 'rejected'},
-    ],
-    []
-  )
-
-  const isEmailVerified = useMemo(
-    () => [
-      {id: true, name: 'Yes'},
-      {id: false, name: 'No'},
-    ],
-    []
-  )
-
-  const fields: FieldsArray = useMemo(
-    () => [
-      {type: 'dropdown', label: 'role', name: role, topLabel: 'Role', placeholder: 'Select Role'},
-      {
-        type: 'dropdown',
-        label: 'sellerStatus',
-        name: sellerStatus,
-        topLabel: 'Seller Status',
-        placeholder: 'Select Seller Status',
-      },
-      {
-        type: 'dropdown',
-        label: 'isEmailVerified',
-        name: isEmailVerified,
-        topLabel: 'Email Verified',
-        placeholder: 'Select Email Verified',
-      },
-    ],
-    [sellerStatus, role, isEmailVerified]
-  )
-  const updateFields: FieldsArray = useMemo(
-    () => [
-      {
-        type: 'text',
-        label: 'First Name',
-        name: 'firstName',
-        placeholder: 'First Name',
-      },
-      {
-        type: 'text',
-        label: 'Last Name',
-        name: 'lastName',
-        placeholder: 'Last Name',
-      },
-      {
-        type: 'text',
-        label: 'Email',
-        name: 'email',
-        placeholder: 'Email',
-      },
-      {
-        type: 'text',
-        label: 'Phone ',
-        name: 'phone',
-        placeholder: 'Phone',
-      },
-
-      {
-        type: 'dropdown',
-        label: 'rewardPointPlanId',
-        name: rewardPointPlanData,
-        topLabel: 'Reward Point',
-        placeholder: 'Select Reward Point Plan',
-        labelKey: 'planName',
-      },
-    ],
-    [rewardPointPlanData]
-  )
-  const fetchDataIfNeeded = useCallback(() => {
-    if (userStatus !== 'succeeded') {
-      fetchUserData({})
-    }
-    if (rewardPointPlanStatus !== 'succeeded') {
-      fetchRewardPlanMap({})
-    }
-  }, [userStatus, fetchUserData, rewardPointPlanStatus, fetchRewardPlanMap])
-  useEffect(() => {
-    fetchDataIfNeeded()
-  }, [fetchDataIfNeeded])
-
-  const {data, error, isLoading, isError, refetch} = useQuery<IndividaulApiResponse>({
-    queryKey: ['individual', {limit: itemsPerPage, page: currentPage, ...filters}],
-    queryFn: async () => fetchIndividual({limit: itemsPerPage, page: currentPage, ...filters}),
+  const {data, error, isLoading, isError, refetch} = useQuery<AddressApiResponse>({
+    queryKey: ['address', {limit: itemsPerPage, page: currentPage, ...filters}],
+    queryFn: async () => fetchAddress({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
     retry: false,
   })
@@ -160,7 +53,7 @@ const Custom: React.FC = () => {
     setCurrentPage(1)
   }
 
-  const handleApplyFilter = (newFilters: userFilters) => {
+  const handleApplyFilter = (newFilters: AddressFilters) => {
     setFilters(newFilters)
     setCurrentPage(1)
     setIsFilterVisible(false) // Hide filter after applying
@@ -185,7 +78,7 @@ const Custom: React.FC = () => {
             {!selectedUser && (
               <>
                 <h2 className='text-2xl font-semibold leading-tight ml-1 mb-2 sm:mb-0 sm:mr-4'>
-                  Individuals
+                  Address
                 </h2>
                 <div className='flex items-center'>
                   {/* <Button
@@ -212,17 +105,17 @@ const Custom: React.FC = () => {
                 onApplyFilter={handleApplyFilter}
                 setIsFilterVisible={setIsFilterVisible}
                 preFilters={filters || {}}
-                fields={fields}
+                fields={[]}
               />
             </div>
           )}
           {isLoading ? (
-            <UserTableSkeleton />
+            <AddressTableSkeleton />
           ) : (
             !selectedUser && (
-              <UserTable
-                userData={data?.data}
-                onSelectUser={setSelectedUser}
+              <AddressTable
+                addressData={data?.data}
+                onSelectAddress={setSelectedUser}
                 setSelectedData={setSelectedUserForUpdate}
                 setIsUpdateModalOpen={setIsUpdateModalOpen}
               />
@@ -241,14 +134,14 @@ const Custom: React.FC = () => {
               totalResults={data?.pagination?.total}
               onPageChange={onPageChange}
               itemsPerPage={itemsPerPage}
-              name='individual'
+              name='address'
               onLimitChange={onLimitChange}
               disabled={isLoading}
             />
           )
         )}
       </div>
-      {isUpdateModalOpen && selectedUserForUpdate && (
+      {/* {isUpdateModalOpen && selectedUserForUpdate && (
         <DynamicModal
           label='Update Individual'
           isOpen={isUpdateModalOpen}
@@ -257,13 +150,13 @@ const Custom: React.FC = () => {
           defaultValues={selectedUserForUpdate}
           onSubmit={handleUpdateUser}
         />
-      )}
+      )} */}
     </>
   )
 }
 
-const User: React.FC = () => {
-  return <DashboardWrapper customComponent={Custom} selectedItem='/individual' />
+const Address: React.FC = () => {
+  return <DashboardWrapper customComponent={Custom} selectedItem='/address' />
 }
 
-export default User
+export default Address
