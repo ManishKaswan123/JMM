@@ -1,6 +1,7 @@
 import {get, post} from 'sr/utils/axios/index'
 import {JmmApiResponse} from './contant'
 import {toast} from 'react-toastify'
+import {Address} from './addressApi'
 
 interface PayloadType {
   limit?: number
@@ -16,12 +17,13 @@ export interface Individual {
   email: string
   status: string
   user_id: string
-  address?: string
+  address?: Address
   createdAt: string
   updatedAt: string
   id: string
 }
 export type IndividaulApiResponse = JmmApiResponse<Individual[]>
+type SingleIndividualApiResponse = JmmApiResponse<Individual>
 
 const filterPayload = (payload: PayloadType) => {
   return Object.fromEntries(
@@ -56,5 +58,20 @@ export const createIndividual = async (payload: any) => {
   } catch (e: any) {
     toast.error(e.message)
     return false
+  }
+}
+export const fetchSingleIndividual = async (id: string): Promise<Individual> => {
+  try {
+    const res = await get<SingleIndividualApiResponse>(`/individual`, {id})
+
+    if (res.success === true && res.data) {
+      return res.data // Return the fetched data
+    } else {
+      // Handle the case where results are not present
+      throw new Error('No results found')
+    }
+  } catch (error) {
+    // Throw the error to be handled by the caller
+    throw new Error(`Failed to fetch : ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
 }

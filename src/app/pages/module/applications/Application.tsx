@@ -17,11 +17,10 @@ import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import { fetchJobs } from 'sr/utils/api/fetchJobs'
+import {fetchJobs} from 'sr/utils/api/fetchJobs'
 import ApplicationTable from './ApplicationTable'
 import SkeletonApplicationTable from './SkeletonApplicationTable'
-import { fetchApplications } from 'sr/utils/api/fetchApplications'
-
+import {fetchApplications} from 'sr/utils/api/fetchApplications'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -216,7 +215,7 @@ const Custom: React.FC = () => {
   )
 
   const {data, error, isLoading, isError, refetch} = useQuery({
-    queryKey: ['jobs', {limit: itemsPerPage, page: currentPage, ...filters}],
+    queryKey: ['application', {limit: itemsPerPage, page: currentPage, ...filters}],
     queryFn: async () => fetchApplications({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
@@ -224,7 +223,7 @@ const Custom: React.FC = () => {
     fetchUserDataIfNeeded()
   }, [])
 
-  console.log("This is the data :- ", data);
+  console.log('This is the data :- ', data)
 
   const defaultValues: defaultData | undefined = useMemo(() => {
     if (!selectedData) return undefined
@@ -296,7 +295,9 @@ const Custom: React.FC = () => {
       <div className='container mx-auto px-4 sm:px-8'>
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
-            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>Applications</h2>
+            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>
+              Applications
+            </h2>
             <div className='flex items-center'>
               <Button
                 label='Create new'
@@ -326,11 +327,11 @@ const Custom: React.FC = () => {
             <SkeletonApplicationTable />
           ) : (
             <ApplicationTable
-            //   setSelectedData={setSelectedData}
-            //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              //   setSelectedData={setSelectedData}
+              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
-            //   handleDelete={onDeleteChat}
-            //   handleView={handleView}
+              //   handleDelete={onDeleteChat}
+              //   handleView={handleView}
             />
           )}
         </div>
@@ -339,7 +340,9 @@ const Custom: React.FC = () => {
         ) : (
           <Pagination
             currentPage={currentPage}
-            totalPages={Math.ceil( (data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1) ) || 0}
+            totalPages={
+              Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
+            }
             totalResults={data?.pagination?.total}
             onPageChange={onPageChange}
             itemsPerPage={itemsPerPage}

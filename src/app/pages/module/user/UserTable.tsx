@@ -65,6 +65,9 @@ const UserTable: React.FC<UserTableProps> = (props) => {
               <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
                 Status
               </th>
+              <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
+                View User
+              </th>
 
               <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
                 Update User
@@ -87,6 +90,14 @@ const UserTable: React.FC<UserTableProps> = (props) => {
                 </td>
                 <td className='px-5 py-5 text-left border-b border-gray-200 text-sm'>
                   <p>{user.status}</p>
+                </td>
+                <td className='px-5 py-5 border-b border-gray-200 text-sm'>
+                  <FaEye
+                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                    onClick={() => {
+                      navigate(`/user/${user.id}`)
+                    }}
+                  />
                 </td>
 
                 <td className='px-5 py-5 border-b border-gray-200 text-sm'>
