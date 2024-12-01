@@ -142,15 +142,13 @@ const Custom: React.FC = () => {
   const fields: FieldsArray = useMemo(() => [], [])
 
   const {data, error, isLoading, isError, refetch} = useQuery({
-    queryKey: ['jobs', {limit: itemsPerPage, page: currentPage, ...filters}],
+    queryKey: ['company', {limit: itemsPerPage, page: currentPage, ...filters}],
     queryFn: async () => fetchCompany({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
   useEffect(() => {
     fetchUserDataIfNeeded()
   }, [])
-
-  console.log('This is the data :- ', data)
 
   const defaultValues: defaultData | undefined = useMemo(() => {
     if (!selectedData) return undefined
@@ -271,7 +269,7 @@ const Custom: React.FC = () => {
             totalResults={data?.pagination?.total}
             onPageChange={onPageChange}
             itemsPerPage={itemsPerPage}
-            name='Jobs'
+            name='company'
             onLimitChange={onLimitChange}
             disabled={isLoading}
           />
