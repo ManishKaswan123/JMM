@@ -1,12 +1,9 @@
 import React, {useState, useEffect, useMemo, useCallback} from 'react'
 import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-
 import {AiOutlineFilter} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
-import {UserInterface} from 'sr/constants/User'
-
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import {Address, AddressApiResponse, AddressData, fetchAddress} from 'sr/utils/api/addressApi'
@@ -15,6 +12,10 @@ import AddressTable from './AddressTable'
 import {updateUser} from 'sr/utils/api/rewardPointPlanApi'
 import {AddressDetailsCard} from './AddressDetails'
 import {set} from 'react-hook-form'
+import {RootState} from 'sr/redux/store'
+import {useSelector} from 'react-redux'
+import {useActions} from 'sr/utils/helpers/useActions'
+import {FieldsArray} from 'sr/constants/fields'
 
 // interface fetchUserResponse {
 //   results: UserInterface[]
@@ -37,6 +38,23 @@ const Custom: React.FC = () => {
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const [itemsPerPage, setItemsPerPage] = useState<number>(8)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
+  const userData = useSelector((state: RootState) => state.user.userData)
+  const userStatus = useSelector((state: RootState) => state.user.status)
+  const {fetchUserData} = useActions()
+
+  const fields: FieldsArray = useMemo(
+    () => [
+      {
+        type: 'dropdown',
+        label: 'individual_id',
+        name: userData,
+        topLabel: 'Individual',
+        placeholder: 'Select Individual',
+        labelKey: 'name',
+      },
+    ],
+    [userData]
+  )
 
   const {data, error, isLoading, isError, refetch} = useQuery<AddressApiResponse>({
     queryKey: ['address', {limit: itemsPerPage, page: currentPage, ...filters}],
@@ -44,6 +62,14 @@ const Custom: React.FC = () => {
     // placeholderData: keepPreviousData,
     retry: false,
   })
+  useEffect(() => {
+    fetchUserDataIfNeeded()
+  }, [])
+  const fetchUserDataIfNeeded = useCallback(() => {
+    if (userStatus !== 'succeeded') {
+      fetchUserData({})
+    }
+  }, [userStatus, fetchUserData])
 
   const onPageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
@@ -111,7 +137,7 @@ const Custom: React.FC = () => {
                 onApplyFilter={handleApplyFilter}
                 setIsFilterVisible={setIsFilterVisible}
                 preFilters={filters || {}}
-                fields={[]}
+                fields={fields}
               />
             </div>
           )}
