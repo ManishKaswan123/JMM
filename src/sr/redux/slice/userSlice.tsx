@@ -3,17 +3,19 @@ import {createSlice} from '@reduxjs/toolkit'
 import {fetchUserData} from '../action/userActions'
 
 interface UserState {
-  data: any
   statistics: any
+  data: any
+  userData: {id: string; name: string}[]
   userMap: {[key: string]: {firstName: string; lastName: string}}
   status: 'idle' | 'loading' | 'succeeded' | 'failed'
   error: string | null
 }
 
 const initialState: UserState = {
-  data: null,
-  statistics: null,
-  userMap: {},
+  statistics: {},
+  data: {},
+  userData: [] as {id: string; name: string}[],
+  userMap: {} as Record<string, {firstName: string; lastName: string}>,
   status: 'idle',
   error: null,
 }
@@ -29,9 +31,8 @@ const userSlice = createSlice({
       })
       .addCase(fetchUserData.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        state.data = action.payload.data
+        state.userData = action.payload.userData
         state.userMap = action.payload.userMap
-        state.statistics = action.payload.statistics
       })
       .addCase(fetchUserData.rejected, (state, action) => {
         state.status = 'failed'
