@@ -129,17 +129,17 @@ const Custom: React.FC = () => {
     ],
     [rewardPointPlanData]
   )
-  const fetchDataIfNeeded = useCallback(() => {
-    if (userStatus !== 'succeeded') {
-      fetchUserData({})
-    }
-    if (rewardPointPlanStatus !== 'succeeded') {
-      fetchRewardPlanMap({})
-    }
-  }, [userStatus, fetchUserData, rewardPointPlanStatus, fetchRewardPlanMap])
-  useEffect(() => {
-    fetchDataIfNeeded()
-  }, [fetchDataIfNeeded])
+  // const fetchDataIfNeeded = useCallback(() => {
+  //   if (userStatus !== 'succeeded') {
+  //     fetchUserData({})
+  //   }
+  //   if (rewardPointPlanStatus !== 'succeeded') {
+  //     fetchRewardPlanMap({})
+  //   }
+  // }, [userStatus, fetchUserData, rewardPointPlanStatus, fetchRewardPlanMap])
+  // useEffect(() => {
+  //   fetchDataIfNeeded()
+  // }, [fetchDataIfNeeded])
 
   const {data, error, isLoading, isError, refetch} = useQuery<IndividaulApiResponse>({
     queryKey: ['individual', {limit: itemsPerPage, page: currentPage, ...filters}],
