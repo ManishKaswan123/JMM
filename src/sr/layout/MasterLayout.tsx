@@ -2,13 +2,14 @@ import clsx from 'clsx'
 import {useState} from 'react'
 import {Outlet} from 'react-router-dom'
 import {ThemeContext} from 'sr/partials/partials'
-import AsideMenuMain from './components/aside/AsideDefault'
-import {Content} from './components/Content'
 import {Footer} from './components/Footer'
 import HeaderWrapper from './components/header/HeaderWrapper'
 import {PageDataProvider} from './master-layout'
+import AsideDefault from './components/aside/AsideDefault'
+import {UserContext} from 'sr/context/UserContext'
 
 const MasterLayout = () => {
+  const [user, setUser] = useState<string | undefined>(undefined)
   const [theme, setTheme] = useState('light')
   const [collapse, setCollapse] = useState<any | null>(false)
   const [width, setWidth] = useState<any | null>(
@@ -33,14 +34,16 @@ const MasterLayout = () => {
             <div className={clsx('main-page')}>
               {/* begin::Page */}
               <div className='page d-flex flex-row flex-column-fluid'>
-                <AsideMenuMain AdjustWidth={AdjustWidth} />
+                <AsideDefault AdjustWidth={AdjustWidth} />
                 {/* begin::Wrapper */}
-                <div className={`master_layout_main ${width}`}>
-                  <HeaderWrapper />
-                </div>
-                <div className={`mt-[80px] ${width}`}>
-                  <Outlet />
-                </div>
+                <UserContext.Provider value={{user, setUser}}>
+                  <div className={`master_layout_main ${width}`}>
+                    <HeaderWrapper />
+                  </div>
+                  <div className={`mt-[80px] ${width}`}>
+                    <Outlet />
+                  </div>
+                </UserContext.Provider>
                 {/* end::Content */}
                 <div className={`master_layout_main ${width}`}>
                   <Footer />

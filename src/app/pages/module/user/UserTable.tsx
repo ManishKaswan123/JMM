@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useCallback} from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
 import {useNavigate} from 'react-router-dom'
+import {UserInterface} from 'sr/constants/User'
 import {fetchWalletBalance} from 'sr/utils/api/checkWalletBalanceApi'
 import {Individual} from 'sr/utils/api/individualApi'
 
@@ -22,8 +23,8 @@ const UserTable: React.FC<UserTableProps> = (props) => {
     props.onSelectUser(user)
   }
 
-  const handleUserDetail = (user: Individual) => {
-    navigate(`/user/${user.id}`)
+  const handleUserDetail = (user: UserInterface) => {
+    navigate(`/user/details/${user.id}`)
   }
 
   const fetchUserWallet = useCallback(async (userId: string) => {
@@ -94,9 +95,7 @@ const UserTable: React.FC<UserTableProps> = (props) => {
                 <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                   <FaEye
                     className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
-                    onClick={() => {
-                      navigate(`/user/${user.id}`)
-                    }}
+                    onClick={() => handleUserDetail(user)}
                   />
                 </td>
 
