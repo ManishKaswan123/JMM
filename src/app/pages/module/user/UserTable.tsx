@@ -1,7 +1,8 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback, useContext} from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
 import {useNavigate} from 'react-router-dom'
 import {UserInterface} from 'sr/constants/User'
+import {UserContext} from 'sr/context/UserContext'
 import {fetchWalletBalance} from 'sr/utils/api/checkWalletBalanceApi'
 import {Individual} from 'sr/utils/api/individualApi'
 
@@ -13,6 +14,7 @@ interface UserTableProps {
 }
 
 const UserTable: React.FC<UserTableProps> = (props) => {
+  const {user, setUser} = useContext(UserContext)
   const navigate = useNavigate()
   const [walletBalances, setWalletBalances] = useState<
     Record<string, {balance: number; rewardPointBalance: number}>
@@ -95,7 +97,10 @@ const UserTable: React.FC<UserTableProps> = (props) => {
                 <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                   <FaEye
                     className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
-                    onClick={() => handleUserDetail(user)}
+                    onClick={() => {
+                      setUser(user.id)
+                      handleUserDetail(user)
+                    }}
                   />
                 </td>
 

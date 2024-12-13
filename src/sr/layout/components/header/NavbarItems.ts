@@ -12,17 +12,18 @@ export const navItems: NavItem[] = [
     iconPath: 'M12 4v16m8-8H4', // Plus icon
   },
   {
-    label: 'Wallet',
-    path: '/user/checkWalletBalance',
-    name: 'checkWalletBalance',
-    iconPath: 'M3 12h18M9 3v18', // Wallet outline
-  },
-  {
     label: 'Address',
     path: 'user/address',
     name: 'address',
     iconPath: 'M12 2C8.134 2 5 5.134 5 9c0 3.865 7 13 7 13s7-9.135 7-13c0-3.866-3.134-7-7-7z', // Location pin
   },
+  {
+    label: 'Wallet',
+    path: '/user/checkWalletBalance',
+    name: 'checkWalletBalance',
+    iconPath: 'M3 12h18M9 3v18', // Wallet outline
+  },
+
   {
     label: 'Reward Earnings',
     path: 'user/reward-earning',
