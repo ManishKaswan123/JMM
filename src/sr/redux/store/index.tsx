@@ -14,6 +14,7 @@ import loginUserSlice from '../slice/loginUserSlice'
 import eightySixTypeReducer from '../slice/eightySixSlice'
 import rewardPlanMapTypeReducer from '../slice/rewardPlanMapSlice'
 import rewardPointMapTypeReducer from '../slice/rewardPointMapSlice'
+import companyTypeReducer from '../slice/companySlice'
 const rootReducer = combineReducers({
   sendOtp: sendOtpReducer,
   otp: otpReducer,
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   eightySix: eightySixTypeReducer,
   rewardPlanMap: rewardPlanMapTypeReducer,
   rewardPointMap: rewardPointMapTypeReducer,
+  company: companyTypeReducer,
 })
 
 export const store = configureStore({

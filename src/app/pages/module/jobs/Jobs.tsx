@@ -19,8 +19,7 @@ import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import SkeletonJobsTable from './SkeletonJobsTable'
 import JobsTable from './JobsTable'
-import { fetchJobs } from 'sr/utils/api/fetchJobs'
-
+import {fetchJobs} from 'sr/utils/api/fetchJobs'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -66,9 +65,11 @@ const Custom: React.FC = () => {
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const userData = useSelector((state: RootState) => state.user.data)
   const userStatus = useSelector((state: RootState) => state.user.status)
+  const companyData = useSelector((state: RootState) => state.company.data)
+  const companyStatus = useSelector((state: RootState) => state.company.status)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const {fetchUserData} = useActions()
+  const {fetchUserData, fetchCompanyData} = useActions()
   const [itemsPerPage, setItemsPerPage] = useState(8)
 
   const eightySixResponse = useMemo(
@@ -185,33 +186,52 @@ const Custom: React.FC = () => {
     () => [
       {
         type: 'dropdown',
-        label: 'senderId',
-        name: userData?.results || [],
-        topLabel: 'Sender',
-        placeholder: 'Select Sender',
-        labelKey: 'firstName',
+        label: 'company_id',
+        name: companyData,
+        topLabel: 'Company',
+        placeholder: 'Select company',
+        labelKey: 'company_name',
         id: 'id',
       },
       {
         type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
-        labelKey: 'firstName',
+        label: 'status',
+        name: [
+          {name: 'Open', id: 'open'},
+          {name: 'Closed', id: 'closed'},
+          {name: 'Active', id: 'active'},
+        ],
+        topLabel: 'Status',
+        placeholder: 'Select Status',
+        labelKey: 'name',
         id: 'id',
       },
       {
         type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
-        labelKey: 'firstName',
+        label: 'require_resume',
+        name: [
+          {name: 'Yes', id: true},
+          {name: 'No', id: false},
+        ],
+        topLabel: 'Resume Required',
+        placeholder: 'Select Resume Required',
+        labelKey: 'name',
+        id: 'id',
       },
-      {type: 'text', label: 'Source Type', name: 'sourceType', placeholder: 'Source Type'},
+      {
+        type: 'dropdown',
+        label: 'notifications',
+        name: [
+          {name: 'Yes', id: true},
+          {name: 'No', id: false},
+        ],
+        topLabel: 'Notifications',
+        placeholder: 'Select Notifications',
+        labelKey: 'name',
+        id: 'id',
+      },
     ],
-    [userData?.results, eightySixResponse]
+    [companyData]
   )
 
   const {data, error, isLoading, isError, refetch} = useQuery({
@@ -220,10 +240,8 @@ const Custom: React.FC = () => {
     // placeholderData: keepPreviousData,
   })
   useEffect(() => {
-    fetchUserDataIfNeeded()
+    fetchDataIfNeeded()
   }, [])
-
-  console.log("This is the data :- ", data);
 
   const defaultValues: defaultData | undefined = useMemo(() => {
     if (!selectedData) return undefined
@@ -236,11 +254,11 @@ const Custom: React.FC = () => {
       receiverId: selectedData.receiverId?.id,
     }
   }, [selectedData])
-  const fetchUserDataIfNeeded = useCallback(() => {
-    if (userStatus !== 'succeeded') {
-      fetchUserData({})
+  const fetchDataIfNeeded = useCallback(() => {
+    if (companyStatus !== 'succeeded') {
+      fetchCompanyData({limit: 0})
     }
-  }, [userStatus, fetchUserData])
+  }, [fetchCompanyData])
 
   const onDeleteChat = async (id: string) => {
     const res = await deleteChat(id)
@@ -325,11 +343,11 @@ const Custom: React.FC = () => {
             <SkeletonJobsTable />
           ) : (
             <JobsTable
-            //   setSelectedData={setSelectedData}
-            //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              //   setSelectedData={setSelectedData}
+              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
-            //   handleDelete={onDeleteChat}
-            //   handleView={handleView}
+              //   handleDelete={onDeleteChat}
+              //   handleView={handleView}
             />
           )}
         </div>
@@ -338,7 +356,9 @@ const Custom: React.FC = () => {
         ) : (
           <Pagination
             currentPage={currentPage}
-            totalPages={Math.ceil( (data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1) ) || 0}
+            totalPages={
+              Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
+            }
             totalResults={data?.pagination?.total}
             onPageChange={onPageChange}
             itemsPerPage={itemsPerPage}
