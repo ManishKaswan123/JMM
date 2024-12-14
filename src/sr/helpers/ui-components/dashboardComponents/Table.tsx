@@ -23,7 +23,7 @@ const Table: React.FC<tableProps> = (props) => {
           <thead>
             <tr>
               <th className='px-5 py-5 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-                Name
+                Type
               </th>
               <th className='px-5 py-5 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
                 Company Count

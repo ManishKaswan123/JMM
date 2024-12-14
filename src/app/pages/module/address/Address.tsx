@@ -44,6 +44,35 @@ const Custom: React.FC = () => {
         placeholder: 'Select Individual',
         labelKey: 'name',
       },
+      {
+        type: 'number',
+        label: 'Rooms Count',
+        name: 'no_of_rooms',
+        placeholder: 'No. of Rooms',
+      },
+      {
+        type: 'number',
+        label: 'Bathrooms Count',
+        name: 'no_of_bath',
+        placeholder: 'No. of Bathrooms',
+      },
+      {
+        type: 'number',
+        label: 'Total Area',
+        name: 'total_area',
+        placeholder: 'Total Area',
+      },
+      {
+        type: 'dropdown',
+        label: 'status',
+        name: [
+          {name: 'Active', id: 'active'},
+          {name: 'Inactive', id: 'inactive'},
+        ],
+        topLabel: 'Status',
+        placeholder: 'Select Status',
+        labelKey: 'name',
+      },
     ],
     [userData]
   )

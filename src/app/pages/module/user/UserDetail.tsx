@@ -66,7 +66,7 @@ const Custom: React.FC<any> = () => {
   // }, [fetchDataIfNeeded])
 
   const onGoBack = () => {
-    navigate('/user')
+    navigate('/users')
   }
 
   // const handleUpdateUser = async (payload: UserInterface) => {

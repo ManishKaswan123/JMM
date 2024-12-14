@@ -43,7 +43,15 @@ const Custom: React.FC = () => {
   const deleteMutation = useDeleteBusinessCategory()
 
   const fields: FieldsArray = useMemo(
-    () => [{type: 'text', label: 'Name', name: 'name', placeholder: 'Name', required: true}],
+    () => [
+      {type: 'text', label: 'Name', name: 'name', placeholder: 'Name'},
+      {
+        type: 'number',
+        label: 'Company Count',
+        name: 'company_count',
+        placeholder: 'Company Count',
+      },
+    ],
     []
   )
 
