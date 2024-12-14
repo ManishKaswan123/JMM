@@ -6,24 +6,15 @@ import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import {Address, AddressApiResponse, AddressData, fetchAddress} from 'sr/utils/api/addressApi'
+import {Address, AddressApiResponse, fetchAddress} from 'sr/utils/api/addressApi'
 import AddressTableSkeleton from './AddressTableSkeleton'
 import AddressTable from './AddressTable'
-import {updateUser} from 'sr/utils/api/rewardPointPlanApi'
 import {AddressDetailsCard} from './AddressDetails'
-import {set} from 'react-hook-form'
 import {RootState} from 'sr/redux/store'
 import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {FieldsArray} from 'sr/constants/fields'
-
-// interface fetchUserResponse {
-//   results: UserInterface[]
-//   page: number
-//   limit: number
-//   totalPages: number
-//   totalResults: number
-// }
+import {useParams} from 'react-router-dom'
 
 interface AddressFilters {
   limit?: number
@@ -32,9 +23,10 @@ interface AddressFilters {
 }
 
 const Custom: React.FC = () => {
+  const {userId} = useParams<{userId: string | undefined}>()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [selectedAddress, setSelectedAddress] = useState<Address | undefined>()
-  const [filters, setFilters] = useState<AddressFilters>()
+  const [filters, setFilters] = useState<AddressFilters>({individual_id: userId})
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const [itemsPerPage, setItemsPerPage] = useState<number>(8)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
@@ -50,6 +42,35 @@ const Custom: React.FC = () => {
         name: userData,
         topLabel: 'Individual',
         placeholder: 'Select Individual',
+        labelKey: 'name',
+      },
+      {
+        type: 'number',
+        label: 'Rooms Count',
+        name: 'no_of_rooms',
+        placeholder: 'No. of Rooms',
+      },
+      {
+        type: 'number',
+        label: 'Bathrooms Count',
+        name: 'no_of_bath',
+        placeholder: 'No. of Bathrooms',
+      },
+      {
+        type: 'number',
+        label: 'Total Area',
+        name: 'total_area',
+        placeholder: 'Total Area',
+      },
+      {
+        type: 'dropdown',
+        label: 'status',
+        name: [
+          {name: 'Active', id: 'active'},
+          {name: 'Inactive', id: 'inactive'},
+        ],
+        topLabel: 'Status',
+        placeholder: 'Select Status',
         labelKey: 'name',
       },
     ],

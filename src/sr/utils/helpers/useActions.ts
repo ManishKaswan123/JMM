@@ -12,6 +12,7 @@ import {fetchSubCatData} from 'sr/redux/action/subCatActions'
 import {fetch86Action} from 'sr/redux/action/eightySixAction'
 import {fetchRewardPlanMap} from 'sr/redux/action/rewardPlanActions'
 import {fetchRewardPointMap} from 'sr/redux/action/rewardPointActions'
+import {fetchCompanyData} from 'sr/redux/action/companyActions'
 
 export const useActions = () => {
   const dispatch = useDispatch()
@@ -27,6 +28,7 @@ export const useActions = () => {
       fetch86Action,
       fetchRewardPlanMap,
       fetchRewardPointMap,
+      fetchCompanyData,
     },
     dispatch
   )

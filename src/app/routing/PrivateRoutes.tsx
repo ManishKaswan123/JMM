@@ -123,6 +123,7 @@ const routeConfigs: RouteConfig[] = [
   {path: '/message', element: <Messages />},
   {path: '/supervisor', element: <Supervisor />},
   {path: '/address', element: <Address />},
+  {path: '/user/address/:userId', element: <Address />},
   {path: '/application', element: <Application />},
 ]
 
