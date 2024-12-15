@@ -185,33 +185,15 @@ const Custom: React.FC = () => {
     () => [
       {
         type: 'dropdown',
-        label: 'senderId',
-        name: userData?.results || [],
+        label: 'status',
+        name: [{name: 'Pending OTP', id: 'pending_otp'}],
         topLabel: 'Sender',
-        placeholder: 'Select Sender',
-        labelKey: 'firstName',
+        placeholder: 'Select Status',
+        labelKey: 'name',
         id: 'id',
       },
-      {
-        type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
-        labelKey: 'firstName',
-        id: 'id',
-      },
-      {
-        type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
-        labelKey: 'firstName',
-      },
-      {type: 'text', label: 'Source Type', name: 'sourceType', placeholder: 'Source Type'},
     ],
-    [userData?.results, eightySixResponse]
+    []
   )
 
   const {data, error, isLoading, isError, refetch} = useQuery({

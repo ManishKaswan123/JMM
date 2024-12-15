@@ -9,7 +9,7 @@ const Custom: React.FC<any> = () => {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
 
-  console.log("this is params :- ", id)
+
 
   // Local state to handle editable fields
   const [isEditing, setIsEditing] = useState(false)

@@ -3,7 +3,6 @@ import {lazy, FC, Suspense} from 'react'
 import {Route, Routes, Navigate} from 'react-router-dom'
 import {MasterLayout} from 'sr/layout/MasterLayout'
 import TopBarProgress from 'react-topbar-progress-indicator'
-import UserDetailCard from 'app/pages/module/user/UserDetail'
 
 //import RewardPointPlan from 'app/pages/module/masterData/rewardPaymentPlan/RewardPointPlan'
 //import RewardPoint from 'app/pages/module/masterData/rewardPoint/RewardPoint'
@@ -43,6 +42,8 @@ const Jobs = lazy(async () => import('app/pages/module/jobs/Jobs'))
 const EightySixResponseDetailsCard = lazy(
   async () => import('app/pages/module/86Response/components/86ResponseDetailsCard')
 )*/
+const UserDetailCard = lazy(async () => import('app/pages/module/user/UserDetail'))
+const JobDetailsCard = lazy(async () => import('app/pages/module/jobs/JobDetails'))
 const Address = lazy(async () => import('app/pages/module/address/Address'))
 const BusinessCategory = lazy(async () => import('app/pages/module/masterData/business/Business'))
 const User = lazy(async () => import('app/pages/module/user/User'))
@@ -109,6 +110,7 @@ const routeConfigs: RouteConfig[] = [
   {path: '/users/checkWalletBalance', element: <CheckWalletBalance />}, */
   {path: '/business-category', element: <BusinessCategory />},
   {path: '/jobs', element: <Jobs />},
+  {path: '/job/:id', element: <JobDetailsCard />},
   {path: '/workorder', element: <WorkOrder />},
   {path: '/cleaner', element: <Cleaner />},
   {path: '/tasklist', element: <TaskList />},
