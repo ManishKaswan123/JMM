@@ -187,7 +187,7 @@ const Custom: React.FC = () => {
         type: 'dropdown',
         label: 'status',
         name: [{name: 'Pending OTP', id: 'pending_otp'}],
-        topLabel: 'Sender',
+        topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',
         id: 'id',

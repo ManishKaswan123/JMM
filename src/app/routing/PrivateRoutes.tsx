@@ -42,6 +42,7 @@ const Jobs = lazy(async () => import('app/pages/module/jobs/Jobs'))
 const EightySixResponseDetailsCard = lazy(
   async () => import('app/pages/module/86Response/components/86ResponseDetailsCard')
 )*/
+const CleanerDetailsCard = lazy(async () => import('app/pages/module/cleaner/CleanerDetails'))
 const UserDetailCard = lazy(async () => import('app/pages/module/user/UserDetail'))
 const JobDetailsCard = lazy(async () => import('app/pages/module/jobs/JobDetails'))
 const Address = lazy(async () => import('app/pages/module/address/Address'))
@@ -113,6 +114,7 @@ const routeConfigs: RouteConfig[] = [
   {path: '/job/:id', element: <JobDetailsCard />},
   {path: '/workorder', element: <WorkOrder />},
   {path: '/cleaner', element: <Cleaner />},
+  {path: '/cleaner/:id', element: <CleanerDetailsCard />},
   {path: '/tasklist', element: <TaskList />},
   {path: '/company', element: <Company />},
   {path: '/company/:id', element: <CompanyDetail />},
