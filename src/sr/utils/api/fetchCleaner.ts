@@ -1,8 +1,9 @@
-import { get } from 'sr/utils/axios/index'
+import {get} from 'sr/utils/axios/index'
 
 interface Address {
   address_line_1: string
   address_line_2: string
+  street: string
   country: string
   city: string
   state: string
@@ -11,7 +12,7 @@ interface Address {
   _id: string
 }
 
-interface CleanerDetails {
+export interface CleanerDetails {
   username: string
   first_name: string
   last_name: string
@@ -38,6 +39,11 @@ interface FetchCleanerResponse {
   data: CleanerDetails[]
   pagination: CleanerPagination
 }
+interface FetchSingleCleanerResponse {
+  success: boolean
+  data: CleanerDetails
+  pagination: CleanerPagination
+}
 
 interface CleanerPayload {
   limit?: number
@@ -59,6 +65,19 @@ export const fetchCleaner = async (payload: CleanerPayload): Promise<FetchCleane
     const res = await get<FetchCleanerResponse>(`/cleaner`, filteredPayload)
 
     if (res.data && res.data.length > 0) {
+      return res // Return the fetched data
+    } else {
+      throw new Error('No data found')
+    }
+  } catch (error) {
+    throw new Error(`Failed to fetch: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  }
+}
+export const fetchSingleCleaner = async (id: string): Promise<FetchSingleCleanerResponse> => {
+  try {
+    const res = await get<FetchSingleCleanerResponse>(`/cleaner`, {id})
+
+    if (res.data) {
       return res // Return the fetched data
     } else {
       throw new Error('No data found')
