@@ -1,4 +1,4 @@
-import { get } from 'sr/utils/axios/index'
+import {get} from 'sr/utils/axios/index'
 
 interface CompanyDetails {
   _id: string
@@ -15,7 +15,7 @@ interface CompanyDetails {
   updatedAt: string
 }
 
-interface JobAdvancedDetails {
+export interface JobAdvancedDetails {
   _id: string
   job_id: string
   reporting_address: {
@@ -30,8 +30,8 @@ interface JobAdvancedDetails {
   }
   hire_count: number
   supplemental_pay: string[]
-  recruitment_timeline?: string
-  application_deadline?: string
+  recruitment_timeline: string
+  application_deadline: string
   status: string
   createdAt: string
   updatedAt: string
@@ -81,22 +81,27 @@ interface JobResponse {
 }
 
 interface Pagination {
-    total: number;
-    page: number;
-    pageSize: number;
-    sort: Record<string, number>;
-    statusCounts: {
-      open: number;
-      closed: number;
-      pause: number;
-      active: number;
-    };
+  total: number
+  page: number
+  pageSize: number
+  sort: Record<string, number>
+  statusCounts: {
+    open: number
+    closed: number
+    pause: number
+    active: number
+  }
 }
 
 interface FetchJobResponse {
   data: JobResponse[]
   success: boolean
-  pagination: Pagination;
+  pagination: Pagination
+}
+export interface FetchSingleJobResponse {
+  data: JobResponse
+  success: boolean
+  pagination: Pagination
 }
 
 interface PayloadType {
@@ -105,6 +110,7 @@ interface PayloadType {
   senderId?: string
   sortBy?: string
   projectBy?: string
+  id?: string
 }
 
 const filterPayload = (payload: PayloadType) => {
@@ -120,6 +126,19 @@ export const fetchJobs = async (payload: PayloadType): Promise<FetchJobResponse>
     const res = await get<FetchJobResponse>(`/job`, filteredPayload)
 
     if (res.data && res.data.length > 0) {
+      return res // Return the fetched data
+    } else {
+      throw new Error('No data found')
+    }
+  } catch (error) {
+    throw new Error(`Failed to fetch: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  }
+}
+export const fetchSingleJob = async (id: string): Promise<FetchSingleJobResponse> => {
+  try {
+    const res = await get<FetchSingleJobResponse>(`/job`, {id})
+
+    if (res.data) {
       return res // Return the fetched data
     } else {
       throw new Error('No data found')
