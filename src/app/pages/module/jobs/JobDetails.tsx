@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {fetchJobs, fetchSingleJob, JobAdvancedDetails} from 'sr/utils/api/fetchJobs'
+import {fetchSingleJob, JobAdvancedDetails} from 'sr/utils/api/fetchJobs'
 
 const JobDetails: React.FC<any> = () => {
   const navigate = useNavigate()
