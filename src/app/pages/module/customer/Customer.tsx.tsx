@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useMemo, useCallback} from 'react'
 import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
-import {AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
+import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
 import {useSelector} from 'react-redux'
@@ -16,8 +16,6 @@ import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import SkeletonCompanyTable from './SkeletonCustomerTable'
-import CompanyTable from './CustomerTable'
 import {fetchCustomers} from 'sr/utils/api/customerApi'
 import SkeletonCustomerTable from './SkeletonCustomerTable'
 import CustomerTable from './CustomerTable'
@@ -271,10 +269,12 @@ const Custom: React.FC = () => {
                 className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
               ></Button>
               <Button
-                label='Filter'
-                Icon={AiOutlineFilter}
+                label={`${isFilterVisible ? 'Close' : 'Filters'}`}
+                Icon={!isFilterVisible ? AiOutlineFilter : AiOutlineClose}
                 onClick={() => setIsFilterVisible(!isFilterVisible)}
-                className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center'
+                className={`text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center ${
+                  isFilterVisible ? 'bg-red-400 hover:bg-red-500' : 'bg-gray-200 hover:bg-gray-300'
+                }`}
               ></Button>
             </div>
           </div>

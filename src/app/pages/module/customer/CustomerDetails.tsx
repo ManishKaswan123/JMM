@@ -1,14 +1,28 @@
-import React, {useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {Customer, fetchSingleCustomer} from 'sr/utils/api/customerApi'
+import {useSelector} from 'react-redux'
+import {useActions} from 'sr/utils/helpers/useActions'
+import {RootState} from 'sr/redux/store'
 
 const CustomerDetails: React.FC = () => {
   const navigate = useNavigate()
   const {id} = useParams<{id: string}>()
   const [data, setData] = useState<Customer>()
   const [isError, setIsError] = useState(false)
+  const companyMap = useSelector((state: RootState) => state.company.idNameMap)
+  const companyStatus = useSelector((state: RootState) => state.company.status)
+  const {fetchCompanyData} = useActions()
+  const fetchUserDataIfNeeded = useCallback(() => {
+    if (companyStatus !== 'succeeded') {
+      fetchCompanyData({})
+    }
+  }, [companyStatus, fetchCompanyData])
+  useEffect(() => {
+    fetchUserDataIfNeeded()
+  }, [])
 
   useEffect(() => {
     fetchSingleCustomer(id || '')
@@ -49,7 +63,7 @@ const CustomerDetails: React.FC = () => {
           </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Company ID:</strong>
-            <p>{data.company_id}</p>
+            <p>{companyMap[data.company_id]}</p>
           </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Name:</strong>
