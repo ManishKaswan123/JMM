@@ -6,7 +6,9 @@ export const fetchCompanyData = createAsyncThunk(
   async (payload: any) => {
     const response = await fetchCompany(payload)
     const data: {company_name: string; id: string}[] = []
+    const idNameMap: {[key: string]: string} = {}
     response.data.forEach((com) => {
+      idNameMap[com.id] = com.company_name
       data.push({
         company_name: com.company_name,
         id: com.id,
@@ -14,6 +16,7 @@ export const fetchCompanyData = createAsyncThunk(
     })
     return {
       data,
+      idNameMap, 
     }
   }
 )

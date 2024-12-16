@@ -13,6 +13,7 @@ import {fetch86Action} from 'sr/redux/action/eightySixAction'
 import {fetchRewardPlanMap} from 'sr/redux/action/rewardPlanActions'
 import {fetchRewardPointMap} from 'sr/redux/action/rewardPointActions'
 import {fetchCompanyData} from 'sr/redux/action/companyActions'
+import {fetchCustomersData} from 'sr/redux/action/customerActions'
 
 export const useActions = () => {
   const dispatch = useDispatch()
@@ -29,6 +30,7 @@ export const useActions = () => {
       fetchRewardPlanMap,
       fetchRewardPointMap,
       fetchCompanyData,
+      fetchCustomersData,
     },
     dispatch
   )

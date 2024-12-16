@@ -1,13 +1,12 @@
 import React, {useState, useEffect, useMemo, useCallback} from 'react'
 import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
-import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
+import {AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
 import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {fetchChats} from 'sr/utils/api/fetchChats'
 import {deleteChat} from 'sr/utils/api/deleteChat'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {createChat} from 'sr/utils/api/createChat'
@@ -17,9 +16,11 @@ import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import SkeletonJobsTable from './SkeletonJobsTable'
-import JobsTable from './JobsTable'
-import {fetchJobs} from 'sr/utils/api/fetchJobs'
+import SkeletonCompanyTable from './SkeletonCustomerTable'
+import CompanyTable from './CustomerTable'
+import {fetchCustomers} from 'sr/utils/api/customerApi'
+import SkeletonCustomerTable from './SkeletonCustomerTable'
+import CustomerTable from './CustomerTable'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -72,114 +73,73 @@ const Custom: React.FC = () => {
   const {fetchUserData, fetchCompanyData} = useActions()
   const [itemsPerPage, setItemsPerPage] = useState(8)
 
-  const eightySixResponse = useMemo(
-    () => [
-      {firstName: 'Devid', id: '65bbf2df9aa9785b019d87b2'},
-      {firstName: 'Devid', id: '65bbf2df9aa9785b019d87b2'},
-    ],
-    []
-  )
-  const msgType = useMemo(
-    () => [
-      {name: '1', id: 1},
-      {name: '2', id: 2},
-      {name: '3', id: 3},
-    ],
-    []
-  )
-
   const createFields: FieldsArray = useMemo(
     () => [
       {
-        type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
+        type: 'text',
+        label: 'Username',
+        name: 'username',
+        placeholder: 'Username',
         required: true,
       },
-      {
-        type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'msgType',
-        name: msgType,
-        topLabel: 'Msg Type',
-        placeholder: 'Select Msg Type',
-        required: true,
-      },
-      {type: 'text', label: 'Message', name: 'message', placeholder: 'Message', required: true},
       {
         type: 'text',
-        label: 'Source Type',
-        name: 'sourceType',
-        placeholder: 'Source Type',
+        label: 'Password',
+        name: 'password',
+        placeholder: 'Password',
         required: true,
       },
       {
-        type: 'file',
-        label: 'Images',
-        name: 'images',
-        wrapperLabel: 'Upload image',
-        topLabel: 'Images',
-        placeholder: 'Select Images',
+        type: 'text',
+        label: 'Email',
+        name: 'email',
+        placeholder: 'Email',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Mobile',
+        name: 'mobile_number',
+        placeholder: 'Mobile',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Company Name',
+        name: 'company_name',
+        placeholder: 'Company Name',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Username',
+        name: 'username',
+        placeholder: 'Username',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Business Type',
+        name: 'business_type',
+        placeholder: 'Business Type',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Intent',
+        name: 'intent',
+        placeholder: 'Intent',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Candidate Message',
+        name: 'candidate_msg',
+        placeholder: 'Candidate Message',
         required: true,
       },
     ],
-    [userData, msgType, eightySixResponse]
-  )
-
-  const updateFields: FieldsArray = useMemo(
-    () => [
-      {
-        type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'msgType',
-        name: msgType,
-        topLabel: 'Msg Type',
-        placeholder: 'Select Msg Type',
-        required: true,
-      },
-      {type: 'text', label: 'Message', name: 'message', placeholder: 'Message', required: true},
-      {
-        type: 'text',
-        label: 'Source Type',
-        name: 'sourceType',
-        placeholder: 'Source Type',
-        required: true,
-      },
-      {
-        type: 'file',
-        label: 'Images',
-        name: 'images',
-        wrapperLabel: 'Upload image',
-        topLabel: 'Images',
-        placeholder: 'Select Images',
-        required: true,
-      },
-    ],
-    [userData, msgType, eightySixResponse]
+    []
   )
 
   const fields: FieldsArray = useMemo(
@@ -195,38 +155,27 @@ const Custom: React.FC = () => {
       },
       {
         type: 'dropdown',
+        label: 'type',
+        name: [
+          {name: 'Airport', id: 'Airport'},
+          {name: 'Corporate', id: 'Corporate'},
+          {
+            name: 'Hospital',
+            id: 'Hospital',
+          },
+        ],
+        topLabel: 'Type',
+        placeholder: 'Select Type',
+      },
+      {
+        type: 'dropdown',
         label: 'status',
         name: [
-          {name: 'Open', id: 'open'},
-          {name: 'Closed', id: 'closed'},
+          {name: 'Pending OTP', id: 'pending_otp'},
           {name: 'Active', id: 'active'},
         ],
         topLabel: 'Status',
         placeholder: 'Select Status',
-        labelKey: 'name',
-        id: 'id',
-      },
-      {
-        type: 'dropdown',
-        label: 'require_resume',
-        name: [
-          {name: 'Yes', id: true},
-          {name: 'No', id: false},
-        ],
-        topLabel: 'Resume Required',
-        placeholder: 'Select Resume Required',
-        labelKey: 'name',
-        id: 'id',
-      },
-      {
-        type: 'dropdown',
-        label: 'notifications',
-        name: [
-          {name: 'Yes', id: true},
-          {name: 'No', id: false},
-        ],
-        topLabel: 'Notifications',
-        placeholder: 'Select Notifications',
         labelKey: 'name',
         id: 'id',
       },
@@ -235,12 +184,12 @@ const Custom: React.FC = () => {
   )
 
   const {data, error, isLoading, isError, refetch} = useQuery({
-    queryKey: ['jobs', {limit: itemsPerPage, page: currentPage, ...filters}],
-    queryFn: async () => fetchJobs({limit: itemsPerPage, page: currentPage, ...filters}),
+    queryKey: ['customer', {limit: itemsPerPage, page: currentPage, ...filters}],
+    queryFn: async () => fetchCustomers({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
   useEffect(() => {
-    fetchDataIfNeeded()
+    fetchUserDataIfNeeded()
   }, [])
 
   const defaultValues: defaultData | undefined = useMemo(() => {
@@ -254,11 +203,11 @@ const Custom: React.FC = () => {
       receiverId: selectedData.receiverId?.id,
     }
   }, [selectedData])
-  const fetchDataIfNeeded = useCallback(() => {
+  const fetchUserDataIfNeeded = useCallback(() => {
     if (companyStatus !== 'succeeded') {
-      fetchCompanyData({limit: 0})
+      fetchCompanyData({})
     }
-  }, [fetchCompanyData])
+  }, [companyStatus, fetchCompanyData])
 
   const onDeleteChat = async (id: string) => {
     const res = await deleteChat(id)
@@ -313,7 +262,7 @@ const Custom: React.FC = () => {
       <div className='container mx-auto px-4 sm:px-8'>
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
-            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>Jobs</h2>
+            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>Customer</h2>
             <div className='flex items-center'>
               <Button
                 label='Create new'
@@ -322,12 +271,10 @@ const Custom: React.FC = () => {
                 className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
               ></Button>
               <Button
-                label={`${isFilterVisible ? 'Close' : 'Filters'}`}
-                Icon={!isFilterVisible ? AiOutlineFilter : AiOutlineClose}
+                label='Filter'
+                Icon={AiOutlineFilter}
                 onClick={() => setIsFilterVisible(!isFilterVisible)}
-                className={`text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center ${
-                  isFilterVisible ? 'bg-red-400 hover:bg-red-500' : 'bg-gray-200 hover:bg-gray-300'
-                }`}
+                className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center'
               ></Button>
             </div>
           </div>
@@ -342,9 +289,9 @@ const Custom: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonJobsTable />
+            <SkeletonCustomerTable />
           ) : (
-            <JobsTable
+            <CustomerTable
               //   setSelectedData={setSelectedData}
               //   setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
@@ -364,7 +311,7 @@ const Custom: React.FC = () => {
             totalResults={data?.pagination?.total}
             onPageChange={onPageChange}
             itemsPerPage={itemsPerPage}
-            name='Jobs'
+            name='customer'
             onLimitChange={onLimitChange}
             disabled={isLoading}
           />
@@ -372,7 +319,7 @@ const Custom: React.FC = () => {
       </div>
       {isCreateModalOpen && (
         <DynamicModal
-          label='Create Job'
+          label='Create Customer'
           imageType='images'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
@@ -380,7 +327,7 @@ const Custom: React.FC = () => {
           onSubmit={handleCreateChat}
         />
       )}
-      {isUpdateModalOpen && (
+      {/* {isUpdateModalOpen && (
         <DynamicModal
           imageType='images'
           label='Update Job'
@@ -390,16 +337,16 @@ const Custom: React.FC = () => {
           defaultValues={defaultValues}
           onSubmit={handleEditChat}
         />
-      )}
+      )} */}
     </>
   )
 }
-const Jobs: React.FC = () => {
+const Customer: React.FC = () => {
   return (
     <>
-      <DashboardWrapper customComponent={Custom} selectedItem={'/chat'}></DashboardWrapper>
+      <DashboardWrapper customComponent={Custom} selectedItem={'/customer'}></DashboardWrapper>
     </>
   )
 }
 
-export default Jobs
+export default Customer

@@ -4,13 +4,14 @@ import {fetchCompanyData} from '../action/companyActions'
 
 interface CompanyState {
   data: {company_name: string; id: string}[]
+  idNameMap: {[key: string]: string}
   status: 'idle' | 'loading' | 'succeeded' | 'failed'
   error: string | null
 }
 
 const initialState: CompanyState = {
   data: [] as {company_name: string; id: string}[],
-
+  idNameMap: {} as Record<string, string>,
   status: 'idle',
   error: null,
 }
@@ -26,7 +27,7 @@ const companySlice = createSlice({
       })
       .addCase(fetchCompanyData.fulfilled, (state, action) => {
         state.status = 'succeeded'
-
+        state.idNameMap = action.payload.idNameMap
         state.data = action.payload.data
       })
       .addCase(fetchCompanyData.rejected, (state, action) => {
