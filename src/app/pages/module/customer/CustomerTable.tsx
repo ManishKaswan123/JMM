@@ -1,11 +1,25 @@
-import React from 'react'
+import React, {useCallback, useEffect} from 'react'
 import {FaEye} from 'react-icons/fa'
+import {useSelector} from 'react-redux'
 import {Link} from 'react-router-dom'
+import {RootState} from 'sr/redux/store'
 import {Customer} from 'sr/utils/api/customerApi'
+import {useActions} from 'sr/utils/helpers/useActions'
 interface CustomerTableProps {
   data: Customer[] | undefined
 }
 const CustomerTable: React.FC<CustomerTableProps> = ({data}) => {
+  const companyMap = useSelector((state: RootState) => state.company.idNameMap)
+  const companyStatus = useSelector((state: RootState) => state.company.status)
+  const {fetchCompanyData} = useActions()
+  const fetchUserDataIfNeeded = useCallback(() => {
+    if (companyStatus !== 'succeeded') {
+      fetchCompanyData({})
+    }
+  }, [companyStatus, fetchCompanyData])
+  useEffect(() => {
+    fetchUserDataIfNeeded()
+  }, [])
   return (
     <div className='inline-block min-w-full shadow rounded-lg overflow-hidden'>
       <table className='min-w-full leading-normal'>
@@ -50,7 +64,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({data}) => {
                   to={`/company/${customer.company_id}`}
                   className='text-blue-500 hover:font-medium'
                 >
-                  {customer.company_id}
+                  {companyMap[customer.company_id]}
                 </Link>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
