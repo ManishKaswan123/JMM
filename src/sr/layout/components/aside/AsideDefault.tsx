@@ -104,15 +104,12 @@ export default function AsideDefault({getScenarios, AdjustWidth}: Props) {
             <div className='flex items-center justify-around'>
               <Link to='/dashboard' className='flex items-end justify-center py-2'>
                 <button className='text-rose-800 md:block text-left text-blueGray-600 mr-0 inline-block whitespace-nowrap sm:text-xl md:text-4xl font-bold sm:pr-2 md:pr-0'>
-                  {sideCollapseItem === 'show' ? (
-                    <img
-                      className='w-[8rem]'
-                      src={'/media/logos/company_logo.jpeg'}
-                      alt='86DeadStock'
-                    />
+                  {/* {sideCollapseItem === 'show' ? (
+                    <img className='w-[8rem]' src={'/media/logos/company_logo.jpeg'} alt='JMM' />
                   ) : (
-                    '86'
-                  )}
+                    'JMM'
+                  )} */}
+                  JMM
                 </button>
               </Link>
               <svg
