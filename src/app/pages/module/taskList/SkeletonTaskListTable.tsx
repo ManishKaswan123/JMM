@@ -11,43 +11,32 @@ const SkeletonTaskListTable: React.FC<SkeletonTaskListTableProps> = ({rowCount =
         <thead>
           <tr>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Sender
+              Name
+            </th>
+
+            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
+              Type
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Receiver
+              Checklist
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Message
+              Company
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Images
+              Customer
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              86 Response
+              Status
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Source Type
-            </th>
-            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Msg Type
-            </th>
-            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Created At
-            </th>
-            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Action
+              Actions
             </th>
           </tr>
         </thead>
         <tbody>
           {Array.from({length: rowCount}).map((_, index) => (
             <tr key={index} className='odd:bg-white even:bg-gray-50'>
-              <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <div className='skeleton-row'></div>
-              </td>
-              <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <div className='skeleton-row'></div>
-              </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <div className='skeleton-row'></div>
               </td>

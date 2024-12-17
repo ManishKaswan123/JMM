@@ -4,7 +4,7 @@ import {fetchCompany} from 'sr/utils/api/fetchCompany'
 export const fetchCompanyData = createAsyncThunk(
   'company/fetchCompanyData',
   async (payload: any) => {
-    const response = await fetchCompany(payload)
+    const response = await fetchCompany({...payload, limit: 0})
     const data: {company_name: string; id: string}[] = []
     const idNameMap: {[key: string]: string} = {}
     response.data.forEach((com) => {
@@ -16,7 +16,7 @@ export const fetchCompanyData = createAsyncThunk(
     })
     return {
       data,
-      idNameMap, 
+      idNameMap,
     }
   }
 )

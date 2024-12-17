@@ -59,6 +59,10 @@ const ChecklistDetails: React.FC = () => {
             <strong className='font-medium text-lg mr-2'>Subtype:</strong>
             <p>{data.subtype || 'N/A'}</p>
           </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Status:</strong>
+            <p>{data.status}</p>
+          </div>
         </div>
 
         {/* Column 2 */}
@@ -71,10 +75,7 @@ const ChecklistDetails: React.FC = () => {
             <strong className='font-medium text-lg mr-2'>Customer Name:</strong>
             <p>{data.customer_id?.name || 'N/A'}</p>
           </div>
-          <div className='flex items-center'>
-            <strong className='font-medium text-lg mr-2'>Status:</strong>
-            <p>{data.status}</p>
-          </div>
+
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Taks IDs:</strong>
             <p>{data.task_ids.join(', ') || 'No tasks'}</p>

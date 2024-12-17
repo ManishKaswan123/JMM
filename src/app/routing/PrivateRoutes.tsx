@@ -21,7 +21,7 @@ const SuspensedView: FC<WithChildren> = ({children}) => {
 }
 
 const PrivateRoutes: FC = () => {
-  const {auth} = useAuth()
+  // const {auth} = useAuth()
   return (
     <Routes>
       <Route element={<MasterLayout />}>
