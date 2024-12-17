@@ -1,6 +1,6 @@
 import { get } from 'sr/utils/axios/index'
 
-interface CompanyResponse {
+export  interface CompanyResponse {
   username: string
   email: string
   mobile_number: string
