@@ -2,7 +2,7 @@ import sendOtpReducer from '../slice/sendOtp'
 import otpReducer from '../slice/validateOtp'
 import uploadFileReducer from '../upload/uploadFileReducer'
 import {combineReducers} from 'redux'
-import userReducer from '../slice/userSlice' // Import the new user slice
+import userReducer from '../slice/userSlice'
 import businessTypeReducer from '../slice/buninessTypeSlice'
 import categoryTypeReducer from '../slice/categorySlice'
 import orderTypeReducer from '../slice/orderSlice'
@@ -15,11 +15,12 @@ import rewardPlanMapTypeReducer from '../slice/rewardPlanMapSlice'
 import rewardPointMapTypeReducer from '../slice/rewardPointMapSlice'
 import companyTypeReducer from '../slice/companySlice'
 import customerTypeReducer from '../slice/customerSlice'
+import checklistTypeReducer from '../slice/checklistSlice'
 export const rootReducer = combineReducers({
   sendOtp: sendOtpReducer,
   otp: otpReducer,
   file: uploadFileReducer,
-  user: userReducer, // Add the user slice to the root reducer
+  user: userReducer,
   businessType: businessTypeReducer,
   categoryType: categoryTypeReducer,
   order: orderTypeReducer,
@@ -32,4 +33,5 @@ export const rootReducer = combineReducers({
   rewardPointMap: rewardPointMapTypeReducer,
   company: companyTypeReducer,
   customer: customerTypeReducer,
+  checklist: checklistTypeReducer,
 })

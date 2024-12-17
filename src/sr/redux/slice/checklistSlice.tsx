@@ -1,40 +1,40 @@
 // src/reducers/userReducer.ts
 import {createSlice} from '@reduxjs/toolkit'
-import {fetchCustomersData} from '../action/customerActions'
+import {fetchChecklistData} from '../action/checklistActions'
 
-interface CustomerState {
-  data: {customer_name: string; id: string}[]
+interface ChecklistState {
+  data: {checklist_name: string; id: string}[]
   idNameMap: {[key: string]: string}
   status: 'idle' | 'loading' | 'succeeded' | 'failed'
   error: string | null
 }
 
-const initialState: CustomerState = {
-  data: [] as {customer_name: string; id: string}[],
+const initialState: ChecklistState = {
+  data: [] as {checklist_name: string; id: string}[],
   idNameMap: {} as Record<string, string>,
   status: 'idle',
   error: null,
 }
 
-const customerSlice = createSlice({
-  name: 'customer',
+const checklistSlice = createSlice({
+  name: 'checklist',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCustomersData.pending, (state) => {
+      .addCase(fetchChecklistData.pending, (state) => {
         state.status = 'loading'
       })
-      .addCase(fetchCustomersData.fulfilled, (state, action) => {
+      .addCase(fetchChecklistData.fulfilled, (state, action) => {
         state.status = 'succeeded'
         state.idNameMap = action.payload.idNameMap
         state.data = action.payload.data
       })
-      .addCase(fetchCustomersData.rejected, (state, action) => {
+      .addCase(fetchChecklistData.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message || 'Failed to fetch category type data'
       })
   },
 })
 
-export default customerSlice.reducer
+export default checklistSlice.reducer
