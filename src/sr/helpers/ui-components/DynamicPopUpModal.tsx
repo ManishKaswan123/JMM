@@ -9,7 +9,6 @@ import {uploadMedia} from 'sr/utils/api/media'
 import {ExtractFieldNames, FieldsArray} from 'sr/constants/fields'
 import getSignedURL from 'sr/utils/helpers/getSignedURL'
 import {Spinner} from './Spinner'
-import {Checkbox} from './CheckBox'
 
 interface DynamicModalProps {
   imageType?: string
@@ -189,7 +188,7 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
                     labelKey={field.name?.[0]?.firstName ? 'firstName' : field.labelKey || 'name'}
                     label={field.topLabel}
                     placeholder={field.placeholder}
-                    valueKey='id'
+                    valueKey={field.valueKey || 'id'}
                     name={field.label}
                     required={field.required && field.required}
                     register={register(field.label, {

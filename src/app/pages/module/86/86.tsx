@@ -76,7 +76,7 @@ const Custom: React.FC = () => {
   const categoryData = useSelector((state: RootState) => state.categoryType.data)
   const businessTypeStatus = useSelector((state: RootState) => state.businessType.status)
   const categoryStatus = useSelector((state: RootState) => state.categoryType.status)
-  const {fetchUserData, fetchBusinessType, fetchCategoryType} = useActions()
+  const {fetchUserData,  fetchCategoryType} = useActions()
 
   const status = useMemo(
     () => [
@@ -161,14 +161,7 @@ const Custom: React.FC = () => {
         required: true,
       },
 
-      {
-        type: 'dropdown',
-        label: 'businessType',
-        name: businessTypeData?.results,
-        topLabel: 'Business Type',
-        placeholder: 'Select Business Type',
-        required: true,
-      },
+    
       {
         type: 'dropdown',
         label: 'category',
@@ -223,7 +216,7 @@ const Custom: React.FC = () => {
         required: true,
       },
     ],
-    [userData?.results, businessTypeData?.results, categoryData?.results]
+    [userData?.results,  categoryData?.results]
   )
   const {data, error, isLoading, isError, refetch} = useQuery({
     queryKey: ['86Request', {limit: itemsPerPage, page: currentPage, ...filters}],
@@ -236,14 +229,12 @@ const Custom: React.FC = () => {
 
   const fetchUserDataIfNeeded = useCallback(() => {
     if (userStatus !== 'succeeded') fetchUserData({})
-    if (businessTypeStatus !== 'succeeded') fetchBusinessType({})
     if (categoryStatus !== 'succeeded') fetchCategoryType({})
   }, [
     userStatus,
     businessTypeStatus,
     categoryStatus,
     fetchUserData,
-    fetchBusinessType,
     fetchCategoryType,
   ])
 

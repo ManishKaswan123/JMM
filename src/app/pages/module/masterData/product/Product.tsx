@@ -48,7 +48,7 @@ const Custom: React.FC = () => {
   const businessTypeStatus = useSelector((state: RootState) => state.businessType.status)
   const categoryData = useSelector((state: RootState) => state.categoryType.data)
   const categoryStatus = useSelector((state: RootState) => state.categoryType.status)
-  const {fetchUserData, fetchBusinessType, fetchCategoryType} = useActions()
+  const {fetchUserData, fetchCategoryType} = useActions()
   const [itemsPerPage, setItemsPerPage] = useState(6)
   const [selectedData, setSelectedData] = useState<ProductType>()
   const [isDataModified, setIsDataModified] = useState(false)
@@ -134,13 +134,7 @@ const Custom: React.FC = () => {
         topLabel: 'Hashtags',
         placeholder: 'Select Hashtags',
       },
-      {
-        type: 'dropdown',
-        label: 'businessType',
-        name: businessTypeData?.results,
-        topLabel: 'Business Type',
-        placeholder: 'Select Business Type',
-      },
+
       {
         type: 'dropdown',
         label: 'condition',
@@ -171,7 +165,7 @@ const Custom: React.FC = () => {
         placeholder: 'Select Status',
       },
     ],
-    [userData?.results, businessTypeData?.results, categoryData?.results]
+    [userData?.results, categoryData?.results]
   )
 
   const createFields = useMemo(
@@ -245,13 +239,7 @@ const Custom: React.FC = () => {
         label: 'Is Published',
         name: 'isPublished',
       },
-      {
-        type: 'dropdown',
-        label: 'businessType',
-        name: businessTypeData?.results,
-        topLabel: 'Business Type',
-        placeholder: 'Select Business Type',
-      },
+
       {
         type: 'dropdown',
         label: 'hashtags',
@@ -291,7 +279,7 @@ const Custom: React.FC = () => {
         placeholder: 'Select Images',
       },
     ],
-    [userData?.results, businessTypeData?.results, categoryData?.results]
+    [userData?.results, categoryData?.results]
   )
 
   const fetchData = useCallback(async () => {
@@ -322,9 +310,7 @@ const Custom: React.FC = () => {
     if (userStatus !== 'succeeded') {
       fetchUserData({})
     }
-    if (businessTypeStatus !== 'succeeded') {
-      fetchBusinessType({})
-    }
+
     if (categoryStatus !== 'succeeded') {
       fetchCategoryType({})
     }
@@ -416,9 +402,7 @@ const Custom: React.FC = () => {
         // taxes: data.taxes,
         quantity: data?.quantity || 10,
         unit: data?.unit || '',
-        businessType: [data.businessType] || '',
-        hashtags: [data.hashtags] || '',
-        category: [data.category] || '',
+
         images: data.imagePath ? [data.imagePath] : [],
         // shippingOptions: data.shippingOptions,
         isPublished: data?.isPublished || false,
@@ -453,9 +437,7 @@ const Custom: React.FC = () => {
         // taxes: payload.taxes,
         quantity: payload?.quantity || 10,
         unit: payload?.unit || '',
-        businessType: [payload?.businessType] || '',
-        hashtags: [payload?.hashtags] || '',
-        category: [payload?.category] || '',
+
         images: payload?.imagePath ? [payload?.imagePath] : [],
         // shippingOptions: data.shippingOptions,
         isPublished: payload?.isPublished || false,
