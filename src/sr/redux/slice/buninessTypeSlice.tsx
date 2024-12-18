@@ -1,39 +1,35 @@
-// src/reducers/userReducer.ts
 import {createSlice} from '@reduxjs/toolkit'
-import {fetchBusinessType} from '../action/businessTypeActions'
+import {fetchBusinessTypeData} from '../action/businessTypeActions'
 
 interface BusinessTypeState {
-  data: any
-  totalBusinessTypes: number | null
-  businessTypeMap: Record<string, string>
+  data: {type: string; id: string}[]
+  idNameMap: Record<string, string>
   status: 'idle' | 'loading' | 'succeeded' | 'failed'
   error: string | null
 }
 
 const initialState: BusinessTypeState = {
-  data: null,
-  totalBusinessTypes: null,
-  businessTypeMap: {} as Record<string, string>,
+  data: [] as {type: string; id: string}[],
+  idNameMap: {} as Record<string, string>,
   status: 'idle',
   error: null,
 }
 
 const businessTypeSlice = createSlice({
-  name: 'businessType',
+  name: 'business',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchBusinessType.pending, (state) => {
+      .addCase(fetchBusinessTypeData.pending, (state) => {
         state.status = 'loading'
       })
-      .addCase(fetchBusinessType.fulfilled, (state, action) => {
+      .addCase(fetchBusinessTypeData.fulfilled, (state, action) => {
         state.status = 'succeeded'
         state.data = action.payload.data
-        state.totalBusinessTypes = action.payload.totalBusinessTypes
-        state.businessTypeMap = action.payload.businessTypeMap
+        state.idNameMap = action.payload.idNameMap
       })
-      .addCase(fetchBusinessType.rejected, (state, action) => {
+      .addCase(fetchBusinessTypeData.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message || 'Failed to fetch business type data'
       })

@@ -57,7 +57,7 @@ const DropdownField = ({
         labelStyle == 'style1' ? 'ml-2 my-2 mr-4' : 'm-2'
       } input-wrapper ${wrapperClassName}`}
     >
-      {label && labelStyle == 'style1' && (
+      {label && labelStyle === 'style1' && (
         <label htmlFor={id} className='input-label'>
           {label}
           {required && <span className='required-field'>*</span>}

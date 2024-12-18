@@ -12,7 +12,7 @@ const Footer = () => {
       >
         <div className='text-primary px-8 text-right'>
           <span className=' fw-bold me-1'>{new Date().getFullYear()}&copy;</span>
-          86DeadStock
+          JMM
         </div>
       </div>
     </div>

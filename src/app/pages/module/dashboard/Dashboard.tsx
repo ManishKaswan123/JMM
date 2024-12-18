@@ -42,7 +42,7 @@ const Custom: React.FC = () => {
     transactionStatus,
     products,
     productStatus,
-    businessTypes,
+
     businessTypesStatus,
     categories,
     categoryStatus,
@@ -57,7 +57,7 @@ const Custom: React.FC = () => {
     transactionStatus: state.transaction.status,
     products: state.product.statistics,
     productStatus: state.product.status,
-    businessTypes: state.businessType.totalBusinessTypes,
+
     businessTypesStatus: state.businessType.status,
     categories: state.categoryType.totalCategories,
     categoryStatus: state.categoryType.status,
@@ -70,7 +70,7 @@ const Custom: React.FC = () => {
     fetchOrderData,
     fetchTransactionData,
     fetchProductData,
-    fetchBusinessType,
+
     fetchCategoryType,
     fetchSubCatData,
   } = useActions()
@@ -80,7 +80,6 @@ const Custom: React.FC = () => {
     if (orderStatus !== 'succeeded') fetchOrderData({})
     if (transactionStatus !== 'succeeded') fetchTransactionData({})
     if (productStatus !== 'succeeded') fetchProductData({})
-    if (businessTypesStatus !== 'succeeded') fetchBusinessType({})
     if (categoryStatus !== 'succeeded') fetchCategoryType({})
     if (subCatStatus !== 'succeeded') fetchSubCatData({})
   }, [
@@ -95,7 +94,6 @@ const Custom: React.FC = () => {
     fetchOrderData,
     fetchTransactionData,
     fetchProductData,
-    fetchBusinessType,
     fetchCategoryType,
     fetchSubCatData,
   ])
@@ -107,33 +105,33 @@ const Custom: React.FC = () => {
   const calculatePercentage = (amount: number, total: number): string =>
     `${((amount / total) * 100).toFixed(1)}%`
 
-  const masterData: StatisticsData[] | undefined = useMemo(() => {
-    if (!businessTypes || !categories || !subCat) return undefined
-    return [
-      {
-        type: 'Business',
-        amount: businessTypes,
-        percentage: calculatePercentage(businessTypes, businessTypes + categories + subCat),
-        barColor: 'bg-blue-500',
-      },
-      {
-        type: 'Category',
-        amount: categories,
-        percentage: calculatePercentage(categories, businessTypes + categories + subCat),
-        barColor: 'bg-green-500',
-      },
-      {
-        type: 'Sub Category',
-        amount: subCat,
-        percentage: calculatePercentage(subCat, businessTypes + categories + subCat),
-        barColor: 'bg-pink-500',
-      },
-    ]
-  }, [businessTypes, categories, subCat])
+  // const masterData: StatisticsData[] | undefined = useMemo(() => {
+  //   if (!businessTypes || !categories || !subCat) return undefined
+  //   return [
+  //     {
+  //       type: 'Business',
+  //       amount: businessTypes,
+  //       percentage: calculatePercentage(businessTypes, businessTypes + categories + subCat),
+  //       barColor: 'bg-blue-500',
+  //     },
+  //     {
+  //       type: 'Category',
+  //       amount: categories,
+  //       percentage: calculatePercentage(categories, businessTypes + categories + subCat),
+  //       barColor: 'bg-green-500',
+  //     },
+  //     {
+  //       type: 'Sub Category',
+  //       amount: subCat,
+  //       percentage: calculatePercentage(subCat, businessTypes + categories + subCat),
+  //       barColor: 'bg-pink-500',
+  //     },
+  //   ]
+  // }, [businessTypes, categories, subCat])
 
   const statisticsSections = [
     {title: 'Users', data: users?.data},
-    {title: 'Master Data', data: masterData},
+    // {title: 'Master Data', data: masterData},
     {title: 'Orders', data: orders?.data},
     {title: 'Transactions', data: transactions?.data},
     {title: 'Products', data: products?.data},
@@ -142,7 +140,7 @@ const Custom: React.FC = () => {
   const totalCards = [
     {title: 'Users', total: users?.totalUsers},
     {title: 'Sellers', total: users?.data?.[0]?.amount},
-    {title: 'Business Types', total: businessTypes},
+    // {title: 'Business Types', total: businessTypes},
     {title: 'Categories', total: categories},
     {title: 'Sub Categories', total: subCat},
     {title: 'Products', total: products?.totalProducts},

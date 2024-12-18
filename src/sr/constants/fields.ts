@@ -7,6 +7,7 @@ type Field = {
   wrapperLabel?: string
   topLabel?: string
   labelKey?: string
+  valueKey?: string
   onChange?: any
 }
 export type FieldsArray = Field[]

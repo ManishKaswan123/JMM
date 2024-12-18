@@ -16,7 +16,6 @@ import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import {fetchJobs} from 'sr/utils/api/fetchJobs'
 import SkeletonCompanyTable from './SkeletonCompanyTable'
 import CompanyTable from './CompanyTable'
 import {fetchCompany} from 'sr/utils/api/fetchCompany'
@@ -65,9 +64,11 @@ const Custom: React.FC = () => {
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const userData = useSelector((state: RootState) => state.user.data)
   const userStatus = useSelector((state: RootState) => state.user.status)
+  const businessData = useSelector((state: RootState) => state.businessType.data)
+  const businessStatus = useSelector((state: RootState) => state.businessType.status)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const {fetchUserData} = useActions()
+  const {fetchUserData, fetchBusinessTypeData} = useActions()
   const [itemsPerPage, setItemsPerPage] = useState(8)
 
   const createFields: FieldsArray = useMemo(
@@ -139,7 +140,56 @@ const Custom: React.FC = () => {
     []
   )
 
-  const fields: FieldsArray = useMemo(() => [], [])
+  const fields: FieldsArray = useMemo(
+    () => [
+      {
+        type: 'dropdown',
+        label: 'business_type',
+        name: businessData,
+        topLabel: 'Business Type',
+        placeholder: 'Select Business Type',
+        labelKey: 'id',
+        valueKey: 'type',
+      },
+      {
+        type: 'dropdown',
+        label: 'intent',
+        name: [
+          {name: 'Hiring', id: 'Hiring'},
+          {name: 'Subcontract', id: 'Subcontract'},
+          {name: 'Scheduling', id: 'Scheduling'},
+          {name: 'Bidding', id: 'Bidding'},
+        ],
+        topLabel: 'Intent',
+        placeholder: 'Select Intent',
+      },
+
+      {
+        type: 'dropdown',
+        label: 'candidate_msg',
+        name: [
+          {name: 'Yes', id: true},
+          {name: 'No', id: false},
+        ],
+        topLabel: 'Candidate Msg',
+        placeholder: 'Select Candidate Msg',
+      },
+
+      {
+        type: 'dropdown',
+        label: 'status',
+        name: [
+          {name: 'Active', id: 'active'},
+          {name: 'Pending Otp', id: 'pending_otp'},
+        ],
+        topLabel: 'Status',
+        placeholder: 'Select Status',
+        labelKey: 'name',
+        id: 'id',
+      },
+    ],
+    [businessData]
+  )
 
   const {data, error, isLoading, isError, refetch} = useQuery({
     queryKey: ['company', {limit: itemsPerPage, page: currentPage, ...filters}],
@@ -147,7 +197,7 @@ const Custom: React.FC = () => {
     // placeholderData: keepPreviousData,
   })
   useEffect(() => {
-    fetchUserDataIfNeeded()
+    fetchDataIfNeeded()
   }, [])
 
   const defaultValues: defaultData | undefined = useMemo(() => {
@@ -161,11 +211,14 @@ const Custom: React.FC = () => {
       receiverId: selectedData.receiverId?.id,
     }
   }, [selectedData])
-  const fetchUserDataIfNeeded = useCallback(() => {
+  const fetchDataIfNeeded = useCallback(() => {
     if (userStatus !== 'succeeded') {
       fetchUserData({})
     }
-  }, [userStatus, fetchUserData])
+    if (businessStatus !== 'succeeded') {
+      fetchBusinessTypeData({})
+    }
+  }, [userStatus, fetchUserData, businessStatus, fetchBusinessTypeData])
 
   const onDeleteChat = async (id: string) => {
     const res = await deleteChat(id)
