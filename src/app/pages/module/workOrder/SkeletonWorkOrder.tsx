@@ -11,40 +11,34 @@ const SkeletonWorkOrderTable: React.FC<SkeletonJobsTableProps> = ({rowCount = 8}
         <thead>
           <tr>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Sender
+              Title
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Receiver
+              Description
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Message
+              Type
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Images
+              Contractor Name
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              86 Response
+              Company Name
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Source Type
+              Checklist Name
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Msg Type
+              Customer Name
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Created At
-            </th>
-            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Action
+              Actions
             </th>
           </tr>
         </thead>
         <tbody>
           {Array.from({length: rowCount}).map((_, index) => (
             <tr key={index} className='odd:bg-white even:bg-gray-50'>
-              <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <div className='skeleton-row'></div>
-              </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <div className='skeleton-row'></div>
               </td>
