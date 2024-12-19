@@ -17,11 +17,10 @@ import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import { fetchJobs } from 'sr/utils/api/fetchJobs'
+import {fetchJobs} from 'sr/utils/api/fetchJobs'
 import SkeletonWorkOrderTable from './SkeletonWorkOrder'
 import WorkOrderTable from './WorkOrderTable'
-import { fetchWorkOrder } from 'sr/utils/api/fetchWorkOrder'
-
+import {fetchWorkOrder} from 'sr/utils/api/fetchWorkOrder'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -67,9 +66,15 @@ const Custom: React.FC = () => {
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const userData = useSelector((state: RootState) => state.user.data)
   const userStatus = useSelector((state: RootState) => state.user.status)
+  const companyData = useSelector((state: RootState) => state.company.data)
+  const companyStatus = useSelector((state: RootState) => state.company.status)
+  const customerData = useSelector((state: RootState) => state.customer.data)
+  const customerStatus = useSelector((state: RootState) => state.customer.status)
+  const checklistData = useSelector((state: RootState) => state.checklist.data)
+  const checklistStatus = useSelector((state: RootState) => state.checklist.status)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const {fetchUserData} = useActions()
+  const {fetchUserData, fetchCustomersData, fetchChecklistData, fetchCompanyData} = useActions()
   const [itemsPerPage, setItemsPerPage] = useState(8)
 
   const eightySixResponse = useMemo(
@@ -186,33 +191,117 @@ const Custom: React.FC = () => {
     () => [
       {
         type: 'dropdown',
-        label: 'senderId',
-        name: userData?.results || [],
-        topLabel: 'Sender',
-        placeholder: 'Select Sender',
-        labelKey: 'firstName',
+        label: 'company_id',
+        name: companyData,
+        topLabel: 'Company',
+        placeholder: 'Select company',
+        labelKey: 'company_name',
         id: 'id',
       },
       {
         type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
-        labelKey: 'firstName',
+        label: 'customer_id',
+        name: customerData,
+        topLabel: 'Customer',
+        placeholder: 'Select Customer',
+        labelKey: 'customer_name',
         id: 'id',
       },
       {
         type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
-        labelKey: 'firstName',
+        label: 'checklist_id',
+        name: checklistData,
+        topLabel: 'Checklist',
+        placeholder: 'Select Checklist',
+        labelKey: 'checklist_name',
+        id: 'id',
       },
-      {type: 'text', label: 'Source Type', name: 'sourceType', placeholder: 'Source Type'},
+      {
+        type: 'dropdown',
+        label: 'type',
+        name: [
+          {name: 'Open', id: 'open'},
+          {name: 'Individual', id: 'individual'},
+        ],
+        topLabel: 'Type',
+        placeholder: 'Select Type',
+        labelKey: 'name',
+        id: 'id',
+      },
+      {
+        type: 'dropdown',
+        label: 'pay_type',
+        name: [{name: 'Fixed Rate', id: 'Fixed Rate'}],
+        topLabel: 'Pay Type',
+        placeholder: 'Select Pay Type',
+        labelKey: 'name',
+        id: 'id',
+      },
+
+      {
+        type: 'dropdown',
+        label: 'recurring',
+        name: [
+          {name: 'Yes', id: true},
+          {name: 'No', id: false},
+        ],
+        topLabel: 'Recurring',
+        placeholder: 'Select Recurring',
+        labelKey: 'name',
+        id: 'id',
+      },
+      {
+        type: 'dropdown',
+        label: 'payment_status',
+        name: [
+          {name: 'Scheduled', id: 'scheduled'},
+          {name: 'Pending', id: 'pending'},
+          {name: 'Completed', id: 'completed'},
+        ],
+        topLabel: 'Payment Status',
+        placeholder: 'Select Payment Status',
+        labelKey: 'name',
+        id: 'id',
+      },
+      {
+        type: 'dropdown',
+        label: 'workorder_status',
+        name: [
+          {name: 'Scheduled', id: 'scheduled'},
+          {name: 'Pending', id: 'pending'},
+          {name: 'Completed', id: 'completed'},
+        ],
+        topLabel: 'WorkOrder Status',
+        placeholder: 'Select WorkOrder Status',
+        labelKey: 'name',
+        id: 'id',
+      },
+      {
+        type: 'dropdown',
+        label: 'status',
+        name: [
+          {name: 'Draft', id: 'draft'},
+          {name: 'Publish', id: 'publist'},
+        ],
+        topLabel: 'Status',
+        placeholder: 'Select Status',
+        labelKey: 'name',
+        id: 'id',
+      },
+      {
+        type: 'number',
+        label: 'Pay Type Rate',
+        name: 'pay_type_rate',
+        placeholder: 'Pay Type Rate',
+      },
+      {
+        type: 'number',
+        label: 'Work Completion Time',
+        name: 'time_for_work_completion',
+        placeholder: 'Work Completion Time',
+      },
     ],
-    [userData?.results, eightySixResponse]
+    [userData?.results, eightySixResponse, companyData, customerData, checklistData]
   )
 
   const {data, error, isLoading, isError, refetch} = useQuery({
@@ -223,8 +312,6 @@ const Custom: React.FC = () => {
   useEffect(() => {
     fetchUserDataIfNeeded()
   }, [])
-
-  console.log("This is the data :- ", data);
 
   const defaultValues: defaultData | undefined = useMemo(() => {
     if (!selectedData) return undefined
@@ -241,7 +328,25 @@ const Custom: React.FC = () => {
     if (userStatus !== 'succeeded') {
       fetchUserData({})
     }
-  }, [userStatus, fetchUserData])
+    if (companyStatus !== 'succeeded') {
+      fetchCompanyData({})
+    }
+    if (customerStatus !== 'succeeded') {
+      fetchCustomersData({})
+    }
+    if (checklistStatus !== 'succeeded') {
+      fetchChecklistData({})
+    }
+  }, [
+    userStatus,
+    fetchUserData,
+    companyStatus,
+    fetchCompanyData,
+    customerStatus,
+    fetchCustomersData,
+    checklistStatus,
+    fetchChecklistData,
+  ])
 
   const onDeleteChat = async (id: string) => {
     const res = await deleteChat(id)
@@ -296,7 +401,9 @@ const Custom: React.FC = () => {
       <div className='container mx-auto px-4 sm:px-8'>
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
-            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>Work Orders</h2>
+            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>
+              Work Orders
+            </h2>
             <div className='flex items-center'>
               <Button
                 label='Create new'
@@ -326,11 +433,11 @@ const Custom: React.FC = () => {
             <SkeletonWorkOrderTable />
           ) : (
             <WorkOrderTable
-            //   setSelectedData={setSelectedData}
-            //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              //   setSelectedData={setSelectedData}
+              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
-            //   handleDelete={onDeleteChat}
-            //   handleView={handleView}
+              //   handleDelete={onDeleteChat}
+              //   handleView={handleView}
             />
           )}
         </div>
@@ -339,7 +446,9 @@ const Custom: React.FC = () => {
         ) : (
           <Pagination
             currentPage={currentPage}
-            totalPages={Math.ceil( (data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1) ) || 0}
+            totalPages={
+              Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
+            }
             totalResults={data?.pagination?.total}
             onPageChange={onPageChange}
             itemsPerPage={itemsPerPage}
