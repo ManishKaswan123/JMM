@@ -1,5 +1,6 @@
 import {lazy} from 'react'
 
+const WorkOrderDetailsCard = lazy(() => import('app/pages/module/workOrder/WorkOrderDetails'))
 const TaskListDetailsCard = lazy(() => import('app/pages/module/taskList/TaskListDetails'))
 const ChecklistDetailsCard = lazy(() => import('app/pages/module/checklist/ChecklistDetails'))
 const Checklist = lazy(() => import('app/pages/module/checklist/Checklist.tsx'))
@@ -34,6 +35,7 @@ export const routeConfigs = [
   {path: '/checklist', element: <Checklist />},
   {path: '/checklist/:id', element: <ChecklistDetailsCard />},
   {path: '/workorder', element: <WorkOrder />},
+  {path: '/workorder/:id', element: <WorkOrderDetailsCard />},
   {path: '/cleaner', element: <Cleaner />},
   {path: '/cleaner/:id', element: <CleanerDetailsCard />},
   {path: '/tasklist', element: <TaskList />},
