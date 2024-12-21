@@ -1,13 +1,12 @@
 import React, {useState, useEffect, useMemo, useCallback} from 'react'
 import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
-import {AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
+import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
 import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {fetchChats} from 'sr/utils/api/fetchChats'
 import {deleteChat} from 'sr/utils/api/deleteChat'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {createChat} from 'sr/utils/api/createChat'
@@ -17,13 +16,9 @@ import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import { fetchJobs } from 'sr/utils/api/fetchJobs'
-import { fetchTaskList } from 'sr/utils/api/fetchTaskList'
-import { fetchTask } from 'sr/utils/api/fetchTask'
 import ProposalDetailsTable from './ProposalDetailsTable'
 import SkeletonProposalDetailsTable from './SkeletonProposalDetailsTable'
-import { fetchProposalDetails } from 'sr/utils/api/fetchProposalDetails'
-
+import {fetchProposalDetails} from 'sr/utils/api/fetchProposalDetails'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -69,9 +64,11 @@ const Custom: React.FC = () => {
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const userData = useSelector((state: RootState) => state.user.data)
   const userStatus = useSelector((state: RootState) => state.user.status)
+  const cleanerData = useSelector((state: RootState) => state.cleaner.data)
+  const cleanerStatus = useSelector((state: RootState) => state.cleaner.status)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const {fetchUserData} = useActions()
+  const {fetchUserData, fetchCleanerData} = useActions()
   const [itemsPerPage, setItemsPerPage] = useState(8)
 
   const eightySixResponse = useMemo(
@@ -188,45 +185,27 @@ const Custom: React.FC = () => {
     () => [
       {
         type: 'dropdown',
-        label: 'senderId',
-        name: userData?.results || [],
-        topLabel: 'Sender',
-        placeholder: 'Select Sender',
-        labelKey: 'firstName',
+        label: 'cleaner_id',
+        name: cleanerData,
+        topLabel: 'Cleaner',
+        placeholder: 'Select Cleaner',
+        labelKey: 'cleaner_name',
         id: 'id',
       },
-      {
-        type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
-        labelKey: 'firstName',
-        id: 'id',
-      },
-      {
-        type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
-        labelKey: 'firstName',
-      },
-      {type: 'text', label: 'Source Type', name: 'sourceType', placeholder: 'Source Type'},
+
+      {type: 'text', label: 'Expected Rate', name: 'expected_rate', placeholder: 'Expected Rate'},
     ],
-    [userData?.results, eightySixResponse]
+    [userData?.results, eightySixResponse, cleanerData]
   )
 
   const {data, error, isLoading, isError, refetch} = useQuery({
-    queryKey: ['tasklist', {limit: itemsPerPage, page: currentPage, ...filters}],
+    queryKey: ['proposalDetails', {limit: itemsPerPage, page: currentPage, ...filters}],
     queryFn: async () => fetchProposalDetails({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
   useEffect(() => {
     fetchUserDataIfNeeded()
   }, [])
-
-  console.log("This is the tasklist data in tasklist :- ", data);
 
   const defaultValues: defaultData | undefined = useMemo(() => {
     if (!selectedData) return undefined
@@ -243,7 +222,10 @@ const Custom: React.FC = () => {
     if (userStatus !== 'succeeded') {
       fetchUserData({})
     }
-  }, [userStatus, fetchUserData])
+    if (cleanerStatus !== 'succeeded') {
+      fetchCleanerData({})
+    }
+  }, [userStatus, fetchUserData, cleanerStatus, fetchCleanerData])
 
   const onDeleteChat = async (id: string) => {
     const res = await deleteChat(id)
@@ -298,7 +280,9 @@ const Custom: React.FC = () => {
       <div className='container mx-auto px-4 sm:px-8'>
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
-            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>Proposal Details</h2>
+            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>
+              Proposal Details
+            </h2>
             <div className='flex items-center'>
               <Button
                 label='Create new'
@@ -307,10 +291,12 @@ const Custom: React.FC = () => {
                 className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
               ></Button>
               <Button
-                label='Filter'
-                Icon={AiOutlineFilter}
+                label={`${isFilterVisible ? 'Close' : 'Filters'}`}
+                Icon={!isFilterVisible ? AiOutlineFilter : AiOutlineClose}
                 onClick={() => setIsFilterVisible(!isFilterVisible)}
-                className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center'
+                className={`text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center ${
+                  isFilterVisible ? 'bg-red-400 hover:bg-red-500' : 'bg-gray-200 hover:bg-gray-300'
+                }`}
               ></Button>
             </div>
           </div>
@@ -328,11 +314,11 @@ const Custom: React.FC = () => {
             <SkeletonProposalDetailsTable />
           ) : (
             <ProposalDetailsTable
-            //   setSelectedData={setSelectedData}
-            //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              //   setSelectedData={setSelectedData}
+              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
-            //   handleDelete={onDeleteChat}
-            //   handleView={handleView}
+              //   handleDelete={onDeleteChat}
+              //   handleView={handleView}
             />
           )}
         </div>
@@ -341,7 +327,9 @@ const Custom: React.FC = () => {
         ) : (
           <Pagination
             currentPage={currentPage}
-            totalPages={Math.ceil( (data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1) ) || 0}
+            totalPages={
+              Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
+            }
             totalResults={data?.pagination?.total}
             onPageChange={onPageChange}
             itemsPerPage={itemsPerPage}
@@ -378,7 +366,10 @@ const Custom: React.FC = () => {
 const ProposalDetails: React.FC = () => {
   return (
     <>
-      <DashboardWrapper customComponent={Custom} selectedItem={'/cleaner/proposaldetails'}></DashboardWrapper>
+      <DashboardWrapper
+        customComponent={Custom}
+        selectedItem={'/cleaner/proposaldetails'}
+      ></DashboardWrapper>
     </>
   )
 }

@@ -1,3 +1,5 @@
+import ProposalDetailCard from 'app/pages/module/proposalDetails/ProposalDetailsDetailsCard'
+import SkeletonProposalDetailsTable from 'app/pages/module/proposalDetails/SkeletonProposalDetailsTable'
 import {lazy} from 'react'
 
 const WorkOrderDetailsCard = lazy(() => import('app/pages/module/workOrder/WorkOrderDetails'))
@@ -42,8 +44,9 @@ export const routeConfigs = [
   {path: '/tasklist/:id', element: <TaskListDetailsCard />},
   {path: '/company', element: <Company />},
   {path: '/company/:id', element: <CompanyDetail />},
-  {path: '/task', element: <Task />},
+//   {path: '/task', element: <Task />},
   {path: '/proposaldetails', element: <ProposalDetails />},
+  {path: '/proposaldetails/:id', element: < ProposalDetailCard/>},
   {path: '/contractor', element: <Contractor />},
   {path: '/users', element: <User />},
   {path: '/user/details/:userId', element: <UserDetailCard />},
