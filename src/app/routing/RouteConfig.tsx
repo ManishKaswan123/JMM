@@ -1,7 +1,9 @@
-import ProposalDetailCard from 'app/pages/module/proposalDetails/ProposalDetailsDetailsCard'
-import SkeletonProposalDetailsTable from 'app/pages/module/proposalDetails/SkeletonProposalDetailsTable'
 import {lazy} from 'react'
 
+const ApplicationDetailsCard = lazy(
+  () => import('app/pages/module/applications/ApplicationDetails')
+)
+const ProposalDetailCard = lazy(() => import('app/pages/module/proposalDetails/ProposalDetails'))
 const WorkOrderDetailsCard = lazy(() => import('app/pages/module/workOrder/WorkOrderDetails'))
 const TaskListDetailsCard = lazy(() => import('app/pages/module/taskList/TaskListDetails'))
 const ChecklistDetailsCard = lazy(() => import('app/pages/module/checklist/ChecklistDetails'))
@@ -20,7 +22,7 @@ const Cleaner = lazy(() => import('app/pages/module/cleaner/Cleaner'))
 const TaskList = lazy(() => import('app/pages/module/taskList/TaskList'))
 const Company = lazy(() => import('app/pages/module/company/Company'))
 const CompanyDetail = lazy(() => import('app/pages/module/company/CompanyDetail'))
-const Task = lazy(() => import('app/pages/module/task/Task'))
+// const Task = lazy(() => import('app/pages/module/task/Task'))
 const ProposalDetails = lazy(() => import('app/pages/module/proposalDetails/ProposalDetails'))
 const Contractor = lazy(() => import('app/pages/module/contractor/Contractor'))
 const Messages = lazy(() => import('app/pages/module/messages/Messages'))
@@ -30,7 +32,7 @@ const Application = lazy(() => import('app/pages/module/applications/Application
 
 export const routeConfigs = [
   {path: '/business-category', element: <BusinessCategory />},
-  {path: '/jobs', element: <Jobs />},
+  {path: '/job', element: <Jobs />},
   {path: '/job/:id', element: <JobDetailsCard />},
   {path: '/customer', element: <Customer />},
   {path: '/customer/:id', element: <CustomerDetailsCard />},
@@ -44,9 +46,9 @@ export const routeConfigs = [
   {path: '/tasklist/:id', element: <TaskListDetailsCard />},
   {path: '/company', element: <Company />},
   {path: '/company/:id', element: <CompanyDetail />},
-//   {path: '/task', element: <Task />},
+  //   {path: '/task', element: <Task />},
   {path: '/proposaldetails', element: <ProposalDetails />},
-  {path: '/proposaldetails/:id', element: < ProposalDetailCard/>},
+  {path: '/proposaldetails/:id', element: <ProposalDetailCard />},
   {path: '/contractor', element: <Contractor />},
   {path: '/users', element: <User />},
   {path: '/user/details/:userId', element: <UserDetailCard />},
@@ -56,4 +58,5 @@ export const routeConfigs = [
   {path: '/address', element: <Address />},
   {path: '/user/address/:userId', element: <Address />},
   {path: '/application', element: <Application />},
+  {path: '/application/:id', element: <ApplicationDetailsCard />},
 ]

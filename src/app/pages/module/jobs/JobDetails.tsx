@@ -21,7 +21,7 @@ const JobDetails: React.FC<any> = () => {
   }, [id])
 
   const onGoBack = () => {
-    navigate('/jobs')
+    navigate('/job')
   }
 
   if (data === undefined) return <div>Loading...</div>
