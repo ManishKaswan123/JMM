@@ -1,13 +1,12 @@
 import React, {useState, useEffect, useMemo, useCallback} from 'react'
 import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
-import {AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
+import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
 import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {fetchChats} from 'sr/utils/api/fetchChats'
 import {deleteChat} from 'sr/utils/api/deleteChat'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {createChat} from 'sr/utils/api/createChat'
@@ -17,7 +16,6 @@ import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import {fetchJobs} from 'sr/utils/api/fetchJobs'
 import ApplicationTable from './ApplicationTable'
 import SkeletonApplicationTable from './SkeletonApplicationTable'
 import {fetchApplications} from 'sr/utils/api/fetchApplications'
@@ -66,9 +64,11 @@ const Custom: React.FC = () => {
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const userData = useSelector((state: RootState) => state.user.data)
   const userStatus = useSelector((state: RootState) => state.user.status)
+  const cleanerData = useSelector((state: RootState) => state.cleaner.data)
+  const cleanerStatus = useSelector((state: RootState) => state.cleaner.status)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const {fetchUserData} = useActions()
+  const {fetchUserData, fetchCleanerData} = useActions()
   const [itemsPerPage, setItemsPerPage] = useState(8)
 
   const eightySixResponse = useMemo(
@@ -185,33 +185,33 @@ const Custom: React.FC = () => {
     () => [
       {
         type: 'dropdown',
-        label: 'senderId',
-        name: userData?.results || [],
-        topLabel: 'Sender',
-        placeholder: 'Select Sender',
-        labelKey: 'firstName',
+        label: 'cleaner_id',
+        name: cleanerData,
+        topLabel: 'Cleaner',
+        placeholder: 'Select Cleaner',
+        labelKey: 'cleaner_name',
         id: 'id',
       },
       {
         type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
-        labelKey: 'firstName',
+        label: 'status',
+        name: [
+          {name: 'Hired', id: 'hired'},
+          {name: 'Active', id: 'active'},
+          {name: 'Withdrawn', id: 'withdrawn'},
+          {name: 'Shortlist', id: 'shortlist'},
+          {name: 'Rejected', id: 'rejected'},
+          {name: 'Awaiting Reviews', id: 'awaiting-reviews'},
+          {name: 'Pause', id: 'pause'},
+          {name: 'Contacting', id: 'contacting'},
+        ],
+        topLabel: 'Status',
+        placeholder: 'Select Status',
+        labelKey: 'name',
         id: 'id',
       },
-      {
-        type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
-        labelKey: 'firstName',
-      },
-      {type: 'text', label: 'Source Type', name: 'sourceType', placeholder: 'Source Type'},
     ],
-    [userData?.results, eightySixResponse]
+    [userData?.results, eightySixResponse, cleanerData]
   )
 
   const {data, error, isLoading, isError, refetch} = useQuery({
@@ -222,8 +222,6 @@ const Custom: React.FC = () => {
   useEffect(() => {
     fetchUserDataIfNeeded()
   }, [])
-
-  console.log('This is the data :- ', data)
 
   const defaultValues: defaultData | undefined = useMemo(() => {
     if (!selectedData) return undefined
@@ -240,7 +238,10 @@ const Custom: React.FC = () => {
     if (userStatus !== 'succeeded') {
       fetchUserData({})
     }
-  }, [userStatus, fetchUserData])
+    if (cleanerStatus !== 'succeeded') {
+      fetchCleanerData({})
+    }
+  }, [userStatus, fetchUserData, cleanerStatus, fetchCleanerData])
 
   const onDeleteChat = async (id: string) => {
     const res = await deleteChat(id)
@@ -306,10 +307,12 @@ const Custom: React.FC = () => {
                 className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
               ></Button>
               <Button
-                label='Filter'
-                Icon={AiOutlineFilter}
+                label={`${isFilterVisible ? 'Close' : 'Filters'}`}
+                Icon={!isFilterVisible ? AiOutlineFilter : AiOutlineClose}
                 onClick={() => setIsFilterVisible(!isFilterVisible)}
-                className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center'
+                className={`text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center ${
+                  isFilterVisible ? 'bg-red-400 hover:bg-red-500' : 'bg-gray-200 hover:bg-gray-300'
+                }`}
               ></Button>
             </div>
           </div>
