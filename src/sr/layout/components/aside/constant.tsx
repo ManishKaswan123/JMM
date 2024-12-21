@@ -1,108 +1,22 @@
-// menuItems.js
 export const masterMenuItems: {label: string; path: string; iconPath: string}[] = [
   {
     label: 'Business Category',
     path: '/business-category',
     iconPath: 'M9 12h6m2 4H7m12-8H5m16 8a9 9 0 11-18 0 9 9 0 0118 0z',
   },
-  //   {
-  //     label: 'Category',
-  //     path: '/category',
-  //     iconPath:
-  //       'M3 7a1 1 0 011-1h16a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V7zM3 14a1 1 0 011-1h16a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3z',
-  //   },
-  //   {
-  //     label: 'Sub Category',
-  //     path: '/sub-category',
-  //     iconPath: 'M4 6h16M4 12h8m-8 6h16',
-  //   },
-  //   {
-  //     label: 'Invitation Coupon',
-  //     path: '/invitation-coupon',
-  //     iconPath:
-  //       'M9 11V9a2 2 0 114 0v2m-4 0a2 2 0 104 0m0 0v2a2 2 0 11-4 0v-2m0 0H6a2 2 0 00-2 2v4a2 2 0 002 2h12a2 2 0 002-2v-4a2 2 0 00-2-2h-3',
-  //   },
-  //   {
-  //     label: 'Seller Payment Plan',
-  //     path: '/seller-payment-plan',
-  //     iconPath:
-  //       'M6 12h12M6 16h12M6 8h12M6 20h12M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z',
-  //   },
-  //   {
-  //     label: 'Reward Point Plan',
-  //     path: '/reward-point-plan',
-  //     iconPath:
-  //       'M6 12h12M6 16h12M6 8h12M6 20h12M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z',
-  //   },
-  //   {
-  //     label: 'Reward Earning',
-  //     path: '/reward-earning',
-  //     iconPath:
-  //       'M6 12h12M6 16h12M6 8h12M6 20h12M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z',
-  //   },
-  //   {
-  //     label: 'Reward Transaction',
-  //     path: '/reward-uses-history',
-  //     iconPath: 'M9 12h6m2 4H7m12-8H5m16 8a9 9 0 11-18 0 9 9 0 0118 0z',
-  //   },
-  //   {
-  //     label: 'Mobile App Version History',
-  //     path: '/mobile-app-version-history',
-  //     iconPath: 'M12 8v4l3 3M7 4h10a2 2 0 012 2v12a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z',
-  //   },
-  // Add other menu items here
 ]
 export const normalMenuItems = [
-  //   {
-  //     label: 'Dashboard',
-  //     path: '/dashboard',
-  //     iconPath:
-  //       'M9 2H7a2 2 0 00-2 2v16a2 2 0 002 2h10a2 2 0 002-2V4a2 2 0 00-2-2h-2m-4 0v4m0-4H9m0 0H7',
-  //   },
-  //   {
-  //     label: 'Users',
-  //     path: '/users',
-  //     iconPath: 'M12 14c-3.866 0-7 3.134-7 7m14 0c0-3.866-3.134-7-7-7m0-6a3 3 0 100-6 3 3 0 000 6z',
-  //   },
-  //   {
-  //     label: 'Product',
-  //     path: '/product',
-  //     iconPath:
-  //       'M3 8h18M3 12h18M3 16h18M5 4h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z',
-  //   },
-  //   {
-  //     label: 'Order',
-  //     path: '/order',
-  //     iconPath: 'M9 12h6m2 4H7m12-8H5m16 8a9 9 0 11-18 0 9 9 0 0118 0z',
-  //   },
-  //   {
-  //     label: 'Transaction',
-  //     path: '/transactions',
-  //     iconPath:
-  //       'M5 11h14M5 15h14M5 19h14M3 5h18a1 1 0 011 1v14a1 1 0 01-1 1H3a1 1 0 01-1-1V6a1 1 0 011-1z',
-  //   },
-  //   {
-  //     label: 'Eighty Six',
-  //     path: '/86',
-  //     iconPath:
-  //       'M9 12a3 3 0 100-6 3 3 0 000 6zM15 12a3 3 0 100-6 3 3 0 000 6zM9 12a3 3 0 100 6 3 3 0 000-6zM15 12a3 3 0 100 6 3 3 0 000-6z',
-  //   },
-  //   {
-  //     label: 'Eighty Six Response',
-  //     path: '/86-response',
-  //     iconPath:
-  //       'M9 12a3 3 0 100-6 3 3 0 000 6zM15 12a3 3 0 100-6 3 3 0 000 6zM9 12a3 3 0 100 6 3 3 0 000-6zM15 12a3 3 0 100 6 3 3 0 000-6z',
-  //   },
-  //   {
-  //     label: 'Chats',
-  //     path: '/chats',
-  //     iconPath: 'M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h12a2 2 0 012 2z',
-  //   },
   {
     label: 'Individuals',
     path: '/users',
     iconPath:
       'M17 9V7a4 4 0 00-8 0v2M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z',
+  },
+  {
+    label: 'Application',
+    path: '/application',
+    iconPath:
+      'M8 2H16C17.1046 2 18 2.89543 18 4V20C18 21.1046 17.1046 22 16 22H8C6.89543 22 6 21.1046 6 20V4C6 2.89543 6.89543 2 8 2ZM8 0C5.79086 0 4 1.79086 4 4V20C4 22.2091 5.79086 24 8 24H16C18.2091 24 20 22.2091 20 20V4C20 1.79086 18.2091 0 16 0H8ZM9 7H15V9H9V7ZM9 11H15V13H9V11ZM9 15H13V17H9V15Z',
   },
   {
     label: 'Checklists',
@@ -182,11 +96,6 @@ export const normalMenuItems = [
     iconPath:
       'M17 9V7a4 4 0 00-8 0v2M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z',
   },
-  {
-    label: 'Application',
-    path: '/application',
-    iconPath:
-      'M8 2H16C17.1046 2 18 2.89543 18 4V20C18 21.1046 17.1046 22 16 22H8C6.89543 22 6 21.1046 6 20V4C6 2.89543 6.89543 2 8 2ZM8 0C5.79086 0 4 1.79086 4 4V20C4 22.2091 5.79086 24 8 24H16C18.2091 24 20 22.2091 20 20V4C20 1.79086 18.2091 0 16 0H8ZM9 7H15V9H9V7ZM9 11H15V13H9V11ZM9 15H13V17H9V15Z',
-  },
+
   // Add other menu items here
 ]
