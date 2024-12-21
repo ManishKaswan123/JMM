@@ -2,18 +2,18 @@ import React, {useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {fetchSingleJob, JobAdvancedDetails} from 'sr/utils/api/fetchJobs'
+import {fetchSingleJob, JobResponse} from 'sr/utils/api/fetchJobs'
 
 const JobDetails: React.FC<any> = () => {
   const navigate = useNavigate()
   const {id} = useParams<{id: string}>()
-  const [data, setData] = useState<JobAdvancedDetails>()
+  const [data, setData] = useState<JobResponse>()
   const [isError, setIsError] = useState(false)
 
   useEffect(() => {
     fetchSingleJob(id || '')
       .then((res) => {
-        setData(res.data.job_advanced_id)
+        setData(res.data)
       })
       .catch(() => {
         setIsError(true)
@@ -23,7 +23,7 @@ const JobDetails: React.FC<any> = () => {
   const onGoBack = () => {
     navigate('/jobs')
   }
-  console.log(data)
+
   if (data === undefined) return <div>Loading...</div>
   if (isError) return <div>Error loading job details.</div>
 
@@ -42,63 +42,165 @@ const JobDetails: React.FC<any> = () => {
       <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
         <div className='space-y-4'>
           <div className='flex items-center'>
-            <strong className='font-medium text-lg mr-2'>Job ID:</strong>
-            <p>{data?.job_id || 'Not Available'}</p>
+            <strong className='font-medium text-lg mr-2'>Company Id:</strong>
+            <p>{data.company_id.company_name || 'Not Available'}</p>
           </div>
           <div className='flex items-center'>
-            <strong className='font-medium text-lg mr-2'>Reporting Address:</strong>
+            <strong className='font-medium text-lg mr-2'>Job ID:</strong>
+            <p>{data.id || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Job Title:</strong>
+            <p>{data.job_title || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Job Types:</strong>
+            <p>{data.job_type?.join(', ') || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Schedule:</strong>
+            <p>{data.schedule?.join(', ') || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Employment Type:</strong>
+            <p>{data.employment_type?.join(', ') || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Start Date:</strong>
+            <p>{new Date(data.start_date).toLocaleString() || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Pay by:</strong>
+            <p>{data.show_pay_by || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Exact Amount & Rate:</strong>
             <p>
-              {`${data?.reporting_address?.address_line_1}, ` +
-                `${data?.reporting_address?.city}, ` +
-                `${data?.reporting_address?.state}, ` +
-                `${data?.reporting_address?.country} `}
+              {data.exact_amount || 'Not Available'} {data.rate || ''}
             </p>
           </div>
-          <div className='flex items-center'>
-            <strong className='font-medium text-lg mr-2'>Postal Code:</strong>
-            <p>{data?.reporting_address?.postal || 'Not Available'}</p>
-          </div>
-          <div className='flex items-center'>
-            <strong className='font-medium text-lg mr-2'>Latitude:</strong>
-            <p>{data?.reporting_address?.lat}</p>
-          </div>
-          <div className='flex items-center'>
-            <strong className='font-medium text-lg mr-2'>Longitude:</strong>
-            <p>{data?.reporting_address?.lng}</p>
-          </div>
         </div>
-
         <div className='space-y-4'>
           <div className='flex items-center'>
-            <strong className='font-medium text-lg mr-2'>Hire Count:</strong>
-            <p>{data?.hire_count}</p>
+            <strong className='font-medium text-lg mr-2'>Benefits:</strong>
+            <p>{data.benefits?.join(', ') || 'Not Available'}</p>
           </div>
           <div className='flex items-center'>
-            <strong className='font-medium text-lg mr-2'>Recruitment Timeline:</strong>
-            <p>{new Date(data?.recruitment_timeline).toLocaleString()}</p>
+            <strong className='font-medium text-lg mr-2'>Job Description:</strong>
+            <p>{data.job_description || 'Not Available'}</p>
           </div>
           <div className='flex items-center'>
-            <strong className='font-medium text-lg mr-2'>Application Deadline:</strong>
-            <p>{new Date(data?.application_deadline).toLocaleString()}</p>
+            <strong className='font-medium text-lg mr-2'>Application Call Mobile:</strong>
+            <p>{data.application_call_mobile_number || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Require Resume:</strong>
+            <p>{data.require_resume ? 'Yes' : 'No'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Notifications:</strong>
+            <p>{data.notifications ? 'Enabled' : 'Disabled'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Email:</strong>
+            <p>{data.email || 'Not Available'}</p>
           </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Status:</strong>
-            <p>{data?.status}</p>
+            <p>{data.status || 'Not Available'}</p>
           </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Created At:</strong>
-            <p>{new Date(data?.createdAt).toLocaleString()}</p>
+            <p>{data.createdAt || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Update At:</strong>
+            <p>{data.updatedAt || 'Not Available'}</p>
           </div>
         </div>
       </div>
+      {/* Associated Entities */}
+      <h3 className='text-2xl font-bold mt-8 mb-4'>Job Advanced Details</h3>
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+        <div className='space-y-4'>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Hire Count:</strong>
+            <p>{data.job_advanced_id?.hire_count || 'Not Available'}</p>
+          </div>
 
-      {/* <div className='mt-8'>
-        <Button
-          onClick={() => console.log('Edit functionality placeholder')}
-          label='Edit Details'
-          className='bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-full'
-        />
-      </div> */}
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'> Status:</strong>
+            <p>{data.job_advanced_id?.status || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Recruitment Timeline:</strong>
+            <p>
+              {new Date(data.job_advanced_id?.recruitment_timeline).toLocaleString() ||
+                'Not Available'}
+            </p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Supplemental Pay:</strong>
+            <p>{data.job_advanced_id?.supplemental_pay.join(', ') || 'Not Available'}</p>
+          </div>
+        </div>
+        <div className='space-y-4'>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Application Deadline:</strong>
+            <p>
+              {new Date(data.job_advanced_id?.application_deadline).toLocaleString() ||
+                'Not Available'}
+            </p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Created At:</strong>
+            <p>{new Date(data.job_advanced_id?.createdAt).toLocaleString() || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Updated At:</strong>
+            <p>{new Date(data.job_advanced_id?.updatedAt).toLocaleString() || 'Not Available'}</p>
+          </div>
+        </div>
+      </div>
+      <h3 className='text-2xl font-bold mt-8 mb-4'>Reporting Address</h3>
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+        <div className='space-y-4'>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Address Line 1:</strong>
+            <p>{data.job_advanced_id?.reporting_address.address_line_1 || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Address Line 2:</strong>
+            <p>{data.job_advanced_id?.reporting_address.address_line_2 || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Country:</strong>
+            <p>{data.job_advanced_id?.reporting_address.country || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>City:</strong>
+            <p>{data.job_advanced_id?.reporting_address.city || 'Not Available'}</p>
+          </div>
+        </div>
+        <div className='space-y-4'>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>State:</strong>
+            <p>{data.job_advanced_id?.reporting_address.state || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Postal Code:</strong>
+            <p>{data.job_advanced_id?.reporting_address.postal || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Latitude:</strong>
+            <p>{data.job_advanced_id?.reporting_address.lat || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Longitute:</strong>
+            <p>{data.job_advanced_id?.reporting_address.lng || 'Not Available'}</p>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

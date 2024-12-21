@@ -47,7 +47,7 @@ interface ApplicationDetails {
   updatedAt: string
 }
 
-interface JobResponse {
+export interface JobResponse {
   company_id: CompanyDetails
   job_title: string
   job_type: string[]
@@ -55,6 +55,7 @@ interface JobResponse {
   employment_type: string[]
   start_date: string
   show_pay_by: string
+  exact_amount: number
   min_amount?: number
   max_amount: number
   range: {
