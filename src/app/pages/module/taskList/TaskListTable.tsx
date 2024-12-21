@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {useCallback, useEffect} from 'react'
 import {FaEye} from 'react-icons/fa'
 import {useSelector} from 'react-redux'
 import {Link} from 'react-router-dom'

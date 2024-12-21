@@ -149,11 +149,11 @@ export const normalMenuItems = [
     path: '/workorder',
     iconPath: 'M9 17v-2a4 4 0 00-8 0v2h8zm13 0v-2a4 4 0 00-8 0v2h8zm-13 4h8m-8-2h8m0-2H6',
   },
-  {
-    label: 'Task',
-    path: '/task',
-    iconPath: 'M8 7h8M8 11h8M8 15h8M8 19h8',
-  },
+  // {
+  //   label: 'Task',
+  //   path: '/task',
+  //   iconPath: 'M8 7h8M8 11h8M8 15h8M8 19h8',
+  // },
   {
     label: 'Proposal Details',
     path: '/proposaldetails',

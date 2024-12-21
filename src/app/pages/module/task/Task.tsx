@@ -17,12 +17,11 @@ import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import { fetchJobs } from 'sr/utils/api/fetchJobs'
-import { fetchTaskList } from 'sr/utils/api/fetchTaskList'
+import {fetchJobs} from 'sr/utils/api/fetchJobs'
+import {fetchTaskList} from 'sr/utils/api/fetchTaskList'
 import SkeletonTaskTable from './SkeletonTaskTable'
 import TaskTable from './TaskTable'
-import { fetchTask } from 'sr/utils/api/fetchTask'
-
+import {fetchTask} from 'sr/utils/api/fetchTask'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -217,15 +216,13 @@ const Custom: React.FC = () => {
   )
 
   const {data, error, isLoading, isError, refetch} = useQuery({
-    queryKey: ['tasklist', {limit: itemsPerPage, page: currentPage, ...filters}],
+    queryKey: ['task', {limit: itemsPerPage, page: currentPage, ...filters}],
     queryFn: async () => fetchTask({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
   useEffect(() => {
     fetchUserDataIfNeeded()
   }, [])
-
-  console.log("This is the tasklist data in tasklist :- ", data);
 
   const defaultValues: defaultData | undefined = useMemo(() => {
     if (!selectedData) return undefined
@@ -327,11 +324,11 @@ const Custom: React.FC = () => {
             <SkeletonTaskTable />
           ) : (
             <TaskTable
-            //   setSelectedData={setSelectedData}
-            //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              //   setSelectedData={setSelectedData}
+              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
-            //   handleDelete={onDeleteChat}
-            //   handleView={handleView}
+              //   handleDelete={onDeleteChat}
+              //   handleView={handleView}
             />
           )}
         </div>
@@ -340,7 +337,9 @@ const Custom: React.FC = () => {
         ) : (
           <Pagination
             currentPage={currentPage}
-            totalPages={Math.ceil( (data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1) ) || 0}
+            totalPages={
+              Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
+            }
             totalResults={data?.pagination?.total}
             onPageChange={onPageChange}
             itemsPerPage={itemsPerPage}
