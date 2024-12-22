@@ -16,9 +16,9 @@ import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import SkeletonCompanyTable from './SkeletonCompanyTable'
 import CompanyTable from './CompanyTable'
 import {fetchCompany} from 'sr/utils/api/fetchCompany'
+import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -302,7 +302,18 @@ const Custom: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonCompanyTable />
+            <SkeletonTable
+              columns={[
+                'Name',
+                'Username',
+                'Email',
+                'Mobile Number',
+                'Business Type',
+                'Intent',
+                'Status',
+                'Actions',
+              ]}
+            />
           ) : (
             <CompanyTable
               //   setSelectedData={setSelectedData}

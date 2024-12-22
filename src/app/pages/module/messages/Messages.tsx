@@ -7,7 +7,6 @@ import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {fetchChats} from 'sr/utils/api/fetchChats'
 import {deleteChat} from 'sr/utils/api/deleteChat'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {createChat} from 'sr/utils/api/createChat'
@@ -17,11 +16,9 @@ import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import { fetchJobs } from 'sr/utils/api/fetchJobs'
-import SkeletonMessagesTable from './SkeletonMessagesTable'
 import MessagesTable from './MessagesTable'
-import { fetchMessages } from 'sr/utils/api/fletchMessages'
-
+import {fetchMessages} from 'sr/utils/api/fletchMessages'
+import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -224,7 +221,7 @@ const Custom: React.FC = () => {
     fetchUserDataIfNeeded()
   }, [])
 
-  console.log("This is the data :- ", data);
+  console.log('This is the data :- ', data)
 
   const defaultValues: defaultData | undefined = useMemo(() => {
     if (!selectedData) return undefined
@@ -323,14 +320,16 @@ const Custom: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonMessagesTable />
+            <SkeletonTable
+              columns={['Source Id', 'Sender Id', 'Recipient Id', 'Message', 'Type', 'Actions']}
+            />
           ) : (
             <MessagesTable
-            //   setSelectedData={setSelectedData}
-            //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              //   setSelectedData={setSelectedData}
+              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
-            //   handleDelete={onDeleteChat}
-            //   handleView={handleView}
+              //   handleDelete={onDeleteChat}
+              //   handleView={handleView}
             />
           )}
         </div>
@@ -339,7 +338,9 @@ const Custom: React.FC = () => {
         ) : (
           <Pagination
             currentPage={currentPage}
-            totalPages={Math.ceil( (data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1) ) || 0}
+            totalPages={
+              Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
+            }
             totalResults={data?.pagination?.total}
             onPageChange={onPageChange}
             itemsPerPage={itemsPerPage}

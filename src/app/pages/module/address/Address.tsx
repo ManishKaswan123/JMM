@@ -7,7 +7,6 @@ import Filter from 'sr/helpers/ui-components/Filter'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import {Address, AddressApiResponse, fetchAddress} from 'sr/utils/api/addressApi'
-import AddressTableSkeleton from './AddressTableSkeleton'
 import AddressTable from './AddressTable'
 import {AddressDetailsCard} from './AddressDetails'
 import {RootState} from 'sr/redux/store'
@@ -15,6 +14,7 @@ import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {FieldsArray} from 'sr/constants/fields'
 import {useParams} from 'react-router-dom'
+import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
 interface AddressFilters {
   limit?: number
@@ -165,7 +165,17 @@ const Custom: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <AddressTableSkeleton />
+            <SkeletonTable
+              columns={[
+                'Address Type',
+                'Rooms Count',
+                'Bathroom Count',
+                'Total Area',
+                'Remark',
+                'Status',
+                'View Address',
+              ]}
+            />
           ) : (
             <AddressTable
               addressData={data?.data}

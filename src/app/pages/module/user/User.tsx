@@ -8,7 +8,6 @@ import Filter from 'sr/helpers/ui-components/Filter'
 import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
-import UserTableSkeleton from './UserTableSkeleton'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {useSelector} from 'react-redux'
@@ -16,6 +15,7 @@ import {RootState} from 'sr/redux/store'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {updateUser} from 'sr/utils/api/rewardPointPlanApi'
 import {fetchIndividual, IndividaulApiResponse, Individual} from 'sr/utils/api/individualApi'
+import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
 // interface fetchUserResponse {
 //   results: UserInterface[]
@@ -212,7 +212,9 @@ const Custom: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <UserTableSkeleton />
+            <SkeletonTable
+              columns={['User Name', 'Email', 'Phone', 'Status', 'View User', 'Update User']}
+            />
           ) : (
             <UserTable
               userData={data?.data}

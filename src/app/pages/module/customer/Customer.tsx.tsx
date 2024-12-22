@@ -17,8 +17,8 @@ import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import {fetchCustomers} from 'sr/utils/api/customerApi'
-import SkeletonCustomerTable from './SkeletonCustomerTable'
 import CustomerTable from './CustomerTable'
+import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -289,7 +289,18 @@ const Custom: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonCustomerTable />
+            <SkeletonTable
+              columns={[
+                'Name',
+                'Company Name',
+                'Email',
+                'Mobile',
+                'Type',
+                'Status',
+                'Remarks',
+                'Actions',
+              ]}
+            />
           ) : (
             <CustomerTable
               //   setSelectedData={setSelectedData}

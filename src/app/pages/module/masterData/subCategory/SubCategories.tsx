@@ -14,7 +14,6 @@ import {RootState} from 'sr/redux/store'
 import {updateSubCategory} from 'sr/utils/api/updateSubCategory'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {useQuery} from '@tanstack/react-query'
-import SkeletonTable from 'sr/helpers/ui-components/dashboardComponents/SkeletonTable'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 
 interface subCategoryApiResponse {

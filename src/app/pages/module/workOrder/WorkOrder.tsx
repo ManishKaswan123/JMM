@@ -7,7 +7,6 @@ import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {fetchChats} from 'sr/utils/api/fetchChats'
 import {deleteChat} from 'sr/utils/api/deleteChat'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {createChat} from 'sr/utils/api/createChat'
@@ -17,10 +16,9 @@ import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import {fetchJobs} from 'sr/utils/api/fetchJobs'
-import SkeletonWorkOrderTable from './SkeletonWorkOrder'
 import WorkOrderTable from './WorkOrderTable'
 import {fetchWorkOrder} from 'sr/utils/api/fetchWorkOrder'
+import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -432,7 +430,18 @@ const Custom: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonWorkOrderTable />
+            <SkeletonTable
+              columns={[
+                'Title',
+                'Description',
+                'Type',
+                'Contractor Name',
+                'Company Name',
+                'Checklist Name',
+                'Customer Name',
+                'Actions',
+              ]}
+            />
           ) : (
             <WorkOrderTable
               //   setSelectedData={setSelectedData}

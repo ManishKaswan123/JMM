@@ -13,7 +13,6 @@ import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {FieldsArray} from 'sr/constants/fields'
 import {getPreSignedURL} from 'sr/utils/api/media'
 import {useQuery} from '@tanstack/react-query'
-import SkeletonTable from 'sr/helpers/ui-components/dashboardComponents/SkeletonTable'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 
 interface categoryApiResponse {

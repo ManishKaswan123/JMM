@@ -18,9 +18,9 @@ import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import {fetchJobs} from 'sr/utils/api/fetchJobs'
-import SkeletonCleanerTable from './SkeletonCleanerTable'
 import CleanerTable from './CleanerTable'
 import {fetchCleaner} from 'sr/utils/api/fetchCleaner'
+import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -304,7 +304,9 @@ const Custom: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonCleanerTable />
+            <SkeletonTable
+              columns={['Username', 'Mobile Number', 'Email', 'Date Of Birth', 'Status', 'Actions']}
+            />
           ) : (
             <CleanerTable
               //   setSelectedData={setSelectedData}

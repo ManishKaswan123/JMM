@@ -17,8 +17,8 @@ import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import ProposalDetailsTable from './ProposalDetailsTable'
-import SkeletonProposalDetailsTable from './SkeletonProposalDetailsTable'
 import {fetchProposalDetails} from 'sr/utils/api/fetchProposalDetails'
+import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -311,7 +311,16 @@ const Custom: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonProposalDetailsTable />
+            <SkeletonTable
+              columns={[
+                'Description',
+                'Cleaner Id',
+                'Expected Rate',
+                'Created At',
+                'Updated At',
+                'Actions',
+              ]}
+            />
           ) : (
             <ProposalDetailsTable
               //   setSelectedData={setSelectedData}
