@@ -7,7 +7,6 @@ import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {fetchChats} from 'sr/utils/api/fetchChats'
 import {deleteChat} from 'sr/utils/api/deleteChat'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {createChat} from 'sr/utils/api/createChat'
@@ -17,13 +16,9 @@ import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import { fetchJobs } from 'sr/utils/api/fetchJobs'
-import { fetchTaskList } from 'sr/utils/api/fetchTaskList'
-import { fetchContractor } from 'sr/utils/api/fetchContractor'
-import { fetchTask } from 'sr/utils/api/fetchTask'
-import SkeletonContractorTable from './SkeletonContractorTable'
+import {fetchContractor} from 'sr/utils/api/fetchContractor'
 import ContractorTable from './ContractorTable'
-
+import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -226,8 +221,8 @@ const Custom: React.FC = () => {
     fetchUserDataIfNeeded()
   }, [])
 
-  console.log("This is the contractor data in contractor :- ", data);
-  console.log("Manish");
+  console.log('This is the contractor data in contractor :- ', data)
+  console.log('Manish')
 
   const defaultValues: defaultData | undefined = useMemo(() => {
     if (!selectedData) return undefined
@@ -299,7 +294,9 @@ const Custom: React.FC = () => {
       <div className='container mx-auto px-4 sm:px-8'>
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
-            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>Contractor</h2>
+            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>
+              Contractor
+            </h2>
             <div className='flex items-center'>
               <Button
                 label='Create new'
@@ -326,14 +323,14 @@ const Custom: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonContractorTable />
+            <SkeletonTable columns={['Name', 'Email', 'Company', 'Created At']} />
           ) : (
             <ContractorTable
-            //   setSelectedData={setSelectedData}
-            //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              //   setSelectedData={setSelectedData}
+              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
-            //   handleDelete={onDeleteChat}
-            //   handleView={handleView}
+              //   handleDelete={onDeleteChat}
+              //   handleView={handleView}
             />
           )}
         </div>
@@ -342,7 +339,9 @@ const Custom: React.FC = () => {
         ) : (
           <Pagination
             currentPage={currentPage}
-            totalPages={Math.ceil( (data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1) ) || 0}
+            totalPages={
+              Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
+            }
             totalResults={data?.pagination?.total}
             onPageChange={onPageChange}
             itemsPerPage={itemsPerPage}

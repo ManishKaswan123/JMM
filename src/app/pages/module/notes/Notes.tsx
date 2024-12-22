@@ -7,7 +7,6 @@ import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {fetchChats} from 'sr/utils/api/fetchChats'
 import {deleteChat} from 'sr/utils/api/deleteChat'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {createChat} from 'sr/utils/api/createChat'
@@ -17,11 +16,9 @@ import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import { fetchJobs } from 'sr/utils/api/fetchJobs'
-import SkeletonNotesTable from './SkeletonNotesTable'
 import NotesTable from './NotesTable'
-import { fetchNotes } from 'sr/utils/api/fetchNotes'
-
+import {fetchNotes} from 'sr/utils/api/fetchNotes'
+import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -216,7 +213,7 @@ const Custom: React.FC = () => {
   )
 
   const {data, error, isLoading, isError, refetch} = useQuery({
-    queryKey: ['notes', { ...filters}],
+    queryKey: ['notes', {...filters}],
     queryFn: async () => fetchNotes({...filters}),
     // placeholderData: keepPreviousData,
   })
@@ -224,7 +221,7 @@ const Custom: React.FC = () => {
     fetchUserDataIfNeeded()
   }, [])
 
-  console.log("This is the data :- ", data);
+  console.log('This is the data :- ', data)
 
   const defaultValues: defaultData | undefined = useMemo(() => {
     if (!selectedData) return undefined
@@ -323,14 +320,23 @@ const Custom: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonNotesTable />
+            <SkeletonTable
+              columns={[
+                'Company Id',
+                'Applicant Id',
+                'Notes',
+                'Created At',
+                'Updated At',
+                'Actions',
+              ]}
+            />
           ) : (
             <NotesTable
-            //   setSelectedData={setSelectedData}
-            //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              //   setSelectedData={setSelectedData}
+              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
-            //   handleDelete={onDeleteChat}
-            //   handleView={handleView}
+              //   handleDelete={onDeleteChat}
+              //   handleView={handleView}
             />
           )}
         </div>

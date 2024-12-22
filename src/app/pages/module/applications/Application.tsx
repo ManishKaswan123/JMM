@@ -17,8 +17,8 @@ import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import ApplicationTable from './ApplicationTable'
-import SkeletonApplicationTable from './SkeletonApplicationTable'
 import {fetchApplications} from 'sr/utils/api/fetchApplications'
+import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -327,7 +327,9 @@ const Custom: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonApplicationTable />
+            <SkeletonTable
+              columns={['Job Id', 'Cleaner Id', 'Status', 'Created At', 'Updated At', 'Actions']}
+            />
           ) : (
             <ApplicationTable
               //   setSelectedData={setSelectedData}

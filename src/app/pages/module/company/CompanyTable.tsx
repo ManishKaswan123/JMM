@@ -28,7 +28,7 @@ const CompanyTable: React.FC<Props> = ({data}) => {
         <thead>
           <tr>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Company Name
+              Name
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
               Username

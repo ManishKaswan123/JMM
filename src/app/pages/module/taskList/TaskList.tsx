@@ -17,8 +17,8 @@ import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import TaskListTable from './TaskListTable'
-import SkeletonTaskListTable from './SkeletonTaskListTable'
 import {fetchTaskList} from 'sr/utils/api/fetchTaskList'
+import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -368,7 +368,9 @@ const Custom: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonTaskListTable />
+            <SkeletonTable
+              columns={['Name', 'Type', 'Checklist', 'Company', 'Customer', 'Status', 'Actions']}
+            />
           ) : (
             <TaskListTable
               //   setSelectedData={setSelectedData}

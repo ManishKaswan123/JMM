@@ -13,8 +13,8 @@ import {useUpdateBusinessCategory} from 'sr/utils/api/updateBusinessCategory'
 import {FieldsArray} from 'sr/constants/fields'
 import {getPreSignedURL} from 'sr/utils/api/media'
 import {useQuery} from '@tanstack/react-query'
-import SkeletonTable from 'sr/helpers/ui-components/dashboardComponents/SkeletonTable'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
+import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
 interface businessTypeFilters {
   name?: string
@@ -174,7 +174,9 @@ const Custom: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonTable title={'Business Category'} />
+            <SkeletonTable
+              columns={['Type', 'Company Count', 'Created At', 'Updated At', 'Actions']}
+            />
           ) : (
             <Table
               handleView={handleView}

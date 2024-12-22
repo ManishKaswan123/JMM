@@ -17,9 +17,9 @@ import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import SkeletonJobsTable from './SkeletonJobsTable'
 import JobsTable from './JobsTable'
 import {fetchJobs} from 'sr/utils/api/fetchJobs'
+import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -342,7 +342,18 @@ const Custom: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonJobsTable />
+            <SkeletonTable
+              columns={[
+                'Company Name',
+                'Job Title',
+                'Start Date',
+                'Max Amount',
+                'Min Amount',
+                'Rate',
+                'Status',
+                'Actions',
+              ]}
+            />
           ) : (
             <JobsTable
               //   setSelectedData={setSelectedData}
