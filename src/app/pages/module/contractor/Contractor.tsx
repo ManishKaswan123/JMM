@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useMemo, useCallback} from 'react'
 import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
-import {AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
+import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
 import {useSelector} from 'react-redux'
@@ -64,9 +64,11 @@ const Custom: React.FC = () => {
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const userData = useSelector((state: RootState) => state.user.data)
   const userStatus = useSelector((state: RootState) => state.user.status)
+  const cleanerStore = useSelector((state: RootState) => state.cleaner)
+  const companyStore = useSelector((state: RootState) => state.company)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const {fetchUserData} = useActions()
+  const {fetchUserData, fetchCleanerData, fetchCompanyData} = useActions()
   const [itemsPerPage, setItemsPerPage] = useState(8)
 
   const eightySixResponse = useMemo(
@@ -183,33 +185,24 @@ const Custom: React.FC = () => {
     () => [
       {
         type: 'dropdown',
-        label: 'senderId',
-        name: userData?.results || [],
-        topLabel: 'Sender',
-        placeholder: 'Select Sender',
-        labelKey: 'firstName',
+        label: 'cleaner_id',
+        name: cleanerStore.data,
+        topLabel: 'Cleaner',
+        placeholder: 'Select Cleaner',
+        labelKey: 'cleaner_name',
         id: 'id',
       },
       {
         type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
-        labelKey: 'firstName',
+        label: 'company_id',
+        name: companyStore.data,
+        topLabel: 'Company',
+        placeholder: 'Select Company',
+        labelKey: 'company_name',
         id: 'id',
       },
-      {
-        type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
-        labelKey: 'firstName',
-      },
-      {type: 'text', label: 'Source Type', name: 'sourceType', placeholder: 'Source Type'},
     ],
-    [userData?.results, eightySixResponse]
+    [cleanerStore.data, companyStore.data]
   )
 
   const {data, error, isLoading, isError, refetch} = useQuery({
@@ -220,9 +213,6 @@ const Custom: React.FC = () => {
   useEffect(() => {
     fetchUserDataIfNeeded()
   }, [])
-
-  console.log('This is the contractor data in contractor :- ', data)
-  console.log('Manish')
 
   const defaultValues: defaultData | undefined = useMemo(() => {
     if (!selectedData) return undefined
@@ -239,7 +229,13 @@ const Custom: React.FC = () => {
     if (userStatus !== 'succeeded') {
       fetchUserData({})
     }
-  }, [userStatus, fetchUserData])
+    if (cleanerStore.status !== 'succeeded') {
+      fetchCleanerData({})
+    }
+    if (companyStore.status !== 'succeeded') {
+      fetchCompanyData({})
+    }
+  }, [userStatus, fetchUserData, cleanerStore, fetchCleanerData, companyStore, fetchCompanyData])
 
   const onDeleteChat = async (id: string) => {
     const res = await deleteChat(id)
@@ -305,10 +301,12 @@ const Custom: React.FC = () => {
                 className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
               ></Button>
               <Button
-                label='Filter'
-                Icon={AiOutlineFilter}
+                label={`${isFilterVisible ? 'Close' : 'Filters'}`}
+                Icon={!isFilterVisible ? AiOutlineFilter : AiOutlineClose}
                 onClick={() => setIsFilterVisible(!isFilterVisible)}
-                className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center'
+                className={`text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center ${
+                  isFilterVisible ? 'bg-red-400 hover:bg-red-500' : 'bg-gray-200 hover:bg-gray-300'
+                }`}
               ></Button>
             </div>
           </div>
@@ -323,7 +321,9 @@ const Custom: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonTable columns={['Name', 'Email', 'Company', 'Created At']} />
+            <SkeletonTable
+              columns={['Name', 'Cleaner Id', 'Company Id', 'Email', 'DOB', 'Status', 'Actions']}
+            />
           ) : (
             <ContractorTable
               //   setSelectedData={setSelectedData}

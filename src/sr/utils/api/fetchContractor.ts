@@ -1,5 +1,4 @@
-import { get } from 'sr/utils/axios/index'
-
+import {get} from 'sr/utils/axios/index'
 
 interface Address {
   address_line_1: string
@@ -45,7 +44,7 @@ interface Company {
   __v: number
 }
 
-interface Contractor {
+export interface Contractor {
   cleaner_id: Cleaner
   first_name: string
   last_name: string
@@ -74,6 +73,10 @@ interface FetchContractorResponse {
   pagination?: Pagination
 }
 
+interface FetchSingleContractorResponse extends Omit<FetchContractorResponse, 'data'> {
+  data: Contractor
+}
+
 interface ContractorListPayload {
   limit?: number
   page?: number
@@ -83,25 +86,44 @@ interface ContractorListPayload {
   cleaner_id?: string
 }
 
-
 const filterPayload = (payload: ContractorListPayload) => {
   return Object.fromEntries(
     Object.entries(payload).filter(([_, value]) => value !== undefined && value !== null)
   )
 }
 
-export const fetchContractor = async (payload: ContractorListPayload): Promise<FetchContractorResponse> => {
+export const fetchContractor = async (
+  payload: ContractorListPayload
+): Promise<FetchContractorResponse> => {
   const filteredPayload = filterPayload(payload)
 
   try {
     const res = await get<FetchContractorResponse>(`/contractor`, filteredPayload)
 
     if (res.data && res.data.length > 0) {
-      return res 
+      return res
     } else {
       throw new Error('No contractor found')
     }
   } catch (error) {
-    throw new Error(`Failed to fetch contractor: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    throw new Error(
+      `Failed to fetch contractor: ${error instanceof Error ? error.message : 'Unknown error'}`
+    )
+  }
+}
+
+export const fetchSingleContractor = async (id: string): Promise<FetchSingleContractorResponse> => {
+  try {
+    const res = await get<FetchSingleContractorResponse>(`/contractor`, {id})
+
+    if (res.success === true && res.data) {
+      return res
+    } else {
+      throw new Error('No contractor found')
+    }
+  } catch (error) {
+    throw new Error(
+      `Failed to fetch contractor: ${error instanceof Error ? error.message : 'Unknown error'}`
+    )
   }
 }

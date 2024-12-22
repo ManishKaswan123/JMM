@@ -25,11 +25,11 @@ const PrivateRoutes: FC = () => {
   return (
     <Routes>
       <Route element={<MasterLayout />}>
-        <Route path='auth/*' element={<Navigate to='/jobs' />} />
+        <Route path='auth/*' element={<Navigate to='/users' />} />
         {routeConfigs.map(({path, element}) => (
           <Route key={path} path={path} element={<SuspensedView>{element}</SuspensedView>} />
         ))}
-        <Route path='*' element={<Navigate to='/jobs' />} />
+        <Route path='*' element={<Navigate to='/users' />} />
       </Route>
     </Routes>
   )
