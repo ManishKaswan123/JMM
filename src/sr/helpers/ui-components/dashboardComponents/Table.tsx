@@ -67,12 +67,12 @@ const Table: React.FC<tableProps> = (props) => {
                         props.setIsUpdateModalOpen(true)
                       }}
                     />
-                    <FaTrash
+                    {/* <FaTrash
                       className='text-red-500 cursor-pointer ml-4 h-4 w-4'
                       onClick={async () => {
                         await handleDelete(category.id)
                       }}
-                    />
+                    /> */}
                   </div>
                 </td>
               </tr>

@@ -1,6 +1,5 @@
 // src/reducers/userReducer.ts
 import {createSlice} from '@reduxjs/toolkit'
-import {fetchCategoryType} from '../action/categoryActions'
 import {rewardPointPlanApiResponse} from 'sr/utils/api/rewardPointPlanApi'
 import {fetchRewardPlanMap} from '../action/rewardPlanActions'
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import {FaEye} from 'react-icons/fa'
+import {FaEdit, FaEye} from 'react-icons/fa'
 import {Link} from 'react-router-dom'
 
 interface JobApplication {
@@ -96,9 +96,11 @@ interface AddressDetails {
 
 interface Props {
   data?: JobApplication[]
+  setSelectedData: React.Dispatch<React.SetStateAction<JobApplication | undefined>>
+  setIsUpdateModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const ApplicationTable: React.FC<Props> = ({data}) => {
+const ApplicationTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalOpen}) => {
   return (
     <div className='inline-block min-w-full shadow rounded-lg overflow-hidden'>
       <table className='min-w-full leading-normal'>
@@ -179,12 +181,21 @@ const ApplicationTable: React.FC<Props> = ({data}) => {
               </td>
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <Link to={`/application/${job.id}`} className='text-blue-500 hover:font-medium'>
-                  <FaEye
-                    className='cursor-pointer text-blue-500 hover:text-gray-700'
-                    style={{fontSize: '1.1rem'}}
+                <div className='flex'>
+                  <FaEdit
+                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                    onClick={() => {
+                      setSelectedData(job)
+                      setIsUpdateModalOpen(true)
+                    }}
                   />
-                </Link>
+                  <Link to={`/application/${job.id}`} className='text-blue-500 hover:font-medium'>
+                    <FaEye
+                      className='cursor-pointer text-blue-500 hover:text-gray-700'
+                      style={{fontSize: '1.1rem'}}
+                    />
+                  </Link>
+                </div>
               </td>
             </tr>
           ))}

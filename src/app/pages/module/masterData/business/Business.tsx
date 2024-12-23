@@ -220,7 +220,7 @@ const Custom: React.FC = () => {
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
           fields={updateFields}
-          defaultValues={selectedData}
+          defaultValues={defaultValues}
           onSubmit={handleEditBusinessType}
         />
       )}

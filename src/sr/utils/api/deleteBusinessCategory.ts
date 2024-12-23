@@ -11,7 +11,7 @@ import {remove} from '../axios'
 // Define the function with correct typing
 const deleteBusinessCategory = async (payload: string): Promise<boolean> => {
   try {
-    const res = await remove<any>(`/business-categories/${payload}`)
+    const res = await remove<any>(`/businesstype/${payload}`)
     return true
   } catch (e: any) {
     throw new Error(e.message)
