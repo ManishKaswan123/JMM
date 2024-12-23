@@ -15,6 +15,7 @@ import {fetchCustomersData} from 'sr/redux/action/customerActions'
 import {fetchChecklistData} from 'sr/redux/action/checklistActions'
 import {fetchBusinessTypeData} from 'sr/redux/action/businessTypeActions'
 import {fetchCleanerData} from 'sr/redux/action/cleanerActions'
+import {fetchJobData} from 'sr/redux/action/jobActions'
 
 export const useActions = () => {
   const dispatch = useDispatch()
@@ -34,6 +35,7 @@ export const useActions = () => {
       fetchCustomersData,
       fetchChecklistData,
       fetchCleanerData,
+      fetchJobData,
     },
     dispatch
   )

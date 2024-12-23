@@ -13,176 +13,150 @@ import {createChat} from 'sr/utils/api/createChat'
 import {getPreSignedURL} from 'sr/utils/api/media'
 import {updateChat} from 'sr/utils/api/updateChat'
 import {FieldsArray} from 'sr/constants/fields'
-import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import ApplicationTable from './ApplicationTable'
-import {fetchApplications} from 'sr/utils/api/fetchApplications'
+import {fetchApplications, JobApplication} from 'sr/utils/api/fetchApplications'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
+import {useCreateApplication} from 'sr/utils/api/createApplication'
+import {useUpdateApplication} from 'sr/utils/api/updateApplication'
 
-interface chatApiResponse {
-  eightySixResponseId?: any
-  senderId?: UserInterface
-  receiverId?: UserInterface
-  sourceType?: string
-  message?: string
-  images?: string[]
-  msgType?: number
-  createdAt: string
-  updatedAt: string
+interface Filters {
+  cleaner_id?: string
+  job_id?: string
+  status?: string
+}
+
+interface ApplicationCreatePayload {
+  job_id: string
+  cleaner_id: string
+  answers: string[]
+  status:
+    | 'hired'
+    | 'active'
+    | 'withdrawn'
+    | 'shortlist'
+    | 'rejected'
+    | 'awaiting-reviews'
+    | 'pause'
+    | 'contacting'
+}
+
+interface ApplicationUpdatePayload extends ApplicationCreatePayload {
   id: string
 }
 
-interface chatFilters {
-  senderId?: string
-  receiverId?: string
-  eightySixResponseId?: string
-  sourceType?: string
-}
-interface chatCreatePayload {
-  eightySixResponseId: string
-  receiverId: string
-  sourceType: string
-  message: string
-  images: string[]
-  msgType: number
-}
-interface defaultData {
-  eightySixResponseId?: string
-  receiverId?: string
-  sourceType?: string
-  message?: string
-  images?: string[]
-  msgType?: number
-}
-interface chatUpdatePayload extends chatCreatePayload {}
-
 const Custom: React.FC = () => {
-  const [selectedData, setSelectedData] = useState<chatApiResponse>()
+  const [selectedData, setSelectedData] = useState<JobApplication>()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [filters, setFilters] = useState<chatFilters>()
+  const [filters, setFilters] = useState<Filters>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
-  const userData = useSelector((state: RootState) => state.user.data)
-  const userStatus = useSelector((state: RootState) => state.user.status)
   const cleanerData = useSelector((state: RootState) => state.cleaner.data)
   const cleanerStatus = useSelector((state: RootState) => state.cleaner.status)
+  const jobData = useSelector((state: RootState) => state.job.data)
+  const jobStatus = useSelector((state: RootState) => state.job.status)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const {fetchUserData, fetchCleanerData} = useActions()
-  const [itemsPerPage, setItemsPerPage] = useState(8)
-
-  const eightySixResponse = useMemo(
-    () => [
-      {firstName: 'Devid', id: '65bbf2df9aa9785b019d87b2'},
-      {firstName: 'Devid', id: '65bbf2df9aa9785b019d87b2'},
-    ],
-    []
-  )
-  const msgType = useMemo(
-    () => [
-      {name: '1', id: 1},
-      {name: '2', id: 2},
-      {name: '3', id: 3},
-    ],
-    []
-  )
+  const {fetchCleanerData, fetchJobData} = useActions()
+  const [itemsPerPage, setItemsPerPage] = useState<number>(8)
+  const createMutation = useCreateApplication()
+  const updateMutation = useUpdateApplication()
 
   const createFields: FieldsArray = useMemo(
     () => [
       {
         type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
+        label: 'job_id',
+        name: jobData,
+        topLabel: 'Job',
+        placeholder: 'Select Job',
+        labelKey: 'job_title',
         required: true,
       },
       {
         type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
+        label: 'cleaner_id',
+        name: cleanerData,
+        topLabel: 'Cleaner',
+        placeholder: 'Select Cleaner',
+        labelKey: 'cleaner_name',
         required: true,
       },
       {
         type: 'dropdown',
-        label: 'msgType',
-        name: msgType,
-        topLabel: 'Msg Type',
-        placeholder: 'Select Msg Type',
-        required: true,
-      },
-      {type: 'text', label: 'Message', name: 'message', placeholder: 'Message', required: true},
-      {
-        type: 'text',
-        label: 'Source Type',
-        name: 'sourceType',
-        placeholder: 'Source Type',
-        required: true,
-      },
-      {
-        type: 'file',
-        label: 'Images',
-        name: 'images',
-        wrapperLabel: 'Upload image',
-        topLabel: 'Images',
-        placeholder: 'Select Images',
-        required: true,
+        label: 'status',
+        name: [
+          {name: 'Hired', id: 'hired'},
+          {name: 'Active', id: 'active'},
+          {name: 'Withdrawn', id: 'withdrawn'},
+          {name: 'Shortlist', id: 'shortlist'},
+          {name: 'Rejected', id: 'rejected'},
+          {name: 'Awaiting Reviews', id: 'awaiting-reviews'},
+          {name: 'Pause', id: 'pause'},
+          {name: 'Contacting', id: 'contacting'},
+        ],
+        topLabel: 'Status',
+        placeholder: 'Select Status',
+        labelKey: 'name',
+        id: 'id',
       },
     ],
-    [userData, msgType, eightySixResponse]
+    [jobData, cleanerData]
   )
 
   const updateFields: FieldsArray = useMemo(
     () => [
       {
         type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
+        label: 'job_id',
+        name: jobData,
+        topLabel: 'Job',
+        placeholder: 'Select Job',
+        labelKey: 'job_title',
         required: true,
       },
       {
         type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
+        label: 'cleaner_id',
+        name: cleanerData,
+        topLabel: 'Cleaner',
+        placeholder: 'Select Cleaner',
+        labelKey: 'cleaner_name',
         required: true,
       },
       {
         type: 'dropdown',
-        label: 'msgType',
-        name: msgType,
-        topLabel: 'Msg Type',
-        placeholder: 'Select Msg Type',
-        required: true,
-      },
-      {type: 'text', label: 'Message', name: 'message', placeholder: 'Message', required: true},
-      {
-        type: 'text',
-        label: 'Source Type',
-        name: 'sourceType',
-        placeholder: 'Source Type',
-        required: true,
-      },
-      {
-        type: 'file',
-        label: 'Images',
-        name: 'images',
-        wrapperLabel: 'Upload image',
-        topLabel: 'Images',
-        placeholder: 'Select Images',
-        required: true,
+        label: 'status',
+        name: [
+          {name: 'Hired', id: 'hired'},
+          {name: 'Active', id: 'active'},
+          {name: 'Withdrawn', id: 'withdrawn'},
+          {name: 'Shortlist', id: 'shortlist'},
+          {name: 'Rejected', id: 'rejected'},
+          {name: 'Awaiting Reviews', id: 'awaiting-reviews'},
+          {name: 'Pause', id: 'pause'},
+          {name: 'Contacting', id: 'contacting'},
+        ],
+        topLabel: 'Status',
+        placeholder: 'Select Status',
+        labelKey: 'name',
+        id: 'id',
       },
     ],
-    [userData, msgType, eightySixResponse]
+    [jobData, cleanerData]
   )
 
   const fields: FieldsArray = useMemo(
     () => [
+      {
+        type: 'dropdown',
+        label: 'job_id',
+        name: jobData,
+        topLabel: 'Job',
+        placeholder: 'Select Job',
+        labelKey: 'job_title',
+        id: 'id',
+      },
       {
         type: 'dropdown',
         label: 'cleaner_id',
@@ -211,45 +185,27 @@ const Custom: React.FC = () => {
         id: 'id',
       },
     ],
-    [userData?.results, eightySixResponse, cleanerData]
+    [cleanerData, jobData]
   )
 
-  const {data, error, isLoading, isError, refetch} = useQuery({
+  const {data, isLoading} = useQuery({
     queryKey: ['application', {limit: itemsPerPage, page: currentPage, ...filters}],
     queryFn: async () => fetchApplications({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
   useEffect(() => {
-    fetchUserDataIfNeeded()
+    fetchDataIfNeeded()
   }, [])
 
-  const defaultValues: defaultData | undefined = useMemo(() => {
-    if (!selectedData) return undefined
-    return {
-      eightySixResponseId: selectedData.eightySixResponseId?.id,
-      sourceType: selectedData.sourceType,
-      message: selectedData.message,
-      images: selectedData.images,
-      msgType: selectedData.msgType,
-      receiverId: selectedData.receiverId?.id,
-    }
-  }, [selectedData])
-  const fetchUserDataIfNeeded = useCallback(() => {
-    if (userStatus !== 'succeeded') {
-      fetchUserData({})
+  const fetchDataIfNeeded = useCallback(() => {
+    if (jobStatus !== 'succeeded') {
+      fetchJobData({})
     }
     if (cleanerStatus !== 'succeeded') {
       fetchCleanerData({})
     }
-  }, [userStatus, fetchUserData, cleanerStatus, fetchCleanerData])
+  }, [cleanerStatus, fetchCleanerData, fetchJobData, jobStatus])
 
-  const onDeleteChat = async (id: string) => {
-    const res = await deleteChat(id)
-    if (!res) {
-      return
-    }
-    refetch()
-  }
   const onPageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
   }
@@ -263,28 +219,42 @@ const Custom: React.FC = () => {
     setIsFilterVisible(false)
   }
 
-  const handleCreateChat = async (payload: chatCreatePayload) => {
-    setIsCreateModalOpen(false)
-    const res = await createChat(payload)
-    if (!res) {
-      setIsCreateModalOpen(false)
-      return
+  const handleCreateApplication = async (payload: ApplicationCreatePayload) => {
+    const data: ApplicationCreatePayload = {
+      job_id: payload.job_id,
+      cleaner_id: payload.cleaner_id,
+      answers: [] as string[],
+      status: payload.status,
     }
-    refetch()
+    setIsCreateModalOpen(false)
+    createMutation.mutate(data)
   }
-  const handleEditChat = async (payload: chatUpdatePayload) => {
+  const handleEditApplication = async (payload: ApplicationUpdatePayload) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
     }
     setIsUpdateModalOpen(false)
-    const res = await updateChat(payload, selectedData.id)
-    if (!res) {
-      setIsUpdateModalOpen(false)
-      return
+    const data: ApplicationUpdatePayload = {
+      job_id: payload.job_id,
+      cleaner_id: payload.cleaner_id,
+      answers: [] as string[],
+      status: payload.status,
+      id: selectedData.id,
     }
-    refetch()
+    updateMutation.mutate({payload: data})
   }
+
+  const defaultValues: ApplicationUpdatePayload | undefined = useMemo(() => {
+    if (!selectedData) return undefined
+    return {
+      job_id: selectedData.job_id._id,
+      cleaner_id: selectedData.cleaner_id._id,
+      status: selectedData.status,
+      answers: [] as string[],
+      id: selectedData.id,
+    }
+  }, [selectedData])
 
   const handleView = async (fileUrl: string) => {
     const response: any = await getPreSignedURL({fileName: fileUrl})
@@ -332,8 +302,8 @@ const Custom: React.FC = () => {
             />
           ) : (
             <ApplicationTable
-              //   setSelectedData={setSelectedData}
-              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              setSelectedData={setSelectedData}
+              setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
               //   handleDelete={onDeleteChat}
               //   handleView={handleView}
@@ -360,22 +330,20 @@ const Custom: React.FC = () => {
       {isCreateModalOpen && (
         <DynamicModal
           label='Create Application'
-          imageType='images'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           fields={createFields}
-          onSubmit={handleCreateChat}
+          onSubmit={handleCreateApplication}
         />
       )}
-      {isUpdateModalOpen && (
+      {isUpdateModalOpen && defaultValues && (
         <DynamicModal
-          imageType='images'
           label='Update Application'
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
           fields={updateFields}
           defaultValues={defaultValues}
-          onSubmit={handleEditChat}
+          onSubmit={handleEditApplication}
         />
       )}
     </>

@@ -17,6 +17,7 @@ import companyTypeReducer from '../slice/companySlice'
 import customerTypeReducer from '../slice/customerSlice'
 import checklistTypeReducer from '../slice/checklistSlice'
 import cleanerTypeReducer from '../slice/cleanerSlice'
+import jobTypeReducer from '../slice/jobSlice'
 export const rootReducer = combineReducers({
   sendOtp: sendOtpReducer,
   otp: otpReducer,
@@ -36,4 +37,5 @@ export const rootReducer = combineReducers({
   customer: customerTypeReducer,
   checklist: checklistTypeReducer,
   cleaner: cleanerTypeReducer,
+  job: jobTypeReducer,
 })
