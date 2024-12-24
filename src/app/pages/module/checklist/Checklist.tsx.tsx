@@ -13,133 +13,121 @@ import {createChat} from 'sr/utils/api/createChat'
 import {getPreSignedURL} from 'sr/utils/api/media'
 import {updateChat} from 'sr/utils/api/updateChat'
 import {FieldsArray} from 'sr/constants/fields'
-import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import {fetchChecklists} from 'sr/utils/api/checklistApi'
+import {
+  Checklist,
+  fetchChecklists,
+  useCreateChecklist,
+  useUpdateChecklist,
+} from 'sr/utils/api/checklistApi'
 import ChecklistTable from './ChecklistTable'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
-interface chatApiResponse {
-  eightySixResponseId?: any
-  senderId?: UserInterface
-  receiverId?: UserInterface
-  sourceType?: string
-  message?: string
-  images?: string[]
-  msgType?: number
-  createdAt: string
-  updatedAt: string
+interface Filters {
+  company_id?: string
+  customer_id?: string
+  type?: string
+  subtype?: string
+  status?: string
+}
+interface ChecklistCreatePayload {
+  name: string
+  type: string
+  subtype: string
+  company_id: string
+  customer_id: string
+  task_ids: string[]
+  status: string
+}
+interface ChecklistUpdatePayload extends ChecklistCreatePayload {
   id: string
 }
 
-interface chatFilters {
-  senderId?: string
-  receiverId?: string
-  eightySixResponseId?: string
-  sourceType?: string
-}
-interface chatCreatePayload {
-  eightySixResponseId: string
-  receiverId: string
-  sourceType: string
-  message: string
-  images: string[]
-  msgType: number
-}
-interface defaultData {
-  eightySixResponseId?: string
-  receiverId?: string
-  sourceType?: string
-  message?: string
-  images?: string[]
-  msgType?: number
-}
-interface chatUpdatePayload extends chatCreatePayload {}
-
 const Custom: React.FC = () => {
-  const [selectedData, setSelectedData] = useState<chatApiResponse>()
+  const [selectedData, setSelectedData] = useState<Checklist>()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [filters, setFilters] = useState<chatFilters>()
+  const [filters, setFilters] = useState<Filters>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
-  const userData = useSelector((state: RootState) => state.user.data)
-  const userStatus = useSelector((state: RootState) => state.user.status)
   const companyData = useSelector((state: RootState) => state.company.data)
   const companyStatus = useSelector((state: RootState) => state.company.status)
   const customerData = useSelector((state: RootState) => state.customer.data)
   const customerStatus = useSelector((state: RootState) => state.customer.status)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const {fetchUserData, fetchCompanyData, fetchCustomersData} = useActions()
-  const [itemsPerPage, setItemsPerPage] = useState(8)
+  const {fetchCompanyData, fetchCustomersData} = useActions()
+  const [itemsPerPage, setItemsPerPage] = useState<number>(8)
+  const createMutation = useCreateChecklist()
+  const updateMutation = useUpdateChecklist()
 
   const createFields: FieldsArray = useMemo(
     () => [
       {
         type: 'text',
-        label: 'Username',
-        name: 'username',
-        placeholder: 'Username',
+        label: 'Name',
+        name: 'name',
+        placeholder: 'Name',
+      },
+
+      {
+        type: 'dropdown',
+        label: 'company_id',
+        name: companyData,
+        topLabel: 'Company',
+        placeholder: 'Select Company',
+        labelKey: 'company_name',
         required: true,
       },
       {
-        type: 'text',
-        label: 'Password',
-        name: 'password',
-        placeholder: 'Password',
+        type: 'dropdown',
+        label: 'customer_id',
+        name: customerData,
+        topLabel: 'Customer',
+        placeholder: 'Select Customer',
+        labelKey: 'customer_name',
         required: true,
       },
       {
-        type: 'text',
-        label: 'Email',
-        name: 'email',
-        placeholder: 'Email',
+        type: 'dropdown',
+        label: 'type',
+        name: [
+          {name: 'Daily', id: 'Daily'},
+          {name: 'Weekly', id: 'Weekly'},
+        ],
+        topLabel: 'Type',
+        placeholder: 'Select Type',
+        labelKey: 'name',
+        id: 'id',
         required: true,
       },
       {
-        type: 'text',
-        label: 'Mobile',
-        name: 'mobile_number',
-        placeholder: 'Mobile',
+        type: 'dropdown',
+        label: 'subtype',
+        name: [
+          {name: 'Office', id: 'Office'},
+          {name: 'Hospital', id: 'Hospital'},
+        ],
+        topLabel: 'Sub Type',
+        placeholder: 'Select Sub Type',
+        labelKey: 'name',
+        id: 'id',
         required: true,
       },
       {
-        type: 'text',
-        label: 'Company Name',
-        name: 'company_name',
-        placeholder: 'Company Name',
-        required: true,
-      },
-      {
-        type: 'text',
-        label: 'Username',
-        name: 'username',
-        placeholder: 'Username',
-        required: true,
-      },
-      {
-        type: 'text',
-        label: 'Business Type',
-        name: 'business_type',
-        placeholder: 'Business Type',
-        required: true,
-      },
-      {
-        type: 'text',
-        label: 'Intent',
-        name: 'intent',
-        placeholder: 'Intent',
-        required: true,
-      },
-      {
-        type: 'text',
-        label: 'Candidate Message',
-        name: 'candidate_msg',
-        placeholder: 'Candidate Message',
+        type: 'dropdown',
+        label: 'status',
+        name: [
+          {name: 'Active', id: 'active'},
+          {name: 'Draft', id: 'draft'},
+        ],
+        topLabel: 'Status',
+        placeholder: 'Select Status',
+        labelKey: 'name',
+        id: 'id',
         required: true,
       },
     ],
-    []
+    [companyData, customerData]
   )
 
   const fields: FieldsArray = useMemo(
@@ -198,7 +186,7 @@ const Custom: React.FC = () => {
     [companyData, customerData]
   )
 
-  const {data, error, isLoading, isError, refetch} = useQuery({
+  const {data, isLoading, refetch} = useQuery({
     queryKey: ['checklist', {limit: itemsPerPage, page: currentPage, ...filters}],
     queryFn: async () => fetchChecklists({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
@@ -207,17 +195,6 @@ const Custom: React.FC = () => {
     fetchDataIfNeeded()
   }, [])
 
-  const defaultValues: defaultData | undefined = useMemo(() => {
-    if (!selectedData) return undefined
-    return {
-      eightySixResponseId: selectedData.eightySixResponseId?.id,
-      sourceType: selectedData.sourceType,
-      message: selectedData.message,
-      images: selectedData.images,
-      msgType: selectedData.msgType,
-      receiverId: selectedData.receiverId?.id,
-    }
-  }, [selectedData])
   const fetchDataIfNeeded = useCallback(() => {
     if (companyStatus !== 'succeeded') {
       fetchCompanyData({})
@@ -225,15 +202,8 @@ const Custom: React.FC = () => {
     if (customerStatus !== 'succeeded') {
       fetchCustomersData({})
     }
-  }, [companyStatus, fetchCompanyData, customerData, fetchCustomersData])
+  }, [companyStatus, fetchCompanyData, customerStatus, fetchCustomersData])
 
-  const onDeleteChat = async (id: string) => {
-    const res = await deleteChat(id)
-    if (!res) {
-      return
-    }
-    refetch()
-  }
   const onPageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
   }
@@ -247,28 +217,50 @@ const Custom: React.FC = () => {
     setIsFilterVisible(false)
   }
 
-  const handleCreateChat = async (payload: chatCreatePayload) => {
-    setIsCreateModalOpen(false)
-    const res = await createChat(payload)
-    if (!res) {
-      setIsCreateModalOpen(false)
-      return
+  const handleCreateChecklist = async (payload: ChecklistCreatePayload) => {
+    const data: ChecklistCreatePayload = {
+      name: payload.name,
+      type: payload.type,
+      subtype: payload.subtype,
+      company_id: payload.company_id,
+      customer_id: payload.customer_id,
+      task_ids: [],
+      status: payload.status,
     }
-    refetch()
+    setIsCreateModalOpen(false)
+    createMutation.mutate(data)
   }
-  const handleEditChat = async (payload: chatUpdatePayload) => {
+  const handleEditChecklist = async (payload: ChecklistUpdatePayload) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
     }
     setIsUpdateModalOpen(false)
-    const res = await updateChat(payload, selectedData.id)
-    if (!res) {
-      setIsUpdateModalOpen(false)
-      return
+    const data: ChecklistUpdatePayload = {
+      name: payload.name,
+      type: payload.type,
+      subtype: payload.subtype,
+      company_id: payload.company_id,
+      customer_id: payload.customer_id,
+      task_ids: [],
+      status: payload.status,
+      id: selectedData.id,
     }
-    refetch()
+    updateMutation.mutate({payload: data})
   }
+  const defaultValues: ChecklistUpdatePayload | undefined = useMemo(() => {
+    if (!selectedData) return undefined
+    return {
+      name: selectedData.name,
+      type: selectedData.type,
+      subtype: selectedData.subtype,
+      company_id: selectedData.company_id._id,
+      customer_id: selectedData.customer_id._id,
+      task_ids: selectedData.task_ids,
+      status: selectedData.status,
+      id: selectedData.id,
+    }
+  }, [selectedData])
 
   const handleView = async (fileUrl: string) => {
     const response: any = await getPreSignedURL({fileName: fileUrl})
@@ -322,8 +314,8 @@ const Custom: React.FC = () => {
             />
           ) : (
             <ChecklistTable
-              //   setSelectedData={setSelectedData}
-              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              setSelectedData={setSelectedData}
+              setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
               //   handleDelete={onDeleteChat}
               //   handleView={handleView}
@@ -350,28 +342,26 @@ const Custom: React.FC = () => {
       {isCreateModalOpen && (
         <DynamicModal
           label='Create Checklist'
-          imageType='images'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           fields={createFields}
-          onSubmit={handleCreateChat}
+          onSubmit={handleCreateChecklist}
         />
       )}
-      {/* {isUpdateModalOpen && (
+      {isUpdateModalOpen && defaultValues && (
         <DynamicModal
-          imageType='images'
-          label='Update Job'
+          label='Update Checklist'
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
-          fields={updateFields}
+          fields={createFields}
           defaultValues={defaultValues}
-          onSubmit={handleEditChat}
+          onSubmit={handleEditChecklist}
         />
-      )} */}
+      )}
     </>
   )
 }
-const Checklist: React.FC = () => {
+const ChecklistCard: React.FC = () => {
   return (
     <>
       <DashboardWrapper customComponent={Custom} selectedItem={'/checklist'}></DashboardWrapper>
@@ -379,4 +369,4 @@ const Checklist: React.FC = () => {
   )
 }
 
-export default Checklist
+export default ChecklistCard

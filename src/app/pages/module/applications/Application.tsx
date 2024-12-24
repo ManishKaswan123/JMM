@@ -7,11 +7,8 @@ import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {deleteChat} from 'sr/utils/api/deleteChat'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
-import {createChat} from 'sr/utils/api/createChat'
 import {getPreSignedURL} from 'sr/utils/api/media'
-import {updateChat} from 'sr/utils/api/updateChat'
 import {FieldsArray} from 'sr/constants/fields'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
@@ -99,6 +96,7 @@ const Custom: React.FC = () => {
         placeholder: 'Select Status',
         labelKey: 'name',
         id: 'id',
+        required: true,
       },
     ],
     [jobData, cleanerData]
@@ -141,6 +139,7 @@ const Custom: React.FC = () => {
         placeholder: 'Select Status',
         labelKey: 'name',
         id: 'id',
+        required: true,
       },
     ],
     [jobData, cleanerData]
@@ -251,7 +250,7 @@ const Custom: React.FC = () => {
       job_id: selectedData.job_id._id,
       cleaner_id: selectedData.cleaner_id._id,
       status: selectedData.status,
-      answers: [] as string[],
+      answers: selectedData.answers,
       id: selectedData.id,
     }
   }, [selectedData])
