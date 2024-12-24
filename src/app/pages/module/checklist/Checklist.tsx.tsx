@@ -67,6 +67,7 @@ const Custom: React.FC = () => {
         label: 'Name',
         name: 'name',
         placeholder: 'Name',
+        required: true,
       },
 
       {
@@ -256,7 +257,7 @@ const Custom: React.FC = () => {
       subtype: selectedData.subtype,
       company_id: selectedData.company_id._id,
       customer_id: selectedData.customer_id._id,
-      task_ids: selectedData.task_ids,
+      task_ids: [] as string[],
       status: selectedData.status,
       id: selectedData.id,
     }

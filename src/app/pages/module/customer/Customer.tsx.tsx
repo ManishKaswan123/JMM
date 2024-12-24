@@ -16,75 +16,98 @@ import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import {fetchCustomers} from 'sr/utils/api/customerApi'
+import {
+  Customer,
+  fetchCustomers,
+  useCreateCustomer,
+  useUpdateCustomer,
+} from 'sr/utils/api/customerApi'
 import CustomerTable from './CustomerTable'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
-interface chatApiResponse {
-  eightySixResponseId?: any
-  senderId?: UserInterface
-  receiverId?: UserInterface
-  sourceType?: string
-  message?: string
-  images?: string[]
-  msgType?: number
-  createdAt: string
-  updatedAt: string
+interface Filters {
+  limit?: number
+  page?: number
+  company_id?: string
+  status?: string
+}
+
+interface CustomerCreatePayload {
+  company_id: string
+  name: string
+  email: string
+  mobile_number: string
+  type: string
+  contacts: string[]
+  status: string
+  remarks: string
+  location_ids: string[]
+  checklist_ids: string[]
+}
+interface CustomerUpdatePayload extends CustomerCreatePayload {
   id: string
 }
 
-interface chatFilters {
-  senderId?: string
-  receiverId?: string
-  eightySixResponseId?: string
-  sourceType?: string
-}
-interface chatCreatePayload {
-  eightySixResponseId: string
-  receiverId: string
-  sourceType: string
-  message: string
-  images: string[]
-  msgType: number
-}
-interface defaultData {
-  eightySixResponseId?: string
-  receiverId?: string
-  sourceType?: string
-  message?: string
-  images?: string[]
-  msgType?: number
-}
-interface chatUpdatePayload extends chatCreatePayload {}
-
 const Custom: React.FC = () => {
-  const [selectedData, setSelectedData] = useState<chatApiResponse>()
+  const [selectedData, setSelectedData] = useState<Customer>()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [filters, setFilters] = useState<chatFilters>()
+  const [filters, setFilters] = useState<Filters>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
-  const userData = useSelector((state: RootState) => state.user.data)
-  const userStatus = useSelector((state: RootState) => state.user.status)
   const companyData = useSelector((state: RootState) => state.company.data)
   const companyStatus = useSelector((state: RootState) => state.company.status)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const {fetchUserData, fetchCompanyData} = useActions()
-  const [itemsPerPage, setItemsPerPage] = useState(8)
+  const {fetchCompanyData} = useActions()
+  const [itemsPerPage, setItemsPerPage] = useState<number>(8)
+  const createMutation = useCreateCustomer()
+  const updateMutation = useUpdateCustomer()
 
   const createFields: FieldsArray = useMemo(
     () => [
       {
-        type: 'text',
-        label: 'Username',
-        name: 'username',
-        placeholder: 'Username',
+        type: 'dropdown',
+        label: 'company_id',
+        name: companyData,
+        topLabel: 'Company',
+        placeholder: 'Select Company',
+        labelKey: 'company_name',
+        required: true,
+      },
+      {
+        type: 'dropdown',
+        label: 'type',
+        name: [
+          {name: 'Airport', id: 'Airport'},
+          {name: 'Corporate', id: 'Corporate'},
+          {
+            name: 'Hospital',
+            id: 'Hospital',
+          },
+        ],
+        topLabel: 'Type',
+        placeholder: 'Select Type',
+        required: true,
+      },
+
+      {
+        type: 'dropdown',
+        label: 'status',
+        name: [
+          {name: 'Active', id: 'active'},
+          {name: 'Pending OTP', id: 'pending_otp'},
+          {name: 'Closed', id: 'closed'},
+        ],
+        topLabel: 'Status',
+        placeholder: 'Select Status',
+        labelKey: 'name',
+        id: 'id',
         required: true,
       },
       {
         type: 'text',
-        label: 'Password',
-        name: 'password',
-        placeholder: 'Password',
+        label: 'Name',
+        name: 'name',
+        placeholder: 'Name',
         required: true,
       },
       {
@@ -96,48 +119,20 @@ const Custom: React.FC = () => {
       },
       {
         type: 'text',
-        label: 'Mobile',
+        label: 'Mobile Number',
         name: 'mobile_number',
-        placeholder: 'Mobile',
+        placeholder: 'Mobile Number',
         required: true,
       },
       {
         type: 'text',
-        label: 'Company Name',
-        name: 'company_name',
-        placeholder: 'Company Name',
-        required: true,
-      },
-      {
-        type: 'text',
-        label: 'Username',
-        name: 'username',
-        placeholder: 'Username',
-        required: true,
-      },
-      {
-        type: 'text',
-        label: 'Business Type',
-        name: 'business_type',
-        placeholder: 'Business Type',
-        required: true,
-      },
-      {
-        type: 'text',
-        label: 'Intent',
-        name: 'intent',
-        placeholder: 'Intent',
-        required: true,
-      },
-      {
-        type: 'text',
-        label: 'Candidate Message',
-        name: 'candidate_msg',
-        placeholder: 'Candidate Message',
+        label: 'Remarks',
+        name: 'remarks',
+        placeholder: 'Remarks',
         required: true,
       },
     ],
-    []
+    [companyData]
   )
 
   const fields: FieldsArray = useMemo(
@@ -181,39 +176,21 @@ const Custom: React.FC = () => {
     [companyData]
   )
 
-  const {data, error, isLoading, isError, refetch} = useQuery({
+  const {data, isLoading, refetch} = useQuery({
     queryKey: ['customer', {limit: itemsPerPage, page: currentPage, ...filters}],
     queryFn: async () => fetchCustomers({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
   useEffect(() => {
-    fetchUserDataIfNeeded()
+    fetchDataIfNeeded()
   }, [])
 
-  const defaultValues: defaultData | undefined = useMemo(() => {
-    if (!selectedData) return undefined
-    return {
-      eightySixResponseId: selectedData.eightySixResponseId?.id,
-      sourceType: selectedData.sourceType,
-      message: selectedData.message,
-      images: selectedData.images,
-      msgType: selectedData.msgType,
-      receiverId: selectedData.receiverId?.id,
-    }
-  }, [selectedData])
-  const fetchUserDataIfNeeded = useCallback(() => {
+  const fetchDataIfNeeded = useCallback(() => {
     if (companyStatus !== 'succeeded') {
       fetchCompanyData({})
     }
   }, [companyStatus, fetchCompanyData])
 
-  const onDeleteChat = async (id: string) => {
-    const res = await deleteChat(id)
-    if (!res) {
-      return
-    }
-    refetch()
-  }
   const onPageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
   }
@@ -227,33 +204,59 @@ const Custom: React.FC = () => {
     setIsFilterVisible(false)
   }
 
-  const handleCreateChat = async (payload: chatCreatePayload) => {
-    setIsCreateModalOpen(false)
-    const res = await createChat(payload)
-    if (!res) {
-      setIsCreateModalOpen(false)
-      return
+  const handleCreateCustomer = async (payload: CustomerCreatePayload) => {
+    const data: CustomerCreatePayload = {
+      company_id: payload.company_id,
+      name: payload.name,
+      email: payload.email,
+      mobile_number: payload.mobile_number,
+      type: payload.type,
+      contacts: [],
+      status: payload.status,
+      remarks: payload.remarks,
+      location_ids: [],
+      checklist_ids: [],
     }
-    refetch()
+    setIsCreateModalOpen(false)
+    createMutation.mutate(data)
   }
-  const handleEditChat = async (payload: chatUpdatePayload) => {
+  const handleEditCustomer = async (payload: CustomerUpdatePayload) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
     }
     setIsUpdateModalOpen(false)
-    const res = await updateChat(payload, selectedData.id)
-    if (!res) {
-      setIsUpdateModalOpen(false)
-      return
+    const data: CustomerUpdatePayload = {
+      company_id: payload.company_id,
+      name: payload.name,
+      email: payload.email,
+      mobile_number: payload.mobile_number,
+      type: payload.type,
+      contacts: [],
+      status: payload.status,
+      remarks: payload.remarks,
+      location_ids: [],
+      checklist_ids: [],
+      id: selectedData.id,
     }
-    refetch()
+    updateMutation.mutate({payload: data})
   }
-
-  const handleView = async (fileUrl: string) => {
-    const response: any = await getPreSignedURL({fileName: fileUrl})
-    window.open(response.results.url.toString(), '_blank')
-  }
+  const defaultValues: CustomerUpdatePayload | undefined = useMemo(() => {
+    if (!selectedData) return undefined
+    return {
+      company_id: selectedData.company_id,
+      name: selectedData.name,
+      email: selectedData.email,
+      mobile_number: selectedData.mobile_number,
+      type: selectedData.type,
+      contacts: [] as string[],
+      status: selectedData.status,
+      remarks: selectedData.remarks,
+      location_ids: [] as string[],
+      checklist_ids: [] as string[],
+      id: selectedData.id,
+    }
+  }, [selectedData])
 
   return (
     <>
@@ -303,8 +306,8 @@ const Custom: React.FC = () => {
             />
           ) : (
             <CustomerTable
-              //   setSelectedData={setSelectedData}
-              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              setSelectedData={setSelectedData}
+              setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
               //   handleDelete={onDeleteChat}
               //   handleView={handleView}
@@ -331,28 +334,26 @@ const Custom: React.FC = () => {
       {isCreateModalOpen && (
         <DynamicModal
           label='Create Customer'
-          imageType='images'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           fields={createFields}
-          onSubmit={handleCreateChat}
+          onSubmit={handleCreateCustomer}
         />
       )}
-      {/* {isUpdateModalOpen && (
+      {isUpdateModalOpen && defaultValues && (
         <DynamicModal
-          imageType='images'
-          label='Update Job'
+          label='Update Customer'
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
-          fields={updateFields}
+          fields={createFields}
           defaultValues={defaultValues}
-          onSubmit={handleEditChat}
+          onSubmit={handleEditCustomer}
         />
-      )} */}
+      )}
     </>
   )
 }
-const Customer: React.FC = () => {
+const CustomerCard: React.FC = () => {
   return (
     <>
       <DashboardWrapper customComponent={Custom} selectedItem={'/customer'}></DashboardWrapper>
@@ -360,4 +361,4 @@ const Customer: React.FC = () => {
   )
 }
 
-export default Customer
+export default CustomerCard

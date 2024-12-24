@@ -9,7 +9,7 @@ const WorkOrderDetailsCard = lazy(() => import('app/pages/module/workOrder/WorkO
 const TaskListDetailsCard = lazy(() => import('app/pages/module/taskList/TaskListDetails'))
 const ChecklistDetailsCard = lazy(() => import('app/pages/module/checklist/ChecklistDetails'))
 const ChecklistCard = lazy(() => import('app/pages/module/checklist/Checklist.tsx'))
-const Customer = lazy(() => import('app/pages/module/customer/Customer.tsx'))
+const CustomerCard = lazy(() => import('app/pages/module/customer/Customer.tsx'))
 const CustomerDetailsCard = lazy(() => import('app/pages/module/customer/CustomerDetails'))
 const CleanerDetailsCard = lazy(() => import('app/pages/module/cleaner/CleanerDetails'))
 const UserDetailCard = lazy(() => import('app/pages/module/user/UserDetail'))
@@ -35,7 +35,7 @@ export const routeConfigs = [
   {path: '/business-category', element: <BusinessCategory />},
   {path: '/job', element: <Jobs />},
   {path: '/job/:id', element: <JobDetailsCard />},
-  {path: '/customer', element: <Customer />},
+  {path: '/customer', element: <CustomerCard />},
   {path: '/customer/:id', element: <CustomerDetailsCard />},
   {path: '/checklist', element: <ChecklistCard />},
   {path: '/checklist/:id', element: <ChecklistDetailsCard />},
