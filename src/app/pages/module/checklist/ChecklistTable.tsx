@@ -1,11 +1,17 @@
 import React from 'react'
-import {FaEye} from 'react-icons/fa'
+import {FaEdit, FaEye} from 'react-icons/fa'
 import {Link} from 'react-router-dom'
 import {Checklist} from 'sr/utils/api/checklistApi'
 interface ChecklistTableProps {
   data: Checklist[] | undefined
+  setSelectedData: React.Dispatch<React.SetStateAction<Checklist | undefined>>
+  setIsUpdateModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
-const ChecklistTable: React.FC<ChecklistTableProps> = ({data}) => {
+const ChecklistTable: React.FC<ChecklistTableProps> = ({
+  data,
+  setSelectedData,
+  setIsUpdateModalOpen,
+}) => {
   return (
     <div className='inline-block min-w-full shadow rounded-lg overflow-hidden'>
       <table className='min-w-full leading-normal'>
@@ -80,12 +86,24 @@ const ChecklistTable: React.FC<ChecklistTableProps> = ({data}) => {
               </td>
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <Link to={`/checklist/${checklist.id}`} className='text-blue-500 hover:font-medium'>
-                  <FaEye
-                    className='cursor-pointer text-blue-500 hover:text-gray-700'
-                    style={{fontSize: '1.1rem'}}
+                <div className='flex'>
+                  <FaEdit
+                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                    onClick={() => {
+                      setSelectedData(checklist)
+                      setIsUpdateModalOpen(true)
+                    }}
                   />
-                </Link>
+                  <Link
+                    to={`/checklist/${checklist.id}`}
+                    className='text-blue-500 hover:font-medium'
+                  >
+                    <FaEye
+                      className='cursor-pointer text-blue-500 hover:text-gray-700'
+                      style={{fontSize: '1.1rem'}}
+                    />
+                  </Link>
+                </div>
               </td>
             </tr>
           ))}

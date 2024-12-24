@@ -198,7 +198,7 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
                       },
                     })}
                     error={errors[field.label] && !watch(field.label)}
-                    errorText={`Please enter ${field.placeholder}`}
+                    errorText={`Please   ${field.placeholder}`}
                   />
                 )
               case 'file':

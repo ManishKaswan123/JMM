@@ -1,8 +1,14 @@
-import {get} from 'sr/utils/axios/index'
+import {get, post, put} from 'sr/utils/axios/index'
 import {JmmApiResponse} from './contant'
 import {CompanyResponse} from './fetchCompany'
 import {Customer} from './customerApi'
-
+import {
+  useMutation,
+  useQueryClient,
+  UseMutationResult,
+  InvalidateQueryFilters,
+} from '@tanstack/react-query'
+import {toast} from 'react-toastify'
 interface PayloadType {
   limit?: number
   page?: number
@@ -13,10 +19,10 @@ interface PayloadType {
   status?: string
 }
 interface ModifiedCompanyResponse extends Omit<CompanyResponse, 'id'> {
-  _id: number
+  _id: string
 }
 interface ModifiedCustomerResponse extends Omit<Customer, 'id'> {
-  _id: number
+  _id: string
 }
 
 export interface Checklist {
@@ -74,4 +80,73 @@ export const fetchSingleChecklist = async (id: string): Promise<SingleChecklistA
     // Throw the error to be handled by the caller
     throw new Error(`Failed to fetch : ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
+}
+const createChecklist = async (payload: Record<string, any>): Promise<boolean> => {
+  try {
+    const res = await post<any>(`/checklist`, payload)
+    if (res.success === true) {
+      toast.success('Checklist Created Successfully')
+      return true
+    }
+    throw new Error('Create failed')
+  } catch (e: any) {
+    throw new Error(e.message)
+  }
+}
+
+// The useMutation hook with correct typing
+export const useCreateChecklist = (): UseMutationResult<
+  boolean, // The type of the data returned on success
+  Error, // The type of the error that could be thrown
+  Record<string, any> // The type of the variables passed to the mutation
+> => {
+  const queryClient = useQueryClient()
+
+  return useMutation<boolean, Error, Record<string, any>>({
+    mutationFn: async (payload: Record<string, any>) => createChecklist(payload),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries(['checklist'] as InvalidateQueryFilters)
+    },
+    onError: (error: Error) => {
+      toast.error(error.message)
+    },
+  })
+}
+
+interface UpdateChecklistVariables {
+  payload: Record<string, any>
+}
+// Define the function with correct typing
+const updateChecklist = async (payload: Record<string, any>): Promise<boolean> => {
+  try {
+    const res = await put<any>(`/checklist`, payload)
+    if (res.success === true) {
+      return true
+    }
+    throw new Error('Update failed')
+  } catch (e: any) {
+    throw new Error(e.message)
+  }
+}
+
+// The useMutation hook with correct typing
+export const useUpdateChecklist = (): UseMutationResult<
+  boolean, // The type of the data returned on success
+  Error, // The type of the error that could be thrown
+  UpdateChecklistVariables // The type of the variables passed to the mutation
+> => {
+  const queryClient = useQueryClient()
+
+  return useMutation<boolean, Error, UpdateChecklistVariables>({
+    mutationFn: async ({payload}: UpdateChecklistVariables) => updateChecklist(payload),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries(['checklist'] as InvalidateQueryFilters)
+      toast.success('Checklist Updated Successfully')
+    },
+    onError: (error: Error) => {
+      toast.error(error.message)
+    },
+  })
 }
