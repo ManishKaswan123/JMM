@@ -8,7 +8,6 @@ import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
-import {getPreSignedURL} from 'sr/utils/api/media'
 import {FieldsArray} from 'sr/constants/fields'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
@@ -250,15 +249,10 @@ const Custom: React.FC = () => {
       job_id: selectedData.job_id._id,
       cleaner_id: selectedData.cleaner_id._id,
       status: selectedData.status,
-      answers: selectedData.answers,
+      answers: [] as string[],
       id: selectedData.id,
     }
   }, [selectedData])
-
-  const handleView = async (fileUrl: string) => {
-    const response: any = await getPreSignedURL({fileName: fileUrl})
-    window.open(response.results.url.toString(), '_blank')
-  }
 
   return (
     <>
