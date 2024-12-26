@@ -1,38 +1,15 @@
 import React from 'react'
-import {FaEye} from 'react-icons/fa'
+import {FaEdit, FaEye} from 'react-icons/fa'
 import {Link} from 'react-router-dom'
-
-interface Address {
-  address_line_1: string
-  address_line_2: string
-  country: string
-  city: string
-  state: string
-  lat: number | null
-  lng: number | null
-  _id: string
-}
-
-interface CleanerResponse {
-  username: string
-  first_name: string
-  last_name: string
-  mobile_number: string
-  email: string
-  date_of_birth: string
-  user_id: string
-  status: string
-  createdAt: string
-  updatedAt: string
-  address: Address
-  id: string
-}
+import {CleanerDetails} from 'sr/utils/api/fetchCleaner'
 
 interface Props {
-  data?: CleanerResponse[]
+  data?: CleanerDetails[]
+  setSelectedData: React.Dispatch<React.SetStateAction<CleanerDetails | undefined>>
+  setIsUpdateModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const CleanerTable: React.FC<Props> = ({data}) => {
+const CleanerTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalOpen}) => {
   return (
     <div className='inline-block min-w-full shadow rounded-lg overflow-hidden'>
       <table className='min-w-full leading-normal'>
@@ -101,12 +78,21 @@ const CleanerTable: React.FC<Props> = ({data}) => {
               </td>
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <Link to={`/cleaner/${cleaner?.id}`} className='text-blue-500 hover:font-medium'>
-                  <FaEye
-                    className='cursor-pointer text-blue-500 hover:text-gray-700'
-                    style={{fontSize: '1.1rem'}}
+                <div className='flex'>
+                  <FaEdit
+                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                    onClick={() => {
+                      setSelectedData(cleaner)
+                      setIsUpdateModalOpen(true)
+                    }}
                   />
-                </Link>
+                  <Link to={`/cleaner/${cleaner.id}`} className='text-blue-500 hover:font-medium'>
+                    <FaEye
+                      className='cursor-pointer text-blue-500 hover:text-gray-700'
+                      style={{fontSize: '1.1rem'}}
+                    />
+                  </Link>
+                </div>
               </td>
             </tr>
           ))}

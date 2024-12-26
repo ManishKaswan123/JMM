@@ -7,8 +7,9 @@ interface Address {
   country: string
   city: string
   state: string
-  lat: number | null
-  lng: number | null
+  postal: number
+  lat: number
+  lng: number
   _id: string
 }
 
@@ -45,20 +46,20 @@ interface FetchSingleCleanerResponse {
   pagination: CleanerPagination
 }
 
-interface CleanerPayload {
+export interface CleanerFilters {
   limit?: number
   page?: number
   sortBy?: string
   status?: string
 }
 
-const filterPayload = (payload: CleanerPayload) => {
+const filterPayload = (payload: CleanerFilters) => {
   return Object.fromEntries(
     Object.entries(payload).filter(([_, value]) => value !== undefined && value !== null)
   )
 }
 
-export const fetchCleaner = async (payload: CleanerPayload): Promise<FetchCleanerResponse> => {
+export const fetchCleaner = async (payload: CleanerFilters): Promise<FetchCleanerResponse> => {
   const filteredPayload = filterPayload(payload)
 
   try {
