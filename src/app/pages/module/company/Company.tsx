@@ -7,69 +7,43 @@ import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {deleteChat} from 'sr/utils/api/deleteChat'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
-import {createChat} from 'sr/utils/api/createChat'
-import {getPreSignedURL} from 'sr/utils/api/media'
-import {updateChat} from 'sr/utils/api/updateChat'
 import {FieldsArray} from 'sr/constants/fields'
-import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import CompanyTable from './CompanyTable'
-import {fetchCompany} from 'sr/utils/api/fetchCompany'
+import {CompanyFilters, CompanyResponse, fetchCompany} from 'sr/utils/api/fetchCompany'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
+import {useCreateCompany} from 'sr/utils/api/createCompany'
+import {useUpdateCompany} from 'sr/utils/api/updateCompany'
 
-interface chatApiResponse {
-  eightySixResponseId?: any
-  senderId?: UserInterface
-  receiverId?: UserInterface
-  sourceType?: string
-  message?: string
-  images?: string[]
-  msgType?: number
-  createdAt: string
-  updatedAt: string
+interface CompanyCreatePayload {
+  username: string
+  password: string
+  email: string
+  mobile_number: string
+  company_name: string
+  business_type: string[]
+  intent: string[]
+  candidate_msg: boolean
+  status?: string
+}
+interface CompanyUpdatePayload extends Omit<CompanyCreatePayload, 'password'> {
   id: string
 }
-
-interface chatFilters {
-  senderId?: string
-  receiverId?: string
-  eightySixResponseId?: string
-  sourceType?: string
-}
-interface chatCreatePayload {
-  eightySixResponseId: string
-  receiverId: string
-  sourceType: string
-  message: string
-  images: string[]
-  msgType: number
-}
-interface defaultData {
-  eightySixResponseId?: string
-  receiverId?: string
-  sourceType?: string
-  message?: string
-  images?: string[]
-  msgType?: number
-}
-interface chatUpdatePayload extends chatCreatePayload {}
-
 const Custom: React.FC = () => {
-  const [selectedData, setSelectedData] = useState<chatApiResponse>()
+  const [selectedData, setSelectedData] = useState<CompanyResponse>()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [filters, setFilters] = useState<chatFilters>()
+  const [filters, setFilters] = useState<CompanyFilters>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
-  const userData = useSelector((state: RootState) => state.user.data)
-  const userStatus = useSelector((state: RootState) => state.user.status)
   const businessData = useSelector((state: RootState) => state.businessType.data)
   const businessStatus = useSelector((state: RootState) => state.businessType.status)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const {fetchUserData, fetchBusinessTypeData} = useActions()
+  const {fetchBusinessTypeData} = useActions()
   const [itemsPerPage, setItemsPerPage] = useState(8)
+  const createMutation = useCreateCompany()
+  const updateMutation = useUpdateCompany()
 
   const createFields: FieldsArray = useMemo(
     () => [
@@ -109,37 +83,58 @@ const Custom: React.FC = () => {
         required: true,
       },
       {
-        type: 'text',
-        label: 'Username',
-        name: 'username',
-        placeholder: 'Username',
+        type: 'dropdown',
+        label: 'business_type',
+        name: businessData,
+        topLabel: 'Business Type',
+        placeholder: 'Select Business Type',
+        labelKey: 'type',
+        id: 'id',
         required: true,
       },
       {
-        type: 'text',
-        label: 'Business Type',
-        name: 'business_type',
-        placeholder: 'Business Type',
+        type: 'dropdown',
+        label: 'intent',
+        name: [
+          {name: 'Hiring', id: 'Hiring'},
+          {name: 'Subcontract', id: 'Subcontract'},
+          {name: 'Scheduling', id: 'Scheduling'},
+          {name: 'Bidding', id: 'Bidding'},
+        ],
+        topLabel: 'Intent',
+        placeholder: 'Select Intent',
         required: true,
       },
       {
-        type: 'text',
-        label: 'Intent',
-        name: 'intent',
-        placeholder: 'Intent',
+        type: 'dropdown',
+        label: 'candidate_msg',
+        name: [
+          {name: 'Yes', id: true},
+          {name: 'No', id: false},
+        ],
+        topLabel: 'Candidate Msg',
+        placeholder: 'Select Candidate Msg',
+        labelKey: 'name',
         required: true,
       },
       {
-        type: 'text',
-        label: 'Candidate Message',
-        name: 'candidate_msg',
-        placeholder: 'Candidate Message',
-        required: true,
+        type: 'dropdown',
+        label: 'status',
+        name: [
+          {name: 'Active', id: 'active'},
+          {name: 'Pending Otp', id: 'pending_otp'},
+        ],
+        topLabel: 'Status',
+        placeholder: 'Select Status',
+        labelKey: 'name',
+        id: 'id',
       },
     ],
-    []
+    [businessData]
   )
-
+  const updateFields = useMemo(() => {
+    return createFields.filter((field) => field.name !== 'password')
+  }, [createFields])
   const fields: FieldsArray = useMemo(
     () => [
       {
@@ -191,42 +186,25 @@ const Custom: React.FC = () => {
     [businessData]
   )
 
-  const {data, error, isLoading, isError, refetch} = useQuery({
+  const {data, isLoading} = useQuery({
     queryKey: ['company', {limit: itemsPerPage, page: currentPage, ...filters}],
     queryFn: async () => fetchCompany({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
+  const onSuccess = (action: string) => {
+    if (action === 'create') setIsCreateModalOpen(false)
+    else if (action === 'update') setIsUpdateModalOpen(false)
+  }
   useEffect(() => {
     fetchDataIfNeeded()
   }, [])
 
-  const defaultValues: defaultData | undefined = useMemo(() => {
-    if (!selectedData) return undefined
-    return {
-      eightySixResponseId: selectedData.eightySixResponseId?.id,
-      sourceType: selectedData.sourceType,
-      message: selectedData.message,
-      images: selectedData.images,
-      msgType: selectedData.msgType,
-      receiverId: selectedData.receiverId?.id,
-    }
-  }, [selectedData])
   const fetchDataIfNeeded = useCallback(() => {
-    if (userStatus !== 'succeeded') {
-      fetchUserData({})
-    }
     if (businessStatus !== 'succeeded') {
       fetchBusinessTypeData({})
     }
-  }, [userStatus, fetchUserData, businessStatus, fetchBusinessTypeData])
+  }, [businessStatus, fetchBusinessTypeData])
 
-  const onDeleteChat = async (id: string) => {
-    const res = await deleteChat(id)
-    if (!res) {
-      return
-    }
-    refetch()
-  }
   const onPageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
   }
@@ -234,39 +212,59 @@ const Custom: React.FC = () => {
     setItemsPerPage(newLimit)
     setCurrentPage(1)
   }
-  const handleApplyFilter = (newFilters: any) => {
+  const handleApplyFilter = (newFilters: CompanyFilters) => {
     setFilters(newFilters)
     setCurrentPage(1)
     setIsFilterVisible(false)
   }
 
-  const handleCreateChat = async (payload: chatCreatePayload) => {
-    setIsCreateModalOpen(false)
-    const res = await createChat(payload)
-    if (!res) {
-      setIsCreateModalOpen(false)
-      return
+  const handleCreateCompany = async (payload: Record<string, any>) => {
+    const data: CompanyCreatePayload = {
+      username: payload.username,
+      password: payload.password,
+      email: payload.email,
+      mobile_number: payload.mobile_number,
+      company_name: payload.company_name,
+      business_type: [payload.business_type],
+      intent: [payload.intent],
+      candidate_msg: payload.candidate_msg,
     }
-    refetch()
+    if (payload.status) data.status = payload.status
+    createMutation.mutate({payload: data, onSuccess})
   }
-  const handleEditChat = async (payload: chatUpdatePayload) => {
+  const handleEditCompany = async (payload: Record<string, any>) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
     }
-    setIsUpdateModalOpen(false)
-    const res = await updateChat(payload, selectedData.id)
-    if (!res) {
-      setIsUpdateModalOpen(false)
-      return
+    const data: CompanyUpdatePayload = {
+      username: payload.username,
+      email: payload.email,
+      mobile_number: payload.mobile_number,
+      company_name: payload.company_name,
+      business_type: [payload.business_type],
+      intent: [payload.intent],
+      candidate_msg: payload.candidate_msg,
+      id: selectedData.id,
     }
-    refetch()
+    if (payload.status) data.status = payload.status
+    // console.log(data)
+    updateMutation.mutate({payload: data, onSuccess})
   }
-
-  const handleView = async (fileUrl: string) => {
-    const response: any = await getPreSignedURL({fileName: fileUrl})
-    window.open(response.results.url.toString(), '_blank')
-  }
+  const defaultValues: Record<string, any> | undefined = useMemo(() => {
+    if (!selectedData) return undefined
+    return {
+      username: selectedData.username,
+      email: selectedData.email,
+      mobile_number: selectedData.mobile_number,
+      company_name: selectedData.company_name,
+      business_type: selectedData.business_type[0],
+      intent: selectedData.intent[0],
+      candidate_msg: selectedData.candidate_msg,
+      status: selectedData.status,
+      id: selectedData.id,
+    }
+  }, [selectedData])
 
   return (
     <>
@@ -316,11 +314,9 @@ const Custom: React.FC = () => {
             />
           ) : (
             <CompanyTable
-              //   setSelectedData={setSelectedData}
-              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              setSelectedData={setSelectedData}
+              setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
-              //   handleDelete={onDeleteChat}
-              //   handleView={handleView}
             />
           )}
         </div>
@@ -343,25 +339,23 @@ const Custom: React.FC = () => {
       </div>
       {isCreateModalOpen && (
         <DynamicModal
-          label='Create Job'
-          imageType='images'
+          label='Create Company'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           fields={createFields}
-          onSubmit={handleCreateChat}
+          onSubmit={handleCreateCompany}
         />
       )}
-      {/* {isUpdateModalOpen && (
+      {isUpdateModalOpen && defaultValues && (
         <DynamicModal
-          imageType='images'
-          label='Update Job'
+          label='Update Company'
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
           fields={updateFields}
           defaultValues={defaultValues}
-          onSubmit={handleEditChat}
+          onSubmit={handleEditCompany}
         />
-      )} */}
+      )}
     </>
   )
 }

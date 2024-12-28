@@ -1,6 +1,6 @@
-import { get } from 'sr/utils/axios/index'
+import {get} from 'sr/utils/axios/index'
 
-export  interface CompanyResponse {
+export interface CompanyResponse {
   username: string
   email: string
   mobile_number: string
@@ -28,21 +28,24 @@ interface FetchCompanyResponse {
   pagination: Pagination
 }
 
-interface PayloadType {
+export interface CompanyFilters {
   limit?: number
   page?: number
-  senderId?: string
   sortBy?: string
   projectBy?: string
+  business_type?: string
+  intent?: string
+  candidate_msg?: boolean
+  status?: string
 }
 
-const filterPayload = (payload: PayloadType) => {
+const filterPayload = (payload: CompanyFilters) => {
   return Object.fromEntries(
     Object.entries(payload).filter(([_, value]) => value !== undefined && value !== null)
   )
 }
 
-export const fetchCompany = async (payload: PayloadType): Promise<FetchCompanyResponse> => {
+export const fetchCompany = async (payload: CompanyFilters): Promise<FetchCompanyResponse> => {
   const filteredPayload = filterPayload(payload)
 
   try {
