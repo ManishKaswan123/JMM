@@ -7,11 +7,7 @@ import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {deleteChat} from 'sr/utils/api/deleteChat'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
-import {createChat} from 'sr/utils/api/createChat'
-import {getPreSignedURL} from 'sr/utils/api/media'
-import {updateChat} from 'sr/utils/api/updateChat'
 import {FieldsArray} from 'sr/constants/fields'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
@@ -192,6 +188,11 @@ const Custom: React.FC = () => {
     queryFn: async () => fetchChecklists({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
+  const onSuccess = (action: string) => {
+    if (action === 'create') setIsCreateModalOpen(false)
+    else if (action === 'update') setIsUpdateModalOpen(false)
+  }
+
   useEffect(() => {
     fetchDataIfNeeded()
   }, [])
@@ -228,15 +229,13 @@ const Custom: React.FC = () => {
       task_ids: [],
       status: payload.status,
     }
-    setIsCreateModalOpen(false)
-    createMutation.mutate(data)
+    createMutation.mutate({payload: data, onSuccess})
   }
   const handleEditChecklist = async (payload: ChecklistUpdatePayload) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
     }
-    setIsUpdateModalOpen(false)
     const data: ChecklistUpdatePayload = {
       name: payload.name,
       type: payload.type,
@@ -247,7 +246,7 @@ const Custom: React.FC = () => {
       status: payload.status,
       id: selectedData.id,
     }
-    updateMutation.mutate({payload: data})
+    updateMutation.mutate({payload: data, onSuccess})
   }
   const defaultValues: ChecklistUpdatePayload | undefined = useMemo(() => {
     if (!selectedData) return undefined
@@ -262,11 +261,6 @@ const Custom: React.FC = () => {
       id: selectedData.id,
     }
   }, [selectedData])
-
-  const handleView = async (fileUrl: string) => {
-    const response: any = await getPreSignedURL({fileName: fileUrl})
-    window.open(response.results.url.toString(), '_blank')
-  }
 
   return (
     <>

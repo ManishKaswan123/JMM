@@ -8,19 +8,19 @@ import {toast} from 'react-toastify'
 import {post} from '../axios'
 // Define the variables that the mutation expects
 
-interface CreateApplicationVariables {
+interface CreateCompanyVariables {
   payload: Record<string, any>
   onSuccess: (action: string) => void
 }
 // Define the function with correct typing
-const createApplication = async (
+const createCompany = async (
   payload: Record<string, any>,
   onSuccess: (action: string) => void
 ): Promise<boolean> => {
   try {
-    const res = await post<any>(`/application`, payload)
+    const res = await post<any>(`/company`, payload)
     if (res.success === true) {
-      toast.success(res.msg)
+      toast.success('Company Created Successfully')
       onSuccess('create')
       return true
     }
@@ -31,18 +31,18 @@ const createApplication = async (
 }
 
 // The useMutation hook with correct typing
-export const useCreateApplication = (): UseMutationResult<
+export const useCreateCompany = (): UseMutationResult<
   boolean, // The type of the data returned on success
   Error, // The type of the error that could be thrown
-  CreateApplicationVariables // The type of the variables passed to the mutation
+  CreateCompanyVariables // The type of the variables passed to the mutation
 > => {
   const queryClient = useQueryClient()
 
-  return useMutation<boolean, Error, CreateApplicationVariables>({
-    mutationFn: async ({payload, onSuccess}) => createApplication(payload, onSuccess),
+  return useMutation<boolean, Error, CreateCompanyVariables>({
+    mutationFn: async ({payload, onSuccess}) => createCompany(payload, onSuccess),
 
     onSuccess: () => {
-      queryClient.invalidateQueries(['application'] as InvalidateQueryFilters)
+      queryClient.invalidateQueries(['company'] as InvalidateQueryFilters)
     },
     onError: (error: Error) => {
       toast.error(error.message)

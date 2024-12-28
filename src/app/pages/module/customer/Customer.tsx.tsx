@@ -176,11 +176,16 @@ const Custom: React.FC = () => {
     [companyData]
   )
 
-  const {data, isLoading, refetch} = useQuery({
+  const {data, isLoading} = useQuery({
     queryKey: ['customer', {limit: itemsPerPage, page: currentPage, ...filters}],
     queryFn: async () => fetchCustomers({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
+  const onSuccess = (action: string) => {
+    if (action === 'create') setIsCreateModalOpen(false)
+    else if (action === 'update') setIsUpdateModalOpen(false)
+  }
+
   useEffect(() => {
     fetchDataIfNeeded()
   }, [])
@@ -217,15 +222,13 @@ const Custom: React.FC = () => {
       location_ids: [],
       checklist_ids: [],
     }
-    setIsCreateModalOpen(false)
-    createMutation.mutate(data)
+    createMutation.mutate({payload: data, onSuccess})
   }
   const handleEditCustomer = async (payload: CustomerUpdatePayload) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
     }
-    setIsUpdateModalOpen(false)
     const data: CustomerUpdatePayload = {
       company_id: payload.company_id,
       name: payload.name,
@@ -239,7 +242,7 @@ const Custom: React.FC = () => {
       checklist_ids: [],
       id: selectedData.id,
     }
-    updateMutation.mutate({payload: data})
+    updateMutation.mutate({payload: data, onSuccess})
   }
   const defaultValues: CustomerUpdatePayload | undefined = useMemo(() => {
     if (!selectedData) return undefined

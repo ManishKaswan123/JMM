@@ -81,11 +81,19 @@ export const fetchSingleChecklist = async (id: string): Promise<SingleChecklistA
     throw new Error(`Failed to fetch : ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
 }
-const createChecklist = async (payload: Record<string, any>): Promise<boolean> => {
+interface ChecklistVariables {
+  payload: Record<string, any>
+  onSuccess: (action: string) => void
+}
+const createChecklist = async (
+  payload: Record<string, any>,
+  onSuccess: (action: string) => void
+): Promise<boolean> => {
   try {
     const res = await post<any>(`/checklist`, payload)
     if (res.success === true) {
       toast.success('Checklist Created Successfully')
+      onSuccess('create')
       return true
     }
     throw new Error('Create failed')
@@ -98,12 +106,12 @@ const createChecklist = async (payload: Record<string, any>): Promise<boolean> =
 export const useCreateChecklist = (): UseMutationResult<
   boolean, // The type of the data returned on success
   Error, // The type of the error that could be thrown
-  Record<string, any> // The type of the variables passed to the mutation
+  ChecklistVariables // The type of the variables passed to the mutation
 > => {
   const queryClient = useQueryClient()
 
-  return useMutation<boolean, Error, Record<string, any>>({
-    mutationFn: async (payload: Record<string, any>) => createChecklist(payload),
+  return useMutation<boolean, Error, ChecklistVariables>({
+    mutationFn: async ({payload, onSuccess}) => createChecklist(payload, onSuccess),
 
     onSuccess: () => {
       queryClient.invalidateQueries(['checklist'] as InvalidateQueryFilters)
@@ -114,14 +122,15 @@ export const useCreateChecklist = (): UseMutationResult<
   })
 }
 
-interface UpdateChecklistVariables {
-  payload: Record<string, any>
-}
 // Define the function with correct typing
-const updateChecklist = async (payload: Record<string, any>): Promise<boolean> => {
+const updateChecklist = async (
+  payload: Record<string, any>,
+  onSuccess: (action: string) => void
+): Promise<boolean> => {
   try {
     const res = await put<any>(`/checklist`, payload)
     if (res.success === true) {
+      onSuccess('update')
       return true
     }
     throw new Error('Update failed')
@@ -134,12 +143,13 @@ const updateChecklist = async (payload: Record<string, any>): Promise<boolean> =
 export const useUpdateChecklist = (): UseMutationResult<
   boolean, // The type of the data returned on success
   Error, // The type of the error that could be thrown
-  UpdateChecklistVariables // The type of the variables passed to the mutation
+  ChecklistVariables // The type of the variables passed to the mutation
 > => {
   const queryClient = useQueryClient()
 
-  return useMutation<boolean, Error, UpdateChecklistVariables>({
-    mutationFn: async ({payload}: UpdateChecklistVariables) => updateChecklist(payload),
+  return useMutation<boolean, Error, ChecklistVariables>({
+    mutationFn: async ({payload, onSuccess}: ChecklistVariables) =>
+      updateChecklist(payload, onSuccess),
 
     onSuccess: () => {
       queryClient.invalidateQueries(['checklist'] as InvalidateQueryFilters)

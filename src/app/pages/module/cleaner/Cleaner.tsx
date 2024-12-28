@@ -4,7 +4,6 @@ import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {deleteChat} from 'sr/utils/api/deleteChat'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {FieldsArray} from 'sr/constants/fields'
 import {useQuery} from '@tanstack/react-query'
@@ -183,13 +182,11 @@ const Custom: React.FC = () => {
     // placeholderData: keepPreviousData,
   })
 
-  const onDeleteChat = async (id: string) => {
-    const res = await deleteChat(id)
-    if (!res) {
-      return
-    }
-    refetch()
+  const onSuccess = (action: string) => {
+    if (action === 'create') setIsCreateModalOpen(false)
+    else if (action === 'update') setIsUpdateModalOpen(false)
   }
+
   const onPageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
   }
@@ -224,15 +221,13 @@ const Custom: React.FC = () => {
         lng: 0,
       },
     }
-    setIsCreateModalOpen(false)
-    createMutation.mutate(data)
+    createMutation.mutate({payload: data, onSuccess})
   }
   const handleEditCleaner = async (payload: CleanerFormPayload) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
     }
-    setIsUpdateModalOpen(false)
     const data: CleanerUpdatePayload = {
       username: payload.username,
       first_name: payload.first_name,
@@ -254,7 +249,7 @@ const Custom: React.FC = () => {
       },
       id: selectedData.id,
     }
-    updateMutation.mutate({payload: data})
+    updateMutation.mutate({payload: data, onSuccess})
   }
 
   const defaultValues: CleanerFormPayload | undefined = useMemo(() => {

@@ -6,12 +6,19 @@ import {
 } from '@tanstack/react-query'
 import {toast} from 'react-toastify'
 import {post} from '../axios'
-
-const createCleaner = async (payload: Record<string, any>): Promise<boolean> => {
+interface CreateCleanerVariables {
+  payload: Record<string, any>
+  onSuccess: (action: string) => void
+}
+const createCleaner = async (
+  payload: Record<string, any>,
+  onSuccess: (action: string) => void
+): Promise<boolean> => {
   try {
     const res = await post<any>(`/cleaner`, payload)
     if (res.success === true) {
       toast.success('Cleaner Created Successfully')
+      onSuccess('create')
       return true
     }
     throw new Error('Create failed')
@@ -24,12 +31,12 @@ const createCleaner = async (payload: Record<string, any>): Promise<boolean> => 
 export const useCreateCleaner = (): UseMutationResult<
   boolean, // The type of the data returned on success
   Error, // The type of the error that could be thrown
-  Record<string, any> // The type of the variables passed to the mutation
+  CreateCleanerVariables // The type of the variables passed to the mutation
 > => {
   const queryClient = useQueryClient()
 
-  return useMutation<boolean, Error, Record<string, any>>({
-    mutationFn: async (payload: Record<string, any>) => createCleaner(payload),
+  return useMutation<boolean, Error, CreateCleanerVariables>({
+    mutationFn: async ({payload, onSuccess}) => createCleaner(payload, onSuccess),
 
     onSuccess: () => {
       queryClient.invalidateQueries(['cleaner'] as InvalidateQueryFilters)

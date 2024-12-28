@@ -191,6 +191,11 @@ const Custom: React.FC = () => {
     queryFn: async () => fetchApplications({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
+  const onSuccess = (action: string) => {
+    if (action === 'create') setIsCreateModalOpen(false)
+    else if (action === 'update') setIsUpdateModalOpen(false)
+  }
+
   useEffect(() => {
     fetchDataIfNeeded()
   }, [])
@@ -224,15 +229,13 @@ const Custom: React.FC = () => {
       answers: [] as string[],
       status: payload.status,
     }
-    setIsCreateModalOpen(false)
-    createMutation.mutate(data)
+    createMutation.mutate({payload: data, onSuccess})
   }
   const handleEditApplication = async (payload: ApplicationUpdatePayload) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
     }
-    setIsUpdateModalOpen(false)
     const data: ApplicationUpdatePayload = {
       job_id: payload.job_id,
       cleaner_id: payload.cleaner_id,
@@ -240,7 +243,7 @@ const Custom: React.FC = () => {
       status: payload.status,
       id: selectedData.id,
     }
-    updateMutation.mutate({payload: data})
+    updateMutation.mutate({payload: data, onSuccess})
   }
 
   const defaultValues: ApplicationUpdatePayload | undefined = useMemo(() => {

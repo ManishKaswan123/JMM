@@ -90,6 +90,11 @@ const Custom: React.FC = () => {
     // placeholderData: keepPreviousData,
   })
 
+  const onSuccess = (action: string) => {
+    if (action === 'create') setIsCreateModalOpen(false)
+    else if (action === 'update') setIsUpdateModalOpen(false)
+  }
+
   const handleView = async (fileUrl: string | undefined) => {
     if (!fileUrl) return
     const response: any = await getPreSignedURL({fileName: fileUrl})
@@ -114,17 +119,15 @@ const Custom: React.FC = () => {
     setIsFilterVisible(false) // Hide filter after applying
   }
   const handleCreateBusinessType = async (payload: businessTypeCreatePayload) => {
-    setIsCreateModalOpen(false)
-    createMutation.mutate(payload)
+    createMutation.mutate({payload, onSuccess})
   }
   const handleEditBusinessType = async (payload: businessTypeUpdatePayload) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
     }
-    setIsUpdateModalOpen(false)
     payload = {...payload, id: selectedData.id}
-    updateMutation.mutate({payload})
+    updateMutation.mutate({payload, onSuccess})
   }
 
   const defaultValues: businessTypeUpdatePayload | undefined = useMemo(() => {

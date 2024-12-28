@@ -1,5 +1,5 @@
 import React from 'react'
-import {FaEye} from 'react-icons/fa'
+import {FaEdit, FaEye} from 'react-icons/fa'
 import {Link} from 'react-router-dom'
 
 interface CompanyResponse {
@@ -19,9 +19,11 @@ interface CompanyResponse {
 
 interface Props {
   data?: CompanyResponse[]
+  setSelectedData: React.Dispatch<React.SetStateAction<CompanyResponse | undefined>>
+  setIsUpdateModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const CompanyTable: React.FC<Props> = ({data}) => {
+const CompanyTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalOpen}) => {
   return (
     <div className='inline-block min-w-full shadow rounded-lg overflow-hidden'>
       <table className='min-w-full leading-normal'>
@@ -92,12 +94,21 @@ const CompanyTable: React.FC<Props> = ({data}) => {
                 </p>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <Link to={`/company/${company.id}`} className='text-blue-500 hover:font-medium'>
-                  <FaEye
-                    className='cursor-pointer text-blue-500 hover:text-gray-700'
-                    style={{fontSize: '1.1rem'}}
+                <div className='flex'>
+                  <FaEdit
+                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                    onClick={() => {
+                      setSelectedData(company)
+                      setIsUpdateModalOpen(true)
+                    }}
                   />
-                </Link>
+                  <Link to={`/company/${company.id}`} className='text-blue-500 hover:font-medium'>
+                    <FaEye
+                      className='cursor-pointer text-blue-500 hover:text-gray-700'
+                      style={{fontSize: '1.1rem'}}
+                    />
+                  </Link>
+                </div>
               </td>
             </tr>
           ))}

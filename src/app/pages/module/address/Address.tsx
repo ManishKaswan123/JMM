@@ -248,6 +248,11 @@ const Custom: React.FC = () => {
     // placeholderData: keepPreviousData,
     retry: false,
   })
+  const onSuccess = (action: string) => {
+    if (action === 'create') setIsCreateModalOpen(false)
+    else if (action === 'update') setIsUpdateModalOpen(false)
+  }
+
   useEffect(() => {
     fetchUserDataIfNeeded()
   }, [])
@@ -291,15 +296,13 @@ const Custom: React.FC = () => {
       address_type: payload.address_type,
       status: payload.status,
     }
-    setIsCreateModalOpen(false)
-    createMutation.mutate(data)
+    createMutation.mutate({payload: data, onSuccess})
   }
   const handleEditAddress = async (payload: AddressFormPayload) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
     }
-    setIsUpdateModalOpen(false)
     const data: AddressUpdatePayload = {
       no_of_rooms: payload.no_of_rooms,
       no_of_bath: payload.no_of_bath,
@@ -320,7 +323,7 @@ const Custom: React.FC = () => {
       status: payload.status,
       id: selectedData.id,
     }
-    updateMutation.mutate({payload: data})
+    updateMutation.mutate({payload: data, onSuccess})
   }
   const defaultValues: AddressFormPayload | undefined = useMemo(() => {
     if (!selectedData) return undefined
