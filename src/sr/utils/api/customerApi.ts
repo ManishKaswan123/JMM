@@ -70,12 +70,20 @@ export const fetchSingleCustomer = async (id: string): Promise<SingleCustomerApi
     throw new Error(`Failed to fetch : ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
 }
+interface CustomerVariables {
+  payload: Record<string, any>
+  onSuccess: (action: string) => void
+}
 
-const createCustomer = async (payload: Record<string, any>): Promise<boolean> => {
+const createCustomer = async (
+  payload: Record<string, any>,
+  onSuccess: (action: string) => void
+): Promise<boolean> => {
   try {
     const res = await post<any>(`/customer`, payload)
     if (res.success === true) {
       toast.success('Customer Created Successfully')
+      onSuccess('create')
       return true
     }
     throw new Error('Create failed')
@@ -87,12 +95,12 @@ const createCustomer = async (payload: Record<string, any>): Promise<boolean> =>
 export const useCreateCustomer = (): UseMutationResult<
   boolean, // The type of the data returned on success
   Error, // The type of the error that could be thrown
-  Record<string, any> // The type of the variables passed to the mutation
+  CustomerVariables // The type of the variables passed to the mutation
 > => {
   const queryClient = useQueryClient()
 
-  return useMutation<boolean, Error, Record<string, any>>({
-    mutationFn: async (payload: Record<string, any>) => createCustomer(payload),
+  return useMutation<boolean, Error, CustomerVariables>({
+    mutationFn: async ({payload, onSuccess}) => createCustomer(payload, onSuccess),
 
     onSuccess: () => {
       queryClient.invalidateQueries(['customer'] as InvalidateQueryFilters)
@@ -102,14 +110,16 @@ export const useCreateCustomer = (): UseMutationResult<
     },
   })
 }
-interface UpdateCustomerVariables {
-  payload: Record<string, any>
-}
+
 // Define the function with correct typing
-const updateCustomer = async (payload: Record<string, any>): Promise<boolean> => {
+const updateCustomer = async (
+  payload: Record<string, any>,
+  onSuccess: (action: string) => void
+): Promise<boolean> => {
   try {
     const res = await put<any>(`/customer`, payload)
     if (res.success === true) {
+      onSuccess('update')
       return true
     }
     throw new Error('Update failed')
@@ -122,12 +132,13 @@ const updateCustomer = async (payload: Record<string, any>): Promise<boolean> =>
 export const useUpdateCustomer = (): UseMutationResult<
   boolean, // The type of the data returned on success
   Error, // The type of the error that could be thrown
-  UpdateCustomerVariables // The type of the variables passed to the mutation
+  CustomerVariables // The type of the variables passed to the mutation
 > => {
   const queryClient = useQueryClient()
 
-  return useMutation<boolean, Error, UpdateCustomerVariables>({
-    mutationFn: async ({payload}: UpdateCustomerVariables) => updateCustomer(payload),
+  return useMutation<boolean, Error, CustomerVariables>({
+    mutationFn: async ({payload, onSuccess}: CustomerVariables) =>
+      updateCustomer(payload, onSuccess),
 
     onSuccess: () => {
       queryClient.invalidateQueries(['customer'] as InvalidateQueryFilters)

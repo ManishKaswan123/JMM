@@ -8,11 +8,16 @@ import {toast} from 'react-toastify'
 import {put} from '../axios'
 interface UpdateCleanerVariables {
   payload: Record<string, any>
+  onSuccess: (action: string) => void
 }
-const updateCleaner = async (payload: Record<string, any>): Promise<boolean> => {
+const updateCleaner = async (
+  payload: Record<string, any>,
+  onSuccess: (action: string) => void
+): Promise<boolean> => {
   try {
     const res = await put<any>(`/cleaner`, payload)
     if (res.success === true) {
+      onSuccess('update')
       return true
     }
     throw new Error('Update failed')
@@ -30,7 +35,8 @@ export const useUpdateCleaner = (): UseMutationResult<
   const queryClient = useQueryClient()
 
   return useMutation<boolean, Error, UpdateCleanerVariables>({
-    mutationFn: async ({payload}: UpdateCleanerVariables) => updateCleaner(payload),
+    mutationFn: async ({payload, onSuccess}: UpdateCleanerVariables) =>
+      updateCleaner(payload, onSuccess),
 
     onSuccess: () => {
       queryClient.invalidateQueries(['cleaner'] as InvalidateQueryFilters)

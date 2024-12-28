@@ -92,11 +92,20 @@ export const createIndividual = async (payload: any) => {
     return false
   }
 }
-const createAddress = async (payload: Record<string, any>): Promise<boolean> => {
+
+interface AddressVariables {
+  payload: Record<string, any>
+  onSuccess: (action: string) => void
+}
+const createAddress = async (
+  payload: Record<string, any>,
+  onSuccess: (action: string) => void
+): Promise<boolean> => {
   try {
     const res = await post<any>(`/address`, payload)
     if (res.success === true) {
       toast.success('Address Created Successfully')
+      onSuccess('create')
       return true
     }
     throw new Error('Create failed')
@@ -109,12 +118,12 @@ const createAddress = async (payload: Record<string, any>): Promise<boolean> => 
 export const useCreateAddress = (): UseMutationResult<
   boolean, // The type of the data returned on success
   Error, // The type of the error that could be thrown
-  Record<string, any> // The type of the variables passed to the mutation
+  AddressVariables // The type of the variables passed to the mutation
 > => {
   const queryClient = useQueryClient()
 
-  return useMutation<boolean, Error, Record<string, any>>({
-    mutationFn: async (payload: Record<string, any>) => createAddress(payload),
+  return useMutation<boolean, Error, AddressVariables>({
+    mutationFn: async ({payload, onSuccess}) => createAddress(payload, onSuccess),
 
     onSuccess: () => {
       queryClient.invalidateQueries(['address'] as InvalidateQueryFilters)
@@ -125,14 +134,15 @@ export const useCreateAddress = (): UseMutationResult<
   })
 }
 
-interface UpdateAddressVariables {
-  payload: Record<string, any>
-}
 // Define the function with correct typing
-const updateAddress = async (payload: Record<string, any>): Promise<boolean> => {
+const updateAddress = async (
+  payload: Record<string, any>,
+  onSuccess: (action: string) => void
+): Promise<boolean> => {
   try {
     const res = await put<any>(`/address`, payload)
     if (res.success === true) {
+      onSuccess('update')
       return true
     }
     throw new Error('Update failed')
@@ -145,12 +155,12 @@ const updateAddress = async (payload: Record<string, any>): Promise<boolean> => 
 export const useUpdateAddress = (): UseMutationResult<
   boolean, // The type of the data returned on success
   Error, // The type of the error that could be thrown
-  UpdateAddressVariables // The type of the variables passed to the mutation
+  AddressVariables // The type of the variables passed to the mutation
 > => {
   const queryClient = useQueryClient()
 
-  return useMutation<boolean, Error, UpdateAddressVariables>({
-    mutationFn: async ({payload}: UpdateAddressVariables) => updateAddress(payload),
+  return useMutation<boolean, Error, AddressVariables>({
+    mutationFn: async ({payload, onSuccess}: AddressVariables) => updateAddress(payload, onSuccess),
 
     onSuccess: () => {
       queryClient.invalidateQueries(['address'] as InvalidateQueryFilters)

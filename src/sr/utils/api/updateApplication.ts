@@ -9,12 +9,17 @@ import {put} from '../axios'
 // Define the variables that the mutation expects
 interface UpdateApplicationVariables {
   payload: Record<string, any>
+  onSuccess: (action: string) => void
 }
 // Define the function with correct typing
-const updateApplication = async (payload: Record<string, any>): Promise<boolean> => {
+const updateApplication = async (
+  payload: Record<string, any>,
+  onSuccess: (action: string) => void
+): Promise<boolean> => {
   try {
     const res = await put<any>(`/application`, payload)
     if (res.success === true) {
+      onSuccess('update')
       return true
     }
     throw new Error('Update failed')
@@ -32,7 +37,8 @@ export const useUpdateApplication = (): UseMutationResult<
   const queryClient = useQueryClient()
 
   return useMutation<boolean, Error, UpdateApplicationVariables>({
-    mutationFn: async ({payload}: UpdateApplicationVariables) => updateApplication(payload),
+    mutationFn: async ({payload, onSuccess}: UpdateApplicationVariables) =>
+      updateApplication(payload, onSuccess),
 
     onSuccess: () => {
       queryClient.invalidateQueries(['application'] as InvalidateQueryFilters)

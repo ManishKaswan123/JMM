@@ -9,12 +9,17 @@ import {put} from '../axios'
 // Define the variables that the mutation expects
 interface UpdateBusinessCategoryVariables {
   payload: Record<string, any>
+  onSuccess: (action: string) => void
 }
 // Define the function with correct typing
-const updateBusinessCategory = async (payload: Record<string, any>): Promise<boolean> => {
+const updateBusinessCategory = async (
+  payload: Record<string, any>,
+  onSuccess: (action: string) => void
+): Promise<boolean> => {
   try {
     const res = await put<any>(`/businesstype`, payload)
     if (res) {
+      onSuccess('update')
       return true
     }
     throw new Error('Update failed')
@@ -32,8 +37,8 @@ export const useUpdateBusinessCategory = (): UseMutationResult<
   const queryClient = useQueryClient()
 
   return useMutation<boolean, Error, UpdateBusinessCategoryVariables>({
-    mutationFn: async ({payload}: UpdateBusinessCategoryVariables) =>
-      updateBusinessCategory(payload),
+    mutationFn: async ({payload, onSuccess}: UpdateBusinessCategoryVariables) =>
+      updateBusinessCategory(payload, onSuccess),
 
     onSuccess: () => {
       queryClient.invalidateQueries(['businessCategories'] as InvalidateQueryFilters)
