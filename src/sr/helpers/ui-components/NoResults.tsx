@@ -1,6 +1,6 @@
 export const NoResults = (props: {title: string}) => {
   return (
-    <div className='flex flex-col items-center justify-center h-64 text-center bg-gray-100 rounded-lg p-4'>
+    <div className='flex flex-col items-center justify-center h-64 w-full text-center bg-gray-100 rounded-lg p-4'>
       <svg
         xmlns='http://www.w3.org/2000/svg'
         fill='none'

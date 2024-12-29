@@ -176,7 +176,7 @@ const Custom: React.FC = () => {
     []
   )
 
-  const {data, isLoading, refetch} = useQuery({
+  const {data, isLoading} = useQuery({
     queryKey: ['cleaner', {limit: itemsPerPage, page: currentPage, ...filters}],
     queryFn: async () => fetchCleaner({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,

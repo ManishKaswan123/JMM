@@ -8,6 +8,7 @@ export interface CompanyResponse {
   business_type: string[]
   intent: string[]
   candidate_msg: boolean
+  no_of_clients?: number
   user_id: string
   status: string
   createdAt: string
