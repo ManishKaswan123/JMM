@@ -33,20 +33,23 @@ export interface FetchSingleTaskListResponse {
   pagination: TaskListPagination
 }
 
-interface TaskListPayload {
+export interface TasklistFilters {
   limit?: number
   page?: number
   sortBy?: string
   status?: string
+  company_id?: string
+  customer_id?: string
+  checklist_id?: string
 }
 
-const filterPayload = (payload: TaskListPayload) => {
+const filterPayload = (payload: TasklistFilters) => {
   return Object.fromEntries(
     Object.entries(payload).filter(([_, value]) => value !== undefined && value !== null)
   )
 }
 
-export const fetchTaskList = async (payload: TaskListPayload): Promise<FetchTaskListResponse> => {
+export const fetchTaskList = async (payload: TasklistFilters): Promise<FetchTaskListResponse> => {
   const filteredPayload = filterPayload(payload)
 
   try {
