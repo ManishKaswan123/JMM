@@ -7,63 +7,35 @@ import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {deleteChat} from 'sr/utils/api/deleteChat'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
-import {createChat} from 'sr/utils/api/createChat'
-import {getPreSignedURL} from 'sr/utils/api/media'
-import {updateChat} from 'sr/utils/api/updateChat'
 import {FieldsArray} from 'sr/constants/fields'
-import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import TaskListTable from './TaskListTable'
-import {fetchTaskList} from 'sr/utils/api/fetchTaskList'
+import {fetchTaskList, TaskListDetails, TasklistFilters} from 'sr/utils/api/fetchTaskList'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
+import {useCreateTasklist} from 'sr/utils/api/createTasklist'
+import {useUpdateTasklist} from 'sr/utils/api/updateTasklist'
 
-interface chatApiResponse {
-  eightySixResponseId?: any
-  senderId?: UserInterface
-  receiverId?: UserInterface
-  sourceType?: string
-  message?: string
-  images?: string[]
-  msgType?: number
-  createdAt: string
-  updatedAt: string
+interface CreateTasklistPayload {
+  name: string
+  description: string
+  type: string
+  checklist_id: string
+  company_id: string
+  customer_id: string
+  images: string[]
+  videos: string[]
+  status: string
+}
+interface UpdateTasklistPayload extends Omit<CreateTasklistPayload, 'password'> {
   id: string
 }
-
-interface chatFilters {
-  senderId?: string
-  receiverId?: string
-  eightySixResponseId?: string
-  sourceType?: string
-}
-interface chatCreatePayload {
-  eightySixResponseId: string
-  receiverId: string
-  sourceType: string
-  message: string
-  images: string[]
-  msgType: number
-}
-interface defaultData {
-  eightySixResponseId?: string
-  receiverId?: string
-  sourceType?: string
-  message?: string
-  images?: string[]
-  msgType?: number
-}
-interface chatUpdatePayload extends chatCreatePayload {}
-
 const Custom: React.FC = () => {
-  const [selectedData, setSelectedData] = useState<chatApiResponse>()
+  const [selectedData, setSelectedData] = useState<TaskListDetails>()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [filters, setFilters] = useState<chatFilters>()
+  const [filters, setFilters] = useState<TasklistFilters>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
-  const userData = useSelector((state: RootState) => state.user.data)
-  const userStatus = useSelector((state: RootState) => state.user.status)
   const companyData = useSelector((state: RootState) => state.company.data)
   const companyStatus = useSelector((state: RootState) => state.company.status)
   const customerData = useSelector((state: RootState) => state.customer.data)
@@ -72,117 +44,85 @@ const Custom: React.FC = () => {
   const checklistStatus = useSelector((state: RootState) => state.checklist.status)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const {fetchUserData, fetchCustomersData, fetchChecklistData, fetchCompanyData} = useActions()
+  const {fetchCustomersData, fetchChecklistData, fetchCompanyData} = useActions()
   const [itemsPerPage, setItemsPerPage] = useState(8)
+  const createMutation = useCreateTasklist()
+  const updateMutation = useUpdateTasklist()
 
-  const eightySixResponse = useMemo(
-    () => [
-      {firstName: 'Devid', id: '65bbf2df9aa9785b019d87b2'},
-      {firstName: 'Devid', id: '65bbf2df9aa9785b019d87b2'},
-    ],
-    []
-  )
-  const msgType = useMemo(
-    () => [
-      {name: '1', id: 1},
-      {name: '2', id: 2},
-      {name: '3', id: 3},
-    ],
-    []
-  )
-
-  const createFields: FieldsArray = useMemo(
+  const createAndUpdateFields: FieldsArray = useMemo(
     () => [
       {
         type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
+        label: 'company_id',
+        name: companyData,
+        topLabel: 'Company',
+        placeholder: 'Select company',
+        labelKey: 'company_name',
+        id: 'id',
         required: true,
       },
       {
         type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
+        label: 'customer_id',
+        name: customerData,
+        topLabel: 'Customer',
+        placeholder: 'Select Customer',
+        labelKey: 'customer_name',
+        id: 'id',
         required: true,
       },
       {
         type: 'dropdown',
-        label: 'msgType',
-        name: msgType,
-        topLabel: 'Msg Type',
-        placeholder: 'Select Msg Type',
+        label: 'checklist_id',
+        name: checklistData,
+        topLabel: 'Checklist',
+        placeholder: 'Select Checklist',
+        labelKey: 'checklist_name',
+        id: 'id',
         required: true,
       },
-      {type: 'text', label: 'Message', name: 'message', placeholder: 'Message', required: true},
       {
         type: 'text',
-        label: 'Source Type',
-        name: 'sourceType',
-        placeholder: 'Source Type',
+        label: 'Name',
+        name: 'name',
+        placeholder: 'Name',
         required: true,
       },
-      {
-        type: 'file',
-        label: 'Images',
-        name: 'images',
-        wrapperLabel: 'Upload image',
-        topLabel: 'Images',
-        placeholder: 'Select Images',
-        required: true,
-      },
-    ],
-    [userData, msgType, eightySixResponse]
-  )
-
-  const updateFields: FieldsArray = useMemo(
-    () => [
-      {
-        type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'msgType',
-        name: msgType,
-        topLabel: 'Msg Type',
-        placeholder: 'Select Msg Type',
-        required: true,
-      },
-      {type: 'text', label: 'Message', name: 'message', placeholder: 'Message', required: true},
       {
         type: 'text',
-        label: 'Source Type',
-        name: 'sourceType',
-        placeholder: 'Source Type',
+        label: 'Description',
+        name: 'description',
+        placeholder: 'Description',
         required: true,
       },
       {
-        type: 'file',
-        label: 'Images',
-        name: 'images',
-        wrapperLabel: 'Upload image',
-        topLabel: 'Images',
-        placeholder: 'Select Images',
+        type: 'dropdown',
+        label: 'type',
+        name: [
+          {name: 'Mandatory', id: 'Mandatory'},
+          {name: 'Optional', id: 'Optional'},
+        ],
+        topLabel: 'Type',
+        placeholder: 'Select Type',
+        labelKey: 'name',
+        id: 'id',
+        required: true,
+      },
+      {
+        type: 'dropdown',
+        label: 'status',
+        name: [
+          {name: 'Active', id: 'active'},
+          {name: 'Draft', id: 'draft'},
+        ],
+        topLabel: 'Status',
+        placeholder: 'Select Status',
+        labelKey: 'name',
+        id: 'id',
         required: true,
       },
     ],
-    [userData, msgType, eightySixResponse]
+    [customerData, companyData, checklistData]
   )
 
   const fields: FieldsArray = useMemo(
@@ -239,33 +179,23 @@ const Custom: React.FC = () => {
         id: 'id',
       },
     ],
-    [userData?.results, eightySixResponse, companyData, customerData, checklistData]
+    [companyData, customerData, checklistData]
   )
 
-  const {data, error, isLoading, isError, refetch} = useQuery({
+  const {data, isLoading} = useQuery({
     queryKey: ['tasklist', {limit: itemsPerPage, page: currentPage, ...filters}],
     queryFn: async () => fetchTaskList({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
+  const onSuccess = (action: string) => {
+    if (action === 'create') setIsCreateModalOpen(false)
+    else if (action === 'update') setIsUpdateModalOpen(false)
+  }
   useEffect(() => {
     fetchUserDataIfNeeded()
   }, [])
 
-  const defaultValues: defaultData | undefined = useMemo(() => {
-    if (!selectedData) return undefined
-    return {
-      eightySixResponseId: selectedData.eightySixResponseId?.id,
-      sourceType: selectedData.sourceType,
-      message: selectedData.message,
-      images: selectedData.images,
-      msgType: selectedData.msgType,
-      receiverId: selectedData.receiverId?.id,
-    }
-  }, [selectedData])
   const fetchUserDataIfNeeded = useCallback(() => {
-    if (userStatus !== 'succeeded') {
-      fetchUserData({})
-    }
     if (companyStatus !== 'succeeded') {
       fetchCompanyData({})
     }
@@ -276,8 +206,6 @@ const Custom: React.FC = () => {
       fetchChecklistData({})
     }
   }, [
-    userStatus,
-    fetchUserData,
     companyStatus,
     fetchCompanyData,
     customerStatus,
@@ -286,13 +214,6 @@ const Custom: React.FC = () => {
     fetchChecklistData,
   ])
 
-  const onDeleteChat = async (id: string) => {
-    const res = await deleteChat(id)
-    if (!res) {
-      return
-    }
-    refetch()
-  }
   const onPageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
   }
@@ -306,33 +227,53 @@ const Custom: React.FC = () => {
     setIsFilterVisible(false)
   }
 
-  const handleCreateChat = async (payload: chatCreatePayload) => {
-    setIsCreateModalOpen(false)
-    const res = await createChat(payload)
-    if (!res) {
-      setIsCreateModalOpen(false)
-      return
+  const handleCreateTasklist = async (payload: Record<string, any>) => {
+    const data: CreateTasklistPayload = {
+      name: payload.name,
+      description: payload.description,
+      type: payload.type,
+      checklist_id: payload.checklist_id,
+      company_id: payload.company_id,
+      customer_id: payload.customer_id,
+      images: [],
+      videos: [],
+      status: payload.status,
     }
-    refetch()
+    createMutation.mutate({payload: data, onSuccess})
   }
-  const handleEditChat = async (payload: chatUpdatePayload) => {
+  const handleEditTasklist = async (payload: Record<string, any>) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
     }
-    setIsUpdateModalOpen(false)
-    const res = await updateChat(payload, selectedData.id)
-    if (!res) {
-      setIsUpdateModalOpen(false)
-      return
+    const data: UpdateTasklistPayload = {
+      name: payload.name,
+      description: payload.description,
+      type: payload.type,
+      checklist_id: payload.checklist_id,
+      company_id: payload.company_id,
+      customer_id: payload.customer_id,
+      images: selectedData.images,
+      videos: selectedData.videos,
+      status: payload.status,
+      id: selectedData.id,
     }
-    refetch()
+    updateMutation.mutate({payload: data, onSuccess})
   }
-
-  const handleView = async (fileUrl: string) => {
-    const response: any = await getPreSignedURL({fileName: fileUrl})
-    window.open(response.results.url.toString(), '_blank')
-  }
+  const defaultValues: Record<string, any> | undefined = useMemo(() => {
+    if (!selectedData) return undefined
+    return {
+      name: selectedData.name,
+      description: selectedData.description,
+      type: selectedData.type,
+      checklist_id: selectedData.checklist_id,
+      company_id: selectedData.company_id,
+      customer_id: selectedData.customer_id,
+      images: selectedData.images,
+      videos: selectedData.videos,
+      status: selectedData.status,
+    }
+  }, [selectedData])
 
   return (
     <>
@@ -373,8 +314,8 @@ const Custom: React.FC = () => {
             />
           ) : (
             <TaskListTable
-              //   setSelectedData={setSelectedData}
-              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              setSelectedData={setSelectedData}
+              setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
               //   handleDelete={onDeleteChat}
               //   handleView={handleView}
@@ -401,22 +342,20 @@ const Custom: React.FC = () => {
       {isCreateModalOpen && (
         <DynamicModal
           label='Create TaskList'
-          imageType='images'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
-          fields={createFields}
-          onSubmit={handleCreateChat}
+          fields={createAndUpdateFields}
+          onSubmit={handleCreateTasklist}
         />
       )}
       {isUpdateModalOpen && (
         <DynamicModal
-          imageType='images'
           label='Update TaskList'
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
-          fields={updateFields}
+          fields={createAndUpdateFields}
           defaultValues={defaultValues}
-          onSubmit={handleEditChat}
+          onSubmit={handleEditTasklist}
         />
       )}
     </>

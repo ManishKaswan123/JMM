@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react'
-import {FaEye} from 'react-icons/fa'
+import {FaEdit, FaEye} from 'react-icons/fa'
 import {useSelector} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {RootState} from 'sr/redux/store'
@@ -8,9 +8,11 @@ import {useActions} from 'sr/utils/helpers/useActions'
 
 interface Props {
   data?: TaskListDetails[]
+  setSelectedData: React.Dispatch<React.SetStateAction<TaskListDetails | undefined>>
+  setIsUpdateModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const TaskListTable: React.FC<Props> = ({data}) => {
+const TaskListTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalOpen}) => {
   const companyMap = useSelector((state: RootState) => state.company.idNameMap)
   const companyStatus = useSelector((state: RootState) => state.company.status)
   const customerMap = useSelector((state: RootState) => state.customer.idNameMap)
@@ -107,12 +109,21 @@ const TaskListTable: React.FC<Props> = ({data}) => {
                 <p className='text-gray-900 text-ellipsis'>{item.status}</p>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <Link to={`/tasklist/${item?.id}`} className='text-blue-500 hover:font-medium'>
-                  <FaEye
-                    className='cursor-pointer text-blue-500 hover:text-gray-700'
-                    style={{fontSize: '1.1rem'}}
+                <div className='flex'>
+                  <FaEdit
+                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                    onClick={() => {
+                      setSelectedData(item)
+                      setIsUpdateModalOpen(true)
+                    }}
                   />
-                </Link>
+                  <Link to={`/tasklist/${item.id}`} className='text-blue-500 hover:font-medium'>
+                    <FaEye
+                      className='cursor-pointer text-blue-500 hover:text-gray-700'
+                      style={{fontSize: '1.1rem'}}
+                    />
+                  </Link>
+                </div>
               </td>
             </tr>
           ))}
