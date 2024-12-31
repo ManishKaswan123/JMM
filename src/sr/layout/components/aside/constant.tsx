@@ -59,6 +59,11 @@ export const normalMenuItems = [
     iconPath: 'M4 6h16M4 10h16M10 14h10M4 14h4v7H4z',
   },
   {
+    label: 'Company Branch',
+    path: '/company/branch',
+    iconPath: 'M4 6h16M4 10h16M10 14h10M4 14h4v7H4z',
+  },
+  {
     label: 'Work Order',
     path: '/workorder',
     iconPath: 'M9 17v-2a4 4 0 00-8 0v2h8zm13 0v-2a4 4 0 00-8 0v2h8zm-13 4h8m-8-2h8m0-2H6',
