@@ -309,6 +309,7 @@ const Custom: React.FC = () => {
                 'Business Type',
                 'Intent',
                 'Status',
+                'View Branch',
                 'Actions',
               ]}
             />

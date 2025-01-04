@@ -58,11 +58,11 @@ export const normalMenuItems = [
     path: '/company',
     iconPath: 'M4 6h16M4 10h16M10 14h10M4 14h4v7H4z',
   },
-  {
-    label: 'Company Branch',
-    path: '/company/branch',
-    iconPath: 'M4 6h16M4 10h16M10 14h10M4 14h4v7H4z',
-  },
+  // {
+  //   label: 'Company Branch',
+  //   path: '/company/branch',
+  //   iconPath: 'M4 6h16M4 10h16M10 14h10M4 14h4v7H4z',
+  // },
   {
     label: 'Work Order',
     path: '/workorder',

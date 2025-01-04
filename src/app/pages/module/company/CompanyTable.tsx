@@ -39,9 +39,7 @@ const CompanyTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalO
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
               Email
             </th>
-            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Mobile Number
-            </th>
+
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
               Business Type
             </th>
@@ -50,6 +48,9 @@ const CompanyTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalO
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
               Status
+            </th>
+            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
+              View Branch
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
               Actions
@@ -68,9 +69,7 @@ const CompanyTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalO
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <p className='text-gray-900 whitespace-no-wrap'>{company.email}</p>
               </td>
-              <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <p className='text-gray-900 whitespace-nowrap'>{company.mobile_number}</p>
-              </td>
+
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <p className='text-gray-900 whitespace-no-wrap'>
                   {company.business_type?.join(', ')}
@@ -93,6 +92,17 @@ const CompanyTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalO
                 >
                   {company.status}
                 </p>
+              </td>
+              <td className='px-5 py-5 border-b border-gray-200 text-sm'>
+                <Link
+                  to={`/company/branch?company_id=${company.id}`}
+                  className='text-blue-500 hover:font-medium'
+                >
+                  <FaEye
+                    className='cursor-pointer text-blue-500 hover:text-gray-700'
+                    style={{fontSize: '1.1rem'}}
+                  />
+                </Link>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <div className='flex'>
