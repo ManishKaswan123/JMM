@@ -1,5 +1,4 @@
 import React, {FC} from 'react'
-import {useAuth} from 'app/pages/module/auth/core/Auth'
 import {Routes, Route, Navigate} from 'react-router-dom'
 import {MasterLayout} from 'sr/layout/MasterLayout'
 import TopBarProgress from 'react-topbar-progress-indicator'

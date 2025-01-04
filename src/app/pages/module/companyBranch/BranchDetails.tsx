@@ -9,6 +9,7 @@ import {useActions} from 'sr/utils/helpers/useActions'
 
 const BranchDetails: React.FC<any> = () => {
   const navigate = useNavigate()
+
   const {id} = useParams<{id: string}>()
   const [data, setData] = useState<BranchType>()
   const [isError, setIsError] = useState(false)
@@ -34,7 +35,7 @@ const BranchDetails: React.FC<any> = () => {
   }, [id])
 
   const onGoBack = () => {
-    navigate('/branch')
+    navigate('/company/branch')
   }
 
   if (data === undefined) return <div>Loading...</div>
@@ -66,12 +67,12 @@ const BranchDetails: React.FC<any> = () => {
             <strong className='font-medium text-lg mr-2'>Default Branch:</strong>
             <p>{data.isDefaultBranch === true ? 'Yes' : 'No'}</p>
           </div>
-        </div>
-        <div className='space-y-4'>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Phone Number:</strong>
             <p>{data.phone_number}</p>
           </div>
+        </div>
+        <div className='space-y-4'>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Status:</strong>
             <p>{data.status}</p>

@@ -10,7 +10,7 @@ import {RootState} from 'sr/redux/store'
 import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {FieldsArray} from 'sr/constants/fields'
-import {useParams} from 'react-router-dom'
+import {useSearchParams} from 'react-router-dom'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {
@@ -22,6 +22,7 @@ import {
   useUpdateBranch,
 } from 'sr/utils/api/branchApi'
 import BranchTable from './BranchTable'
+import {Link} from 'react-router-dom'
 
 interface BranchCreatePayload {
   company_id: string
@@ -48,7 +49,8 @@ interface BranchUpdatePayload extends BranchCreatePayload {
 }
 
 const Custom: React.FC = () => {
-  const {company_id} = useParams<{company_id: string | undefined}>()
+  const [searchParams] = useSearchParams()
+  const company_id = searchParams.get('company_id') || ''
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [selectedData, setSelectedData] = useState<BranchType>()
   const [filters, setFilters] = useState<BranchFilters>({company_id})
@@ -308,9 +310,19 @@ const Custom: React.FC = () => {
       <div className='container mx-auto px-4 sm:px-8'>
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
-            <h2 className='text-2xl font-semibold leading-tight ml-1 mb-2 sm:mb-0 sm:mr-4'>
-              Company Branch
-            </h2>
+            <div className='flex items-center mb-2 sm:mb-0'>
+              <Link to={`/company`} className=' hover:font-medium'>
+                <Button
+                  label='Back'
+                  onClick={() => setIsCreateModalOpen(true)}
+                  className=' hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
+                ></Button>
+              </Link>
+              <h2 className='text-2xl font-semibold leading-tight ml-1 mb-2 sm:mb-0 sm:mr-4'>
+                Company Branch
+              </h2>
+            </div>
+
             <div className='flex items-center'>
               <Button
                 label='Create new'
