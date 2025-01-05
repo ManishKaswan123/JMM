@@ -63,7 +63,7 @@ const Custom: React.FC = () => {
   const {userId} = useParams<{userId: string | undefined}>()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [selectedData, setSelectedData] = useState<AddressData>()
-  const [selectedAddress, setSelectedAddress] = useState<Address | undefined>()
+  const [selectedAddress, setSelectedAddress] = useState<AddressData>()
   const [filters, setFilters] = useState<AddressFilters>({individual_id: userId})
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const [itemsPerPage, setItemsPerPage] = useState<number>(8)
@@ -436,6 +436,7 @@ const Custom: React.FC = () => {
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           fields={createFields}
+          defaultValues={{individual_id: userId}}
           onSubmit={handleCreateAddress}
         />
       )}

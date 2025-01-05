@@ -8,7 +8,7 @@ export const masterMenuItems: {label: string; path: string; iconPath: string}[] 
 export const normalMenuItems = [
   {
     label: 'Individuals',
-    path: '/users',
+    path: '/user',
     iconPath:
       'M17 9V7a4 4 0 00-8 0v2M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z',
   },

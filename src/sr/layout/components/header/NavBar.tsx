@@ -14,18 +14,37 @@ const NavBar: React.FC = () => {
   }, [location])
 
   return (
-    <nav className='flex items-center px-2'>
+    // <nav className='flex items-center px-2'>
+    //   {/* Back Button */}
+    //   <Button
+    //     className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
+    //     onClick={() => navigate('/user')}
+    //     label={'🡸'}
+    //   />
+
+    //   {/* Horizontal Scrollable Nav Items */}
+    //   <div className='flex space-x-4 overflow-x-auto items-center ml-4 px-2'>
+    //     {navItems.map((item, index) => (
+    //       <div key={index} className='flex-shrink-0 basis-1/4 mb-2'>
+    //         <NavBarItem item={item} isActive={urlItems[2] === item.name} />
+    //       </div>
+    //     ))}
+    //   </div>
+    // </nav>
+    <nav className='flex items-center h-12 px-2'>
       {/* Back Button */}
       <Button
         className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
-        onClick={() => navigate('/users')}
+        onClick={() => navigate('/user')}
         label={'🡸'}
       />
 
       {/* Horizontal Scrollable Nav Items */}
-      <div className='flex space-x-4 overflow-x-auto items-center ml-4 px-2'>
+      <div className='flex space-x-2 overflow-x-auto flex-nowrap items-center ml-4 px-2'>
         {navItems.map((item, index) => (
-          <div key={index} className='flex-shrink-0 basis-1/4 mb-2'>
+          <div key={index} className='flex-shrink-0 basis-1/7 mb-2'>
+            {' '}
+            {/* Fixed height, no wrapping */}
             <NavBarItem item={item} isActive={urlItems[2] === item.name} />
           </div>
         ))}

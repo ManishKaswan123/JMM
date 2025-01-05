@@ -27,6 +27,10 @@ export interface Address {
   postal: number
   lat: number
   lng: number
+  no_of_rooms?: number
+  no_of_bath?: number
+  total_area?: number
+  remark?: string
   _id: string
 }
 export interface IndividualId {

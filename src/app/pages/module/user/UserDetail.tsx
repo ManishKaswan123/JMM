@@ -1,152 +1,116 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
-import {Spinner} from 'sr/helpers/ui-components/Spinner'
 import {useNavigate, useParams} from 'react-router-dom'
-import {fetchSingleUser} from 'sr/utils/api/fetchUser'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {UserInterface} from 'sr/constants/User'
-import {useSelector} from 'react-redux'
-import {RootState} from 'sr/redux/store'
-import {useActions} from 'sr/utils/helpers/useActions'
-import {useQuery} from '@tanstack/react-query'
-import UserDetailsSkeleton from './UserDetailsSkeleton'
-import {set} from 'react-hook-form'
-import {FieldsArray} from 'sr/constants/fields'
-import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
-import {updateUser} from 'sr/utils/api/rewardPointPlanApi'
 import {fetchSingleIndividual, Individual} from 'sr/utils/api/individualApi'
-import {Address} from 'sr/utils/api/addressApi'
 
-const Custom: React.FC<any> = () => {
-  // const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  // const [defaultUserData, setDefaultUserData] = useState<UserInterface>({} as UserInterface)
+const Custom: React.FC = () => {
   const navigate = useNavigate()
-  const {userId} = useParams<{userId: string}>()
-  // const [user, setUser] = useState<UserInterface>()
-  // const [isLoading, setIsLoading] = useState<boolean>(false)
-  // const businessTypeReduxData: Record<string, string> = useSelector(
-  //   (state: RootState) => state.businessType.businessTypeMap
-  // )
-  // const businessTypeReduxStatus: string = useSelector(
-  //   (state: RootState) => state.businessType.status
-  // )
-  // const categoryReduxData: Record<string, string> = useSelector(
-  //   (state: RootState) => state.categoryType.categoryMap
-  // )
-  // const categoryReduxStatus: string = useSelector((state: RootState) => state.categoryType.status)
-  // const rewardPointPlanData = useSelector((state: RootState) => state.rewardPlanMap.data)
-  // const rewardPointPlanStatus = useSelector((state: RootState) => state.rewardPlanMap.status)
-  // const {fetchBusinessType, fetchCategoryType, fetchRewardPlanMap} = useActions()
+  const {id} = useParams<{id: string}>()
+  const [data, setData] = useState<Individual>()
+  const [isError, setIsError] = useState(false)
 
-  const {data, error, isLoading, isError, refetch} = useQuery<Individual>({
-    queryKey: ['singleUser', userId],
-    queryFn: async () => fetchSingleIndividual(userId || ''),
-    // placeholderData: keepPreviousData,
-    retry: false,
-  })
-
-  // useEffect(() => {
-  //   if (data) setDefaultUserData(data)
-  // }, [data])
-
-  // const fetchDataIfNeeded = useCallback(() => {
-  //   if (businessTypeReduxStatus !== 'succeeded') fetchBusinessType({})
-  //   if (categoryReduxStatus !== 'succeeded') fetchCategoryType({})
-  //   if (rewardPointPlanStatus !== 'succeeded') fetchRewardPlanMap({})
-  // }, [
-  //   businessTypeReduxStatus,
-  //   categoryReduxStatus,
-  //   fetchBusinessType,
-  //   fetchCategoryType,
-  //   fetchRewardPlanMap,
-  //   rewardPointPlanStatus,
-  // ])
-  // useEffect(() => {
-  //   fetchDataIfNeeded()
-  // }, [fetchDataIfNeeded])
+  useEffect(() => {
+    fetchSingleIndividual(id || '')
+      .then((res) => {
+        setData(res)
+      })
+      .catch(() => {
+        setIsError(true)
+      })
+  }, [id])
 
   const onGoBack = () => {
-    navigate('/users')
+    navigate('/user')
   }
 
-  // const handleUpdateUser = async (payload: UserInterface) => {
-  //   setIsUpdateModalOpen(false)
-  //   if (data) {
-  //     const userId = data.id
-  //     const res = await updateUser(userId, payload)
-  //     if (!res) {
-  //       return
-  //     }
-  //     refetch()
-  //   }
-  // }
+  if (!data) return <div>Loading...</div>
+  if (isError) return <div>Error loading individual details.</div>
+
   return (
-    <>
-      {!isLoading ? (
-        <>
-          {data && (
-            <div className='bg-white rounded-lg p-6 shadow-lg border border-gray-300 mx-4 my-8'>
-              <h2 className='text-2xl font-bold mb-6'>User Details</h2>
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                <div>
-                  <p className='mb-4'>
-                    <strong className='font-medium'>User Name:</strong> {data.username}
-                  </p>
-                  <p className='mb-4'>
-                    <strong className='font-medium'>Name:</strong> {data.first_name}{' '}
-                    {data.last_name}
-                  </p>
-                  <p className='mb-4'>
-                    <strong className='font-medium'>Email:</strong> {data.email}
-                  </p>
-                  <p className='mb-4'>
-                    <strong className='font-medium'>Phone:</strong> {data.mobile_number}
-                  </p>
-                  <p className='mb-4'>
-                    <strong className='font-medium'>Status:</strong> {data.status}
-                  </p>
-                </div>
-                <div>
-                  {/* <p className='mb-4'>
-                    <strong className='font-medium'>Interest:</strong>{' '}
-                    {user.interest?.map((id) => businessTypeReduxData[id]).join(', ')}
-                  </p> */}
-                  <p className='mb-4'>
-                    <strong className='font-medium'>Created At:</strong>{' '}
-                    {data.createdAt && new Date(data.createdAt).toLocaleString()}
-                  </p>
-                  <p className='mb-4'>
-                    <strong className='font-medium'>Updated At:</strong>{' '}
-                    {data.updatedAt && new Date(data.updatedAt).toLocaleString()}
-                  </p>
+    <div className='bg-white rounded-lg p-6 shadow-lg border border-gray-300 mx-4 my-8 w-full relative'>
+      {/* Go Back Button */}
+      <Button
+        onClick={onGoBack}
+        label='Go Back 🡸'
+        className='bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-full absolute top-4 left-4'
+      />
 
-                  <p className='mb-4'>
-                    <strong className='font-medium'>ID:</strong> {data.id}
-                  </p>
-                </div>
-              </div>
+      {/* Title */}
+      <h2 className='text-4xl font-bold mb-6 text-center'>Individual Details</h2>
 
-              {!isLoading && (
-                <div className='mt-8 items-center'>
-                  <div className='flex justify-between '>
-                    <Button
-                      className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
-                      onClick={onGoBack}
-                      label={'Go Back 🡸'}
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-        </>
-      ) : (
-        <UserDetailsSkeleton />
-      )}
-    </>
+      {/* Details Grid */}
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+        {/* Column 1 */}
+        <div className='space-y-4'>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Individual ID:</strong>
+            <p>{data.id}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Username:</strong>
+            <p>{data.id}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>First Name:</strong>
+            <p>{data.first_name}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Last Name:</strong>
+            <p>{data.last_name}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Email:</strong>
+            <p>{data.email}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Mobile Number:</strong>
+            <p>{data.mobile_number}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Status:</strong>
+            <p>{data.status}</p>
+          </div>
+        </div>
+
+        {/* Column 2 */}
+        <div className='space-y-4'>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Rooms Count:</strong>
+            <p>{data.no_of_rooms}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Bathrooms Count:</strong>
+            <p>{data.no_of_bath}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Total Area:</strong>
+            <p>{data.total_area}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Remark:</strong>
+            <p>{data.remark}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>User Id:</strong>
+            <p>{data.user_id}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Created At:</strong>
+            <p>{new Date(data.createdAt).toLocaleString()}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Updated At:</strong>
+            <p>{new Date(data.updatedAt).toLocaleString()}</p>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
+
 const UserDetailCard: React.FC = () => {
-  return <DashboardWrapper customComponent={Custom} selectedItem='/user' />
+  return <DashboardWrapper customComponent={Custom} selectedItem='/customer-details' />
 }
+
 export default UserDetailCard

@@ -86,15 +86,4 @@ export const deleteRewardPlan = async (payload: string) => {
     return false
   }
 }
-export const updateUser = async (userId: string, payload: Record<string, any>) => {
-  try {
-    const res = await patch<any>(`/users/${userId}`, payload)
-    if (res && res.user) {
-      toast.success('User updated successfully')
-      return true
-    }
-  } catch (e: any) {
-    toast.error(e.message)
-    return false
-  }
-}
+
