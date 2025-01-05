@@ -69,11 +69,7 @@ const UserTable: React.FC<UserTableProps> = (props) => {
                 Status
               </th>
               <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-                View User
-              </th>
-
-              <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-                Update User
+                Actions
               </th>
             </tr>
           </thead>
@@ -94,24 +90,24 @@ const UserTable: React.FC<UserTableProps> = (props) => {
                 <td className='px-5 py-5 text-left border-b border-gray-200 text-sm'>
                   <p>{user.status}</p>
                 </td>
-                <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                  <FaEye
-                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
-                    onClick={() => {
-                      setUser(user.id)
-                      handleUserDetail(user)
-                    }}
-                  />
-                </td>
 
                 <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                  <FaEdit
-                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
-                    onClick={() => {
-                      props.setSelectedData(user)
-                      props.setIsUpdateModalOpen(true)
-                    }}
-                  />
+                  <div className='flex'>
+                    <FaEdit
+                      className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                      onClick={() => {
+                        props.setSelectedData(user)
+                        props.setIsUpdateModalOpen(true)
+                      }}
+                    />
+                    <FaEye
+                      className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                      onClick={() => {
+                        setUser(user.id)
+                        handleUserDetail(user)
+                      }}
+                    />
+                  </div>
                 </td>
               </tr>
             ))}

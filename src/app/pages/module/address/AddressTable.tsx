@@ -1,10 +1,10 @@
 import React from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
-import {Address, AddressData} from 'sr/utils/api/addressApi'
+import {AddressData} from 'sr/utils/api/addressApi'
 
 interface AddressTableProps {
   addressData: AddressData[] | undefined
-  onSelectAddress: React.Dispatch<React.SetStateAction<Address | undefined>>
+  onSelectAddress: React.Dispatch<React.SetStateAction<AddressData | undefined>>
   setIsUpdateModalOpen: React.Dispatch<React.SetStateAction<boolean>>
   setSelectedData: React.Dispatch<React.SetStateAction<AddressData | undefined>>
 }
@@ -82,7 +82,7 @@ const AddressTable: React.FC<AddressTableProps> = (props) => {
                     <FaEye
                       className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
                       onClick={() => {
-                        props.onSelectAddress(address.address)
+                        props.onSelectAddress(address)
                       }}
                     />
                   </div>

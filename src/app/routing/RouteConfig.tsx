@@ -56,7 +56,7 @@ export const routeConfigs = [
   {path: '/proposaldetails/:id', element: <ProposalDetailCard />},
   {path: '/contractor', element: <Contractor />},
   {path: '/contractor/:id', element: <ContractorDetailsCard />},
-  {path: '/users', element: <User />},
+  {path: '/user', element: <User />},
   {path: '/user/details/:userId', element: <UserDetailCard />},
   {path: '/notes', element: <Notes />},
   {path: '/message', element: <Messages />},

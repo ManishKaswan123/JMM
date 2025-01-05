@@ -5,7 +5,6 @@ import {UserContext} from 'sr/context/UserContext'
 import {Button} from 'sr/helpers'
 export const NavBarItem = ({item, isActive}: {item: any; isActive: boolean}) => {
   const {user, setUser} = useContext(UserContext)
-  console.log('is active is ', isActive)
   return (
     <Link to={`${item.path}/${user}`} replace>
       <div className='flex items-center'>
