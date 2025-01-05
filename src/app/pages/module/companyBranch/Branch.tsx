@@ -50,10 +50,10 @@ interface BranchUpdatePayload extends BranchCreatePayload {
 
 const Custom: React.FC = () => {
   const [searchParams] = useSearchParams()
-  const company_id = searchParams.get('company_id') || ''
+  const company_id = searchParams.get('company_id')
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [selectedData, setSelectedData] = useState<BranchType>()
-  const [filters, setFilters] = useState<BranchFilters>({company_id})
+  const [filters, setFilters] = useState<BranchFilters>({company_id: company_id || ''})
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const [itemsPerPage, setItemsPerPage] = useState<number>(8)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
@@ -145,6 +145,14 @@ const Custom: React.FC = () => {
         name: 'phone_number',
         placeholder: 'Phone Number',
         required: true,
+      },
+      {
+        type: 'dropdown',
+        label: 'status',
+        name: [{name: 'Active', id: 'ACTIVE'}],
+        topLabel: 'Status',
+        placeholder: 'Select Status',
+        labelKey: 'name',
       },
       {
         type: 'dropdown',
@@ -379,13 +387,14 @@ const Custom: React.FC = () => {
           />
         )}
       </div>
-      {isCreateModalOpen && (
+      {isCreateModalOpen && company_id && (
         <DynamicModal
           label='Create Branch'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           fields={createAndUpdateFields}
           onSubmit={handleCreateBranch}
+          defaultValues={{company_id}}
         />
       )}
       {isUpdateModalOpen && defaultValues && (

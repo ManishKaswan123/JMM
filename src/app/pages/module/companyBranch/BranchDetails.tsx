@@ -35,7 +35,7 @@ const BranchDetails: React.FC<any> = () => {
   }, [id])
 
   const onGoBack = () => {
-    navigate('/company/branch')
+    navigate(`/company/branch?company_id=${data?.company_id}`)
   }
 
   if (data === undefined) return <div>Loading...</div>
