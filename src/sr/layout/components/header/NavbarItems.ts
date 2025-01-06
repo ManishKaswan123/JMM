@@ -23,6 +23,12 @@ export const navItems: NavItem[] = [
     name: 'checklist',
     iconPath: 'M3 12h18M9 3v18', // Wallet outline
   },
+  {
+    label: 'Tasklist',
+    path: '/user/tasklist',
+    name: 'tasklist',
+    iconPath: 'M3 12h18M9 3v18', // Wallet outline
+  },
 
   // {
   //   label: 'Reward Earnings',
