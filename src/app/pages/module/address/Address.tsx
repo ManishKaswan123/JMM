@@ -7,7 +7,6 @@ import Filter from 'sr/helpers/ui-components/Filter'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import {
-  Address,
   AddressApiResponse,
   AddressData,
   fetchAddress,
