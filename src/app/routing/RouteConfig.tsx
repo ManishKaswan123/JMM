@@ -1,5 +1,8 @@
 import {lazy} from 'react'
 
+const IndividualChecklistCard = lazy(
+  () => import('app/pages/module/individualChecklist/IndividualChecklist.tsx')
+)
 const BranchDetailsCard = lazy(() => import('app/pages/module/companyBranch/BranchDetails'))
 const Branch = lazy(() => import('app/pages/module/companyBranch/Branch'))
 const ContractorDetailsCard = lazy(() => import('app/pages/module/contractor/ContractorDetails'))
@@ -58,6 +61,7 @@ export const routeConfigs = [
   {path: '/contractor/:id', element: <ContractorDetailsCard />},
   {path: '/user', element: <User />},
   {path: '/user/details/:userId', element: <UserDetailCard />},
+  {path: '/user/checklist/:userId', element: <IndividualChecklistCard />},
   {path: '/notes', element: <Notes />},
   {path: '/message', element: <Messages />},
   {path: '/supervisor', element: <Supervisor />},
