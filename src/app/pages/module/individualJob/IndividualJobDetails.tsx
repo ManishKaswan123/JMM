@@ -37,7 +37,7 @@ export const IndividualJobDetailsCard: React.FC<IndividualJobDetailsProps> = ({d
           </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Street Address:</strong>
-            <p>{data.description}</p>
+            <p>{data.streetAddress}</p>
           </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Individual:</strong>

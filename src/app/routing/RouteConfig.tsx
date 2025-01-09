@@ -1,5 +1,8 @@
 import {lazy} from 'react'
 
+const IndividualJobCategoryCard = lazy(
+  () => import('app/pages/module/individualJobCategory/IndividualJobCategory.tsx')
+)
 const IndividualJobCard = lazy(() => import('app/pages/module/individualJob/IndividualJob.tsx'))
 const IndividualTasklistCard = lazy(
   () => import('app/pages/module/individualTasklist/IndividualTasklist.tsx')
@@ -68,6 +71,7 @@ export const routeConfigs = [
   {path: '/user/checklist/:userId', element: <IndividualChecklistCard />},
   {path: '/user/tasklist/:userId', element: <IndividualTasklistCard />},
   {path: '/user/job/:userId', element: <IndividualJobCard />},
+  {path: '/user/jobCategory/:userId', element: <IndividualJobCategoryCard />},
   {path: '/notes', element: <Notes />},
   {path: '/message', element: <Messages />},
   {path: '/supervisor', element: <Supervisor />},

@@ -1,4 +1,4 @@
-import {get, remove, post, patch} from 'sr/utils/axios/index'
+import {get, remove, post} from 'sr/utils/axios/index'
 import {toast} from 'react-toastify'
 interface PayloadType {
   sortBy?: string
@@ -78,7 +78,7 @@ export const createRewardPlan = async (payload: any) => {
 
 export const deleteRewardPlan = async (payload: string) => {
   try {
-    const res = await remove<any>(`/reward-point-plan/${payload}`)
+    await remove<any>(`/reward-point-plan/${payload}`)
     toast.success('Reward Plan deleted successfully')
     return true
   } catch (e: any) {
@@ -86,4 +86,3 @@ export const deleteRewardPlan = async (payload: string) => {
     return false
   }
 }
-

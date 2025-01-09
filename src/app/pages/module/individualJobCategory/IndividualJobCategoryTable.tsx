@@ -1,16 +1,15 @@
 import React from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
-import {Link} from 'react-router-dom'
-import {IndividualJob} from 'sr/utils/api/individualJobApi'
-interface IndividualJobTableProps {
-  data: IndividualJob[] | undefined
-  onSelectJob: React.Dispatch<React.SetStateAction<IndividualJob | undefined>>
-  setSelectedData: React.Dispatch<React.SetStateAction<IndividualJob | undefined>>
+import {IndividualJobCategory} from 'sr/utils/api/individualJobCategoryApi'
+interface IndividualJobCategoryTableProps {
+  data: IndividualJobCategory[] | undefined
+  onSelectJobCategory: React.Dispatch<React.SetStateAction<IndividualJobCategory | undefined>>
+  setSelectedData: React.Dispatch<React.SetStateAction<IndividualJobCategory | undefined>>
   setIsUpdateModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
-const IndividualJobTable: React.FC<IndividualJobTableProps> = ({
+const IndividualJobCategoryTable: React.FC<IndividualJobCategoryTableProps> = ({
   data,
-  onSelectJob,
+  onSelectJobCategory,
   setSelectedData,
   setIsUpdateModalOpen,
 }) => {
@@ -20,66 +19,39 @@ const IndividualJobTable: React.FC<IndividualJobTableProps> = ({
         <thead>
           <tr>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Title
+              Name
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Unit or Apt
+              Icon Path
             </th>
 
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Individual
+              Created At
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Cleaner
+              Updated At
             </th>
-            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Work Status
-            </th>
+
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
               Actions
             </th>
           </tr>
         </thead>
         <tbody>
-          {data?.map((Job) => (
-            <tr key={Job.id} className='odd:bg-white even:bg-gray-50'>
+          {data?.map((JobCategory) => (
+            <tr key={JobCategory.id} className='odd:bg-white even:bg-gray-50'>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <p className='text-gray-900 whitespace-no-wrap'>{Job.title}</p>
+                <p className='text-gray-900 whitespace-no-wrap'>{JobCategory.name}</p>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <p className='text-gray-900 whitespace-no-wrap'>{Job.unitorapt}</p>
+                <p className='text-gray-900 whitespace-no-wrap'>{JobCategory.icon_path}</p>
               </td>
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <Link
-                  to={`/user/details/${Job.individual_id._id}`}
-                  className='text-blue-500 hover:font-medium'
-                >
-                  {Job.individual_id.username}
-                </Link>
+                <p className='text-gray-900 whitespace-no-wrap'>{JobCategory.createdAt}</p>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <Link
-                  to={`/checklist/${Job.cleaner_id?._id}`}
-                  className='text-blue-500 hover:font-medium'
-                >
-                  {Job.cleaner_id?.username}
-                </Link>
-              </td>
-              <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <p
-                  className={`whitespace-no-wrap ${
-                    Job?.work_status === 'active'
-                      ? 'text-green-500'
-                      : Job?.work_status === 'pending'
-                      ? 'text-yellow-500'
-                      : Job?.work_status === 'completed'
-                      ? 'text-red-500'
-                      : 'text-gray-500' // Default color for unknown statuses
-                  }`}
-                >
-                  {Job?.work_status || 'Unknown'}
-                </p>
+                <p className='text-gray-900 whitespace-no-wrap'>{JobCategory.updatedAt}</p>
               </td>
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
@@ -87,14 +59,14 @@ const IndividualJobTable: React.FC<IndividualJobTableProps> = ({
                   <FaEdit
                     className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
                     onClick={() => {
-                      setSelectedData(Job)
+                      setSelectedData(JobCategory)
                       setIsUpdateModalOpen(true)
                     }}
                   />
                   <FaEye
                     className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
                     onClick={() => {
-                      onSelectJob(Job)
+                      onSelectJobCategory(JobCategory)
                     }}
                   />
                 </div>
@@ -107,4 +79,4 @@ const IndividualJobTable: React.FC<IndividualJobTableProps> = ({
   )
 }
 
-export default IndividualJobTable
+export default IndividualJobCategoryTable
