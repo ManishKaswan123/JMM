@@ -303,7 +303,6 @@ const Custom: React.FC = () => {
                 'Mobile',
                 'Type',
                 'Status',
-                'Remarks',
                 'Actions',
               ]}
             />
