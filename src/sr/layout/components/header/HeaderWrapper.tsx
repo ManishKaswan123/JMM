@@ -2,11 +2,13 @@ import React, {useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
 import HeaderDropdown from './HeaderDropdown'
 import NavBar from './NavBar'
-import {useLocation} from 'react-router-dom'
+import {useLocation, useNavigate} from 'react-router-dom'
+import {cleanerNavItems, userNavItems} from './NavbarItems'
 
 type Props = {hubName: any}
 
 export default function HeaderWrapper({hubName}: Props) {
+  const navigate = useNavigate()
   const location = useLocation()
   const [urlItems, setUrlItems] = useState<string[]>([] as string[])
   useEffect(() => {
@@ -21,7 +23,12 @@ export default function HeaderWrapper({hubName}: Props) {
       >
         {urlItems.length > 2 && urlItems[1] === 'user' && (
           <div className='w-11/12'>
-            <NavBar />
+            <NavBar onGoBack={() => navigate('/user')} navItems={userNavItems} />
+          </div>
+        )}
+        {urlItems.length > 2 && urlItems[1] === 'cleaner' && (
+          <div className='w-11/12'>
+            <NavBar onGoBack={() => navigate('/cleaner')} navItems={cleanerNavItems} />
           </div>
         )}
 

@@ -1,11 +1,17 @@
 import {lazy} from 'react'
 
-const IndividualJobCategoryCard = lazy(
-  () => import('app/pages/module/individualJobCategory/IndividualJobCategory.tsx')
+const CleanerEmploymentCard = lazy(
+  () => import('app/pages/module/cleanerEmployment/CleanerEmployment')
 )
-const IndividualJobCard = lazy(() => import('app/pages/module/individualJob/IndividualJob.tsx'))
+const CleanerReferenceCard = lazy(
+  () => import('app/pages/module/cleanerReference/CleanerReference')
+)
+const IndividualJobCategoryCard = lazy(
+  () => import('app/pages/module/individualJobCategory/IndividualJobCategory')
+)
+const IndividualJobCard = lazy(() => import('app/pages/module/individualJob/IndividualJob'))
 const IndividualTasklistCard = lazy(
-  () => import('app/pages/module/individualTasklist/IndividualTasklist.tsx')
+  () => import('app/pages/module/individualTasklist/IndividualTasklist')
 )
 const IndividualChecklistCard = lazy(
   () => import('app/pages/module/individualChecklist/IndividualChecklist.tsx')
@@ -54,7 +60,9 @@ export const routeConfigs = [
   {path: '/workorder', element: <WorkOrder />},
   {path: '/workorder/:id', element: <WorkOrderDetailsCard />},
   {path: '/cleaner', element: <Cleaner />},
-  {path: '/cleaner/:id', element: <CleanerDetailsCard />},
+  {path: '/cleaner/details/:cleanerId', element: <CleanerDetailsCard />},
+  {path: '/cleaner/reference/:cleanerId', element: <CleanerReferenceCard />},
+  {path: '/cleaner/employment/:cleanerId', element: <CleanerEmploymentCard />},
   {path: '/tasklist', element: <TaskList />},
   {path: '/tasklist/:id', element: <TaskListDetailsCard />},
   {path: '/company', element: <Company />},
