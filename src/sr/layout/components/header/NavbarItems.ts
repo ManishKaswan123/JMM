@@ -29,6 +29,18 @@ export const navItems: NavItem[] = [
     name: 'tasklist',
     iconPath: 'M3 12h18M9 3v18', // Wallet outline
   },
+  {
+    label: 'Job',
+    path: '/user/job',
+    name: 'job',
+    iconPath: 'M3 12h18M9 3v18', // Wallet outline
+  },
+  {
+    label: 'Job Category',
+    path: '/user/jobCategory',
+    name: 'jobCategory',
+    iconPath: 'M3 12h18M9 3v18', // Wallet outline
+  },
 
   // {
   //   label: 'Reward Earnings',

@@ -50,9 +50,9 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
               Status
             </th>
-            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
+            {/* <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
               Remarks
-            </th>
+            </th> */}
 
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
               Actions
@@ -98,9 +98,9 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                   {customer.status}
                 </p>
               </td>
-              <td className='px-5 py-5 border-b border-gray-200 text-sm'>
+              {/* <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <p className='text-gray-900 whitespace-no-wrap'>{customer.remarks}</p>
-              </td>
+              </td> */}
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <div className='flex'>
                   <FaEdit

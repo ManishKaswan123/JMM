@@ -85,10 +85,7 @@ const JobDetails: React.FC<any> = () => {
             <strong className='font-medium text-lg mr-2'>Benefits:</strong>
             <p>{data.benefits?.join(', ') || 'Not Available'}</p>
           </div>
-          <div className='flex items-center'>
-            <strong className='font-medium text-lg mr-2'>Job Description:</strong>
-            <p>{data.job_description || 'Not Available'}</p>
-          </div>
+
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Application Call Mobile:</strong>
             <p>{data.application_call_mobile_number || 'Not Available'}</p>
@@ -118,6 +115,10 @@ const JobDetails: React.FC<any> = () => {
             <p>{data.updatedAt || 'Not Available'}</p>
           </div>
         </div>
+      </div>
+      <div className='mt-2'>
+        <strong className='font-medium text-lg mr-2'>Job Description:</strong>
+        <p>{data.job_description || 'Not Available'}</p>
       </div>
       {/* Associated Entities */}
       <h3 className='text-2xl font-bold mt-8 mb-4'>Job Advanced Details</h3>
