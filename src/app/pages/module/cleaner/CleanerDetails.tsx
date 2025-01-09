@@ -6,19 +6,19 @@ import {CleanerDetails, fetchSingleCleaner} from 'sr/utils/api/fetchCleaner'
 
 const Custom: React.FC<any> = () => {
   const navigate = useNavigate()
-  const {id} = useParams<{id: string}>()
+  const {cleanerId} = useParams<{cleanerId: string}>()
   const [data, setData] = useState<CleanerDetails>()
   const [isError, setIsError] = useState(false)
 
   useEffect(() => {
-    fetchSingleCleaner(id || '')
+    fetchSingleCleaner(cleanerId || '')
       .then((res) => {
         setData(res.data)
       })
       .catch(() => {
         setIsError(true)
       })
-  }, [id])
+  }, [cleanerId])
 
   const onGoBack = () => {
     navigate('/cleaner')

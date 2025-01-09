@@ -87,8 +87,20 @@ const UserTable: React.FC<UserTableProps> = (props) => {
                 <td className='px-5 py-5 text-left border-b border-gray-200 text-sm'>
                   <p>{user.mobile_number}</p>
                 </td>
-                <td className='px-5 py-5 text-left border-b border-gray-200 text-sm'>
-                  <p>{user.status}</p>
+                <td className='px-5 py-5 border-b border-gray-200 text-sm'>
+                  <p
+                    className={`whitespace-no-wrap ${
+                      user.status === 'active'
+                        ? 'text-green-500'
+                        : user.status === 'pending'
+                        ? 'text-yellow-500'
+                        : user.status === 'inactive'
+                        ? 'text-red-500'
+                        : 'text-gray-500' // Default color for unknown statuses
+                    }`}
+                  >
+                    {user.status}
+                  </p>
                 </td>
 
                 <td className='px-5 py-5 border-b border-gray-200 text-sm'>

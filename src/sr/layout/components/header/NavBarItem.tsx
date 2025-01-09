@@ -1,4 +1,3 @@
-import {red} from '@mui/material/colors'
 import {useContext} from 'react'
 import {Link} from 'react-router-dom'
 import {UserContext} from 'sr/context/UserContext'
@@ -14,16 +13,6 @@ export const NavBarItem = ({item, isActive}: {item: any; isActive: boolean}) => 
           } font-semibold px-4 py-2 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3`}
           label={item.label}
         />
-        {/* <svg
-          xmlns='http://www.w3.org/2000/svg'
-          className='h-5 w-5 mr-2'
-          fill='none'
-          viewBox='0 0 24 24'
-          stroke='currentColor'
-          strokeWidth={2}
-        >
-          <path strokeLinecap='round' strokeLinejoin='round' d={item.iconPath} />
-        </svg> */}
       </div>
     </Link>
   )
