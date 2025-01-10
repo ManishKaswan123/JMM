@@ -4,9 +4,9 @@ export const MenuItem = ({item, isActive, sideCollapseItem}: any) => (
   <li className='items-center'>
     <Link to={item.path} replace>
       <button
-        className={`flex md:text-xs lg:text-sm uppercase py-3 font-semibold hover:text-rose-600 text-left text-gray-500 ${
-          isActive ? 'text-rose-600' : ''
-        }`}
+        className={`flex md:text-xs lg:text-sm uppercase py-3 font-semibold text-left relative transition-colors duration-500 ease-in-out ${
+          isActive ? 'text-rose-600' : 'text-gray-500'
+        } hover:text-rose-500`}
       >
         <svg
           xmlns='http://www.w3.org/2000/svg'

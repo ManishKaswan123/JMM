@@ -7,9 +7,12 @@ import HeaderWrapper from './components/header/HeaderWrapper'
 import {PageDataProvider} from './master-layout'
 import AsideDefault from './components/aside/AsideDefault'
 import {UserContext} from 'sr/context/UserContext'
+import MasterNavBar from './master-layout/MasterNavBar'
+import {useUrlItems} from 'sr/utils/helpers/useUrlItems'
 
 const MasterLayout = () => {
   const [user, setUser] = useState<string | undefined>(undefined)
+  const urlItems = useUrlItems()
   const [theme, setTheme] = useState('light')
   const [collapse, setCollapse] = useState<any | null>(false)
   const [width, setWidth] = useState<any | null>(
@@ -36,11 +39,13 @@ const MasterLayout = () => {
               <div className='page d-flex flex-row flex-column-fluid'>
                 <AsideDefault AdjustWidth={AdjustWidth} />
                 {/* begin::Wrapper */}
+
                 <UserContext.Provider value={{user, setUser}}>
                   <div className={`master_layout_main ${width}`}>
                     <HeaderWrapper />
                   </div>
-                  <div className={`mt-[80px] ${width}`}>
+                  <div className={`mt-${urlItems.length > 2 ? 28 : 16} ${width}`}>
+                    <MasterNavBar />
                     <Outlet />
                   </div>
                 </UserContext.Provider>

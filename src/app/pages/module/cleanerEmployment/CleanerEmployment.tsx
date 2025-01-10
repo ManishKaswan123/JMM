@@ -221,14 +221,14 @@ const Custom: React.FC = () => {
                 onClick={() => setIsCreateModalOpen(true)}
                 className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
               ></Button>
-              <Button
+              {/* <Button
                 label={`${isFilterVisible ? 'Close' : 'Filters'}`}
                 Icon={!isFilterVisible ? AiOutlineFilter : AiOutlineClose}
                 onClick={() => setIsFilterVisible(!isFilterVisible)}
                 className={`text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center ${
                   isFilterVisible ? 'bg-red-400 hover:bg-red-500' : 'bg-gray-200 hover:bg-gray-300'
                 }`}
-              ></Button>
+              ></Button> */}
             </div>
           </div>
           {isFilterVisible && (
