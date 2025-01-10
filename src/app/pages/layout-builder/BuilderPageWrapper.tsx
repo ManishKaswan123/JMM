@@ -11,12 +11,10 @@
 // }
 
 // export default BuilderPageWrapper
-import React from 'react';
-import DashboardWrapper from '../dashboard/DashboardWrapper';
+import React from 'react'
+import DashboardWrapper from '../dashboard/DashboardWrapper'
 
-const withCustomComponent = (CustomComponent:React.FC) => (props:any) => (
+const withCustomComponent = (CustomComponent: React.FC) => (props: any) =>
   <DashboardWrapper customComponent={CustomComponent} {...props} />
-);
 
-export default withCustomComponent;
-
+export default withCustomComponent
