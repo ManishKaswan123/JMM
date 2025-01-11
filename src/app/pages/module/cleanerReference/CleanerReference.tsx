@@ -4,7 +4,6 @@ import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
 
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {FieldsArray} from 'sr/constants/fields'
 import {useQuery} from '@tanstack/react-query'
@@ -32,7 +31,7 @@ interface CleanerReferenceUpdatePayload extends CleanerReferenceCreatePayload {
   id: string
 }
 
-const Custom: React.FC = () => {
+const CleanerReferenceCard: React.FC = () => {
   const {cleanerId} = useParams<{cleanerId: string | undefined}>()
   const [selectedData, setSelectedData] = useState<CleanerReference>()
   const [selectedCleanerRef, setSelectedCleanerRef] = useState<CleanerReference>()
@@ -236,16 +235,6 @@ const Custom: React.FC = () => {
           onSubmit={handleEditCleanerReference}
         />
       )}
-    </>
-  )
-}
-const CleanerReferenceCard: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper
-        customComponent={Custom}
-        selectedItem={'/cleaner/references'}
-      ></DashboardWrapper>
     </>
   )
 }

@@ -1,10 +1,8 @@
-import React, {useState} from 'react'
+import React from 'react'
 
-const DashboardWrapper: React.FC<{customComponent: React.FC; selectedItem: string}> = ({
+const DashboardWrapper: React.FC<{customComponent: React.FC}> = ({
   customComponent: CustomComponent,
-  selectedItem: selectedItem,
 }) => {
-  const [isNavOpen, setIsNavOpen] = useState(false)
   return (
     <div className='min-h-screen'>
       {/* <Header setIsNavOpen={setIsNavOpen} /> */}

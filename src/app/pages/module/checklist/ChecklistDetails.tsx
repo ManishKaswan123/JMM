@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {Checklist, fetchSingleChecklist} from 'sr/utils/api/checklistApi'
 
-const ChecklistDetails: React.FC = () => {
+const ChecklistDetailsCard: React.FC = () => {
   const navigate = useNavigate()
   const {id} = useParams<{id: string}>()
   const [data, setData] = useState<Checklist>()
@@ -92,10 +91,6 @@ const ChecklistDetails: React.FC = () => {
       </div>
     </div>
   )
-}
-
-const ChecklistDetailsCard: React.FC = () => {
-  return <DashboardWrapper customComponent={ChecklistDetails} selectedItem='/checklist' />
 }
 
 export default ChecklistDetailsCard

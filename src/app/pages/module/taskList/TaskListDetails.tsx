@@ -1,13 +1,12 @@
 import React, {useCallback, useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {useSelector} from 'react-redux'
 import {RootState} from 'sr/redux/store'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {fetchSingleTaskList, TaskListDetails} from 'sr/utils/api/fetchTaskList'
 
-const Custom: React.FC = () => {
+const TaskListDetailsCard: React.FC = () => {
   const navigate = useNavigate()
   const {id} = useParams<{id: string}>()
   const [data, setData] = useState<TaskListDetails>()
@@ -158,10 +157,6 @@ const Custom: React.FC = () => {
       </div>
     </div>
   )
-}
-
-const TaskListDetailsCard: React.FC = () => {
-  return <DashboardWrapper customComponent={Custom} selectedItem='/tasklist' />
 }
 
 export default TaskListDetailsCard

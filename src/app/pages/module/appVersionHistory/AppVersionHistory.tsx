@@ -40,7 +40,7 @@ interface appVersionHistoryPayload {
   link: string
 }
 
-const Custom: React.FC = () => {
+const AppVersionHistory: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<appVersionHistoryFilters>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
@@ -231,16 +231,6 @@ const Custom: React.FC = () => {
           onSubmit={handleCreateAppVersionHistory}
         />
       )}
-    </>
-  )
-}
-const AppVersionHistory: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper
-        customComponent={Custom}
-        selectedItem={'/mobile-app-version-history'}
-      ></DashboardWrapper>
     </>
   )
 }

@@ -6,7 +6,6 @@ import Filter from 'sr/helpers/ui-components/Filter'
 import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {fetchChats} from 'sr/utils/api/fetchChats'
 import {deleteChat} from 'sr/utils/api/deleteChat'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
@@ -17,11 +16,10 @@ import {FieldsArray} from 'sr/constants/fields'
 import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import { fetchJobs } from 'sr/utils/api/fetchJobs'
+import {fetchJobs} from 'sr/utils/api/fetchJobs'
 import SupervisorTable from './SupervisorTable'
 import SkeletonSupervisorTable from './SkeletonSupervisorTable'
-import { fetchSupervisors } from 'sr/utils/api/fetchSupervisor'
-
+import {fetchSupervisors} from 'sr/utils/api/fetchSupervisor'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -60,7 +58,7 @@ interface defaultData {
 }
 interface chatUpdatePayload extends chatCreatePayload {}
 
-const Custom: React.FC = () => {
+const Supervisor: React.FC = () => {
   const [selectedData, setSelectedData] = useState<chatApiResponse>()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<chatFilters>()
@@ -224,7 +222,7 @@ const Custom: React.FC = () => {
     fetchUserDataIfNeeded()
   }, [])
 
-  console.log("This is the data :- ", data);
+  console.log('This is the data :- ', data)
 
   const defaultValues: defaultData | undefined = useMemo(() => {
     if (!selectedData) return undefined
@@ -296,7 +294,9 @@ const Custom: React.FC = () => {
       <div className='container mx-auto px-4 sm:px-8'>
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
-            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>Supervisors</h2>
+            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>
+              Supervisors
+            </h2>
             <div className='flex items-center'>
               <Button
                 label='Create new'
@@ -326,11 +326,11 @@ const Custom: React.FC = () => {
             <SkeletonSupervisorTable />
           ) : (
             <SupervisorTable
-            //   setSelectedData={setSelectedData}
-            //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              //   setSelectedData={setSelectedData}
+              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
-            //   handleDelete={onDeleteChat}
-            //   handleView={handleView}
+              //   handleDelete={onDeleteChat}
+              //   handleView={handleView}
             />
           )}
         </div>
@@ -339,7 +339,9 @@ const Custom: React.FC = () => {
         ) : (
           <Pagination
             currentPage={currentPage}
-            totalPages={Math.ceil( (data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1) ) || 0}
+            totalPages={
+              Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
+            }
             totalResults={data?.pagination?.total}
             onPageChange={onPageChange}
             itemsPerPage={itemsPerPage}
@@ -370,13 +372,6 @@ const Custom: React.FC = () => {
           onSubmit={handleEditChat}
         />
       )}
-    </>
-  )
-}
-const Supervisor: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper customComponent={Custom} selectedItem={'/chat'}></DashboardWrapper>
     </>
   )
 }

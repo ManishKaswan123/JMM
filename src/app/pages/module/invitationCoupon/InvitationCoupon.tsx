@@ -44,7 +44,7 @@ interface invitationCodePayload {
   expiryDate: string
 }
 
-const Custom: React.FC = () => {
+const InvitationCoupon: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<invitationCodeFilters>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
@@ -225,16 +225,6 @@ const Custom: React.FC = () => {
           onSubmit={handleCreateInvitationCode}
         />
       )}
-    </>
-  )
-}
-const InvitationCoupon: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper
-        customComponent={Custom}
-        selectedItem={'/invitation-coupon'}
-      ></DashboardWrapper>
     </>
   )
 }

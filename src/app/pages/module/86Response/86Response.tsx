@@ -49,7 +49,7 @@ interface defaultData {
   offerAmount?: number
 }
 
-const Custom: React.FC = () => {
+const EightySixResponse: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<EightySixResponseFilters>({})
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
@@ -315,13 +315,6 @@ const Custom: React.FC = () => {
           onSubmit={handleEditEightySixResponse}
         />
       )}
-    </>
-  )
-}
-const EightySixResponse: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper customComponent={Custom} selectedItem={'/86Response'}></DashboardWrapper>
     </>
   )
 }

@@ -6,7 +6,6 @@ import Filter from 'sr/helpers/ui-components/Filter'
 import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {FieldsArray} from 'sr/constants/fields'
 import {useQuery} from '@tanstack/react-query'
@@ -40,7 +39,7 @@ interface ChecklistUpdatePayload extends ChecklistCreatePayload {
   id: string
 }
 
-const Custom: React.FC = () => {
+const ChecklistCard: React.FC = () => {
   const [selectedData, setSelectedData] = useState<Checklist>()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<Filters>()
@@ -353,13 +352,6 @@ const Custom: React.FC = () => {
           onSubmit={handleEditChecklist}
         />
       )}
-    </>
-  )
-}
-const ChecklistCard: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper customComponent={Custom} selectedItem={'/checklist'}></DashboardWrapper>
     </>
   )
 }

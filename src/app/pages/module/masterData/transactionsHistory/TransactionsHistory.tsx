@@ -17,7 +17,7 @@ import {updateTransaction} from 'sr/utils/api/updateTransaction'
 import {createTransaction} from 'sr/utils/api/createTransaction'
 import {FieldsArray} from 'sr/constants/fields'
 
-const Custom: React.FC = () => {
+const TransactionHistory: React.FC = () => {
   const [transactions, setTransactions] = useState<any[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
@@ -357,9 +357,6 @@ const Custom: React.FC = () => {
       )}
     </>
   )
-}
-const TransactionHistory: React.FC = () => {
-  return <DashboardWrapper customComponent={Custom} selectedItem='/order' />
 }
 
 export default TransactionHistory

@@ -36,7 +36,7 @@ interface sellerPaymentPlanPayload {
   convenienceFee: number
 }
 
-const Custom: React.FC = () => {
+const SellerPaymentPlan: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<sellerPaymentPlanFilters>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
@@ -191,16 +191,6 @@ const Custom: React.FC = () => {
           onSubmit={handleCreateSellerPaymentPlan}
         />
       )}
-    </>
-  )
-}
-const SellerPaymentPlan: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper
-        customComponent={Custom}
-        selectedItem={'/seller-payment-plan'}
-      ></DashboardWrapper>
     </>
   )
 }

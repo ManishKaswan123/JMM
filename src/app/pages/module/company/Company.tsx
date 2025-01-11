@@ -31,7 +31,7 @@ interface CompanyCreatePayload {
 interface CompanyUpdatePayload extends Omit<CompanyCreatePayload, 'password'> {
   id: string
 }
-const Custom: React.FC = () => {
+const Company: React.FC = () => {
   const [selectedData, setSelectedData] = useState<CompanyResponse>()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<CompanyFilters>()
@@ -357,13 +357,6 @@ const Custom: React.FC = () => {
           onSubmit={handleEditCompany}
         />
       )}
-    </>
-  )
-}
-const Company: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper customComponent={Custom} selectedItem={'/chat'}></DashboardWrapper>
     </>
   )
 }

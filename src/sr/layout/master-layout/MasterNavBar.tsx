@@ -10,10 +10,10 @@ export default function MasterNavBar() {
   return (
     <>
       {/* Navbar */}
-      {urlItems.length > 2 && urlItems[1] === 'user' && (
+      {urlItems.length > 2 && urlItems[0] === 'user' && (
         <NavBar onGoBack={() => navigate('/user')} navItems={userNavItems} />
       )}
-      {urlItems.length > 2 && urlItems[1] === 'cleaner' && (
+      {urlItems.length > 2 && urlItems[0] === 'cleaner' && (
         <NavBar onGoBack={() => navigate('/cleaner')} navItems={cleanerNavItems} />
       )}
       {/* End Navbar */}

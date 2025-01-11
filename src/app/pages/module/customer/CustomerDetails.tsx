@@ -1,13 +1,12 @@
 import React, {useCallback, useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {Customer, fetchSingleCustomer} from 'sr/utils/api/customerApi'
 import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
 
-const CustomerDetails: React.FC = () => {
+const CustomerDetailsCard: React.FC = () => {
   const navigate = useNavigate()
   const {id} = useParams<{id: string}>()
   const [data, setData] = useState<Customer>()
@@ -121,10 +120,6 @@ const CustomerDetails: React.FC = () => {
       </div>
     </div>
   )
-}
-
-const CustomerDetailsCard: React.FC = () => {
-  return <DashboardWrapper customComponent={CustomerDetails} selectedItem='/customer-details' />
 }
 
 export default CustomerDetailsCard

@@ -32,7 +32,7 @@ import {DummyData, StatisticsData} from 'sr/constants/dashboard'
 //   ],
 // }
 
-const Custom: React.FC = () => {
+const Dashboard: React.FC = () => {
   const {
     users,
     userStatus,
@@ -165,10 +165,6 @@ const Custom: React.FC = () => {
       </div>
     </div>
   )
-}
-
-const Dashboard: React.FC = () => {
-  return <DashboardWrapper customComponent={Custom} selectedItem='/dashboard' />
 }
 
 export default Dashboard

@@ -1,6 +1,6 @@
 import {Link} from 'react-router-dom'
-import {useContext} from 'react'
-import {UserContext} from 'sr/context/UserContext'
+// import {useContext} from 'react'
+// import {UserContext} from 'sr/context/UserContext'
 export const BreadcrumbItem = ({
   index,
   item,
@@ -10,7 +10,7 @@ export const BreadcrumbItem = ({
   item: {path: string; label: string}
   isActive: boolean
 }) => {
-  const {user} = useContext(UserContext)
+  // const {user} = useContext(UserContext)
   return (
     <li className='inline-flex items-center'>
       <div className='flex items-center'>

@@ -40,7 +40,7 @@ interface categoryCreatePayload {
 }
 interface categoryUpdatePayload extends Omit<categoryCreatePayload, 'taxCode'> {}
 
-const Custom: React.FC = () => {
+const Categories: React.FC = () => {
   const [filters, setFilters] = useState<categoryFilters>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState<number>(1)
@@ -247,9 +247,6 @@ const Custom: React.FC = () => {
       )}
     </>
   )
-}
-const Categories: React.FC = () => {
-  return <DashboardWrapper customComponent={Custom} selectedItem={'/category'}></DashboardWrapper>
 }
 
 export default Categories

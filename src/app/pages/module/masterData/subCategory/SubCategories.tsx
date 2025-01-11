@@ -36,7 +36,7 @@ interface subCategoryCreatePayload {
 }
 interface subCategoryUpdatePayload extends Omit<subCategoryApiResponse, 'taxCode'> {}
 
-const Custom: React.FC = () => {
+const SubCategory: React.FC = () => {
   const [filters, setFilters] = useState<subCategoryFilters>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState<number>(1)
@@ -248,12 +248,6 @@ const Custom: React.FC = () => {
         />
       )}
     </>
-  )
-}
-
-const SubCategory: React.FC = () => {
-  return (
-    <DashboardWrapper customComponent={Custom} selectedItem={'/sub-category'}></DashboardWrapper>
   )
 }
 

@@ -2,11 +2,10 @@ import React, {useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {Spinner} from 'sr/helpers/ui-components/Spinner'
 import {useNavigate, useParams} from 'react-router-dom'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import ApiResponse from './86ResponseTypes'
 import {fetchSingle86Response} from 'sr/utils/api/86Response'
 
-const Custom: React.FC<any> = () => {
+const EightySixResponseDetailsCard: React.FC<any> = () => {
   const navigate = useNavigate()
   const {responseId} = useParams<{responseId: string}>()
   const [eightySixResponse, setEightySixResponse] = useState<ApiResponse>()
@@ -129,10 +128,6 @@ const Custom: React.FC<any> = () => {
       )}
     </>
   )
-}
-
-const EightySixResponseDetailsCard: React.FC = () => {
-  return <DashboardWrapper customComponent={Custom} selectedItem='/eightySixResponse' />
 }
 
 export default EightySixResponseDetailsCard

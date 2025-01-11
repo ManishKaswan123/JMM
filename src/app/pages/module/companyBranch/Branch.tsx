@@ -48,7 +48,7 @@ interface BranchUpdatePayload extends BranchCreatePayload {
   id: string
 }
 
-const Custom: React.FC = () => {
+const Branch: React.FC = () => {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const company_id = searchParams.get('company_id')
@@ -408,10 +408,6 @@ const Custom: React.FC = () => {
       )}
     </>
   )
-}
-
-const Branch: React.FC = () => {
-  return <DashboardWrapper customComponent={Custom} selectedItem='/branch' />
 }
 
 export default Branch

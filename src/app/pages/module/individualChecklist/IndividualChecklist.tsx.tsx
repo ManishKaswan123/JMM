@@ -3,8 +3,6 @@ import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
 import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
-
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {FieldsArray} from 'sr/constants/fields'
 import {useQuery} from '@tanstack/react-query'
@@ -31,7 +29,7 @@ interface IndividualChecklistUpdatePayload extends IndividualChecklistCreatePayl
   id: string
 }
 
-const Custom: React.FC = () => {
+const IndividualChecklistCard: React.FC = () => {
   const {userId} = useParams<{userId: string | undefined}>()
   const [selectedData, setSelectedData] = useState<IndividualChecklist>()
   const [selectedChecklist, setSelectedChecklist] = useState<IndividualChecklist>()
@@ -260,16 +258,6 @@ const Custom: React.FC = () => {
           onSubmit={handleEditIndividualChecklist}
         />
       )}
-    </>
-  )
-}
-const IndividualChecklistCard: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper
-        customComponent={Custom}
-        selectedItem={'/individual/checklist'}
-      ></DashboardWrapper>
     </>
   )
 }

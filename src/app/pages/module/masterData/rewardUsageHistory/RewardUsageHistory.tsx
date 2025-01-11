@@ -44,7 +44,7 @@ interface UserRewardPoints {
   id: string
 }
 
-const Custom: React.FC = () => {
+const RewardUsageHistory: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<RewardUsageFilters>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
@@ -292,16 +292,6 @@ const Custom: React.FC = () => {
           onSubmit={handleCreateRewardPlan}
         />
       )}
-    </>
-  )
-}
-const RewardUsageHistory: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper
-        customComponent={Custom}
-        selectedItem={'/reward-uses-history'}
-      ></DashboardWrapper>
     </>
   )
 }

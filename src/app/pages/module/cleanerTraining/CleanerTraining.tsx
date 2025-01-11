@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useCallback, useEffect} from 'react'
+import React, {useState, useMemo} from 'react'
 import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
 import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
@@ -10,118 +10,71 @@ import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 import {
-  fetchCleanerEmployment,
-  CleanerEmployment,
-  CleanerEmploymentFilters,
-  useCreateCleanerEmployment,
-  useUpdateCleanerEmployment,
-} from 'sr/utils/api/cleanerEmploymentApi'
-import {CleanerEmploymentDetailsCard} from './CleanerEmploymentDetails'
+  fetchCleanerTraining,
+  CleanerTraining,
+  CleanerTrainingFilters,
+  useCreateCleanerTraining,
+  useUpdateCleanerTraining,
+} from 'sr/utils/api/cleanerTrainingApi'
+import {CleanerTrainingDetailsCard} from './CleanerTrainingDetails'
 import {useParams} from 'react-router-dom'
-import CleanerEmploymentTable from './CleanerEmploymentTable'
-import {useSelector} from 'react-redux'
-import {RootState} from 'sr/redux/store'
-import {useActions} from 'sr/utils/helpers/useActions'
+import CleanerTrainingTable from './CleanerTrainingTable'
 
-interface CleanerEmploymentCreatePayload {
+interface CleanerTrainingCreatePayload {
   cleaner_id: string
-  currently_employed: boolean
-  company_name: string
-  job_title: string
-  company_location: string
-  working_since_start: string
-  working_since_end: string
+  training: string
+  date_attended: string
+  description: string
 }
-interface CleanerEmploymentUpdatePayload extends CleanerEmploymentCreatePayload {
+interface CleanerTrainingUpdatePayload extends CleanerTrainingCreatePayload {
   id: string
 }
 
-const CleanerEmploymentCard: React.FC = () => {
+const CleanerTrainingCard: React.FC = () => {
   const {cleanerId} = useParams<{cleanerId: string | undefined}>()
-  const [selectedData, setSelectedData] = useState<CleanerEmployment>()
-  const [selectedCleanerEmp, setSelectedCleanerEmp] = useState<CleanerEmployment>()
+  const [selectedData, setSelectedData] = useState<CleanerTraining>()
+  const [selectedCleanerTraining, setSelectedCleanerTraining] = useState<CleanerTraining>()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [filters, setFilters] = useState<CleanerEmploymentFilters>({cleaner_id: cleanerId})
+  const [filters, setFilters] = useState<CleanerTrainingFilters>({cleaner_id: cleanerId})
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
   const [itemsPerPage, setItemsPerPage] = useState<number>(8)
-  const createMutation = useCreateCleanerEmployment()
-  const updateMutation = useUpdateCleanerEmployment()
-  const companyStore = useSelector((state: RootState) => state.company)
-  const {fetchCompanyData} = useActions()
-  useEffect(() => {
-    fetchUserDataIfNeeded()
-  }, [])
-  const fetchUserDataIfNeeded = useCallback(() => {
-    if (companyStore.status !== 'succeeded') {
-      fetchCompanyData({})
-    }
-  }, [companyStore.status, fetchCompanyData])
+  const createMutation = useCreateCleanerTraining()
+  const updateMutation = useUpdateCleanerTraining()
 
   const createAndUpdateFields: FieldsArray = useMemo(
     () => [
       {
-        type: 'dropdown',
-        label: 'currently_employed',
-        name: [
-          {name: 'Yes', id: true},
-          {name: 'No', id: false},
-        ],
-        topLabel: 'Currently Employed',
-        placeholder: 'Select Currently Employed',
-        labelKey: 'name',
-        id: 'id',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'company_name',
-        name: companyStore.data,
-        topLabel: 'Company Name',
-        placeholder: 'Select Company Name',
-        labelKey: 'name',
-        id: 'name',
-        required: true,
-      },
-      {
         type: 'text',
-        label: 'Job Title',
-        name: 'job_title',
-        placeholder: 'Job Title',
-        required: true,
-      },
-      {
-        type: 'text',
-        label: 'Company Location',
-        name: 'company_location',
-        placeholder: 'Company Location',
+        label: 'Training',
+        name: 'training',
+        placeholder: 'Training',
         required: true,
       },
       {
         type: 'date',
-        label: 'Working Since Start',
-        name: 'working_since_start',
-        placeholder: 'Working Since Start',
+        label: 'Date Attended',
+        name: 'date_attended',
+        placeholder: 'Date Attended',
         required: true,
       },
       {
-        type: 'date',
-        label: 'Working Since End',
-        name: 'working_since_end',
-        placeholder: 'Working Since End',
+        type: 'text',
+        label: 'Description',
+        name: 'description',
+        placeholder: 'Description',
         required: true,
       },
     ],
-    [companyStore.data]
+    []
   )
 
   const fields: FieldsArray = useMemo(() => [], [])
 
   const {data, isLoading} = useQuery({
-    queryKey: ['cleanerEmployment', {limit: itemsPerPage, page: currentPage, ...filters}],
-    queryFn: async () =>
-      fetchCleanerEmployment({limit: itemsPerPage, page: currentPage, ...filters}),
+    queryKey: ['cleanerTraining', {limit: itemsPerPage, page: currentPage, ...filters}],
+    queryFn: async () => fetchCleanerTraining({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
   const onSuccess = (action: string) => {
@@ -142,65 +95,51 @@ const CleanerEmploymentCard: React.FC = () => {
     setIsFilterVisible(false)
   }
 
-  const handleCreateCleanerEmployment = async (payload: CleanerEmploymentCreatePayload) => {
-    const data: CleanerEmploymentCreatePayload = {
+  const handleCreateCleanerTraining = async (payload: CleanerTrainingCreatePayload) => {
+    const data: CleanerTrainingCreatePayload = {
       cleaner_id: cleanerId || '',
-      currently_employed: payload.currently_employed,
-      company_name: payload.company_name,
-      job_title: payload.job_title,
-      company_location: payload.company_location,
-      working_since_start: payload.working_since_start,
-      working_since_end: payload.working_since_end,
+      training: payload.training,
+      date_attended: payload.date_attended,
+      description: payload.description,
     }
     createMutation.mutate({payload: data, onSuccess})
   }
-  const handleEditCleanerEmployment = async (payload: CleanerEmploymentUpdatePayload) => {
+  const handleEditCleanerTraining = async (payload: CleanerTrainingUpdatePayload) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
     }
-    const data: CleanerEmploymentUpdatePayload = {
+    const data: CleanerTrainingUpdatePayload = {
       cleaner_id: selectedData.cleaner_id,
-      currently_employed: payload.currently_employed,
-      company_name: payload.company_name,
-      job_title: payload.job_title,
-      company_location: payload.company_location,
-      working_since_start: payload.working_since_start,
-      working_since_end: payload.working_since_end,
+      training: payload.training,
+      date_attended: payload.date_attended,
+      description: payload.description,
       id: selectedData.id,
     }
     updateMutation.mutate({payload: data, onSuccess})
   }
-  const defaultValues: CleanerEmploymentUpdatePayload | undefined = useMemo(() => {
+  const defaultValues: CleanerTrainingUpdatePayload | undefined = useMemo(() => {
     if (!selectedData) return undefined
     return {
       cleaner_id: selectedData.cleaner_id,
-      currently_employed: selectedData.currently_employed || false,
-      company_name: selectedData.company_name || '',
-      job_title: selectedData.job_title || '',
-      company_location: selectedData.company_location || '',
-      working_since_start: (() => {
-        const date = new Date(selectedData.working_since_start || '')
+      training: selectedData.training,
+      date_attended: (() => {
+        const date = new Date(selectedData.date_attended)
         const month = String(date.getMonth() + 1).padStart(2, '0') // Months are 0-indexed
         const day = String(date.getDate()).padStart(2, '0')
         const year = date.getFullYear()
         return `${year}-${month}-${day}`
       })(),
-      working_since_end: (() => {
-        const date = new Date(selectedData.working_since_end || '')
-        const month = String(date.getMonth() + 1).padStart(2, '0') // Months are 0-indexed
-        const day = String(date.getDate()).padStart(2, '0')
-        const year = date.getFullYear()
-        return `${year}-${month}-${day}`
-      })(),
+      description: selectedData.description,
+
       id: selectedData.id,
     }
   }, [selectedData])
-  if (selectedCleanerEmp) {
+  if (selectedCleanerTraining) {
     return (
-      <CleanerEmploymentDetailsCard
-        data={selectedCleanerEmp}
-        onGoBack={() => setSelectedCleanerEmp(undefined)}
+      <CleanerTrainingDetailsCard
+        data={selectedCleanerTraining}
+        onGoBack={() => setSelectedCleanerTraining(undefined)}
       />
     )
   }
@@ -211,7 +150,7 @@ const CleanerEmploymentCard: React.FC = () => {
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
             <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>
-              Cleaner Employment
+              Cleaner Training
             </h2>
             <div className='flex items-center'>
               <Button
@@ -235,20 +174,18 @@ const CleanerEmploymentCard: React.FC = () => {
               <Filter
                 onApplyFilter={handleApplyFilter}
                 setIsFilterVisible={setIsFilterVisible}
-                pEmpilters={filters || {}}
+                pTrainingilters={filters || {}}
                 fields={fields}
               />
             </div>
           )}
           {isLoading ? (
-            <SkeletonTable
-              columns={['Cleaner', 'Company Name', 'Job Title', 'Currently Employed', 'Actions']}
-            />
+            <SkeletonTable columns={['Cleaner', 'Training', 'Date Attended', 'Actions']} />
           ) : (
-            <CleanerEmploymentTable
+            <CleanerTrainingTable
               setSelectedData={setSelectedData}
               setIsUpdateModalOpen={setIsUpdateModalOpen}
-              onSelectCleanerEmployment={setSelectedCleanerEmp}
+              onSelectCleanerTraining={setSelectedCleanerTraining}
               data={data?.data}
               //   handleDelete={onDeleteChat}
               //   handleView={handleView}
@@ -266,7 +203,7 @@ const CleanerEmploymentCard: React.FC = () => {
             totalResults={data?.pagination?.total}
             onPageChange={onPageChange}
             itemsPerPage={itemsPerPage}
-            name='CleanerEmployment'
+            name='cleanerTraining'
             onLimitChange={onLimitChange}
             disabled={isLoading}
           />
@@ -274,25 +211,25 @@ const CleanerEmploymentCard: React.FC = () => {
       </div>
       {isCreateModalOpen && (
         <DynamicModal
-          label='Create Cleaner Employment'
+          label='Create Cleaner Training'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           fields={createAndUpdateFields}
-          onSubmit={handleCreateCleanerEmployment}
+          onSubmit={handleCreateCleanerTraining}
         />
       )}
       {isUpdateModalOpen && defaultValues && (
         <DynamicModal
-          label='Update Cleaner Employment'
+          label='Update Cleaner Training'
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
           fields={createAndUpdateFields}
           defaultValues={defaultValues}
-          onSubmit={handleEditCleanerEmployment}
+          onSubmit={handleEditCleanerTraining}
         />
       )}
     </>
   )
 }
 
-export default CleanerEmploymentCard
+export default CleanerTrainingCard

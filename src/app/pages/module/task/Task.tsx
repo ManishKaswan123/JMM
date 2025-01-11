@@ -6,7 +6,6 @@ import Filter from 'sr/helpers/ui-components/Filter'
 import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {fetchChats} from 'sr/utils/api/fetchChats'
 import {deleteChat} from 'sr/utils/api/deleteChat'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
@@ -60,7 +59,7 @@ interface defaultData {
 }
 interface chatUpdatePayload extends chatCreatePayload {}
 
-const Custom: React.FC = () => {
+const Task: React.FC = () => {
   const [selectedData, setSelectedData] = useState<chatApiResponse>()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<chatFilters>()
@@ -370,13 +369,6 @@ const Custom: React.FC = () => {
           onSubmit={handleEditChat}
         />
       )}
-    </>
-  )
-}
-const Task: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper customComponent={Custom} selectedItem={'/chat'}></DashboardWrapper>
     </>
   )
 }

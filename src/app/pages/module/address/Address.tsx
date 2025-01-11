@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useMemo, useCallback} from 'react'
 import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
@@ -58,7 +57,7 @@ interface AddressUpdatePayload extends AddressCreatePayload {
   id: string
 }
 
-const Custom: React.FC = () => {
+const Addresses: React.FC = () => {
   const {userId} = useParams<{userId: string | undefined}>()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [selectedData, setSelectedData] = useState<AddressData>()
@@ -451,10 +450,6 @@ const Custom: React.FC = () => {
       )}
     </>
   )
-}
-
-const Addresses: React.FC = () => {
-  return <DashboardWrapper customComponent={Custom} selectedItem='/address' />
 }
 
 export default Addresses

@@ -3,7 +3,6 @@ import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
 import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {FieldsArray} from 'sr/constants/fields'
 import {useQuery} from '@tanstack/react-query'
@@ -40,7 +39,7 @@ interface CleanerUpdatePayload extends Omit<CleanerCreatePayload, 'password'> {
   id: string
 }
 
-const Custom: React.FC = () => {
+const Cleaner: React.FC = () => {
   const [selectedData, setSelectedData] = useState<CleanerDetails>()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<CleanerFilters>()
@@ -361,13 +360,6 @@ const Custom: React.FC = () => {
           onSubmit={handleEditCleaner}
         />
       )}
-    </>
-  )
-}
-const Cleaner: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper customComponent={Custom} selectedItem={'/chat'}></DashboardWrapper>
     </>
   )
 }

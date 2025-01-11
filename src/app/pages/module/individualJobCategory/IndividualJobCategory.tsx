@@ -3,8 +3,6 @@ import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
 import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
-
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {FieldsArray} from 'sr/constants/fields'
 import {useQuery} from '@tanstack/react-query'
@@ -29,7 +27,7 @@ interface IndividualJobCategoryUpdatePayload extends IndividualJobCategoryCreate
   id: string
 }
 
-const Custom: React.FC = () => {
+const IndividualJobCategoryCard: React.FC = () => {
   const {userId} = useParams<{userId: string | undefined}>()
   const [selectedData, setSelectedData] = useState<IndividualJobCategory>()
   const [selectedJobCategory, setSelectedJobCategory] = useState<IndividualJobCategory>()
@@ -201,16 +199,6 @@ const Custom: React.FC = () => {
           onSubmit={handleEditIndividualJobCategory}
         />
       )}
-    </>
-  )
-}
-const IndividualJobCategoryCard: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper
-        customComponent={Custom}
-        selectedItem={'/individual/job/category'}
-      ></DashboardWrapper>
     </>
   )
 }

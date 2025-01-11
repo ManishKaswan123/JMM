@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {useQuery} from '@tanstack/react-query'
 import {fetchCompanyDetail} from 'sr/utils/api/fetchCompanyDetail'
 import {useSelector} from 'react-redux'
@@ -28,7 +27,7 @@ interface CreatePayload {
 }
 interface UpdatePayload extends CreatePayload {}
 
-const Custom: React.FC<any> = () => {
+const CompanyDetailCard: React.FC<any> = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
   const navigate = useNavigate()
@@ -307,10 +306,6 @@ const Custom: React.FC<any> = () => {
       )}
     </>
   )
-}
-
-const CompanyDetailCard: React.FC = () => {
-  return <DashboardWrapper customComponent={Custom} selectedItem='/company' />
 }
 
 export default CompanyDetailCard

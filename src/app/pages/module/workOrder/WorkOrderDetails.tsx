@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {fetchSingleWorkOrder, WorkOrderResponse} from 'sr/utils/api/fetchWorkOrder'
 
-const WorkOrderDetails: React.FC = () => {
+const WorkOrderDetailsCard: React.FC = () => {
   const navigate = useNavigate()
   const {id} = useParams<{id: string}>()
   const [data, setData] = useState<WorkOrderResponse | null>(null)
@@ -128,10 +127,6 @@ const WorkOrderDetails: React.FC = () => {
       </div>
     </div>
   )
-}
-
-const WorkOrderDetailsCard: React.FC = () => {
-  return <DashboardWrapper customComponent={WorkOrderDetails} selectedItem='/workorder' />
 }
 
 export default WorkOrderDetailsCard

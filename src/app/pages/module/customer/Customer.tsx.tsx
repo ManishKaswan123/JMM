@@ -6,14 +6,8 @@ import Filter from 'sr/helpers/ui-components/Filter'
 import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {deleteChat} from 'sr/utils/api/deleteChat'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
-import {createChat} from 'sr/utils/api/createChat'
-import {getPreSignedURL} from 'sr/utils/api/media'
-import {updateChat} from 'sr/utils/api/updateChat'
 import {FieldsArray} from 'sr/constants/fields'
-import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import {
@@ -48,7 +42,7 @@ interface CustomerUpdatePayload extends CustomerCreatePayload {
   id: string
 }
 
-const Custom: React.FC = () => {
+const CustomerCard: React.FC = () => {
   const [selectedData, setSelectedData] = useState<Customer>()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<Filters>()
@@ -296,15 +290,7 @@ const Custom: React.FC = () => {
           )}
           {isLoading ? (
             <SkeletonTable
-              columns={[
-                'Name',
-                'Company Name',
-                'Email',
-                'Mobile',
-                'Type',
-                'Status',
-                'Actions',
-              ]}
+              columns={['Name', 'Company Name', 'Email', 'Mobile', 'Type', 'Status', 'Actions']}
             />
           ) : (
             <CustomerTable
@@ -352,13 +338,6 @@ const Custom: React.FC = () => {
           onSubmit={handleEditCustomer}
         />
       )}
-    </>
-  )
-}
-const CustomerCard: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper customComponent={Custom} selectedItem={'/customer'}></DashboardWrapper>
     </>
   )
 }

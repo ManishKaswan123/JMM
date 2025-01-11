@@ -31,7 +31,7 @@ interface ProductFormValues {
   countryCode: string
 }
 
-const Custom: React.FC = () => {
+const Products: React.FC = () => {
   const [products, setProducts] = useState<ProductType[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
@@ -552,9 +552,6 @@ const Custom: React.FC = () => {
       )}
     </>
   )
-}
-const Products: React.FC = () => {
-  return <DashboardWrapper customComponent={Custom} selectedItem='/products' />
 }
 
 export default Products
