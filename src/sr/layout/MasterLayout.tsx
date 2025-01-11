@@ -9,6 +9,7 @@ import AsideDefault from './components/aside/AsideDefault'
 import {UserContext} from 'sr/context/UserContext'
 import MasterNavBar from './master-layout/MasterNavBar'
 import {useUrlItems} from 'sr/utils/helpers/useUrlItems'
+import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 
 const MasterLayout = () => {
   const [user, setUser] = useState<string | undefined>(undefined)
@@ -44,9 +45,11 @@ const MasterLayout = () => {
                   <div className={`master_layout_main ${width}`}>
                     <HeaderWrapper />
                   </div>
+
                   <div className={`mt-${urlItems.length > 2 ? 28 : 16} ${width}`}>
                     <MasterNavBar />
-                    <Outlet />
+                    <DashboardWrapper customComponent={Outlet} />
+                    {/* <Outlet /> */}
                   </div>
                 </UserContext.Provider>
                 {/* end::Content */}

@@ -3,8 +3,6 @@ import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
 import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
-
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {FieldsArray} from 'sr/constants/fields'
 import {useQuery} from '@tanstack/react-query'
@@ -36,7 +34,7 @@ interface IndividualTasklistUpdatePayload extends IndividualTasklistCreatePayloa
   id: string
 }
 
-const Custom: React.FC = () => {
+const IndividualTasklistCard: React.FC = () => {
   const {userId} = useParams<{userId: string | undefined}>()
   const [selectedData, setSelectedData] = useState<IndividualTasklist>()
   const [selectedTasklist, setSelectedTasklist] = useState<IndividualTasklist>()
@@ -317,16 +315,6 @@ const Custom: React.FC = () => {
           onSubmit={handleEditIndividualTasklist}
         />
       )}
-    </>
-  )
-}
-const IndividualTasklistCard: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper
-        customComponent={Custom}
-        selectedItem={'/individual/Tasklist'}
-      ></DashboardWrapper>
     </>
   )
 }

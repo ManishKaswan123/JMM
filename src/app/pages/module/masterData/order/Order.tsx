@@ -17,7 +17,7 @@ import {FieldsArray} from 'sr/constants/fields'
 import {async} from 'rxjs'
 import {set} from 'react-hook-form'
 
-const Custom: React.FC = () => {
+const Orders: React.FC = () => {
   const [orders, setOrders] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -341,7 +341,4 @@ const Custom: React.FC = () => {
   )
 }
 
-const Orders: React.FC = () => {
-  return <DashboardWrapper customComponent={Custom} selectedItem='/order' />
-}
 export default Orders

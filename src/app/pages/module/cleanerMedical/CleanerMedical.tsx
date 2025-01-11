@@ -10,118 +10,71 @@ import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 import {
-  fetchCleanerEmployment,
-  CleanerEmployment,
-  CleanerEmploymentFilters,
-  useCreateCleanerEmployment,
-  useUpdateCleanerEmployment,
-} from 'sr/utils/api/cleanerEmploymentApi'
-import {CleanerEmploymentDetailsCard} from './CleanerEmploymentDetails'
+  fetchCleanerMedical,
+  CleanerMedical,
+  CleanerMedicalFilters,
+  useCreateCleanerMedical,
+  useUpdateCleanerMedical,
+} from 'sr/utils/api/cleanerMedicalApi'
+import {CleanerMedicalDetailsCard} from './CleanerMedicalDetails'
 import {useParams} from 'react-router-dom'
-import CleanerEmploymentTable from './CleanerEmploymentTable'
-import {useSelector} from 'react-redux'
-import {RootState} from 'sr/redux/store'
-import {useActions} from 'sr/utils/helpers/useActions'
+import CleanerMedicalTable from './CleanerMedicalTable'
 
-interface CleanerEmploymentCreatePayload {
+interface CleanerMedicalCreatePayload {
   cleaner_id: string
-  currently_employed: boolean
-  company_name: string
-  job_title: string
-  company_location: string
-  working_since_start: string
-  working_since_end: string
+  condition: string
+  since_when: string
+  description: string
 }
-interface CleanerEmploymentUpdatePayload extends CleanerEmploymentCreatePayload {
+interface CleanerMedicalUpdatePayload extends CleanerMedicalCreatePayload {
   id: string
 }
 
-const CleanerEmploymentCard: React.FC = () => {
+const CleanerMedicalCard: React.FC = () => {
   const {cleanerId} = useParams<{cleanerId: string | undefined}>()
-  const [selectedData, setSelectedData] = useState<CleanerEmployment>()
-  const [selectedCleanerEmp, setSelectedCleanerEmp] = useState<CleanerEmployment>()
+  const [selectedData, setSelectedData] = useState<CleanerMedical>()
+  const [selectedCleanerMedical, setSelectedCleanerMedical] = useState<CleanerMedical>()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [filters, setFilters] = useState<CleanerEmploymentFilters>({cleaner_id: cleanerId})
+  const [filters, setFilters] = useState<CleanerMedicalFilters>({cleaner_id: cleanerId})
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
   const [itemsPerPage, setItemsPerPage] = useState<number>(8)
-  const createMutation = useCreateCleanerEmployment()
-  const updateMutation = useUpdateCleanerEmployment()
-  const companyStore = useSelector((state: RootState) => state.company)
-  const {fetchCompanyData} = useActions()
-  useEffect(() => {
-    fetchUserDataIfNeeded()
-  }, [])
-  const fetchUserDataIfNeeded = useCallback(() => {
-    if (companyStore.status !== 'succeeded') {
-      fetchCompanyData({})
-    }
-  }, [companyStore.status, fetchCompanyData])
+  const createMutation = useCreateCleanerMedical()
+  const updateMutation = useUpdateCleanerMedical()
 
   const createAndUpdateFields: FieldsArray = useMemo(
     () => [
       {
-        type: 'dropdown',
-        label: 'currently_employed',
-        name: [
-          {name: 'Yes', id: true},
-          {name: 'No', id: false},
-        ],
-        topLabel: 'Currently Employed',
-        placeholder: 'Select Currently Employed',
-        labelKey: 'name',
-        id: 'id',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'company_name',
-        name: companyStore.data,
-        topLabel: 'Company Name',
-        placeholder: 'Select Company Name',
-        labelKey: 'name',
-        id: 'name',
+        type: 'text',
+        label: 'Condition',
+        name: 'condition',
+        placeholder: 'Condition',
         required: true,
       },
       {
         type: 'text',
-        label: 'Job Title',
-        name: 'job_title',
-        placeholder: 'Job Title',
-        required: true,
-      },
-      {
-        type: 'text',
-        label: 'Company Location',
-        name: 'company_location',
-        placeholder: 'Company Location',
+        label: 'Description',
+        name: 'description',
+        placeholder: 'Description',
         required: true,
       },
       {
         type: 'date',
-        label: 'Working Since Start',
-        name: 'working_since_start',
-        placeholder: 'Working Since Start',
-        required: true,
-      },
-      {
-        type: 'date',
-        label: 'Working Since End',
-        name: 'working_since_end',
-        placeholder: 'Working Since End',
+        label: 'Since When',
+        name: 'since_when',
+        placeholder: 'Since When',
         required: true,
       },
     ],
-    [companyStore.data]
+    []
   )
 
   const fields: FieldsArray = useMemo(() => [], [])
 
   const {data, isLoading} = useQuery({
-    queryKey: ['cleanerEmployment', {limit: itemsPerPage, page: currentPage, ...filters}],
-    queryFn: async () =>
-      fetchCleanerEmployment({limit: itemsPerPage, page: currentPage, ...filters}),
+    queryKey: ['cleanerMedical', {limit: itemsPerPage, page: currentPage, ...filters}],
+    queryFn: async () => fetchCleanerMedical({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
   const onSuccess = (action: string) => {
@@ -142,65 +95,52 @@ const CleanerEmploymentCard: React.FC = () => {
     setIsFilterVisible(false)
   }
 
-  const handleCreateCleanerEmployment = async (payload: CleanerEmploymentCreatePayload) => {
-    const data: CleanerEmploymentCreatePayload = {
+  const handleCreateCleanerMedical = async (payload: CleanerMedicalCreatePayload) => {
+    const data: CleanerMedicalCreatePayload = {
       cleaner_id: cleanerId || '',
-      currently_employed: payload.currently_employed,
-      company_name: payload.company_name,
-      job_title: payload.job_title,
-      company_location: payload.company_location,
-      working_since_start: payload.working_since_start,
-      working_since_end: payload.working_since_end,
+      condition: payload.condition,
+      since_when: payload.since_when,
+      description: payload.description,
     }
     createMutation.mutate({payload: data, onSuccess})
   }
-  const handleEditCleanerEmployment = async (payload: CleanerEmploymentUpdatePayload) => {
+  const handleEditCleanerMedical = async (payload: CleanerMedicalUpdatePayload) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
     }
-    const data: CleanerEmploymentUpdatePayload = {
+    const data: CleanerMedicalUpdatePayload = {
       cleaner_id: selectedData.cleaner_id,
-      currently_employed: payload.currently_employed,
-      company_name: payload.company_name,
-      job_title: payload.job_title,
-      company_location: payload.company_location,
-      working_since_start: payload.working_since_start,
-      working_since_end: payload.working_since_end,
+      condition: payload.condition,
+      since_when: payload.since_when,
+      description: payload.description,
       id: selectedData.id,
     }
     updateMutation.mutate({payload: data, onSuccess})
   }
-  const defaultValues: CleanerEmploymentUpdatePayload | undefined = useMemo(() => {
+  const defaultValues: CleanerMedicalUpdatePayload | undefined = useMemo(() => {
     if (!selectedData) return undefined
     return {
       cleaner_id: selectedData.cleaner_id,
-      currently_employed: selectedData.currently_employed || false,
-      company_name: selectedData.company_name || '',
-      job_title: selectedData.job_title || '',
-      company_location: selectedData.company_location || '',
-      working_since_start: (() => {
-        const date = new Date(selectedData.working_since_start || '')
+      condition: selectedData.condition,
+      description: selectedData.description,
+
+      since_when: (() => {
+        const date = new Date(selectedData.since_when)
         const month = String(date.getMonth() + 1).padStart(2, '0') // Months are 0-indexed
         const day = String(date.getDate()).padStart(2, '0')
         const year = date.getFullYear()
         return `${year}-${month}-${day}`
       })(),
-      working_since_end: (() => {
-        const date = new Date(selectedData.working_since_end || '')
-        const month = String(date.getMonth() + 1).padStart(2, '0') // Months are 0-indexed
-        const day = String(date.getDate()).padStart(2, '0')
-        const year = date.getFullYear()
-        return `${year}-${month}-${day}`
-      })(),
+
       id: selectedData.id,
     }
   }, [selectedData])
-  if (selectedCleanerEmp) {
+  if (selectedCleanerMedical) {
     return (
-      <CleanerEmploymentDetailsCard
-        data={selectedCleanerEmp}
-        onGoBack={() => setSelectedCleanerEmp(undefined)}
+      <CleanerMedicalDetailsCard
+        data={selectedCleanerMedical}
+        onGoBack={() => setSelectedCleanerMedical(undefined)}
       />
     )
   }
@@ -211,7 +151,7 @@ const CleanerEmploymentCard: React.FC = () => {
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
             <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>
-              Cleaner Employment
+              Cleaner Medical
             </h2>
             <div className='flex items-center'>
               <Button
@@ -235,20 +175,18 @@ const CleanerEmploymentCard: React.FC = () => {
               <Filter
                 onApplyFilter={handleApplyFilter}
                 setIsFilterVisible={setIsFilterVisible}
-                pEmpilters={filters || {}}
+                pMedicalilters={filters || {}}
                 fields={fields}
               />
             </div>
           )}
           {isLoading ? (
-            <SkeletonTable
-              columns={['Cleaner', 'Company Name', 'Job Title', 'Currently Employed', 'Actions']}
-            />
+            <SkeletonTable columns={['Cleaner', 'Condition', 'Since When', 'Actions']} />
           ) : (
-            <CleanerEmploymentTable
+            <CleanerMedicalTable
               setSelectedData={setSelectedData}
               setIsUpdateModalOpen={setIsUpdateModalOpen}
-              onSelectCleanerEmployment={setSelectedCleanerEmp}
+              onSelectCleanerMedical={setSelectedCleanerMedical}
               data={data?.data}
               //   handleDelete={onDeleteChat}
               //   handleView={handleView}
@@ -266,7 +204,7 @@ const CleanerEmploymentCard: React.FC = () => {
             totalResults={data?.pagination?.total}
             onPageChange={onPageChange}
             itemsPerPage={itemsPerPage}
-            name='CleanerEmployment'
+            name='cleanerMedical'
             onLimitChange={onLimitChange}
             disabled={isLoading}
           />
@@ -274,25 +212,25 @@ const CleanerEmploymentCard: React.FC = () => {
       </div>
       {isCreateModalOpen && (
         <DynamicModal
-          label='Create Cleaner Employment'
+          label='Create Cleaner Medical'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           fields={createAndUpdateFields}
-          onSubmit={handleCreateCleanerEmployment}
+          onSubmit={handleCreateCleanerMedical}
         />
       )}
       {isUpdateModalOpen && defaultValues && (
         <DynamicModal
-          label='Update Cleaner Employment'
+          label='Update Cleaner Medical'
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
           fields={createAndUpdateFields}
           defaultValues={defaultValues}
-          onSubmit={handleEditCleanerEmployment}
+          onSubmit={handleEditCleanerMedical}
         />
       )}
     </>
   )
 }
 
-export default CleanerEmploymentCard
+export default CleanerMedicalCard

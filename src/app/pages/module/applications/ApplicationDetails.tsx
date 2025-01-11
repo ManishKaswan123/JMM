@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {fetchSingleApplication, JobApplication} from 'sr/utils/api/fetchApplications'
 
-const ApplicationDetails: React.FC = () => {
+const ApplicationDetailsCard: React.FC = () => {
   const navigate = useNavigate()
   const {id} = useParams<{id: string}>()
   const [data, setData] = useState<JobApplication>()
@@ -82,12 +81,6 @@ const ApplicationDetails: React.FC = () => {
         </div>
       </div>
     </div>
-  )
-}
-
-const ApplicationDetailsCard: React.FC = () => {
-  return (
-    <DashboardWrapper customComponent={ApplicationDetails} selectedItem='/application-details' />
   )
 }
 

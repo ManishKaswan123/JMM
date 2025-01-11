@@ -61,4 +61,16 @@ export const cleanerNavItems: NavItem[] = [
     name: 'employment',
     iconPath: 'M12 4v16m8-8H4', // Plus icon
   },
+  {
+    label: 'Medical',
+    path: 'cleaner/medical',
+    name: 'medical',
+    iconPath: 'M12 4v16m8-8H4', // Plus icon
+  },
+  {
+    label: 'Training',
+    path: 'cleaner/training',
+    name: 'training',
+    iconPath: 'M12 4v16m8-8H4', // Plus icon
+  },
 ]

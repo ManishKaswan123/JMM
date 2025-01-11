@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {fetchSingleIndividual, Individual} from 'sr/utils/api/individualApi'
+import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
 
-const Custom: React.FC = () => {
+const UserDetailCard: React.FC = () => {
   const navigate = useNavigate()
   const {id} = useParams<{id: string}>()
   const [data, setData] = useState<Individual>()
@@ -24,7 +24,22 @@ const Custom: React.FC = () => {
     navigate('/user')
   }
 
-  if (!data) return <div>Loading...</div>
+  if (!data)
+    return (
+      <SkeletonCard
+        label='Individual Details'
+        col1={['ID', 'Username', 'First Name', 'Last Name', 'Email', 'Mobile Number', 'Status']}
+        col2={[
+          'Rooms Count',
+          'Bathrooms Count',
+          'Total Area',
+          'Remark',
+          'User ID',
+          'Created At',
+          'Updated At',
+        ]}
+      />
+    )
   if (isError) return <div>Error loading individual details.</div>
 
   return (
@@ -107,10 +122,6 @@ const Custom: React.FC = () => {
       </div>
     </div>
   )
-}
-
-const UserDetailCard: React.FC = () => {
-  return <DashboardWrapper customComponent={Custom} selectedItem='/customer-details' />
 }
 
 export default UserDetailCard

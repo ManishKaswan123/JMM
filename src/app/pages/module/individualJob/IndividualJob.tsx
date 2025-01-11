@@ -3,8 +3,6 @@ import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
 import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
-
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {FieldsArray} from 'sr/constants/fields'
 import {useQuery} from '@tanstack/react-query'
@@ -39,7 +37,7 @@ interface IndividualJobUpdatePayload extends IndividualJobCreatePayload {
   id: string
 }
 
-const Custom: React.FC = () => {
+const IndividualJobCard: React.FC = () => {
   const {userId} = useParams<{userId: string | undefined}>()
   const [selectedData, setSelectedData] = useState<IndividualJob>()
   const [selectedJob, setSelectedJob] = useState<IndividualJob>()
@@ -327,16 +325,6 @@ const Custom: React.FC = () => {
           onSubmit={handleEditIndividualJob}
         />
       )}
-    </>
-  )
-}
-const IndividualJobCard: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper
-        customComponent={Custom}
-        selectedItem={'/individual/job'}
-      ></DashboardWrapper>
     </>
   )
 }

@@ -62,7 +62,7 @@ interface defaultData
   userId?: string
 }
 
-const Custom: React.FC = () => {
+const EightSix: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<EightySixFilters>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
@@ -76,7 +76,7 @@ const Custom: React.FC = () => {
   const categoryData = useSelector((state: RootState) => state.categoryType.data)
   const businessTypeStatus = useSelector((state: RootState) => state.businessType.status)
   const categoryStatus = useSelector((state: RootState) => state.categoryType.status)
-  const {fetchUserData,  fetchCategoryType} = useActions()
+  const {fetchUserData, fetchCategoryType} = useActions()
 
   const status = useMemo(
     () => [
@@ -161,7 +161,6 @@ const Custom: React.FC = () => {
         required: true,
       },
 
-    
       {
         type: 'dropdown',
         label: 'category',
@@ -216,7 +215,7 @@ const Custom: React.FC = () => {
         required: true,
       },
     ],
-    [userData?.results,  categoryData?.results]
+    [userData?.results, categoryData?.results]
   )
   const {data, error, isLoading, isError, refetch} = useQuery({
     queryKey: ['86Request', {limit: itemsPerPage, page: currentPage, ...filters}],
@@ -230,13 +229,7 @@ const Custom: React.FC = () => {
   const fetchUserDataIfNeeded = useCallback(() => {
     if (userStatus !== 'succeeded') fetchUserData({})
     if (categoryStatus !== 'succeeded') fetchCategoryType({})
-  }, [
-    userStatus,
-    businessTypeStatus,
-    categoryStatus,
-    fetchUserData,
-    fetchCategoryType,
-  ])
+  }, [userStatus, businessTypeStatus, categoryStatus, fetchUserData, fetchCategoryType])
 
   const handleApplyFilter = (newFilters: EightySixFilters) => {
     setFilters(newFilters)
@@ -401,13 +394,6 @@ const Custom: React.FC = () => {
           onSubmit={handleEditEightSixItem}
         />
       )}
-    </>
-  )
-}
-const EightSix: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper customComponent={Custom} selectedItem={'/86'}></DashboardWrapper>
     </>
   )
 }

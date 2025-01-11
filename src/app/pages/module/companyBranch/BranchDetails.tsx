@@ -1,13 +1,12 @@
 import React, {useCallback, useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {BranchType, fetchSingleBranch} from 'sr/utils/api/branchApi'
 import {useSelector} from 'react-redux'
 import {RootState} from 'sr/redux/store'
 import {useActions} from 'sr/utils/helpers/useActions'
 
-const BranchDetails: React.FC<any> = () => {
+const BranchDetailsCard: React.FC<any> = () => {
   const navigate = useNavigate()
 
   const {id} = useParams<{id: string}>()
@@ -130,10 +129,6 @@ const BranchDetails: React.FC<any> = () => {
       </div>
     </div>
   )
-}
-
-const BranchDetailsCard: React.FC = () => {
-  return <DashboardWrapper customComponent={BranchDetails} selectedItem='/job-details' />
 }
 
 export default BranchDetailsCard

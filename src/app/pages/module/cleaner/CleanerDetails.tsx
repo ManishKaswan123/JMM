@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {CleanerDetails, fetchSingleCleaner} from 'sr/utils/api/fetchCleaner'
 
-const Custom: React.FC<any> = () => {
+const CleanerDetailsCard: React.FC<any> = () => {
   const navigate = useNavigate()
   const {cleanerId} = useParams<{cleanerId: string}>()
   const [data, setData] = useState<CleanerDetails>()
@@ -110,10 +109,6 @@ const Custom: React.FC<any> = () => {
       </div>
     </div>
   )
-}
-
-const CleanerDetailsCard: React.FC = () => {
-  return <DashboardWrapper customComponent={Custom} selectedItem='/cleaner-details' />
 }
 
 export default CleanerDetailsCard

@@ -6,7 +6,7 @@ export const useUrlItems = () => {
   const [urlItems, setUrlItems] = useState<string[]>([])
 
   useEffect(() => {
-    setUrlItems(location.pathname.split('/'))
+    setUrlItems(location.pathname.split('/').filter((item) => item !== ''))
   }, [location])
 
   return urlItems

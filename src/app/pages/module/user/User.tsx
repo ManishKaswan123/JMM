@@ -46,7 +46,7 @@ interface IndividualUpdatePayload extends Omit<IndividualCreatePayload, 'passwor
   id: string
 }
 
-const Custom: React.FC = () => {
+const User: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [selectedUser, setSelectedUser] = useState<Individual>()
   const [filters, setFilters] = useState<IndividualFilters>()
@@ -402,8 +402,5 @@ const Custom: React.FC = () => {
   )
 }
 
-const User: React.FC = () => {
-  return <DashboardWrapper customComponent={Custom} selectedItem='/individual' />
-}
 
 export default User

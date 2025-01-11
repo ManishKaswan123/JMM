@@ -28,7 +28,7 @@ interface RewardPlanPayload {
   isDefault: boolean
 }
 
-const Custom: React.FC = () => {
+const RewardPointPlan: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<RewardPlanFilters>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
@@ -242,16 +242,6 @@ const Custom: React.FC = () => {
           onSubmit={handleCreateRewardPlan}
         />
       )}
-    </>
-  )
-}
-const RewardPointPlan: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper
-        customComponent={Custom}
-        selectedItem={'/reward-point-plan'}
-      ></DashboardWrapper>
     </>
   )
 }

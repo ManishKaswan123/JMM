@@ -1,13 +1,12 @@
 import React, {useCallback, useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {useSelector} from 'react-redux'
 import {RootState} from 'sr/redux/store'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {fetchSingleProposalDetails, ProposalDetails} from 'sr/utils/api/fetchProposalDetails'
 
-const Custom: React.FC<any> = () => {
+const ProposalDetailCard: React.FC<any> = () => {
   const navigate = useNavigate()
   const {id} = useParams<{id: string}>()
   const [data, setData] = useState<ProposalDetails | null>(null)
@@ -90,10 +89,6 @@ const Custom: React.FC<any> = () => {
       </div>
     </div>
   )
-}
-
-const ProposalDetailCard: React.FC = () => {
-  return <DashboardWrapper customComponent={Custom} selectedItem='/cleaner/proposaldetails' />
 }
 
 export default ProposalDetailCard

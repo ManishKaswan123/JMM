@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {Contractor, fetchSingleContractor} from 'sr/utils/api/fetchContractor'
 import {Link} from 'react-router-dom'
 
-const ContractorDetails: React.FC<any> = () => {
+const ContractorDetailsCard: React.FC<any> = () => {
   const navigate = useNavigate()
   const {id} = useParams<{id: string}>()
   const [data, setData] = useState<Contractor>()
@@ -134,10 +133,6 @@ const ContractorDetails: React.FC<any> = () => {
       </div>
     </div>
   )
-}
-
-const ContractorDetailsCard: React.FC = () => {
-  return <DashboardWrapper customComponent={ContractorDetails} selectedItem='/contractor-details' />
 }
 
 export default ContractorDetailsCard

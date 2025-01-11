@@ -2,7 +2,6 @@ import React, {useMemo, useState} from 'react'
 import {AiOutlinePlus, AiOutlineFilter, AiOutlineClose} from 'react-icons/ai'
 import Table from 'sr/helpers/ui-components/dashboardComponents/Table'
 import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {BusinessType, fetchBusinessCategory} from 'sr/utils/api/fetchBusinessCategory'
 import {useDeleteBusinessCategory} from 'sr/utils/api/deleteBusinessCategory'
 import {Button} from 'sr/helpers'
@@ -29,7 +28,7 @@ interface businessTypeUpdatePayload {
   id: string
 }
 
-const Custom: React.FC = () => {
+const BusinessCategory: React.FC = () => {
   // const [loading, setLoading] = useState<Boolean>(false)
   const [filters, setFilters] = useState<businessTypeFilters>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
@@ -227,16 +226,6 @@ const Custom: React.FC = () => {
           onSubmit={handleEditBusinessType}
         />
       )}
-    </>
-  )
-}
-const BusinessCategory: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper
-        customComponent={Custom}
-        selectedItem={'/business-category'}
-      ></DashboardWrapper>
     </>
   )
 }

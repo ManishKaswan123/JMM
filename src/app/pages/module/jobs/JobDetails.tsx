@@ -4,7 +4,7 @@ import {useNavigate, useParams} from 'react-router-dom'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {fetchSingleJob, JobResponse} from 'sr/utils/api/fetchJobs'
 
-const JobDetails: React.FC<any> = () => {
+const JobDetailsCard: React.FC<any> = () => {
   const navigate = useNavigate()
   const {id} = useParams<{id: string}>()
   const [data, setData] = useState<JobResponse>()
@@ -204,10 +204,6 @@ const JobDetails: React.FC<any> = () => {
       </div>
     </div>
   )
-}
-
-const JobDetailsCard: React.FC = () => {
-  return <DashboardWrapper customComponent={JobDetails} selectedItem='/job-details' />
 }
 
 export default JobDetailsCard

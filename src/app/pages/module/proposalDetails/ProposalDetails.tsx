@@ -57,7 +57,7 @@ interface defaultData {
 }
 interface chatUpdatePayload extends chatCreatePayload {}
 
-const Custom: React.FC = () => {
+const ProposalDetails: React.FC = () => {
   const [selectedData, setSelectedData] = useState<chatApiResponse>()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<chatFilters>()
@@ -369,16 +369,6 @@ const Custom: React.FC = () => {
           onSubmit={handleEditChat}
         />
       )}
-    </>
-  )
-}
-const ProposalDetails: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper
-        customComponent={Custom}
-        selectedItem={'/cleaner/proposaldetails'}
-      ></DashboardWrapper>
     </>
   )
 }

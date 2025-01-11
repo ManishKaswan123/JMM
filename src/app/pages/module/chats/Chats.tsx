@@ -57,7 +57,7 @@ interface defaultData {
 }
 interface chatUpdatePayload extends chatCreatePayload {}
 
-const Custom: React.FC = () => {
+const Chats: React.FC = () => {
   const [selectedData, setSelectedData] = useState<chatApiResponse>()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<chatFilters>()
@@ -365,13 +365,6 @@ const Custom: React.FC = () => {
           onSubmit={handleEditChat}
         />
       )}
-    </>
-  )
-}
-const Chats: React.FC = () => {
-  return (
-    <>
-      <DashboardWrapper customComponent={Custom} selectedItem={'/chat'}></DashboardWrapper>
     </>
   )
 }
