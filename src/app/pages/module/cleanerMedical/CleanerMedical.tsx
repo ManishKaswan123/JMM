@@ -175,7 +175,7 @@ const CleanerMedicalCard: React.FC = () => {
               <Filter
                 onApplyFilter={handleApplyFilter}
                 setIsFilterVisible={setIsFilterVisible}
-                pMedicalilters={filters || {}}
+                preFilters={filters || {}}
                 fields={fields}
               />
             </div>

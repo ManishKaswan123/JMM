@@ -79,4 +79,10 @@ export const cleanerNavItems: NavItem[] = [
     name: 'preference',
     iconPath: 'M12 4v16m8-8H4', // Plus icon
   },
+  {
+    label: 'Job Type',
+    path: 'cleaner/jobtype',
+    name: 'jobtype',
+    iconPath: 'M12 4v16m8-8H4', // Plus icon
+  },
 ]
