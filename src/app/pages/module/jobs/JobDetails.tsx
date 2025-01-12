@@ -3,6 +3,7 @@ import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
 import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {fetchSingleJob, JobResponse} from 'sr/utils/api/fetchJobs'
+import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
 
 const JobDetailsCard: React.FC<any> = () => {
   const navigate = useNavigate()
@@ -24,7 +25,18 @@ const JobDetailsCard: React.FC<any> = () => {
     navigate('/job')
   }
 
-  if (data === undefined) return <div>Loading...</div>
+  if (!data)
+    return (
+      <SkeletonCard
+        label='Job Details'
+        col1={'Company Id,Job ID,Job Title,Job Types,Schedule,Employment Type,Start Date,Pay by,Exact Amount & Rate'.split(
+          ','
+        )}
+        col2={'Benefits,Application Call Mobile,Require Resume,Notifications,Email,Status,Created At,Update At'.split(
+          ','
+        )}
+      />
+    )
   if (isError) return <div>Error loading job details.</div>
 
   return (

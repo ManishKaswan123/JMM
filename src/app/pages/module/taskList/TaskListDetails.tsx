@@ -5,6 +5,7 @@ import {useSelector} from 'react-redux'
 import {RootState} from 'sr/redux/store'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {fetchSingleTaskList, TaskListDetails} from 'sr/utils/api/fetchTaskList'
+import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
 
 const TaskListDetailsCard: React.FC = () => {
   const navigate = useNavigate()
@@ -54,7 +55,14 @@ const TaskListDetailsCard: React.FC = () => {
     navigate('/tasklist')
   }
 
-  if (!data) return <div>Loading...</div>
+  if (!data)
+    return (
+      <SkeletonCard
+        label='TaskList Details'
+        col1={'TaskList ID,Name,Description,Type,Checklist ID'.split(',')}
+        col2={'Company ID,Customer ID,Created At,Updated At'.split(',')}
+      />
+    )
   if (isError) return <div>Error loading tasklist details.</div>
 
   return (

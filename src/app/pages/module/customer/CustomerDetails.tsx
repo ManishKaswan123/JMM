@@ -5,6 +5,7 @@ import {Customer, fetchSingleCustomer} from 'sr/utils/api/customerApi'
 import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
+import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
 
 const CustomerDetailsCard: React.FC = () => {
   const navigate = useNavigate()
@@ -37,7 +38,14 @@ const CustomerDetailsCard: React.FC = () => {
     navigate('/customer')
   }
 
-  if (!data) return <div>Loading...</div>
+  if (!data)
+    return (
+      <SkeletonCard
+        label='Customer Details'
+        col1={'Customer ID,Company ID,Name,Email,Mobile Number,Type'.split(',')}
+        col2={'Status,Remarks,Created At,Updated At,Location IDs,Checklist IDs'.split(',')}
+      />
+    )
   if (isError) return <div>Error loading customer details.</div>
 
   return (

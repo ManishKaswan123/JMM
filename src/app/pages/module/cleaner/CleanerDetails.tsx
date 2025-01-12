@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
 import {CleanerDetails, fetchSingleCleaner} from 'sr/utils/api/fetchCleaner'
+import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
 
 const CleanerDetailsCard: React.FC<any> = () => {
   const navigate = useNavigate()
@@ -23,7 +24,14 @@ const CleanerDetailsCard: React.FC<any> = () => {
     navigate('/cleaner')
   }
 
-  if (data === undefined) return <div>Loading...</div>
+  if (data === undefined)
+    return (
+      <SkeletonCard
+        label='Cleaner Details'
+        col1={'Username,First Name,Last Name,Mobile Number,Email'.split(',')}
+        col2={'Date of Birth,User ID,Status,Created At,Updated At'.split(',')}
+      />
+    )
   if (isError) return <div>Error loading cleaner details.</div>
 
   return (

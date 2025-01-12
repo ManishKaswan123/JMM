@@ -1,5 +1,8 @@
 import {lazy} from 'react'
 
+const CleanerPreferenceCard = lazy(
+  () => import('app/pages/module/cleanerPreference/CleanerPreference')
+)
 const CleanerTrainingCard = lazy(() => import('app/pages/module/cleanerTraining/CleanerTraining'))
 const CleanerMedicalCard = lazy(() => import('app/pages/module/cleanerMedical/CleanerMedical'))
 const CleanerEmploymentCard = lazy(
@@ -67,6 +70,7 @@ export const routeConfigs = [
   {path: '/cleaner/employment/:cleanerId', element: <CleanerEmploymentCard />},
   {path: '/cleaner/medical/:cleanerId', element: <CleanerMedicalCard />},
   {path: '/cleaner/training/:cleanerId', element: <CleanerTrainingCard />},
+  {path: '/cleaner/preference/:cleanerId', element: <CleanerPreferenceCard />},
   {path: '/tasklist', element: <TaskList />},
   {path: '/tasklist/:id', element: <TaskListDetailsCard />},
   {path: '/company', element: <Company />},

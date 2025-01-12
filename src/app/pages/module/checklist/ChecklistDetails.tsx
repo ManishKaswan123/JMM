@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
 import {Checklist, fetchSingleChecklist} from 'sr/utils/api/checklistApi'
+import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
 
 const ChecklistDetailsCard: React.FC = () => {
   const navigate = useNavigate()
@@ -23,7 +24,14 @@ const ChecklistDetailsCard: React.FC = () => {
     navigate('/checklist')
   }
 
-  if (!data) return <div>Loading...</div>
+  if (!data)
+    return (
+      <SkeletonCard
+        label='Checklist Details'
+        col1={'Checklist ID,Name,Type,Subtype,Status'.split(',')}
+        col2={'Company Name,Customer Name,Task IDs,Created At,Updated At'.split(',')}
+      />
+    )
   if (isError) return <div>Error loading checklist details.</div>
 
   return (
