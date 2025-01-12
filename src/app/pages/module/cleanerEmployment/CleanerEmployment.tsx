@@ -235,7 +235,7 @@ const CleanerEmploymentCard: React.FC = () => {
               <Filter
                 onApplyFilter={handleApplyFilter}
                 setIsFilterVisible={setIsFilterVisible}
-                pEmpilters={filters || {}}
+                preFilters={filters || {}}
                 fields={fields}
               />
             </div>

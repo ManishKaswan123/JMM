@@ -174,7 +174,7 @@ const CleanerTrainingCard: React.FC = () => {
               <Filter
                 onApplyFilter={handleApplyFilter}
                 setIsFilterVisible={setIsFilterVisible}
-                pTrainingilters={filters || {}}
+                preFilters={filters || {}}
                 fields={fields}
               />
             </div>

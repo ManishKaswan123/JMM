@@ -3,8 +3,21 @@ import {AiOutlineClose, AiOutlineFilter} from 'react-icons/ai'
 import TextField from 'sr/partials/widgets/widgets-components/form/TextField'
 import {Button} from './Button'
 import DropdownField from 'sr/partials/widgets/widgets-components/form/DropdownField'
+interface FilterProps {
+  onApplyFilter: any
+  setIsFilterVisible: any
+  preFilters: any
+  fields: any
+  handleClearFilter?: () => void
+}
 
-const Filter = ({onApplyFilter, setIsFilterVisible, preFilters, fields}: any) => {
+const Filter = ({
+  onApplyFilter,
+  setIsFilterVisible,
+  preFilters,
+  fields,
+  handleClearFilter,
+}: FilterProps) => {
   const [filters, setFilters] = useState(preFilters)
   // console.log('fields are :- ', fields)
   const handleChange = (e: any) => {
@@ -14,7 +27,7 @@ const Filter = ({onApplyFilter, setIsFilterVisible, preFilters, fields}: any) =>
       [name]: type === 'checkbox' ? checked : value,
     })
   }
-  const handleClearFilter = () => {
+  const handleClearFilterDefault = () => {
     setFilters({})
     onApplyFilter({})
     setIsFilterVisible(false)
@@ -87,7 +100,7 @@ const Filter = ({onApplyFilter, setIsFilterVisible, preFilters, fields}: any) =>
                 labelStyle='style1'
                 label={field.label}
                 className={`custom-input form-input p-2 border rounded ${
-                  isFilterActive(filters[field.email]) ? 'bg-gray-200' : 'bg-white'
+                  isFilterActive(filters[field.name]) ? 'bg-gray-200' : 'bg-white'
                 } placeholder:text-[15px]`}
                 name={field.name}
                 value={filters[field.name]}
@@ -108,7 +121,7 @@ const Filter = ({onApplyFilter, setIsFilterVisible, preFilters, fields}: any) =>
         ></Button>
         <Button
           disabled={Object.keys(filters).length === 0}
-          onClick={handleClearFilter}
+          onClick={handleClearFilter ? handleApplyFilter : handleClearFilterDefault}
           className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
           Icon={AiOutlineClose}
           label='Clear Filters'

@@ -10,80 +10,84 @@ import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 import {
-  fetchCleanerPreference,
-  CleanerPreference,
-  CleanerPreferenceFilters,
-  useCreateCleanerPreference,
-  useUpdateCleanerPreference,
-} from 'sr/utils/api/cleanerPreferenceApi'
-import {CleanerPreferenceDetailsCard} from './CleanerPreferenceDetails'
+  fetchCleanerJobType,
+  CleanerJobType,
+  CleanerJobTypeFilters,
+  useCreateCleanerJobType,
+  useUpdateCleanerJobType,
+} from 'sr/utils/api/cleanerJobTypeApi'
+import {CleanerJobTypeDetailsCard} from './CleanerJobTypeDetails'
 import {useParams} from 'react-router-dom'
-import CleanerPreferenceTable from './CleanerPreferenceTable'
+import CleanerJobTypeTable from './CleanerJobTypeTable'
 
-interface CleanerPreferenceCreatePayload {
+interface CleanerJobTypeCreatePayload {
   cleaner_id: string
-  radius: number
-  shift_type: string
-  min_hours: number
-  max_hours: number
+  job_type: string[]
+  rate: number
+  additional_information: string
 }
-interface CleanerPreferenceUpdatePayload extends CleanerPreferenceCreatePayload {
+interface CleanerJobTypeFormPayload extends Omit<CleanerJobTypeCreatePayload, 'job_type'> {
+  job_type: string
+}
+interface CleanerJobTypeUpdatePayload extends CleanerJobTypeCreatePayload {
   id: string
 }
 
-const CleanerPreferenceCard: React.FC = () => {
+const CleanerJobTypeCard: React.FC = () => {
   const {cleanerId} = useParams<{cleanerId: string | undefined}>()
-  const [selectedData, setSelectedData] = useState<CleanerPreference>()
-  const [selectedCleanerPreference, setSelectedCleanerPreference] = useState<CleanerPreference>()
+  const [selectedData, setSelectedData] = useState<CleanerJobType>()
+  const [selectedCleanerJobType, setSelectedCleanerJobType] = useState<CleanerJobType>()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [filters, setFilters] = useState<CleanerPreferenceFilters>({cleaner_id: cleanerId})
+  const [filters, setFilters] = useState<CleanerJobTypeFilters>({cleaner_id: cleanerId})
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
   const [itemsPerPage, setItemsPerPage] = useState<number>(8)
-  const createMutation = useCreateCleanerPreference()
-  const updateMutation = useUpdateCleanerPreference()
+  const createMutation = useCreateCleanerJobType()
+  const updateMutation = useUpdateCleanerJobType()
 
   const createAndUpdateFields: FieldsArray = useMemo(
     () => [
       {
+        type: 'text',
+        label: 'Job Type',
+        name: 'job_type',
+        placeholder: 'Job Type',
+        required: true,
+      },
+      {
         type: 'number',
-        label: 'Radius',
-        name: 'radius',
-        placeholder: 'Radius',
+        label: 'Rate',
+        name: 'rate',
+        placeholder: 'Rate',
         required: true,
       },
       {
         type: 'text',
-        label: 'Shift Type',
-        name: 'shift_type',
-        placeholder: 'Shift Type',
-        required: true,
-      },
-      {
-        type: 'number',
-        label: 'Min Hours',
-        name: 'min_hours',
-        placeholder: 'Min Hours',
-        required: true,
-      },
-      {
-        type: 'number',
-        label: 'Max Hours',
-        name: 'max_hours',
-        placeholder: 'Max Hours',
+        label: 'Additional Info',
+        name: 'additional_information',
+        placeholder: 'Additional Info',
         required: true,
       },
     ],
     []
   )
 
-  const fields: FieldsArray = useMemo(() => [], [])
+  const fields: FieldsArray = useMemo(
+    () => [
+      {
+        type: 'number',
+        label: 'Rate',
+        name: 'rate',
+        placeholder: 'Rate',
+      },
+    ],
+    []
+  )
 
   const {data, isLoading} = useQuery({
-    queryKey: ['cleanerPreference', {limit: itemsPerPage, page: currentPage, ...filters}],
-    queryFn: async () =>
-      fetchCleanerPreference({limit: itemsPerPage, page: currentPage, ...filters}),
+    queryKey: ['cleanerJobType', {limit: itemsPerPage, page: currentPage, ...filters}],
+    queryFn: async () => fetchCleanerJobType({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
   const onSuccess = (action: string) => {
@@ -104,48 +108,44 @@ const CleanerPreferenceCard: React.FC = () => {
     setIsFilterVisible(false)
   }
 
-  const handleCreateCleanerPreference = async (payload: CleanerPreferenceCreatePayload) => {
-    const data: CleanerPreferenceCreatePayload = {
+  const handleCreateCleanerJobType = async (payload: CleanerJobTypeFormPayload) => {
+    const data: CleanerJobTypeCreatePayload = {
       cleaner_id: cleanerId || '',
-      radius: payload.radius,
-      shift_type: payload.shift_type,
-      min_hours: payload.min_hours,
-      max_hours: payload.max_hours,
+      job_type: [payload.job_type],
+      rate: payload.rate,
+      additional_information: payload.additional_information,
     }
     createMutation.mutate({payload: data, onSuccess})
   }
-  const handleEditCleanerPreference = async (payload: CleanerPreferenceUpdatePayload) => {
+  const handleEditCleanerJobType = async (payload: CleanerJobTypeFormPayload) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
     }
-    const data: CleanerPreferenceUpdatePayload = {
-      cleaner_id: selectedData.cleaner_id,
-      radius: payload.radius,
-      shift_type: payload.shift_type,
-      min_hours: payload.min_hours,
-      max_hours: payload.max_hours,
-
+    const data: CleanerJobTypeUpdatePayload = {
+      cleaner_id: selectedData.cleaner_id._id,
+      job_type: [payload.job_type],
+      rate: payload.rate,
+      additional_information: payload.additional_information,
       id: selectedData.id,
     }
     updateMutation.mutate({payload: data, onSuccess})
   }
-  const defaultValues: CleanerPreferenceUpdatePayload | undefined = useMemo(() => {
+  const defaultValues: CleanerJobTypeFormPayload | undefined = useMemo(() => {
     if (!selectedData) return undefined
     return {
-      cleaner_id: selectedData.cleaner_id,
-      radius: selectedData.radius,
-      shift_type: selectedData.shift_type,
-      min_hours: selectedData.min_hours,
-      max_hours: selectedData.max_hours,
+      cleaner_id: selectedData.cleaner_id._id,
+      job_type: selectedData.job_type[0],
+      rate: selectedData.rate,
+      additional_information: selectedData.additional_information,
       id: selectedData.id,
     }
   }, [selectedData])
-  if (selectedCleanerPreference) {
+  if (selectedCleanerJobType) {
     return (
-      <CleanerPreferenceDetailsCard
-        data={selectedCleanerPreference}
-        onGoBack={() => setSelectedCleanerPreference(undefined)}
+      <CleanerJobTypeDetailsCard
+        data={selectedCleanerJobType}
+        onGoBack={() => setSelectedCleanerJobType(undefined)}
       />
     )
   }
@@ -156,7 +156,7 @@ const CleanerPreferenceCard: React.FC = () => {
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
             <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>
-              Cleaner Preference
+              Cleaner JobType
             </h2>
             <div className='flex items-center'>
               <Button
@@ -165,14 +165,14 @@ const CleanerPreferenceCard: React.FC = () => {
                 onClick={() => setIsCreateModalOpen(true)}
                 className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
               ></Button>
-              {/* <Button
+              <Button
                 label={`${isFilterVisible ? 'Close' : 'Filters'}`}
                 Icon={!isFilterVisible ? AiOutlineFilter : AiOutlineClose}
                 onClick={() => setIsFilterVisible(!isFilterVisible)}
                 className={`text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center ${
                   isFilterVisible ? 'bg-red-400 hover:bg-red-500' : 'bg-gray-200 hover:bg-gray-300'
                 }`}
-              ></Button> */}
+              ></Button>
             </div>
           </div>
           {isFilterVisible && (
@@ -182,18 +182,17 @@ const CleanerPreferenceCard: React.FC = () => {
                 setIsFilterVisible={setIsFilterVisible}
                 preFilters={filters || {}}
                 fields={fields}
+                handleClearFilter={() => setFilters({cleaner_id: cleanerId})}
               />
             </div>
           )}
           {isLoading ? (
-            <SkeletonTable
-              columns={['Cleaner', 'Radius', 'Shift Type', 'Min Hours', 'Max Hours', 'Actions']}
-            />
+            <SkeletonTable columns={['Cleaner', 'Rate', 'Job Type', 'Actions']} />
           ) : (
-            <CleanerPreferenceTable
+            <CleanerJobTypeTable
               setSelectedData={setSelectedData}
               setIsUpdateModalOpen={setIsUpdateModalOpen}
-              onSelectCleanerPreference={setSelectedCleanerPreference}
+              onSelectCleanerJobType={setSelectedCleanerJobType}
               data={data?.data}
               //   handleDelete={onDeleteChat}
               //   handleView={handleView}
@@ -211,7 +210,7 @@ const CleanerPreferenceCard: React.FC = () => {
             totalResults={data?.pagination?.total}
             onPageChange={onPageChange}
             itemsPerPage={itemsPerPage}
-            name='cleanerPreference'
+            name='cleanerJobType'
             onLimitChange={onLimitChange}
             disabled={isLoading}
           />
@@ -219,25 +218,25 @@ const CleanerPreferenceCard: React.FC = () => {
       </div>
       {isCreateModalOpen && (
         <DynamicModal
-          label='Create Cleaner Preference'
+          label='Create Cleaner JobType'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           fields={createAndUpdateFields}
-          onSubmit={handleCreateCleanerPreference}
+          onSubmit={handleCreateCleanerJobType}
         />
       )}
       {isUpdateModalOpen && defaultValues && (
         <DynamicModal
-          label='Update Cleaner Preference'
+          label='Update Cleaner JobType'
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
           fields={createAndUpdateFields}
           defaultValues={defaultValues}
-          onSubmit={handleEditCleanerPreference}
+          onSubmit={handleEditCleanerJobType}
         />
       )}
     </>
   )
 }
 
-export default CleanerPreferenceCard
+export default CleanerJobTypeCard
