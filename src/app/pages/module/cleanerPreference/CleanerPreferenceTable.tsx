@@ -1,85 +1,84 @@
-import React from 'react'
+import React, {useCallback, useEffect} from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
+import {useSelector} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {IndividualJob} from 'sr/utils/api/individualJobApi'
-interface IndividualJobTableProps {
-  data: IndividualJob[] | undefined
-  onSelectJob: React.Dispatch<React.SetStateAction<IndividualJob | undefined>>
-  setSelectedData: React.Dispatch<React.SetStateAction<IndividualJob | undefined>>
+import {RootState} from 'sr/redux/store'
+import {CleanerPreference} from 'sr/utils/api/cleanerPreferenceApi'
+import {useActions} from 'sr/utils/helpers/useActions'
+interface CleanerPreferenceTableProps {
+  data: CleanerPreference[] | undefined
+  onSelectCleanerPreference: React.Dispatch<React.SetStateAction<CleanerPreference | undefined>>
+  setSelectedData: React.Dispatch<React.SetStateAction<CleanerPreference | undefined>>
   setIsUpdateModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
-const IndividualJobTable: React.FC<IndividualJobTableProps> = ({
+const CleanerPreferenceTable: React.FC<CleanerPreferenceTableProps> = ({
   data,
-  onSelectJob,
+  onSelectCleanerPreference,
   setSelectedData,
   setIsUpdateModalOpen,
 }) => {
+  const cleanerMap = useSelector((state: RootState) => state.cleaner.idNameMap)
+  const cleanerStatus = useSelector((state: RootState) => state.cleaner.status)
+  const {fetchCleanerData} = useActions()
+  useEffect(() => {
+    fetchUserDataIfNeeded()
+  }, [])
+
+  const fetchUserDataIfNeeded = useCallback(() => {
+    if (cleanerStatus !== 'succeeded') {
+      fetchCleanerData({})
+    }
+  }, [cleanerStatus, fetchCleanerData])
   return (
     <div className='inline-block min-w-full shadow rounded-lg overflow-hidden'>
       <table className='min-w-full leading-normal'>
         <thead>
           <tr>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Title
-            </th>
-            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Unit or Apt
-            </th>
-
-            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Individual
-            </th>
-            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
               Cleaner
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Work Status
+              Radius
             </th>
+
+            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
+              Shift Type
+            </th>
+
+            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
+              Min Hours
+            </th>
+            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
+              Max Hours
+            </th>
+
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
               Actions
             </th>
           </tr>
         </thead>
         <tbody>
-          {data?.map((Job) => (
-            <tr key={Job.id} className='odd:bg-white even:bg-gray-50'>
-              <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <p className='text-gray-900 whitespace-no-wrap'>{Job.title}</p>
-              </td>
-              <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <p className='text-gray-900 whitespace-no-wrap'>{Job.unitorapt}</p>
-              </td>
-
+          {data?.map((cleaner) => (
+            <tr key={cleaner.id} className='odd:bg-white even:bg-gray-50'>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <Link
-                  to={`/user/details/${Job.individual_id._id}`}
+                  to={`/cleaner/details/${cleaner.cleaner_id}`}
                   className='text-blue-500 hover:font-medium'
                 >
-                  {Job.individual_id.username}
+                  {cleanerMap[cleaner.cleaner_id]}
                 </Link>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <Link
-                  to={`/cleaner/details/${Job.cleaner_id?._id}`}
-                  className='text-blue-500 hover:font-medium'
-                >
-                  {Job.cleaner_id?.username}
-                </Link>
+                <p className='text-gray-900 whitespace-no-wrap'>{cleaner.radius}</p>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <p
-                  className={`whitespace-no-wrap ${
-                    Job?.work_status === 'active'
-                      ? 'text-green-500'
-                      : Job?.work_status === 'pending'
-                      ? 'text-yellow-500'
-                      : Job?.work_status === 'completed'
-                      ? 'text-red-500'
-                      : 'text-gray-500' // Default color for unknown statuses
-                  }`}
-                >
-                  {Job?.work_status || 'Unknown'}
-                </p>
+                <p className='text-gray-900 whitespace-no-wrap'>{cleaner.shift_type}</p>
+              </td>
+              <td className='px-5 py-5 border-b border-gray-200 text-sm'>
+                <p className='text-gray-900 whitespace-no-wrap'>{cleaner.min_hours}</p>
+              </td>
+              <td className='px-5 py-5 border-b border-gray-200 text-sm'>
+                <p className='text-gray-900 whitespace-no-wrap'>{cleaner.max_hours}</p>
               </td>
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
@@ -87,14 +86,14 @@ const IndividualJobTable: React.FC<IndividualJobTableProps> = ({
                   <FaEdit
                     className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
                     onClick={() => {
-                      setSelectedData(Job)
+                      setSelectedData(cleaner)
                       setIsUpdateModalOpen(true)
                     }}
                   />
                   <FaEye
                     className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
                     onClick={() => {
-                      onSelectJob(Job)
+                      onSelectCleanerPreference(cleaner)
                     }}
                   />
                 </div>
@@ -107,4 +106,4 @@ const IndividualJobTable: React.FC<IndividualJobTableProps> = ({
   )
 }
 
-export default IndividualJobTable
+export default CleanerPreferenceTable

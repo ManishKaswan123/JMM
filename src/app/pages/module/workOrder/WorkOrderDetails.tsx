@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
 import {fetchSingleWorkOrder, WorkOrderResponse} from 'sr/utils/api/fetchWorkOrder'
+import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
 
 const WorkOrderDetailsCard: React.FC = () => {
   const navigate = useNavigate()
@@ -23,7 +24,16 @@ const WorkOrderDetailsCard: React.FC = () => {
     navigate('/workorder')
   }
 
-  if (!data) return <div>Loading...</div>
+  if (!data)
+    return (
+      <SkeletonCard
+        label='Work Order Details'
+        col1={'Title,Description,Type,Job Type,Payment Status,Work Order Status,Status'.split(',')}
+        col2={'Pay Type,Pay Type Rate,Entry Time,Exit Time,One-Time Date,Time for Work Completion,Recurring'.split(
+          ','
+        )}
+      />
+    )
   if (isError) return <div>Error loading workorder details.</div>
 
   return (

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
 import {fetchSingleApplication, JobApplication} from 'sr/utils/api/fetchApplications'
+import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
 
 const ApplicationDetailsCard: React.FC = () => {
   const navigate = useNavigate()
@@ -23,7 +24,14 @@ const ApplicationDetailsCard: React.FC = () => {
     navigate('/application')
   }
 
-  if (!data) return <div>Loading...</div>
+  if (!data)
+    return (
+      <SkeletonCard
+        label='Application Details'
+        col1={'Application ID,Job Details,Cleaner Details,Status'.split(',')}
+        col2={'Created At,Updated At,Version,Answers'.split(',')}
+      />
+    )
   if (isError) return <div>Error loading application details.</div>
 
   return (

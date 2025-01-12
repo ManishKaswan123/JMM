@@ -11,6 +11,7 @@ import {FieldsArray} from 'sr/constants/fields'
 import {useCreateCompanyDetails} from 'sr/utils/api/createCompanyDetails'
 import {useUpdateCompanyDetails} from 'sr/utils/api/updateCompanyDetails'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
+import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
 
 interface CreatePayload {
   company_id: string
@@ -183,7 +184,14 @@ const CompanyDetailCard: React.FC<any> = () => {
       about_company: data.data.about_company,
     }
   }, [data])
-  if (isLoading) return <div className='flex justify-center  w-full'>Loading...</div>
+  if (isLoading)
+    return (
+      <SkeletonCard
+        label='Company Details'
+        col1={'Company Name,Website,Employees,Date Format,Date of Incorporation'.split(',')}
+        col2={'Annual Revenue,Branches,Clients,Created At,Updated At'.split(',')}
+      />
+    )
 
   return (
     <>
