@@ -1,20 +1,21 @@
 import React, {useContext} from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
 import {useNavigate} from 'react-router-dom'
-import {CleanerDetails} from 'sr/utils/api/fetchCleaner'
 import {UserContext} from 'sr/context/UserContext'
+import {CleanerDetails} from 'sr/utils/api/fetchCleaner'
 
-interface Props {
-  data?: CleanerDetails[]
-  setSelectedData: React.Dispatch<React.SetStateAction<CleanerDetails | undefined>>
-  setIsUpdateModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+interface Props<T> {
+  type: 'cleaner' | 'favcleaner'
+  data?: T[]
+  setSelectedData?: React.Dispatch<React.SetStateAction<CleanerDetails | undefined>>
+  setIsUpdateModalOpen?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const CleanerTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalOpen}) => {
+const CleanerTable = <T,>({type, data, setSelectedData, setIsUpdateModalOpen}: Props<T>) => {
   const navigate = useNavigate()
   const {setUser} = useContext(UserContext)
-  const handleCleanerDetail = (cleaner: CleanerDetails) => {
-    navigate(`/cleaner/details/${cleaner.id}`)
+  const handleCleanerDetail = (cleaner: any) => {
+    navigate(`/cleaner/details/${type === 'cleaner' ? cleaner.id : cleaner._id}`)
   }
   return (
     <div className='inline-block min-w-full shadow rounded-lg overflow-hidden'>
@@ -46,8 +47,11 @@ const CleanerTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalO
           </tr>
         </thead>
         <tbody>
-          {data?.map((cleaner) => (
-            <tr key={cleaner?.id} className='odd:bg-white even:bg-gray-50'>
+          {data?.map((cleaner: any) => (
+            <tr
+              key={type === 'cleaner' ? cleaner.id : cleaner._id}
+              className='odd:bg-white even:bg-gray-50'
+            >
               {/* <td className="px-5 py-5 border-b border-gray-200 text-sm">
                     <p className="text-gray-900 whitespace-no-wrap">
                       {cleaner?.first_name} {cleaner?.last_name}
@@ -85,17 +89,20 @@ const CleanerTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalO
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <div className='flex'>
-                  <FaEdit
-                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
-                    onClick={() => {
-                      setSelectedData(cleaner)
-                      setIsUpdateModalOpen(true)
-                    }}
-                  />
+                  {type === 'cleaner' && (
+                    <FaEdit
+                      className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                      onClick={() => {
+                        setSelectedData && setSelectedData(cleaner)
+                        setIsUpdateModalOpen && setIsUpdateModalOpen(true)
+                      }}
+                    />
+                  )}
+
                   <FaEye
                     className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
                     onClick={() => {
-                      setUser(cleaner.id)
+                      setUser(type === 'cleaner' ? cleaner.id : cleaner._id)
                       handleCleanerDetail(cleaner)
                     }}
                   />

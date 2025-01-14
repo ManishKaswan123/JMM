@@ -41,6 +41,12 @@ export const userNavItems: NavItem[] = [
     name: 'jobCategory',
     iconPath: 'M3 12h18M9 3v18', // Wallet outline
   },
+  {
+    label: 'Favorite Cleaner',
+    path: '/user/favcleaner',
+    name: 'favcleaner',
+    iconPath: 'M3 12h18M9 3v18', // Wallet outline
+  },
 ]
 export const cleanerNavItems: NavItem[] = [
   {
