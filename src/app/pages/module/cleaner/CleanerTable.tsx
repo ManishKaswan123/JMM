@@ -12,7 +12,7 @@ interface Props {
 
 const CleanerTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalOpen}) => {
   const navigate = useNavigate()
-  const {user, setUser} = useContext(UserContext)
+  const {setUser} = useContext(UserContext)
   const handleCleanerDetail = (cleaner: CleanerDetails) => {
     navigate(`/cleaner/details/${cleaner.id}`)
   }

@@ -182,7 +182,9 @@ const CleanerJobTypeCard: React.FC = () => {
                 setIsFilterVisible={setIsFilterVisible}
                 preFilters={filters || {}}
                 fields={fields}
-                handleClearFilter={() => setFilters({cleaner_id: cleanerId})}
+                handleClearFilter={() => {
+                  handleApplyFilter({cleaner_id: cleanerId})
+                }}
               />
             </div>
           )}

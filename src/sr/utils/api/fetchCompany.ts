@@ -28,6 +28,9 @@ interface FetchCompanyResponse {
   data: CompanyResponse[]
   pagination: Pagination
 }
+export interface FetchSingleCompanyResponse extends Omit<FetchCompanyResponse, 'data'> {
+  data: CompanyResponse
+}
 
 export interface CompanyFilters {
   limit?: number
@@ -53,6 +56,19 @@ export const fetchCompany = async (payload: CompanyFilters): Promise<FetchCompan
     const res = await get<FetchCompanyResponse>(`/company`, filteredPayload)
 
     if (res.data && res.data.length > 0) {
+      return res // Return the fetched data
+    } else {
+      throw new Error('No data found')
+    }
+  } catch (error) {
+    throw new Error(`Failed to fetch: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  }
+}
+export const fetchSingleCompany = async (id: string): Promise<FetchSingleCompanyResponse> => {
+  try {
+    const res = await get<FetchSingleCompanyResponse>(`/company`, {id})
+
+    if (res.success === true && res.data) {
       return res // Return the fetched data
     } else {
       throw new Error('No data found')

@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
+import {UserContext} from 'sr/context/UserContext'
 
 interface CompanyResponse {
   username: string
@@ -25,6 +26,11 @@ interface Props {
 }
 
 const CompanyTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalOpen}) => {
+  const navigate = useNavigate()
+  const {setUser} = useContext(UserContext)
+  const handleCompanyDetail = (company: CompanyResponse) => {
+    navigate(`/company/details/${company.id}`)
+  }
   return (
     <div className='inline-block min-w-full shadow rounded-lg overflow-hidden'>
       <table className='min-w-full leading-normal'>
@@ -39,19 +45,14 @@ const CompanyTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalO
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
               Email
             </th>
+            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
+              Mobile
+            </th>
 
-            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Business Type
-            </th>
-            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              Intent
-            </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
               Status
             </th>
-            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-              View Branch
-            </th>
+
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
               Actions
             </th>
@@ -69,15 +70,10 @@ const CompanyTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalO
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <p className='text-gray-900 whitespace-no-wrap'>{company.email}</p>
               </td>
+              <td className='px-5 py-5 border-b border-gray-200 text-sm'>
+                <p className='text-gray-900 whitespace-no-wrap'>{company.mobile_number}</p>
+              </td>
 
-              <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <p className='text-gray-900 whitespace-no-wrap'>
-                  {company.business_type?.join(', ')}
-                </p>
-              </td>
-              <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <p className='text-gray-900 whitespace-no-wrap'>{company.intent?.join(', ')}</p>
-              </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <p
                   className={`whitespace-no-wrap ${
@@ -94,17 +90,6 @@ const CompanyTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalO
                 </p>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <Link
-                  to={`/company/branch?company_id=${company.id}`}
-                  className='text-blue-500 hover:font-medium'
-                >
-                  <FaEye
-                    className='cursor-pointer text-blue-500 hover:text-gray-700'
-                    style={{fontSize: '1.1rem'}}
-                  />
-                </Link>
-              </td>
-              <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <div className='flex'>
                   <FaEdit
                     className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
@@ -113,12 +98,13 @@ const CompanyTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalO
                       setIsUpdateModalOpen(true)
                     }}
                   />
-                  <Link to={`/company/${company.id}`} className='text-blue-500 hover:font-medium'>
-                    <FaEye
-                      className='cursor-pointer text-blue-500 hover:text-gray-700'
-                      style={{fontSize: '1.1rem'}}
-                    />
-                  </Link>
+                  <FaEye
+                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                    onClick={() => {
+                      setUser(company.id)
+                      handleCompanyDetail(company)
+                    }}
+                  />
                 </div>
               </td>
             </tr>
