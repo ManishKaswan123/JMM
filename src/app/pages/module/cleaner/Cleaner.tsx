@@ -317,7 +317,8 @@ const Cleaner: React.FC = () => {
               columns={['Username', 'Mobile Number', 'Email', 'Date Of Birth', 'Status', 'Actions']}
             />
           ) : (
-            <CleanerTable
+            <CleanerTable<CleanerDetails>
+              type='cleaner'
               setSelectedData={setSelectedData}
               setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}

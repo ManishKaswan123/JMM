@@ -1,5 +1,6 @@
 import {lazy} from 'react'
 
+const IndividualFavCleanerCard = lazy(() => import('app/pages/module/favCleaner/FavCleaner'))
 const CompanyAddInfoCard = lazy(() => import('app/pages/module/company/CompanyAddInfo'))
 const CleanerJobTypeCard = lazy(() => import('app/pages/module/cleanerJobType/CleanerJobType'))
 const CleanerPreferenceCard = lazy(
@@ -23,7 +24,6 @@ const IndividualTasklistCard = lazy(
 const IndividualChecklistCard = lazy(
   () => import('app/pages/module/individualChecklist/IndividualChecklist.tsx')
 )
-const BranchDetailsCard = lazy(() => import('app/pages/module/companyBranch/BranchDetails'))
 const Branch = lazy(() => import('app/pages/module/companyBranch/Branch'))
 const ContractorDetailsCard = lazy(() => import('app/pages/module/contractor/ContractorDetails'))
 const ApplicationDetailsCard = lazy(
@@ -91,6 +91,7 @@ export const routeConfigs = [
   {path: '/user/tasklist/:userId', element: <IndividualTasklistCard />},
   {path: '/user/job/:userId', element: <IndividualJobCard />},
   {path: '/user/jobCategory/:userId', element: <IndividualJobCategoryCard />},
+  {path: '/user/favcleaner/:userId', element: <IndividualFavCleanerCard />},
   {path: '/notes', element: <Notes />},
   {path: '/message', element: <Messages />},
   {path: '/supervisor', element: <Supervisor />},
