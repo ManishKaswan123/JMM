@@ -39,7 +39,7 @@ export const useUpdateCompanyDetails = (): UseMutationResult<
       updateCompanyDetails(payload, onSuccess),
 
     onSuccess: () => {
-      queryClient.invalidateQueries(['companyDetail'] as InvalidateQueryFilters)
+      queryClient.invalidateQueries(['companyAddInfo'] as InvalidateQueryFilters)
       toast.success('Company Details Updated Successfully')
     },
     onError: (error: Error) => {

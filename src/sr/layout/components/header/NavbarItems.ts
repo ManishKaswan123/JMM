@@ -86,3 +86,23 @@ export const cleanerNavItems: NavItem[] = [
     iconPath: 'M12 4v16m8-8H4', // Plus icon
   },
 ]
+export const companyNavItems: NavItem[] = [
+  {
+    label: 'Details',
+    path: 'company/details',
+    name: 'details',
+    iconPath: 'M12 4v16m8-8H4', // Plus icon
+  },
+  {
+    label: 'Additional Info',
+    path: 'company/additionalInfo',
+    name: 'additionalInfo',
+    iconPath: 'M12 4v16m8-8H4', // Plus icon
+  },
+  {
+    label: 'Branch',
+    path: 'company/branch',
+    name: 'branch',
+    iconPath: 'M12 4v16m8-8H4', // Plus icon
+  },
+]

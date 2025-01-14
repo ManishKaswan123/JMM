@@ -35,26 +35,9 @@ interface SortOrder {
   createdAt: number
 }
 
-interface PayloadType {
-  limit?: number
-  page?: number
-  senderId?: string
-  sortBy?: string
-  projectBy?: string
-  company_id?: string
-}
-
-const filterPayload = (payload: PayloadType) => {
-  return Object.fromEntries(
-    Object.entries(payload).filter(([_, value]) => value !== undefined && value !== null)
-  )
-}
-
-export const fetchCompanyDetail = async (payload: PayloadType): Promise<CompanyResponse> => {
-  const filteredPayload = filterPayload(payload)
-
+export const fetchCompanyDetail = async (id: string): Promise<CompanyResponse> => {
   try {
-    const res = await get<CompanyResponse>(`/company/addlinfo`, filteredPayload)
+    const res = await get<CompanyResponse>(`/company/addlinfo`, {company_id: id})
 
     if (res.data) {
       return res // Return the fetched data

@@ -5,13 +5,12 @@ import {BranchType, fetchSingleBranch} from 'sr/utils/api/branchApi'
 import {useSelector} from 'react-redux'
 import {RootState} from 'sr/redux/store'
 import {useActions} from 'sr/utils/helpers/useActions'
+interface BranchDetailsProps {
+  data: BranchType
+  onGoBack: () => void
+}
 
-const BranchDetailsCard: React.FC<any> = () => {
-  const navigate = useNavigate()
-
-  const {id} = useParams<{id: string}>()
-  const [data, setData] = useState<BranchType>()
-  const [isError, setIsError] = useState(false)
+const BranchDetailsCard: React.FC<BranchDetailsProps> = ({data, onGoBack}) => {
   const companyStore = useSelector((state: RootState) => state.company)
   const {fetchCompanyData} = useActions()
   useEffect(() => {
@@ -22,24 +21,6 @@ const BranchDetailsCard: React.FC<any> = () => {
       fetchCompanyData({})
     }
   }, [companyStore.status, fetchCompanyData])
-
-  useEffect(() => {
-    fetchSingleBranch(id || '')
-      .then((res) => {
-        setData(res.data)
-      })
-      .catch(() => {
-        setIsError(true)
-      })
-  }, [id])
-
-  const onGoBack = () => {
-    navigate(`/company/branch?company_id=${data?.company_id}`)
-  }
-
-  if (data === undefined) return <div>Loading...</div>
-  if (isError) return <div>Error loading branch details.</div>
-
   return (
     <div className='bg-white rounded-lg p-6 shadow-lg border border-gray-300 mx-4 my-8 w-full relative'>
       {/* Go Back Button */}
@@ -59,6 +40,10 @@ const BranchDetailsCard: React.FC<any> = () => {
             <p>{companyStore.idNameMap[data.company_id]}</p>
           </div>
           <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Branch Name:</strong>
+            <p>{data.branch_name}</p>
+          </div>
+          <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Branch Type:</strong>
             <p>{data.type}</p>
           </div>
@@ -66,12 +51,12 @@ const BranchDetailsCard: React.FC<any> = () => {
             <strong className='font-medium text-lg mr-2'>Default Branch:</strong>
             <p>{data.isDefaultBranch === true ? 'Yes' : 'No'}</p>
           </div>
+        </div>
+        <div className='space-y-4'>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Phone Number:</strong>
             <p>{data.phone_number}</p>
           </div>
-        </div>
-        <div className='space-y-4'>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Status:</strong>
             <p>{data.status}</p>

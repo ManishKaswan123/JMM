@@ -39,7 +39,7 @@ export const useCreateCompanyDetails = (): UseMutationResult<
     mutationFn: async ({payload, onSuccess}) => createCompanyDetails(payload, onSuccess),
 
     onSuccess: () => {
-      queryClient.invalidateQueries(['companyDetail'] as InvalidateQueryFilters)
+      queryClient.invalidateQueries(['companyAddInfo'] as InvalidateQueryFilters)
     },
     onError: (error: Error) => {
       toast.error(error.message)

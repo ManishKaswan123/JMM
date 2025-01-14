@@ -6,7 +6,6 @@ import Filter from 'sr/helpers/ui-components/Filter'
 import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {FieldsArray} from 'sr/constants/fields'
 import {useQuery} from '@tanstack/react-query'
@@ -301,17 +300,7 @@ const Company: React.FC = () => {
           )}
           {isLoading ? (
             <SkeletonTable
-              columns={[
-                'Name',
-                'Username',
-                'Email',
-                'Mobile Number',
-                'Business Type',
-                'Intent',
-                'Status',
-                'View Branch',
-                'Actions',
-              ]}
+              columns={['Name', 'Username', 'Email', 'Mobile Number', 'Status', 'Actions']}
             />
           ) : (
             <CompanyTable

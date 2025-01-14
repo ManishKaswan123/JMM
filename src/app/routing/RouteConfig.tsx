@@ -1,5 +1,6 @@
 import {lazy} from 'react'
 
+const CompanyAddInfoCard = lazy(() => import('app/pages/module/company/CompanyAddInfo'))
 const CleanerJobTypeCard = lazy(() => import('app/pages/module/cleanerJobType/CleanerJobType'))
 const CleanerPreferenceCard = lazy(
   () => import('app/pages/module/cleanerPreference/CleanerPreference')
@@ -46,7 +47,7 @@ const WorkOrder = lazy(() => import('app/pages/module/workOrder/WorkOrder'))
 const Cleaner = lazy(() => import('app/pages/module/cleaner/Cleaner'))
 const TaskList = lazy(() => import('app/pages/module/taskList/TaskList'))
 const Company = lazy(() => import('app/pages/module/company/Company'))
-const CompanyDetail = lazy(() => import('app/pages/module/company/CompanyDetail'))
+const CompanyDetailCard = lazy(() => import('app/pages/module/company/CompanyDetail'))
 // const Task = lazy(() => import('app/pages/module/task/Task'))
 const ProposalDetails = lazy(() => import('app/pages/module/proposalDetails/ProposalDetails'))
 const Contractor = lazy(() => import('app/pages/module/contractor/Contractor'))
@@ -76,9 +77,9 @@ export const routeConfigs = [
   {path: '/tasklist', element: <TaskList />},
   {path: '/tasklist/:id', element: <TaskListDetailsCard />},
   {path: '/company', element: <Company />},
-  {path: '/company/:id', element: <CompanyDetail />},
-  {path: '/company/branch', element: <Branch />},
-  {path: '/company/branch/:id', element: <BranchDetailsCard />},
+  {path: '/company/details/:company_id', element: <CompanyDetailCard />},
+  {path: '/company/additionalInfo/:company_id', element: <CompanyAddInfoCard />},
+  {path: '/company/branch/:company_id', element: <Branch />},
   //   {path: '/task', element: <Task />},
   {path: '/proposaldetails', element: <ProposalDetails />},
   {path: '/proposaldetails/:id', element: <ProposalDetailCard />},

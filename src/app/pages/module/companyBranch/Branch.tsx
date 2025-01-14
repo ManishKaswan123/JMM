@@ -10,7 +10,7 @@ import {RootState} from 'sr/redux/store'
 import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {FieldsArray} from 'sr/constants/fields'
-import {useNavigate, useSearchParams} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {
@@ -22,7 +22,7 @@ import {
   useUpdateBranch,
 } from 'sr/utils/api/branchApi'
 import BranchTable from './BranchTable'
-import {Link} from 'react-router-dom'
+import BranchDetailsCard from './BranchDetails'
 
 interface BranchCreatePayload {
   company_id: string
@@ -49,11 +49,10 @@ interface BranchUpdatePayload extends BranchCreatePayload {
 }
 
 const Branch: React.FC = () => {
-  const [searchParams] = useSearchParams()
-  const navigate = useNavigate()
-  const company_id = searchParams.get('company_id')
+  const {company_id} = useParams<{company_id: string}>()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [selectedData, setSelectedData] = useState<BranchType>()
+  const [selectedBranch, setSelectedBranch] = useState<BranchType>()
   const [filters, setFilters] = useState<BranchFilters>({company_id: company_id || ''})
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const [itemsPerPage, setItemsPerPage] = useState<number>(8)
@@ -66,14 +65,6 @@ const Branch: React.FC = () => {
 
   const fields: FieldsArray = useMemo(
     () => [
-      {
-        type: 'dropdown',
-        label: 'company_id',
-        name: companyStore.data,
-        topLabel: 'Company',
-        placeholder: 'Select Company',
-        labelKey: 'company_name',
-      },
       {
         type: 'dropdown',
         label: 'type',
@@ -107,7 +98,7 @@ const Branch: React.FC = () => {
         labelKey: 'name',
       },
     ],
-    [companyStore.data]
+    []
   )
   const createAndUpdateFields: FieldsArray = useMemo(
     () => [
@@ -313,22 +304,18 @@ const Branch: React.FC = () => {
       status: selectedData.status || '',
     }
   }, [selectedData])
+  if (selectedBranch) {
+    return <BranchDetailsCard data={selectedBranch} onGoBack={() => setSelectedBranch(undefined)} />
+  }
 
   return (
     <>
       <div className='container mx-auto px-4 sm:px-8'>
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
-            <div className='flex items-center mb-2 sm:mb-0'>
-              <Button
-                className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
-                onClick={() => navigate('/company')}
-                label={'🡸'}
-              />
-              <h2 className='text-2xl font-semibold leading-tight ml-1 mb-2 sm:mb-0 sm:mr-4'>
-                Company Branch
-              </h2>
-            </div>
+            <h2 className='text-2xl font-semibold leading-tight ml-1 mb-2 sm:mb-0 sm:mr-4'>
+              Company Branch
+            </h2>
 
             <div className='flex items-center'>
               <Button
@@ -354,6 +341,9 @@ const Branch: React.FC = () => {
                 setIsFilterVisible={setIsFilterVisible}
                 preFilters={filters || {}}
                 fields={fields}
+                handleClearFilter={() => {
+                  handleApplyFilter({company_id: company_id})
+                }}
               />
             </div>
           )}
@@ -366,6 +356,7 @@ const Branch: React.FC = () => {
               data={data?.data}
               setIsUpdateModalOpen={setIsUpdateModalOpen}
               setSelectedData={setSelectedData}
+              onSelectBranch={setSelectedBranch}
             />
           )}
         </div>

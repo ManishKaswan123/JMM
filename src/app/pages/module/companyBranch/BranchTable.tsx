@@ -10,6 +10,7 @@ interface BranchTableProps {
   data?: BranchType[]
   setIsUpdateModalOpen: React.Dispatch<React.SetStateAction<boolean>>
   setSelectedData: React.Dispatch<React.SetStateAction<BranchType | undefined>>
+  onSelectBranch: React.Dispatch<React.SetStateAction<BranchType | undefined>>
 }
 
 const BranchTable: React.FC<BranchTableProps> = (props) => {
@@ -93,15 +94,12 @@ const BranchTable: React.FC<BranchTableProps> = (props) => {
                         props.setIsUpdateModalOpen(true)
                       }}
                     />
-                    <Link
-                      to={`/company/branch/${branch.id}`}
-                      className='text-blue-500 hover:font-medium'
-                    >
-                      <FaEye
-                        className='cursor-pointer text-blue-500 hover:text-gray-700'
-                        style={{fontSize: '1.1rem'}}
-                      />
-                    </Link>
+                    <FaEye
+                      className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                      onClick={() => {
+                        props.onSelectBranch(branch)
+                      }}
+                    />
                   </div>
                 </td>
               </tr>
