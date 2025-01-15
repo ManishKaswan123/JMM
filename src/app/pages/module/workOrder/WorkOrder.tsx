@@ -16,7 +16,7 @@ import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import WorkOrderTable from './WorkOrderTable'
-import {fetchWorkOrder} from 'sr/utils/api/fetchWorkOrder'
+import {fetchWorkOrder, WorkOrderResponse} from 'sr/utils/api/fetchWorkOrder'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
 interface chatApiResponse {
@@ -442,9 +442,10 @@ const WorkOrder: React.FC = () => {
               ]}
             />
           ) : (
-            <WorkOrderTable
+            <WorkOrderTable<WorkOrderResponse>
               //   setSelectedData={setSelectedData}
               //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              type='workorder'
               data={data?.data}
               //   handleDelete={onDeleteChat}
               //   handleView={handleView}
