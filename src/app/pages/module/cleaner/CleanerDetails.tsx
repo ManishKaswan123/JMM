@@ -1,11 +1,13 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
 import {CleanerDetails, fetchSingleCleaner} from 'sr/utils/api/fetchCleaner'
 import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
+import {UserContext} from 'sr/context/UserContext'
 
 const CleanerDetailsCard: React.FC<any> = () => {
   const navigate = useNavigate()
+  const {setUser} = useContext(UserContext)
   const {cleanerId} = useParams<{cleanerId: string}>()
   const [data, setData] = useState<CleanerDetails>()
   const [isError, setIsError] = useState(false)
@@ -18,6 +20,7 @@ const CleanerDetailsCard: React.FC<any> = () => {
       .catch(() => {
         setIsError(true)
       })
+    setUser(cleanerId)
   }, [cleanerId])
 
   const onGoBack = () => {

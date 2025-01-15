@@ -6,19 +6,19 @@ import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
 
 const UserDetailCard: React.FC = () => {
   const navigate = useNavigate()
-  const {id} = useParams<{id: string}>()
+  const {userId} = useParams<{userId: string}>()
   const [data, setData] = useState<Individual>()
   const [isError, setIsError] = useState(false)
 
   useEffect(() => {
-    fetchSingleIndividual(id || '')
+    fetchSingleIndividual(userId || '')
       .then((res) => {
         setData(res)
       })
       .catch(() => {
         setIsError(true)
       })
-  }, [id])
+  }, [userId])
 
   const onGoBack = () => {
     navigate('/user')
@@ -64,7 +64,7 @@ const UserDetailCard: React.FC = () => {
           </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Username:</strong>
-            <p>{data.id}</p>
+            <p>{data.username}</p>
           </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>First Name:</strong>

@@ -1,92 +1,30 @@
-import React from 'react'
+import React, {useCallback, useEffect} from 'react'
 import {FaEye} from 'react-icons/fa'
-import {Link} from 'react-router-dom'
+import {useSelector} from 'react-redux'
+import {Link, useNavigate} from 'react-router-dom'
+import {RootState} from 'sr/redux/store'
+import {useActions} from 'sr/utils/helpers/useActions'
 
-interface CompanyDetails {
-  _id: string
-  username: string
-  email: string
-  mobile_number: string
-  company_name: string
-  business_type: string[]
-  intent: string[]
-  candidate_msg: boolean
-  user_id: string
-  status: string
-  createdAt: string
-  updatedAt: string
+interface Props<T> {
+  type: 'jobs' | 'favjobs'
+  data?: T[]
 }
 
-interface JobAdvancedDetails {
-  _id: string
-  job_id: string
-  reporting_address: {
-    address_line_1: string
-    address_line_2: string
-    country: string
-    city: string
-    state: string
-    postal: string
-    lat: number
-    lng: number
+const JobsTable = <T,>({type, data}: Props<T>) => {
+  const navigate = useNavigate()
+  const handleJobDetails = (job: any) => {
+    navigate(`/job/${type === 'jobs' ? job.id : job._id}`)
   }
-  hire_count: number
-  supplemental_pay: string[]
-  recruitment_timeline?: string
-  application_deadline?: string
-  status: string
-  createdAt: string
-  updatedAt: string
-}
-
-interface ApplicationDetails {
-  _id: string
-  job_id: string
-  cleaner_id: string
-  answers: string[]
-  status: string
-  createdAt: string
-  updatedAt: string
-}
-
-interface JobResponse {
-  company_id: CompanyDetails
-  job_title: string
-  job_type: string[]
-  schedule: string[]
-  employment_type: string[]
-  start_date: string
-  show_pay_by: string
-  min_amount?: number
-  max_amount: number
-  rate: string
-  benefits: string[]
-  range: {
-    min: number
-    max: number
-  }
-  job_description: string
-  application_call_mobile_number: string
-  require_resume: boolean
-  notifications: boolean
-  email: string
-  application_ids: ApplicationDetails[]
-  status: string
-  createdAt: string
-  updatedAt: string
-  job_advanced_id: JobAdvancedDetails
-  application_status_counts: {
-    hired: number
-    active: number
-  }
-  id: string
-}
-
-interface Props {
-  data?: JobResponse[]
-}
-
-const JobsTable: React.FC<Props> = ({data}) => {
+  const companyStore = useSelector((state: RootState) => state.company)
+  const {fetchCompanyData} = useActions()
+  useEffect(() => {
+    fetchDataIfNeeded()
+  }, [])
+  const fetchDataIfNeeded = useCallback(() => {
+    if (companyStore.status !== 'succeeded') {
+      fetchCompanyData({})
+    }
+  }, [companyStore.status, fetchCompanyData])
   return (
     <div className='inline-block min-w-full shadow rounded-lg overflow-hidden'>
       <table className='min-w-full leading-normal'>
@@ -119,14 +57,14 @@ const JobsTable: React.FC<Props> = ({data}) => {
           </tr>
         </thead>
         <tbody>
-          {data?.map((job) => (
-            <tr key={job?.id} className='odd:bg-white even:bg-gray-50'>
+          {data?.map((job: any) => (
+            <tr key={job.id} className='odd:bg-white even:bg-gray-50'>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <Link
-                  to={`/company/${job?.company_id?._id}`}
+                  to={`/company/details/${type === 'jobs' ? job.company_id?._id : job.company_id}`}
                   className='text-blue-500 hover:font-medium'
                 >
-                  {job?.company_id?.company_name}
+                  {companyStore.idNameMap[type === 'jobs' ? job.company_id?._id : job.company_id]}
                 </Link>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
@@ -169,12 +107,13 @@ const JobsTable: React.FC<Props> = ({data}) => {
               </td>
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <Link to={`/job/${job?.id}`} className='text-blue-500 hover:font-medium'>
-                  <FaEye
-                    className='cursor-pointer text-blue-500 hover:text-gray-700'
-                    style={{fontSize: '1.1rem'}}
-                  />
-                </Link>
+                <FaEye
+                  className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                  onClick={() => {
+                    // setUser(type === 'cleaner' ? cleaner.id : cleaner._id)
+                    handleJobDetails(job)
+                  }}
+                />
               </td>
             </tr>
           ))}

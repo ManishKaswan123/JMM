@@ -29,6 +29,7 @@ const MasterLayout = () => {
       setWidth(' md:ml-[16.6vw] md:w-[83.4%] bg-gray-100 sm:w-full duration-1000 ease-in-out')
     }
   }
+  console.log('urlItems', urlItems.length)
 
   return (
     <PageDataProvider>
@@ -46,7 +47,7 @@ const MasterLayout = () => {
                     <HeaderWrapper />
                   </div>
 
-                  <div className={`mt-${urlItems.length > 2 ? 28 : 16} ${width}`}>
+                  <div className={clsx(urlItems.length > 2 ? 'mt-28' : 'mt-16', width)}>
                     <MasterNavBar />
                     <DashboardWrapper customComponent={Outlet} />
                     {/* <Outlet /> */}

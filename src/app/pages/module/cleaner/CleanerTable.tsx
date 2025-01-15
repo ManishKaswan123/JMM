@@ -1,7 +1,5 @@
-import React, {useContext} from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
 import {useNavigate} from 'react-router-dom'
-import {UserContext} from 'sr/context/UserContext'
 import {CleanerDetails} from 'sr/utils/api/fetchCleaner'
 
 interface Props<T> {
@@ -13,7 +11,6 @@ interface Props<T> {
 
 const CleanerTable = <T,>({type, data, setSelectedData, setIsUpdateModalOpen}: Props<T>) => {
   const navigate = useNavigate()
-  const {setUser} = useContext(UserContext)
   const handleCleanerDetail = (cleaner: any) => {
     navigate(`/cleaner/details/${type === 'cleaner' ? cleaner.id : cleaner._id}`)
   }
@@ -102,7 +99,7 @@ const CleanerTable = <T,>({type, data, setSelectedData, setIsUpdateModalOpen}: P
                   <FaEye
                     className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
                     onClick={() => {
-                      setUser(type === 'cleaner' ? cleaner.id : cleaner._id)
+                      // setUser(type === 'cleaner' ? cleaner.id : cleaner._id)
                       handleCleanerDetail(cleaner)
                     }}
                   />
