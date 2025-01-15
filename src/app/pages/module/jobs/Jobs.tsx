@@ -16,7 +16,7 @@ import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import JobsTable from './JobsTable'
-import {fetchJobs} from 'sr/utils/api/fetchJobs'
+import {fetchJobs, JobResponse} from 'sr/utils/api/fetchJobs'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
 interface chatApiResponse {
@@ -353,10 +353,11 @@ const Jobs: React.FC = () => {
               ]}
             />
           ) : (
-            <JobsTable
+            <JobsTable<JobResponse>
               //   setSelectedData={setSelectedData}
               //   setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
+              type='jobs'
               //   handleDelete={onDeleteChat}
               //   handleView={handleView}
             />

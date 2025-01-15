@@ -1,11 +1,13 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
 import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
 import {CompanyResponse, fetchSingleCompany} from 'sr/utils/api/fetchCompany'
+import {UserContext} from 'sr/context/UserContext'
 
 const CompanyDetailCard: React.FC<any> = () => {
   const navigate = useNavigate()
+  const {setUser} = useContext(UserContext)
   const {company_id} = useParams<{company_id: string}>()
   const [data, setData] = useState<CompanyResponse>()
   const [isError, setIsError] = useState(false)
@@ -18,6 +20,7 @@ const CompanyDetailCard: React.FC<any> = () => {
       .catch(() => {
         setIsError(true)
       })
+    setUser(company_id)
   }, [company_id])
 
   const onGoBack = () => {

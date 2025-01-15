@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
 import {fetchSingleJob, JobResponse} from 'sr/utils/api/fetchJobs'
 import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
 
