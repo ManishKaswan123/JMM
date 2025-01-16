@@ -56,18 +56,18 @@ const ChecklistTable: React.FC<ChecklistTableProps> = ({
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <Link
-                  to={`/company/${checklist.company_id._id}`}
+                  to={`/company/details/${checklist.company_id?._id}`}
                   className='text-blue-500 hover:font-medium'
                 >
-                  {checklist.company_id.company_name}
+                  {checklist.company_id?.company_name}
                 </Link>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <Link
-                  to={`/customer/${checklist.customer_id.name}`}
+                  to={`/customer/${checklist.customer_id?.name}`}
                   className='text-blue-500 hover:font-medium'
                 >
-                  {checklist.customer_id.name}
+                  {checklist.customer_id?.name}
                 </Link>
               </td>
 

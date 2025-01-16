@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {useCallback, useContext, useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
 import {Customer, fetchSingleCustomer} from 'sr/utils/api/customerApi'
@@ -6,10 +6,12 @@ import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
 import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
+import {UserContext} from 'sr/context/UserContext'
 
 const CustomerDetailsCard: React.FC = () => {
   const navigate = useNavigate()
-  const {id} = useParams<{id: string}>()
+  const {customer_id} = useParams<{customer_id: string}>()
+  const {setUser} = useContext(UserContext)
   const [data, setData] = useState<Customer>()
   const [isError, setIsError] = useState(false)
   const companyMap = useSelector((state: RootState) => state.company.idNameMap)
@@ -25,14 +27,15 @@ const CustomerDetailsCard: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    fetchSingleCustomer(id || '')
+    fetchSingleCustomer(customer_id || '')
       .then((res) => {
         setData(res.data)
       })
       .catch(() => {
         setIsError(true)
       })
-  }, [id])
+    setUser(customer_id)
+  }, [customer_id])
 
   const onGoBack = () => {
     navigate('/customer')

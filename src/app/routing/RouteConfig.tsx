@@ -1,5 +1,8 @@
 import {lazy} from 'react'
 
+const CustomerLocationCard = lazy(
+  () => import('app/pages/module/customerLocation/CustomerLocation')
+)
 const CleanerFavWorkorderCard = lazy(() => import('app/pages/module/favWorkorder/FavWorkorder'))
 const CleanerFavJobCard = lazy(() => import('app/pages/module/favJobs/FavJob'))
 const IndividualFavCleanerCard = lazy(() => import('app/pages/module/favCleaner/FavCleaner'))
@@ -63,7 +66,9 @@ export const routeConfigs = [
   {path: '/job', element: <Jobs />},
   {path: '/job/:id', element: <JobDetailsCard />},
   {path: '/customer', element: <CustomerCard />},
-  {path: '/customer/:id', element: <CustomerDetailsCard />},
+  {path: '/customer/details/:customer_id', element: <CustomerDetailsCard />},
+  {path: '/customer/checklist/:customer_id', element: <ChecklistCard />},
+  {path: '/customer/location/:customer_id', element: <CustomerLocationCard />},
   {path: '/checklist', element: <ChecklistCard />},
   {path: '/checklist/:id', element: <ChecklistDetailsCard />},
   {path: '/workorder', element: <WorkOrder />},

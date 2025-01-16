@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect} from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
 import {useSelector} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {RootState} from 'sr/redux/store'
 import {Customer} from 'sr/utils/api/customerApi'
 import {useActions} from 'sr/utils/helpers/useActions'
@@ -15,6 +15,10 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
   setSelectedData,
   setIsUpdateModalOpen,
 }) => {
+  const navigate = useNavigate()
+  const handleCustomerDetail = (customer: Customer) => {
+    navigate(`/customer/details/${customer.id}`)
+  }
   const companyMap = useSelector((state: RootState) => state.company.idNameMap)
   const companyStatus = useSelector((state: RootState) => state.company.status)
   const {fetchCompanyData} = useActions()
@@ -110,12 +114,13 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                       setIsUpdateModalOpen(true)
                     }}
                   />
-                  <Link to={`/customer/${customer.id}`} className='text-blue-500 hover:font-medium'>
-                    <FaEye
-                      className='cursor-pointer text-blue-500 hover:text-gray-700'
-                      style={{fontSize: '1.1rem'}}
-                    />
-                  </Link>
+                  <FaEye
+                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                    onClick={() => {
+                      // setUser(type === 'cleaner' ? cleaner.id : cleaner._id)
+                      handleCustomerDetail(customer)
+                    }}
+                  />
                 </div>
               </td>
             </tr>
