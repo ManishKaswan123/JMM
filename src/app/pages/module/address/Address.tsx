@@ -387,6 +387,7 @@ const Addresses: React.FC = () => {
                 setIsFilterVisible={setIsFilterVisible}
                 preFilters={filters || {}}
                 fields={fields}
+                handleClearFilter={() => handleApplyFilter({individual_id: userId})}
               />
             </div>
           )}

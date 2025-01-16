@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {Link, useNavigate} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import companyLogo from '../../../../sr/img/company_logo.jpeg'
 import {toast} from 'react-toastify'
 
@@ -24,7 +24,7 @@ export default function Signin() {
   const {
     register,
     handleSubmit,
-    formState: {errors, isSubmitting, isSubmitSuccessful},
+    formState: {errors, isSubmitting},
   } = useForm<FormFields>({mode: 'onBlur', reValidateMode: 'onSubmit', defaultValues: formValues})
 
   const handleSubmitForm = async (formData: any, e: any) => {
@@ -57,10 +57,8 @@ export default function Signin() {
   return (
     <div className='bg-slate-300 h-screen flex justify-center items-center'>
       <div className='flex flex-col justify-center items-center'>
-        <div className='rounded-lg bg-[#F7F7F7] px-4 py-2 w-80 '>
-          <div className='image-container flex justify-center items-center'>
-            <img src={companyLogo} alt='Company Logo' className='image' />
-          </div>
+        <div className='rounded-lg bg-[#FFFFFF] px-4 py-2 w-80 '>
+          <img src={companyLogo} alt='Company Logo' className='image rounded-lg' />
           <div className='text-center font-bold text-4xl pt-1'>Login</div>
           <div className='text-center text-slate-500 text-md pt-2 px-4 pb-2'>
             Enter your credentials to access your account
@@ -69,7 +67,7 @@ export default function Signin() {
             <TextField
               type='text'
               // label={'Email'}
-              label={'username'}
+              label={'Username'}
               // className='p-2 border w-full border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500'
               // wrapperClassName='text-sm font-medium text-left py-2 seller'
               required={true}
@@ -88,7 +86,7 @@ export default function Signin() {
                 required: true,
                 // pattern: {
                 //   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                //   message: 'Invalid username address',
+                //   message: 'Invalid Username address',
                 // },
               })}
               // error={errors.email}

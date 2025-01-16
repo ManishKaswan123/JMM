@@ -9,7 +9,7 @@ export default function HeaderWrapper({hubName}: Props) {
     <>
       {/* Navbar */}
       <div
-        className={`h-16 md:fixed sm:relative md:z-[50] sm:z-10 top-0 right-0 w-inherit md:flex-row md:flex-nowrap md:justify-between flex p-4  shadow-lg  bg-[#f1f1f1] items-center`}
+        className={`h-16 md:fixed sm:relative md:z-[50] sm:z-10 top-0 right-0 w-inherit md:flex-row md:flex-nowrap md:justify-between flex p-4  shadow-lg  bg-[white] items-center`}
       >
         <Breadcrumb />
         <div className='ml-auto'>

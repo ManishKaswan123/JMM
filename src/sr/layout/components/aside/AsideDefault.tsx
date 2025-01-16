@@ -57,7 +57,7 @@ export default function AsideDefault({getScenarios, AdjustWidth}: Props) {
     <>
       <div className={` md:block md:relative sm:absolute  ${sideCollapse}`}>
         <nav
-          className={` ${sideCollapse} fixed sm:h-[5rem] md:h-full z-50 md:left-0 md:block md:top-0 md:bottom-0 md:overflow-hidden md:flex-row md:flex-nowrap shadow-xl bg-[#F7F7F7] flex flex-wrap items-center justify-between xl:px-2  md:px-2`}
+          className={` ${sideCollapse} fixed sm:h-[5rem] md:h-full z-50 md:left-0 md:block md:top-0 md:bottom-0 md:overflow-hidden md:flex-row md:flex-nowrap shadow-xl bg-white flex flex-wrap items-center justify-between xl:px-2  md:px-2`}
         >
           <div className='md:flex-col md:items-stretch md:min-h-screen md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto h-full'>
             {/* Toggler */}
@@ -102,14 +102,21 @@ export default function AsideDefault({getScenarios, AdjustWidth}: Props) {
 
             {/* Brand */}
             <div className='flex items-center justify-around'>
-              <Link to='/dashboard' className='flex items-end justify-center py-2'>
+              <Link to='/user' className='flex items-end justify-center pt-2'>
                 <button className='text-rose-800 md:block text-left text-blueGray-600 mr-0 inline-block whitespace-nowrap sm:text-xl md:text-4xl font-bold sm:pr-2 md:pr-0'>
-                  {/* {sideCollapseItem === 'show' ? (
-                    <img className='w-[8rem]' src={'/media/logos/company_logo.jpeg'} alt='JMM' />
+                  {sideCollapseItem === 'show' ? (
+                    <img
+                      className='w-[8rem] rounded-lg'
+                      src={'/media/logos/company_logo.jpeg'}
+                      alt='JMM'
+                    />
                   ) : (
-                    'JMM'
-                  )} */}
-                  JMM
+                    <img
+                      className='w-[4rem] rounded-lg'
+                      src={'/media/logos/company_logo.jpeg'}
+                      alt='JMM'
+                    />
+                  )}
                 </button>
               </Link>
               <svg
@@ -131,7 +138,7 @@ export default function AsideDefault({getScenarios, AdjustWidth}: Props) {
                 collapseShow
               }
             >
-              <div className='md:min-w-full  md:hidden  py-4 border-b-[0.5px] border-rose-600 mb-2'>
+              {/* <div className='md:min-w-full  md:hidden  py-4 border-b-[0.5px] border-rose-600 mb-2'>
                 <div className='flex flex-wrap'>
                   <div className='w-full flex justify-between items-center'>
                     <Link to='/dashboard'>
@@ -161,7 +168,7 @@ export default function AsideDefault({getScenarios, AdjustWidth}: Props) {
                     </button>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className='flex justify-between flex-col h-full'>
                 {/* Navigation */}
                 <div>

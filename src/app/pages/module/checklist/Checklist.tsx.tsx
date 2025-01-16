@@ -18,6 +18,7 @@ import {
 } from 'sr/utils/api/checklistApi'
 import ChecklistTable from './ChecklistTable'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
+import {useParams} from 'react-router-dom'
 
 interface Filters {
   company_id?: string
@@ -41,8 +42,9 @@ interface ChecklistUpdatePayload extends ChecklistCreatePayload {
 
 const ChecklistCard: React.FC = () => {
   const [selectedData, setSelectedData] = useState<Checklist>()
+  const {customer_id} = useParams<{customer_id: string}>()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [filters, setFilters] = useState<Filters>()
+  const [filters, setFilters] = useState<Filters>({customer_id})
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const companyData = useSelector((state: RootState) => state.company.data)
   const companyStatus = useSelector((state: RootState) => state.company.status)
@@ -291,6 +293,7 @@ const ChecklistCard: React.FC = () => {
                 setIsFilterVisible={setIsFilterVisible}
                 preFilters={filters || {}}
                 fields={fields}
+                handleClearFilter={() => handleApplyFilter({customer_id})}
               />
             </div>
           )}
