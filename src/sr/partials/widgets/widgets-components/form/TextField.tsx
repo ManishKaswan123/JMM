@@ -54,44 +54,34 @@ const TextField = ({
   height,
 }: Props) => {
   return (
-    <div className={`m-2 input-wrapper ${wrapperClassName}`}>
-      {label && labelStyle === 'style1' && (
-        <label htmlFor={id} className='input-label'>
+    <div
+      className={`${
+        labelStyle === 'style1' ? 'ml-2 my-2 mr-4' : 'm-2'
+      } input-wrapper ${wrapperClassName}`}
+    >
+      {label && (
+        <label
+          htmlFor={id || name}
+          className={`${
+            labelStyle === 'style1'
+              ? 'text-sm font-medium text-gray-700 mb-1 block'
+              : 'text-center text-sm font-medium text-[#7747ff]'
+          }`}
+        >
           {label}
-          {required && <span className='required-field'>*</span>}
+          {required && <span className='text-red-500'> *</span>}
         </label>
       )}
-      {label && labelStyle === 'style2' && (
-        <div>
-          <label
-            htmlFor={id}
-            className='ml-1 text-center text-sm font-montserrat-regular text-[#7747ff]'
-          >
-            {label}
-            {required && <span className='required-field'>*</span>}
-          </label>
-        </div>
-      )}
-      {label && labelStyle === 'style3' && (
-        <div>
-          <label
-            htmlFor={id}
-            className='ml-1 text-center text-sm font-montserrat-regular text-[#828282]'
-          >
-            {label}
-            {required && <span className='required-field'>*</span>}
-          </label>
-        </div>
-      )}
+
       <div className='flex justify-center items-center'>
         <input
           type={type}
           step={step}
           name={name}
           id={id || name}
-          className={` ${className} ${
-            error ? 'border-red-500' : 'border-gray-300'
-          }  placeholder:text-left placeholder-gray-400 placeholder:text-sm placeholder:font-medium  px-1`}
+          className={` w-full basic-single px-2 pt-2 pb-3 rounded-md border-2 border-gray-200 ${
+            error ? 'border-red-500' : ''
+          }`}
           placeholder={placeholder ? `Enter ${placeholder}` : `Enter ${name}`}
           onChange={onChange}
           style={{

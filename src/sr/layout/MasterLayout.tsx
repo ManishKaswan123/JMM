@@ -29,7 +29,6 @@ const MasterLayout = () => {
       setWidth(' md:ml-[16.6vw] md:w-[83.4%] bg-gray-100 sm:w-full duration-1000 ease-in-out')
     }
   }
-  console.log('urlItems', urlItems.length)
 
   return (
     <PageDataProvider>

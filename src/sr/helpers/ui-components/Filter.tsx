@@ -3,6 +3,7 @@ import {AiOutlineClose, AiOutlineFilter} from 'react-icons/ai'
 import TextField from 'sr/partials/widgets/widgets-components/form/TextField'
 import {Button} from './Button'
 import DropdownField from 'sr/partials/widgets/widgets-components/form/DropdownField'
+import MultiSelectField, {OptionType} from 'sr/partials/widgets/widgets-components/Multiselect'
 interface FilterProps {
   onApplyFilter: any
   setIsFilterVisible: any
@@ -27,6 +28,7 @@ const Filter = ({
       [name]: type === 'checkbox' ? checked : value,
     })
   }
+
   const handleClearFilterDefault = () => {
     setFilters({})
     onApplyFilter({})
@@ -37,13 +39,25 @@ const Filter = ({
     const activeFilters = Object.fromEntries(
       Object.entries(filters).filter(([_, value]) => {
         if (typeof value === 'boolean') {
-          return value
+          return value // Keep boolean values that are true
         }
-        return value !== ''
+        if (Array.isArray(value)) {
+          return value.length > 0 // Keep arrays with at least one element
+        }
+        return value !== '' // Keep non-empty strings
       })
+      // .map(([key, value]) => {
+      //   if (Array.isArray(value)) {
+      //     // Transform array to a comma-separated string of value attributes
+      //     const onlyValue = value.map((item) => item.value)
+      //     return [key, onlyValue]
+      //   }
+      //   return [key, value] // Keep other types as is
+      // })
     )
+
     onApplyFilter(activeFilters)
-    setIsFilterVisible(false)
+    // setIsFilterVisible(false)
   }
 
   const isFilterActive = (filterValue: any) => {
@@ -57,6 +71,25 @@ const Filter = ({
     <div className='w-full p-4 rounded-lg mt-4'>
       <div className='grid grid-cols-4 gap-4'>
         {fields.map((field: any, index: number) => {
+          if (field.type === 'multi') {
+            return (
+              <div key={index}>
+                <MultiSelectField
+                  options={field.options || []}
+                  label={field.label}
+                  name={field.name}
+                  value={filters[field.label] || []}
+                  onChange={(selectedOptions: OptionType[], actionMeta: any) => {
+                    setFilters({
+                      ...filters,
+                      [field.label]: selectedOptions,
+                    })
+                  }}
+                  placeholder={field.placeholder}
+                />
+              </div>
+            )
+          }
           if (field.type === 'dropdown') {
             return (
               <div key={index}>

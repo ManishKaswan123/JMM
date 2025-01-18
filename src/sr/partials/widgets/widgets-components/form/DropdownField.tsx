@@ -1,4 +1,6 @@
 import React, {ChangeEvent, FocusEvent} from 'react'
+import {StylesConfig} from 'react-select'
+import {OptionType} from '../Multiselect'
 
 interface Props {
   label?: string
@@ -54,34 +56,30 @@ const DropdownField = ({
   return (
     <div
       className={`${
-        labelStyle == 'style1' ? 'ml-2 my-2 mr-4' : 'm-2'
+        labelStyle === 'style1' ? 'ml-2 my-2 mr-4' : 'm-2'
       } input-wrapper ${wrapperClassName}`}
     >
-      {label && labelStyle === 'style1' && (
-        <label htmlFor={id} className='input-label'>
+      {label && (
+        <label
+          htmlFor={id || name}
+          className={`${
+            labelStyle === 'style1'
+              ? 'text-sm font-medium text-gray-700 mb-1 block'
+              : 'text-center text-sm font-medium text-[#7747ff]'
+          }`}
+        >
           {label}
-          {required && <span className='required-field'>*</span>}
+          {required && <span className='text-red-500'> *</span>}
         </label>
-      )}
-      {label && labelStyle === 'style2' && (
-        <div>
-          <label
-            htmlFor={id}
-            className='ml-1 text-center text-sm font-montserrat-regular text-[#7747ff]'
-          >
-            {label}
-            {required && <span className='required-field'>*</span>}
-          </label>
-        </div>
       )}
 
       <select
         name={name}
         id={id || name}
         multiple={isMultiselect}
-        className={` ${className} ${
-          required && error ? 'border-red-500' : 'border-gray-300'
-        } placeholder:text-left placeholder-gray-400 placeholder:text-sm placeholder:font-medium  px-1`}
+        className={` w-full basic-single px-2 py-3 rounded-md border-2 border-gray-200 ${
+          error ? 'border-red-500' : ''
+        }`}
         placeholder=' '
         onChange={onChange}
         onBlur={onBlur}
@@ -92,31 +90,16 @@ const DropdownField = ({
         {...register}
         value={value}
       >
-        {!isMultiselect && (
-          <option className={''} value={''}>
-            {placeholder}
-          </option>
-        )}
-
+        {!isMultiselect && <option value=''>{placeholder || 'Select an option'}</option>}
         {data &&
-          data.length > 0 &&
-          data.map((item: any, key: any) => (
-            <option key={key} value={item[valueKey]}>
+          data.map((item: any, index: number) => (
+            <option key={index} value={item[valueKey]}>
               {item[labelKey]}
             </option>
           ))}
       </select>
 
-      {/* {label && (
-        <label
-          htmlFor={id}
-          className='text-xs text-neutral-50 absolute pt-2 top-0 pointer-events-none -z-10'
-        >
-          {label}
-          {required && <span className='text-error-90'>*</span>}
-        </label>
-      )} */}
-      {required && error && <p className='text-rose-500 font-medium text-center'>{errorText}</p>}
+      {required && error && <p className='text-red-500 text-sm mt-1'>{errorText}</p>}
     </div>
   )
 }

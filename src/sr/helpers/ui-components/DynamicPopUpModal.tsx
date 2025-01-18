@@ -9,6 +9,7 @@ import {uploadMedia} from 'sr/utils/api/media'
 import {ExtractFieldNames, FieldsArray} from 'sr/constants/fields'
 import getSignedURL from 'sr/utils/helpers/getSignedURL'
 import {Spinner} from './Spinner'
+import MultiSelectField from 'sr/partials/widgets/widgets-components/Multiselect'
 
 interface DynamicModalProps {
   imageType?: string
@@ -195,6 +196,20 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
         <form onSubmit={handleSubmit(onSubmitForm)}>
           {fields.map((field, index) => {
             switch (field.type) {
+              case 'multi':
+                return (
+                  <MultiSelectField
+                    options={field.options || []}
+                    label={field.label}
+                    name={field.name}
+                    value={field.value || []}
+                    onChange={field.onChange}
+                    placeholder={field.placeholder}
+                    error={errors[field.name] && !watch(field.name)}
+                    errorText='Please select a value'
+                    required={field.required}
+                  />
+                )
               case 'dropdown':
                 return (
                   <DropdownField
