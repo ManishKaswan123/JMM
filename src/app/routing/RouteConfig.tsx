@@ -1,3 +1,4 @@
+import TestMultiSelect from 'app/pages/module/test/Test'
 import {lazy} from 'react'
 
 const CustomerLocationCard = lazy(
@@ -108,4 +109,5 @@ export const routeConfigs = [
   {path: '/user/address/:userId', element: <Address />},
   {path: '/application', element: <Application />},
   {path: '/application/:id', element: <ApplicationDetailsCard />},
+  {path: '/test', element: <TestMultiSelect />},
 ]

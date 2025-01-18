@@ -146,7 +146,7 @@ export default function Signin() {
       <div className='flex flex-col justify-center items-center'>
         <div className='rounded-lg bg-[#F7F7F7] px-4 py-2 h-max'>
           <div className='image-container flex justify-center items-center'>
-            <img src={companyLogo} alt='Company Logo' className='image h-16 w-40' />
+            <img src={companyLogo} alt='Company Logo' className='image h-16 w-40 rounded-lg' />
           </div>
           <div className='flex justify-center font-bold text-2xl pt-1'>Create a new account</div>
           <form action='' onSubmit={handleSubmit(handleSubmitForm)}>

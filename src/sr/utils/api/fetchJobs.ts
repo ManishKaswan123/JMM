@@ -1,4 +1,5 @@
 import {get} from 'sr/utils/axios/index'
+import {transformPayloadToFilter} from '../helpers/processFilter'
 
 interface CompanyDetails {
   _id: string
@@ -105,23 +106,9 @@ export interface FetchSingleJobResponse {
   pagination: Pagination
 }
 
-interface PayloadType {
-  limit?: number
-  page?: number
-  senderId?: string
-  sortBy?: string
-  projectBy?: string
-  id?: string
-}
-
-const filterPayload = (payload: PayloadType) => {
-  return Object.fromEntries(
-    Object.entries(payload).filter(([_, value]) => value !== undefined && value !== null)
-  )
-}
-
-export const fetchJobs = async (payload: PayloadType): Promise<FetchJobResponse> => {
-  const filteredPayload = filterPayload(payload)
+export const fetchJobs = async (payload: Record<string, any>): Promise<FetchJobResponse> => {
+  console.log('filter payload', payload)
+  const filteredPayload = transformPayloadToFilter(payload)
 
   try {
     const res = await get<FetchJobResponse>(`/job`, filteredPayload)

@@ -1,4 +1,8 @@
+import {OptionType} from 'sr/partials/widgets/widgets-components/Multiselect'
+
 type Field = {
+  options?: OptionType[]
+  value?: OptionType[]
   name: any
   type: string
   label: string

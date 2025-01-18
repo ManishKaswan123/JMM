@@ -18,6 +18,13 @@ import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/Pag
 import JobsTable from './JobsTable'
 import {fetchJobs, JobResponse} from 'sr/utils/api/fetchJobs'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
+import {
+  businessTypes,
+  employmentTypes,
+  jobTypes,
+  locations,
+  rates,
+} from 'sr/constants/jobsConstants'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -59,7 +66,7 @@ interface chatUpdatePayload extends chatCreatePayload {}
 const Jobs: React.FC = () => {
   const [selectedData, setSelectedData] = useState<chatApiResponse>()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [filters, setFilters] = useState<chatFilters>()
+  const [filters, setFilters] = useState<Record<string, any>>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const userData = useSelector((state: RootState) => state.user.data)
   const userStatus = useSelector((state: RootState) => state.user.status)
@@ -183,6 +190,53 @@ const Jobs: React.FC = () => {
   const fields: FieldsArray = useMemo(
     () => [
       {
+        type: 'multi',
+        options: [
+          {value: 'open', label: 'Open'},
+          {value: 'closed', label: 'Closed'},
+          {value: 'active', label: 'Active'},
+        ],
+        label: 'status',
+        name: 'Status',
+        placeholder: 'Select Status',
+      },
+      {
+        type: 'multi',
+        options: businessTypes,
+        label: 'business',
+        name: 'Business Type',
+        placeholder: 'Select Business Type',
+      },
+      {
+        type: 'multi',
+        options: locations,
+        label: 'location',
+        name: 'Location',
+        placeholder: 'Select Location',
+      },
+      {
+        type: 'multi',
+        options: employmentTypes,
+        label: 'employment_type',
+        name: 'Employment type',
+        placeholder: 'Select Employment Type',
+      },
+      {
+        type: 'multi',
+        options: jobTypes,
+        label: 'job_type',
+        name: 'Job Type',
+        placeholder: 'Select Job Type',
+      },
+      {
+        type: 'multi',
+        options: rates,
+        label: 'rate',
+        name: 'Rate',
+        placeholder: 'Select Rate',
+      },
+
+      {
         type: 'dropdown',
         label: 'company_id',
         name: companyData,
@@ -190,20 +244,15 @@ const Jobs: React.FC = () => {
         placeholder: 'Select company',
         labelKey: 'company_name',
         id: 'id',
+        isMultiselect: true,
       },
       {
-        type: 'dropdown',
-        label: 'status',
-        name: [
-          {name: 'Open', id: 'open'},
-          {name: 'Closed', id: 'closed'},
-          {name: 'Active', id: 'active'},
-        ],
-        topLabel: 'Status',
-        placeholder: 'Select Status',
-        labelKey: 'name',
-        id: 'id',
+        type: 'text',
+        label: 'Location',
+        name: 'location',
+        placeholder: 'location',
       },
+
       {
         type: 'dropdown',
         label: 'require_resume',
@@ -275,7 +324,6 @@ const Jobs: React.FC = () => {
   const handleApplyFilter = (newFilters: any) => {
     setFilters(newFilters)
     setCurrentPage(1)
-    setIsFilterVisible(false)
   }
 
   const handleCreateChat = async (payload: chatCreatePayload) => {
