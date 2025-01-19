@@ -203,7 +203,7 @@ const Jobs: React.FC = () => {
       {
         type: 'multi',
         options: businessTypes,
-        label: 'business',
+        label: 'business_type',
         name: 'Business Type',
         placeholder: 'Select Business Type',
       },

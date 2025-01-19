@@ -18,6 +18,9 @@ import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/Pag
 import WorkOrderTable from './WorkOrderTable'
 import {fetchWorkOrder, WorkOrderResponse} from 'sr/utils/api/fetchWorkOrder'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
+import {useParams} from 'react-router-dom'
+import {set} from 'react-hook-form'
+import {locations} from 'sr/constants/jobsConstants'
 
 interface chatApiResponse {
   eightySixResponseId?: any
@@ -57,9 +60,14 @@ interface defaultData {
 interface chatUpdatePayload extends chatCreatePayload {}
 
 const WorkOrder: React.FC = () => {
+  const {cleanerId} = useParams<{cleanerId: string}>()
   const [selectedData, setSelectedData] = useState<chatApiResponse>()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [filters, setFilters] = useState<chatFilters>()
+  const [filters, setFilters] = useState<any>({
+    cleaner_id: cleanerId,
+    min_pay_type_rate: 1,
+    max_pay_type_rate: 100,
+  })
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const userData = useSelector((state: RootState) => state.user.data)
   const userStatus = useSelector((state: RootState) => state.user.status)
@@ -187,6 +195,35 @@ const WorkOrder: React.FC = () => {
   const fields: FieldsArray = useMemo(
     () => [
       {
+        type: 'multi',
+        options: [
+          {value: 'Fixed Rate', label: 'Fixed Rate'},
+          {value: 'Hourly Rate', label: 'Hourly Rate'},
+        ],
+        label: 'pay_type',
+        name: 'Pay Type',
+        placeholder: 'Select Pay Type',
+      },
+      {
+        type: 'multi',
+        options: locations,
+        label: 'location',
+        name: 'Location',
+        placeholder: 'Select Location',
+      },
+      {
+        type: 'number',
+        label: 'Min. Pay Type Rate',
+        name: 'min_pay_type_rate',
+        placeholder: '$1 to $100',
+      },
+      {
+        type: 'number',
+        label: 'Max. Pay Type Rate',
+        name: 'max_pay_type_rate',
+        placeholder: '$1 to $100',
+      },
+      {
         type: 'dropdown',
         label: 'company_id',
         name: companyData,
@@ -222,15 +259,6 @@ const WorkOrder: React.FC = () => {
         ],
         topLabel: 'Type',
         placeholder: 'Select Type',
-        labelKey: 'name',
-        id: 'id',
-      },
-      {
-        type: 'dropdown',
-        label: 'pay_type',
-        name: [{name: 'Fixed Rate', id: 'Fixed Rate'}],
-        topLabel: 'Pay Type',
-        placeholder: 'Select Pay Type',
         labelKey: 'name',
         id: 'id',
       },
@@ -285,12 +313,7 @@ const WorkOrder: React.FC = () => {
         labelKey: 'name',
         id: 'id',
       },
-      {
-        type: 'number',
-        label: 'Pay Type Rate',
-        name: 'pay_type_rate',
-        placeholder: 'Pay Type Rate',
-      },
+
       {
         type: 'number',
         label: 'Work Completion Time',
@@ -309,6 +332,13 @@ const WorkOrder: React.FC = () => {
   useEffect(() => {
     fetchUserDataIfNeeded()
   }, [])
+
+  useEffect(() => {
+    if (cleanerId === undefined) {
+      const {cleaner_id, ...rest} = filters
+      setFilters(rest)
+    }
+  }, [cleanerId])
 
   const defaultValues: defaultData | undefined = useMemo(() => {
     if (!selectedData) return undefined
@@ -425,6 +455,13 @@ const WorkOrder: React.FC = () => {
                 setIsFilterVisible={setIsFilterVisible}
                 preFilters={filters || {}}
                 fields={fields}
+                handleClearFilter={() => {
+                  handleApplyFilter({
+                    cleaner_id: cleanerId,
+                    min_pay_type_rate: 1,
+                    max_pay_type_rate: 100,
+                  })
+                }}
               />
             </div>
           )}
