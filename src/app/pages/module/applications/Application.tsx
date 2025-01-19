@@ -15,6 +15,7 @@ import {fetchApplications, JobApplication} from 'sr/utils/api/fetchApplications'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 import {useCreateApplication} from 'sr/utils/api/createApplication'
 import {useUpdateApplication} from 'sr/utils/api/updateApplication'
+import {useParams} from 'react-router-dom'
 
 interface Filters {
   cleaner_id?: string
@@ -42,9 +43,10 @@ interface ApplicationUpdatePayload extends ApplicationCreatePayload {
 }
 
 const Application: React.FC = () => {
+  const {cleanerId} = useParams<{cleanerId: string}>()
   const [selectedData, setSelectedData] = useState<JobApplication>()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [filters, setFilters] = useState<Filters>()
+  const [filters, setFilters] = useState<Filters>({cleaner_id: cleanerId})
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const cleanerData = useSelector((state: RootState) => state.cleaner.data)
   const cleanerStatus = useSelector((state: RootState) => state.cleaner.status)
@@ -199,6 +201,12 @@ const Application: React.FC = () => {
     fetchDataIfNeeded()
   }, [])
 
+  useEffect(() => {
+    if (cleanerId === undefined) {
+      const {cleaner_id, ...rest} = filters
+      setFilters(rest)
+    }
+  }, [cleanerId])
   const fetchDataIfNeeded = useCallback(() => {
     if (jobStatus !== 'succeeded') {
       fetchJobData({})
@@ -262,7 +270,7 @@ const Application: React.FC = () => {
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
             <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>
-              Applications
+              Job Applications
             </h2>
             <div className='flex items-center'>
               <Button
@@ -288,6 +296,9 @@ const Application: React.FC = () => {
                 setIsFilterVisible={setIsFilterVisible}
                 preFilters={filters || {}}
                 fields={fields}
+                handleClearFilter={() => {
+                  handleApplyFilter({cleaner_id: cleanerId})
+                }}
               />
             </div>
           )}

@@ -15,6 +15,7 @@ import {CompanyFilters, CompanyResponse, fetchCompany} from 'sr/utils/api/fetchC
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 import {useCreateCompany} from 'sr/utils/api/createCompany'
 import {useUpdateCompany} from 'sr/utils/api/updateCompany'
+import {businessTypes} from 'sr/constants/jobsConstants'
 
 interface CompanyCreatePayload {
   username: string
@@ -137,13 +138,11 @@ const Company: React.FC = () => {
   const fields: FieldsArray = useMemo(
     () => [
       {
-        type: 'dropdown',
+        type: 'multi',
+        options: businessTypes,
         label: 'business_type',
-        name: businessData,
-        topLabel: 'Business Type',
+        name: 'Business Type',
         placeholder: 'Select Business Type',
-        labelKey: 'id',
-        valueKey: 'type',
       },
       {
         type: 'dropdown',

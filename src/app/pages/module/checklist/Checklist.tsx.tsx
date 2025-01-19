@@ -184,7 +184,7 @@ const ChecklistCard: React.FC = () => {
     [companyData, customerData]
   )
 
-  const {data, isLoading, refetch} = useQuery({
+  const {data, isLoading} = useQuery({
     queryKey: ['checklist', {limit: itemsPerPage, page: currentPage, ...filters}],
     queryFn: async () => fetchChecklists({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
@@ -197,6 +197,12 @@ const ChecklistCard: React.FC = () => {
   useEffect(() => {
     fetchDataIfNeeded()
   }, [])
+  useEffect(() => {
+    if (customer_id === undefined) {
+      const {customer_id, ...rest} = filters
+      setFilters(rest)
+    }
+  }, [customer_id])
 
   const fetchDataIfNeeded = useCallback(() => {
     if (companyStatus !== 'succeeded') {
@@ -262,6 +268,7 @@ const ChecklistCard: React.FC = () => {
       id: selectedData.id,
     }
   }, [selectedData])
+  console.log('filters are  :', filters)
 
   return (
     <>

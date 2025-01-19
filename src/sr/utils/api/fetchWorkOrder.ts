@@ -1,4 +1,5 @@
 import {get} from 'sr/utils/axios/index'
+import {transformPayloadToFilter} from '../helpers/processFilter'
 
 interface ChecklistDetails {
   _id: string
@@ -112,24 +113,18 @@ export interface FetchSingleWorkOrderResponse extends Omit<FetchWorkOrderRespons
   data: WorkOrderResponse
 }
 
-interface PayloadType {
-  limit?: number
-  page?: number
-  sortBy?: string
-  filterBy?: string
-}
-
-const filterPayload = (payload: PayloadType) => {
-  return Object.fromEntries(
-    Object.entries(payload).filter(([_, value]) => value !== undefined && value !== null)
-  )
-}
-
-export const fetchWorkOrder = async (payload: PayloadType): Promise<FetchWorkOrderResponse> => {
-  const filteredPayload = filterPayload(payload)
+export const fetchWorkOrder = async (
+  payload: Record<string, any>
+): Promise<FetchWorkOrderResponse> => {
+  const {min_pay_type_rate, max_pay_type_rate, ...rest} = transformPayloadToFilter(payload)
+  payload = {
+    ...rest, // Include the rest of the payload fields
+    [`pay_type_rate>${min_pay_type_rate}`]: '',
+    [`pay_type_rate<${max_pay_type_rate}`]: '',
+  }
 
   try {
-    const res = await get<FetchWorkOrderResponse>(`/workorder`, filteredPayload)
+    const res = await get<FetchWorkOrderResponse>(`/workorder`, payload)
 
     if (res.data && res.data.length > 0) {
       return res // Return the fetched data

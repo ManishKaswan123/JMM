@@ -1,12 +1,18 @@
-import TestMultiSelect from 'app/pages/module/test/Test'
+// import TestMultiSelect from 'app/pages/module/test/Test'
 import {lazy} from 'react'
 
+const IndividualFavCleanerCard = lazy(() => import('app/pages/module/favCleaner/FavCleaner'))
+const WorkOrderApplicationDetailsCard = lazy(
+  () => import('app/pages/module/workorderApplication/WorkOrderApplicationDetails')
+)
+const WorkOrderApplication = lazy(
+  () => import('app/pages/module/workorderApplication/WorkOrderApplication')
+)
 const CustomerLocationCard = lazy(
   () => import('app/pages/module/customerLocation/CustomerLocation')
 )
 const CleanerFavWorkorderCard = lazy(() => import('app/pages/module/favWorkorder/FavWorkorder'))
 const CleanerFavJobCard = lazy(() => import('app/pages/module/favJobs/FavJob'))
-const IndividualFavCleanerCard = lazy(() => import('app/pages/module/favCleaner/FavCleaner'))
 const CompanyAddInfoCard = lazy(() => import('app/pages/module/company/CompanyAddInfo'))
 const CleanerJobTypeCard = lazy(() => import('app/pages/module/cleanerJobType/CleanerJobType'))
 const CleanerPreferenceCard = lazy(
@@ -74,6 +80,8 @@ export const routeConfigs = [
   {path: '/checklist/:id', element: <ChecklistDetailsCard />},
   {path: '/workorder', element: <WorkOrder />},
   {path: '/workorder/:id', element: <WorkOrderDetailsCard />},
+  {path: '/workorderapplication', element: <WorkOrderApplication />},
+  {path: '/workorderapplication/:id', element: <WorkOrderApplicationDetailsCard />},
   {path: '/cleaner', element: <Cleaner />},
   {path: '/cleaner/details/:cleanerId', element: <CleanerDetailsCard />},
   {path: '/cleaner/reference/:cleanerId', element: <CleanerReferenceCard />},
@@ -82,8 +90,11 @@ export const routeConfigs = [
   {path: '/cleaner/training/:cleanerId', element: <CleanerTrainingCard />},
   {path: '/cleaner/preference/:cleanerId', element: <CleanerPreferenceCard />},
   {path: '/cleaner/jobtype/:cleanerId', element: <CleanerJobTypeCard />},
-  {path: '/cleaner/favjob/:cleanerId', element: <CleanerFavJobCard />},
-  {path: '/cleaner/favworkorder/:cleanerId', element: <CleanerFavWorkorderCard />},
+  {path: '/cleaner/savedjob/:cleanerId', element: <CleanerFavJobCard />},
+  {path: '/cleaner/workorder/:cleanerId', element: <WorkOrder />},
+  {path: '/cleaner/savedworkorder/:cleanerId', element: <CleanerFavWorkorderCard />},
+  {path: '/cleaner/appliedwordorder/:cleanerId', element: <WorkOrderApplication />},
+  {path: '/cleaner/appliedjobs/:cleanerId', element: <Application />},
   {path: '/tasklist', element: <TaskList />},
   {path: '/tasklist/:id', element: <TaskListDetailsCard />},
   {path: '/company', element: <Company />},
@@ -109,5 +120,5 @@ export const routeConfigs = [
   {path: '/user/address/:userId', element: <Address />},
   {path: '/application', element: <Application />},
   {path: '/application/:id', element: <ApplicationDetailsCard />},
-  {path: '/test', element: <TestMultiSelect />},
+  // {path: '/test', element: <TestMultiSelect />},
 ]

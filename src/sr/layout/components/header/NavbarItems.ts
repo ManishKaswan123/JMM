@@ -56,6 +56,36 @@ export const cleanerNavItems: NavItem[] = [
     iconPath: 'M12 4v16m8-8H4', // Plus icon
   },
   {
+    label: 'Applied Jobs',
+    path: 'cleaner/appliedjobs',
+    name: 'appliedjobs',
+    iconPath: 'M12 4v16m8-8H4', // Plus icon
+  },
+  {
+    label: 'Saved Jobs',
+    path: 'cleaner/savedjob',
+    name: 'savedjob',
+    iconPath: 'M12 4v16m8-8H4', // Plus icon
+  },
+  {
+    label: 'Workorder',
+    path: 'cleaner/workorder',
+    name: 'workorder',
+    iconPath: 'M12 4v16m8-8H4', // Plus icon
+  },
+  {
+    label: 'Applied Workorder',
+    path: 'cleaner/appliedwordorder',
+    name: 'appliedwordorder',
+    iconPath: 'M12 4v16m8-8H4', // Plus icon
+  },
+  {
+    label: 'Saved Workorder',
+    path: 'cleaner/savedworkorder',
+    name: 'savedworkorder',
+    iconPath: 'M12 4v16m8-8H4', // Plus icon
+  },
+  {
     label: 'Reference',
     path: 'cleaner/reference',
     name: 'reference',
@@ -89,18 +119,6 @@ export const cleanerNavItems: NavItem[] = [
     label: 'Job Type',
     path: 'cleaner/jobtype',
     name: 'jobtype',
-    iconPath: 'M12 4v16m8-8H4', // Plus icon
-  },
-  {
-    label: 'Favorite Job',
-    path: 'cleaner/favjob',
-    name: 'favjob',
-    iconPath: 'M12 4v16m8-8H4', // Plus icon
-  },
-  {
-    label: 'Favorite Workorder',
-    path: 'cleaner/favworkorder',
-    name: 'favworkorder',
     iconPath: 'M12 4v16m8-8H4', // Plus icon
   },
 ]

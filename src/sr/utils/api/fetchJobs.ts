@@ -107,7 +107,6 @@ export interface FetchSingleJobResponse {
 }
 
 export const fetchJobs = async (payload: Record<string, any>): Promise<FetchJobResponse> => {
-  console.log('filter payload', payload)
   const filteredPayload = transformPayloadToFilter(payload)
 
   try {

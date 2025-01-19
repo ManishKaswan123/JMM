@@ -6,12 +6,12 @@ export const masterMenuItems: {label: string; path: string; iconPath: string}[] 
   },
 ]
 export const normalMenuItems = [
-  {
-    label: 'Test',
-    path: '/test',
-    iconPath:
-      'M17 9V7a4 4 0 00-8 0v2M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z',
-  },
+  // {
+  //   label: 'Test',
+  //   path: '/test',
+  //   iconPath:
+  //     'M17 9V7a4 4 0 00-8 0v2M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z',
+  // },
   {
     label: 'Individuals',
     path: '/user',
@@ -19,7 +19,7 @@ export const normalMenuItems = [
       'M17 9V7a4 4 0 00-8 0v2M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z',
   },
   {
-    label: 'Application',
+    label: 'Job Application',
     path: '/application',
     iconPath:
       'M8 2H16C17.1046 2 18 2.89543 18 4V20C18 21.1046 17.1046 22 16 22H8C6.89543 22 6 21.1046 6 20V4C6 2.89543 6.89543 2 8 2ZM8 0C5.79086 0 4 1.79086 4 4V20C4 22.2091 5.79086 24 8 24H16C18.2091 24 20 22.2091 20 20V4C20 1.79086 18.2091 0 16 0H8ZM9 7H15V9H9V7ZM9 11H15V13H9V11ZM9 15H13V17H9V15Z',
@@ -70,8 +70,13 @@ export const normalMenuItems = [
   //   iconPath: 'M4 6h16M4 10h16M10 14h10M4 14h4v7H4z',
   // },
   {
-    label: 'Work Order',
+    label: 'Workorder',
     path: '/workorder',
+    iconPath: 'M9 17v-2a4 4 0 00-8 0v2h8zm13 0v-2a4 4 0 00-8 0v2h8zm-13 4h8m-8-2h8m0-2H6',
+  },
+  {
+    label: 'Workorder Application',
+    path: '/workorderapplication',
     iconPath: 'M9 17v-2a4 4 0 00-8 0v2h8zm13 0v-2a4 4 0 00-8 0v2h8zm-13 4h8m-8-2h8m0-2H6',
   },
   // {
