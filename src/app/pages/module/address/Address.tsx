@@ -197,6 +197,20 @@ const Addresses: React.FC = () => {
       },
       {
         type: 'number',
+        label: 'Latitude',
+        name: 'lat',
+        placeholder: 'Latitude',
+        required: true,
+      },
+      {
+        type: 'number',
+        label: 'Longitude',
+        name: 'lng',
+        placeholder: 'Longitude',
+        required: true,
+      },
+      {
+        type: 'number',
         label: 'Rooms Count',
         name: 'no_of_rooms',
         placeholder: 'No. of Rooms',
@@ -288,8 +302,8 @@ const Addresses: React.FC = () => {
         city: payload.city,
         state: payload.state,
         postal: payload.postal,
-        lat: 0,
-        lng: 0,
+        lat: payload.lat,
+        lng: payload.lng,
       },
       address_type: payload.address_type,
       status: payload.status,
@@ -314,8 +328,8 @@ const Addresses: React.FC = () => {
         city: payload.city,
         state: payload.state,
         postal: payload.postal,
-        lat: 0,
-        lng: 0,
+        lat: payload.lat,
+        lng: payload.lng,
       },
       address_type: payload.address_type,
       status: payload.status,
@@ -394,13 +408,14 @@ const Addresses: React.FC = () => {
           {isLoading ? (
             <SkeletonTable
               columns={[
-                'Address Type',
-                'Rooms Count',
-                'Bathroom Count',
-                'Total Area',
-                'Remark',
+                'Address 1',
+                'Address 2',
+                'City',
+                'State',
+                'Zip Code',
+                'Country',
                 'Status',
-                'View Address',
+                'Actions',
               ]}
             />
           ) : (
@@ -412,21 +427,19 @@ const Addresses: React.FC = () => {
             />
           )}
         </div>
-        {isLoading || isError ? (
+        {isLoading ? (
           <PaginationSkeleton />
         ) : (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={
-              Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
-            }
-            totalResults={data?.pagination?.total}
-            onPageChange={onPageChange}
-            itemsPerPage={itemsPerPage}
-            name='address'
-            onLimitChange={onLimitChange}
-            disabled={isLoading}
-          />
+          data?.pagination && (
+            <Pagination
+              currentPage={currentPage}
+              pagination={data.pagination}
+              onPageChange={onPageChange}
+              name='address'
+              onLimitChange={onLimitChange}
+              disabled={isLoading}
+            />
+          )
         )}
       </div>
       {isCreateModalOpen && (

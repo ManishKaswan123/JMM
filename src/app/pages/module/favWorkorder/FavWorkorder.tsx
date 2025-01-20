@@ -210,22 +210,20 @@ const CleanerFavWorkorderCard: React.FC = () => {
             />
           )}
         </div>
-        {/* {isLoading ? (
+        {isLoading ? (
           <PaginationSkeleton />
         ) : (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={
-              Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
-            }
-            totalResults={data?.pagination?.total}
-            onPageChange={onPageChange}
-            itemsPerPage={itemsPerPage}
-            name='CleanerFavWorkorder'
-            onLimitChange={onLimitChange}
-            disabled={isLoading}
-          />
-        )} */}
+          data?.pagination && (
+            <Pagination
+              currentPage={currentPage}
+              pagination={data.pagination}
+              onPageChange={onPageChange}
+              name='CleanerFavWorkorder'
+              onLimitChange={onLimitChange}
+              disabled={isLoading}
+            />
+          )
+        )}
       </div>
       {/* {isCreateModalOpen && (
         <DynamicModal

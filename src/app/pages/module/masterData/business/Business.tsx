@@ -193,18 +193,16 @@ const BusinessCategory: React.FC = () => {
         {isLoading || isError ? (
           <PaginationSkeleton />
         ) : (
-          <Pagination
+          data?.pagination && (
+            <Pagination
             currentPage={currentPage}
-            totalPages={
-              Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
-            }
-            onPageChange={onPageChange}
-            itemsPerPage={itemsPerPage}
-            name='Business'
-            onLimitChange={onLimitChange}
-            disabled={isLoading}
-            totalResults={data?.pagination.total || 0}
-          />
+              pagination={data.pagination}
+              onPageChange={onPageChange}
+              name='Business'
+              onLimitChange={onLimitChange}
+              disabled={isLoading}
+            />
+          )
         )}
       </div>
       {isCreateModalOpen && (

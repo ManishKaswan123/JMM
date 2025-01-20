@@ -1,20 +1,18 @@
-import { get } from 'sr/utils/axios/index'
+import {get} from 'sr/utils/axios/index'
+import {JmmApiResponse} from './contant'
 
 interface NotesResponse {
-    _id: string
-    company_id: string
-    applicant_id: string
-    notes: string
-    createdAt: string
-    updatedAt: string
-    __v: number
-    id: string
+  _id: string
+  company_id: string
+  applicant_id: string
+  notes: string
+  createdAt: string
+  updatedAt: string
+  __v: number
+  id: string
 }
 
-interface FetchNotesResponse {
-  data: NotesResponse[]
-  success: boolean
-}
+export type FetchNotesResponse = JmmApiResponse<NotesResponse[]>
 
 interface PayloadType {
   limit?: number
@@ -36,7 +34,7 @@ export const fetchNotes = async (payload: PayloadType): Promise<FetchNotesRespon
   try {
     const res = await get<FetchNotesResponse>(`/application/notes`, filteredPayload)
 
-    if (res.data && res.data.length > 0) {
+    if (res.success === true && res.data) {
       return res // Return the fetched data
     } else {
       throw new Error('No data found')

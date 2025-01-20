@@ -1,4 +1,5 @@
 import {get} from 'sr/utils/axios/index'
+import {JmmApiResponse} from './contant'
 
 interface Address {
   address_line_1: string
@@ -28,24 +29,8 @@ export interface CleanerDetails {
   id: string
 }
 
-interface CleanerPagination {
-  total: number
-  page: number
-  pageSize: number
-  sort: Record<string, number>
-}
-
-interface FetchCleanerResponse {
-  success: boolean
-  data: CleanerDetails[]
-  pagination: CleanerPagination
-}
-interface FetchSingleCleanerResponse {
-  success: boolean
-  data: CleanerDetails
-  pagination: CleanerPagination
-}
-
+export type FetchCleanerResponse = JmmApiResponse<CleanerDetails[]>
+export type FetchSingleCleanerResponse = JmmApiResponse<CleanerDetails>
 export interface CleanerFilters {
   limit?: number
   page?: number
@@ -65,7 +50,7 @@ export const fetchCleaner = async (payload: CleanerFilters): Promise<FetchCleane
   try {
     const res = await get<FetchCleanerResponse>(`/cleaner`, filteredPayload)
 
-    if (res.data && res.data.length > 0) {
+    if (res.success === true && res.data) {
       return res // Return the fetched data
     } else {
       throw new Error('No data found')
@@ -78,7 +63,7 @@ export const fetchSingleCleaner = async (id: string): Promise<FetchSingleCleaner
   try {
     const res = await get<FetchSingleCleanerResponse>(`/cleaner`, {id})
 
-    if (res.data) {
+    if (res.success === true && res.data) {
       return res // Return the fetched data
     } else {
       throw new Error('No data found')

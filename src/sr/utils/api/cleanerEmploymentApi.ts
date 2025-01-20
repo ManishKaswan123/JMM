@@ -43,7 +43,7 @@ export const fetchCleanerEmployment = async (
   try {
     const res = await get<CleanerEmploymentApiResponse>(`/cleaner/employments`, filteredPayload)
 
-    if (res.success && res.data && res.data.length > 0) {
+    if (res.success && res.data) {
       return res // Return the fetched data
     } else {
       // Handle the case where results are not present

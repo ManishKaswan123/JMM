@@ -41,7 +41,7 @@ export const fetchCleanerJobType = async (
   try {
     const res = await get<CleanerJobTypeApiResponse>(`/cleaner/jobtypes`, filteredPayload)
 
-    if (res.success && res.data && res.data.length > 0) {
+    if (res.success && res.data) {
       return res // Return the fetched data
     } else {
       // Handle the case where results are not present

@@ -1,30 +1,33 @@
 import React, {useState, useEffect} from 'react'
 import {Button} from '../Button'
+import {NoResults} from '../NoResults'
 
 interface PaginationProps {
-  currentPage: number
-  totalPages: number
-  itemsPerPage: number
+  pagination: {
+    total: number
+    page: number
+    pageSize: number
+    sort: Record<string, number>
+  }
+  currentPage?: number
   name: string
   onPageChange: (page: number) => void
   onLimitChange: (limit: number) => void
   disabled?: boolean
-  totalResults?: number
 }
 
 const Pagination: React.FC<PaginationProps> = ({
-  currentPage,
-  totalPages,
-  itemsPerPage,
+  currentPage = 1,
+  pagination,
   onPageChange,
   onLimitChange,
-  totalResults,
   name,
   disabled = false,
 }) => {
   const [startItem, setStartItem] = useState(1)
   const [endItem, setEndItem] = useState(8)
-  const [inputLimit, setInputLimit] = useState(itemsPerPage.toString())
+  const [inputLimit, setInputLimit] = useState(pagination.pageSize.toString())
+  const totalPages = Math.ceil(pagination.total / pagination.pageSize)
 
   const handleLimitChange = (
     e: React.KeyboardEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement>
@@ -54,17 +57,20 @@ const Pagination: React.FC<PaginationProps> = ({
     return Array.from({length: end - start + 1}, (_, i) => start + i)
   }
 
-  let eItem = currentPage * itemsPerPage
-  let sItem = (currentPage - 1) * itemsPerPage + 1
+  let eItem = currentPage * pagination.pageSize
+  let sItem = (currentPage - 1) * pagination.pageSize + 1
 
+  if (pagination.total === 0) {
+    return <NoResults />
+  }
   return (
     <>
-      {totalPages > 0 && (
+      {totalPages > 1 && (
         <div className='px-2 py-2 bg-white shadow-sm '>
           <div className='flex items-center justify-between parent-font-medium'>
             <span className='text-m text-gray-700'>
-              Showing {sItem} to {currentPage === totalPages ? totalResults : eItem} of{' '}
-              {totalResults} entries
+              Showing {sItem} to {currentPage === totalPages ? pagination.total : eItem} of{' '}
+              {pagination.total} entries
             </span>
             <div className='flex items-center'>
               <Button

@@ -1,14 +1,8 @@
 import {get} from 'sr/utils/axios/index'
+import {JmmApiResponse} from './contant'
 
-interface FetchApplicationResponse {
-  success: boolean
-  data: JobApplication[]
-  pagination: Pagination
-}
-interface FetchSingleApplicationResponse extends Omit<FetchApplicationResponse, 'data'> {
-  data: JobApplication
-}
-
+export type FetchApplicationResponse = JmmApiResponse<JobApplication[]>
+export type FetchSingleApplicationResponse = JmmApiResponse<JobApplication>
 export interface JobApplication {
   _id: string
   job_id: JobDetails
@@ -142,7 +136,7 @@ export const fetchApplications = async (
   try {
     const res = await get<FetchApplicationResponse>(`/application`, filteredPayload)
 
-    if (res.data && res.data.length > 0) {
+    if (res.success === true && res.data) {
       return res // Return the fetched data
     } else {
       throw new Error('No data found')

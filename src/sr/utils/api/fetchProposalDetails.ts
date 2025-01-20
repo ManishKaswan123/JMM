@@ -1,4 +1,5 @@
 import {get} from 'sr/utils/axios/index'
+import {JmmApiResponse} from './contant'
 
 export interface ProposalDetails {
   cleaner_id: string
@@ -9,21 +10,8 @@ export interface ProposalDetails {
   id: string
 }
 
-interface ProposalDetailsPagination {
-  total: number
-  page: number
-  pageSize: number
-  sort: Record<string, number>
-}
-
-interface FetchProposalDetailsResponse {
-  success: boolean
-  data: ProposalDetails[]
-  pagination: ProposalDetailsPagination
-}
-interface FetchSingleProposalDetailsResponse extends Omit<FetchProposalDetailsResponse, 'data'> {
-  data: ProposalDetails
-}
+export type FetchProposalDetailsResponse = JmmApiResponse<ProposalDetails[]>
+export type FetchSingleProposalDetailsResponse = JmmApiResponse<ProposalDetails>
 
 interface ProposalDetailsPayload {
   limit?: number
@@ -46,7 +34,7 @@ export const fetchProposalDetails = async (
   try {
     const res = await get<FetchProposalDetailsResponse>(`/cleaner/proposaldetails`, filteredPayload)
 
-    if (res.data && res.data.length > 0) {
+    if (res.success === true && res.data) {
       return res // Return the fetched data
     } else {
       throw new Error('No data found')

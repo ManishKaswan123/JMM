@@ -49,7 +49,7 @@ export const fetchIndividual = async (
   try {
     const res = await get<IndividaulApiResponse>(`/individual`, filteredPayload)
 
-    if (res.success && res.data && res.data.length > 0) {
+    if (res.success && res.data ) {
       return res // Return the fetched data
     } else {
       // Handle the case where results are not present

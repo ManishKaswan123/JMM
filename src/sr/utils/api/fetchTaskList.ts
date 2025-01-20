@@ -1,4 +1,5 @@
 import {get} from 'sr/utils/axios/index'
+import {JmmApiResponse} from './contant'
 
 export interface TaskListDetails {
   name: string
@@ -15,23 +16,8 @@ export interface TaskListDetails {
   id: string
 }
 
-interface TaskListPagination {
-  total: number
-  page: number
-  pageSize: number
-  sort: Record<string, number>
-}
-
-interface FetchTaskListResponse {
-  success: boolean
-  data: TaskListDetails[]
-  pagination: TaskListPagination
-}
-export interface FetchSingleTaskListResponse {
-  success: boolean
-  data: TaskListDetails
-  pagination: TaskListPagination
-}
+export type FetchSingleTaskListResponse = JmmApiResponse<TaskListDetails>
+export type FetchTaskListResponse = JmmApiResponse<TaskListDetails[]>
 
 export interface TasklistFilters {
   limit?: number
@@ -55,7 +41,7 @@ export const fetchTaskList = async (payload: TasklistFilters): Promise<FetchTask
   try {
     const res = await get<FetchTaskListResponse>(`/customer/tasklist`, filteredPayload)
 
-    if (res.success === true && res.data && res.data.length > 0) {
+    if (res.success === true && res.data) {
       return res // Return the fetched data
     } else {
       throw new Error('No data found')
