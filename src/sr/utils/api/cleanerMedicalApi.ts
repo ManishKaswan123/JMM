@@ -39,7 +39,7 @@ export const fetchCleanerMedical = async (
   try {
     const res = await get<CleanerMedicalApiResponse>(`/cleaner/medicals`, filteredPayload)
 
-    if (res.success && res.data && res.data.length > 0) {
+    if (res.success && res.data) {
       return res // Return the fetched data
     } else {
       // Handle the case where results are not present

@@ -197,7 +197,7 @@ const CompanyAddInfoCard: React.FC<any> = () => {
     <>
       {!data ? (
         <div className='w-full h-full'>
-          <NoResults title='No Additional Company Info.' />
+          <NoResults />
           <div className='flex items-center justify-center  space-x-4'>
             <Button
               onClick={onGoBack}

@@ -1,5 +1,6 @@
 import {get} from 'sr/utils/axios/index'
 import {transformPayloadToFilter} from '../helpers/processFilter'
+import {JmmApiResponse} from './contant'
 
 interface CompanyDetails {
   _id: string
@@ -95,16 +96,8 @@ interface Pagination {
   }
 }
 
-interface FetchJobResponse {
-  data: JobResponse[]
-  success: boolean
-  pagination: Pagination
-}
-export interface FetchSingleJobResponse {
-  data: JobResponse
-  success: boolean
-  pagination: Pagination
-}
+export type FetchJobResponse = JmmApiResponse<JobResponse[]>
+export type FetchSingleJobResponse = JmmApiResponse<JobResponse>
 
 export const fetchJobs = async (payload: Record<string, any>): Promise<FetchJobResponse> => {
   const filteredPayload = transformPayloadToFilter(payload)
@@ -112,7 +105,7 @@ export const fetchJobs = async (payload: Record<string, any>): Promise<FetchJobR
   try {
     const res = await get<FetchJobResponse>(`/job`, filteredPayload)
 
-    if (res.data && res.data.length > 0) {
+    if (res.success === true && res.data) {
       return res // Return the fetched data
     } else {
       throw new Error('No data found')

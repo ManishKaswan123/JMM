@@ -10,7 +10,6 @@ const AuthPage = lazy(async () => import('app/pages/module/auth/Login'))
 const RegisterPage = lazy(async () => import('app/pages/module/auth/Register'))
 const ErrorsPage = lazy(async () => import('app/pages/module/errors/ErrorsPage'))
 const OtpPage = lazy(async () => import('app/pages/module/auth/OTP'))
-const SellerOnBoarding = lazy(async () => import('app/pages/module/seller/SellerOnBoarding'))
 const PrivateRoutes = lazy(async () => import('./PrivateRoutes'))
 
 const {PUBLIC_URL} = process.env
@@ -63,14 +62,7 @@ const AppRoutes: FC = () => {
                   </Suspense>
                 }
               />
-              <Route
-                path='seller-onboarding/'
-                element={
-                  <Suspense fallback={<LayoutSplashScreen />}>
-                    <SellerOnBoarding />
-                  </Suspense>
-                }
-              />
+
               <Route path='*' element={<Navigate to='/auth' />} />
             </>
           )}

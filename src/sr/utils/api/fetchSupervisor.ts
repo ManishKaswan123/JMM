@@ -1,4 +1,5 @@
-import { get } from 'sr/utils/axios/index'
+import {get} from 'sr/utils/axios/index'
+import {JmmApiResponse} from './contant'
 
 interface SupervisorAccess {
   job_management: {
@@ -59,18 +60,7 @@ interface SupervisorDetails {
   id: string
 }
 
-interface Pagination {
-  total: number
-  page: number
-  pageSize: number
-  sort: Record<string, number>
-}
-
-interface FetchSupervisorsResponse {
-  success: boolean
-  data: SupervisorDetails[]
-  pagination: Pagination
-}
+export type FetchSupervisorsResponse = JmmApiResponse<SupervisorDetails[]>
 
 interface PayloadType {
   limit?: number
@@ -86,18 +76,17 @@ const filterPayload = (payload: PayloadType) => {
 }
 
 export const fetchSupervisors = async (payload: PayloadType): Promise<FetchSupervisorsResponse> => {
-    const filteredPayload = filterPayload(payload)
-  
-    try {
-      const res = await get<FetchSupervisorsResponse>(`/supervisor`, filteredPayload)
-  
-      if (res.data && res.data.length > 0) {
-        return res // Return the fetched data
-      } else {
-        throw new Error('No data found')
-      }
-    } catch (error) {
-      throw new Error(`Failed to fetch: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  const filteredPayload = filterPayload(payload)
+
+  try {
+    const res = await get<FetchSupervisorsResponse>(`/supervisor`, filteredPayload)
+
+    if (res.success === true && res.data) {
+      return res // Return the fetched data
+    } else {
+      throw new Error('No data found')
     }
+  } catch (error) {
+    throw new Error(`Failed to fetch: ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
-  
+}

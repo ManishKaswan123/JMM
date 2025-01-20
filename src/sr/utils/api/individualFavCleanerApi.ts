@@ -6,6 +6,7 @@ import {
   UseMutationResult,
   useQueryClient,
 } from '@tanstack/react-query'
+import {JmmApiResponse} from './contant'
 
 export interface IndividualFavCleanerFilters {
   limit?: number
@@ -20,10 +21,7 @@ export interface IndividualFavCleaner {
   updatedAt: string
   id: string
 }
-export interface IndividualFavCleanerApiResponse {
-  success: boolean
-  data: IndividualFavCleaner
-}
+export type IndividualFavCleanerApiResponse = JmmApiResponse<IndividualFavCleaner>
 
 const filterPayload = (payload: IndividualFavCleanerFilters) => {
   return Object.fromEntries(

@@ -1,10 +1,7 @@
 import {get} from 'sr/utils/axios/index'
+import {JmmApiResponse} from './contant'
 
-export interface CompanyResponse {
-  success: boolean
-  data: CompanyData
-  pagination: Pagination
-}
+export type CompanyResponse = JmmApiResponse<CompanyData>
 
 export interface CompanyData {
   company_id: string
@@ -24,22 +21,11 @@ export interface CompanyData {
   id: string
 }
 
-interface Pagination {
-  total: number
-  page: number
-  pageSize: number
-  sort: SortOrder
-}
-
-interface SortOrder {
-  createdAt: number
-}
-
 export const fetchCompanyDetail = async (id: string): Promise<CompanyResponse> => {
   try {
     const res = await get<CompanyResponse>(`/company/addlinfo`, {company_id: id})
 
-    if (res.data) {
+    if (res.success === true && res.data) {
       return res // Return the fetched data
     } else {
       throw new Error('No data found')

@@ -1,4 +1,5 @@
 import {get} from 'sr/utils/axios/index'
+import {JmmApiResponse} from './contant'
 
 interface Address {
   address_line_1: string
@@ -60,22 +61,8 @@ export interface Contractor {
   id: string
 }
 
-interface Pagination {
-  total: number
-  page: number
-  pageSize: number
-  sort?: Record<string, number>
-}
-
-interface FetchContractorResponse {
-  success: boolean
-  data: Contractor[]
-  pagination?: Pagination
-}
-
-interface FetchSingleContractorResponse extends Omit<FetchContractorResponse, 'data'> {
-  data: Contractor
-}
+export type FetchContractorResponse = JmmApiResponse<Contractor[]>
+export type FetchSingleContractorResponse = JmmApiResponse<Contractor>
 
 interface ContractorListPayload {
   limit?: number
@@ -100,7 +87,7 @@ export const fetchContractor = async (
   try {
     const res = await get<FetchContractorResponse>(`/contractor`, filteredPayload)
 
-    if (res.data && res.data.length > 0) {
+    if (res.success === true && res.data) {
       return res
     } else {
       throw new Error('No contractor found')

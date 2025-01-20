@@ -17,19 +17,22 @@ const AddressTable: React.FC<AddressTableProps> = (props) => {
           <thead>
             <tr>
               <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-                Address Type
+                Address 1
               </th>
               <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-                Rooms Count
+                Address 2
               </th>
               <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-                Bathroom Count
+                City
               </th>
               <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-                Total Area
+                State
               </th>
               <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
-                Remark
+                Zip Code
+              </th>
+              <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
+                Country
               </th>
               <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
                 Status
@@ -43,19 +46,24 @@ const AddressTable: React.FC<AddressTableProps> = (props) => {
             {props.addressData?.map((address) => (
               <tr key={address.id} className='odd:bg-white even:bg-gray-50'>
                 <td className='px-5 py-5 text-left border-b border-gray text-sm'>
-                  <p className='text-gray-900 whitespace-no-wrap'>{address.address_type}</p>
+                  <p className='text-gray-900 whitespace-no-wrap'>
+                    {address.address.address_line_1}
+                  </p>
                 </td>
                 <td className='px-5 py-5 text-left border-b border-gray-200 text-sm'>
-                  <p>{address.no_of_rooms}</p>
+                  <p>{address.address.address_line_2}</p>
                 </td>
                 <td className='px-5 py-5 text-left border-b border-gray-200 text-sm'>
-                  <p>{address.no_of_bath}</p>
+                  <p>{address.address.city}</p>
                 </td>
                 <td className='px-5 py-5 text-left border-b border-gray-200 text-sm'>
-                  <p>{address.total_area}</p>
+                  <p>{address.address.city}</p>
                 </td>
                 <td className='px-5 py-5 text-left border-b border-gray-200 text-sm'>
-                  <p>{address.remark}</p>
+                  <p>{address.address.postal}</p>
+                </td>
+                <td className='px-5 py-5 text-left border-b border-gray-200 text-sm'>
+                  <p>{address.address.country}</p>
                 </td>
                 <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                   <p

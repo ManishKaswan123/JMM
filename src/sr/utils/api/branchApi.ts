@@ -44,7 +44,7 @@ export const fetchBranches = async (payload: BranchFilters): Promise<BranchApiRe
   try {
     const res = await get<BranchApiResponse>(`/company/branch`, filteredPayload)
 
-    if (res.success && res.data && res.data.length > 0) {
+    if (res.success && res.data) {
       return res // Return the fetched data
     } else {
       // Handle the case where results are not present

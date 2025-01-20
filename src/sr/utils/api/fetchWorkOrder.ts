@@ -1,5 +1,6 @@
 import {get} from 'sr/utils/axios/index'
 import {transformPayloadToFilter} from '../helpers/processFilter'
+import {JmmApiResponse} from './contant'
 
 interface ChecklistDetails {
   _id: string
@@ -104,14 +105,8 @@ interface Pagination {
   }
 }
 
-interface FetchWorkOrderResponse {
-  data: WorkOrderResponse[]
-  success: boolean
-  pagination: Pagination
-}
-export interface FetchSingleWorkOrderResponse extends Omit<FetchWorkOrderResponse, 'data'> {
-  data: WorkOrderResponse
-}
+export type FetchSingleWorkOrderResponse = JmmApiResponse<WorkOrderResponse>
+export type FetchWorkOrderResponse = JmmApiResponse<WorkOrderResponse[]>
 
 export const fetchWorkOrder = async (
   payload: Record<string, any>
@@ -126,7 +121,7 @@ export const fetchWorkOrder = async (
   try {
     const res = await get<FetchWorkOrderResponse>(`/workorder`, payload)
 
-    if (res.data && res.data.length > 0) {
+    if (res.success === true && res.data) {
       return res // Return the fetched data
     } else {
       throw new Error('No data found')

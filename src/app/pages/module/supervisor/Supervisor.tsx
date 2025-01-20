@@ -337,18 +337,16 @@ const Supervisor: React.FC = () => {
         {isLoading ? (
           <PaginationSkeleton />
         ) : (
-          <Pagination
+          data?.pagination && (
+            <Pagination
             currentPage={currentPage}
-            totalPages={
-              Math.ceil((data?.pagination?.total || 1) / (data?.pagination?.pageSize || 1)) || 0
-            }
-            totalResults={data?.pagination?.total}
-            onPageChange={onPageChange}
-            itemsPerPage={itemsPerPage}
-            name='Supervisors'
-            onLimitChange={onLimitChange}
-            disabled={isLoading}
-          />
+              pagination={data.pagination}
+              onPageChange={onPageChange}
+              name='Supervisors'
+              onLimitChange={onLimitChange}
+              disabled={isLoading}
+            />
+          )
         )}
       </div>
       {isCreateModalOpen && (

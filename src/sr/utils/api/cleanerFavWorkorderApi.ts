@@ -7,6 +7,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import {WorkOrderResponse} from './fetchWorkOrder'
+import {JmmApiResponse} from './contant'
 
 export interface CleanerFavWorkorderFilters {
   limit?: number
@@ -24,10 +25,7 @@ export interface CleanerFavWorkorder {
   updatedAt: string
   id: string
 }
-export type CleanerFavWorkorderApiResponse = {
-  success: boolean
-  data: CleanerFavWorkorder
-}
+export type CleanerFavWorkorderApiResponse = JmmApiResponse<CleanerFavWorkorder>
 
 const filterPayload = (payload: CleanerFavWorkorderFilters) => {
   return Object.fromEntries(

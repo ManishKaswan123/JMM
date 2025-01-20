@@ -1,5 +1,6 @@
 import {get} from 'sr/utils/axios/index'
 import {transformPayloadToFilter} from '../helpers/processFilter'
+import {JmmApiResponse} from './contant'
 
 export interface CompanyResponse {
   username: string
@@ -17,21 +18,8 @@ export interface CompanyResponse {
   id: string
 }
 
-interface Pagination {
-  total: number
-  page: number
-  pageSize: number
-  sort: Record<string, number>
-}
-
-interface FetchCompanyResponse {
-  success: boolean
-  data: CompanyResponse[]
-  pagination: Pagination
-}
-export interface FetchSingleCompanyResponse extends Omit<FetchCompanyResponse, 'data'> {
-  data: CompanyResponse
-}
+export type FetchCompanyResponse = JmmApiResponse<CompanyResponse[]>
+export type FetchSingleCompanyResponse = JmmApiResponse<CompanyResponse>
 
 export interface CompanyFilters {
   limit?: number
@@ -50,7 +38,7 @@ export const fetchCompany = async (payload: Record<string, any>): Promise<FetchC
   try {
     const res = await get<FetchCompanyResponse>(`/company`, filteredPayload)
 
-    if (res.data && res.data.length > 0) {
+    if (res.success === true && res.data) {
       return res // Return the fetched data
     } else {
       throw new Error('No data found')

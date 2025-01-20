@@ -41,7 +41,7 @@ export const fetchIndividualChecklist = async (
   try {
     const res = await get<IndividualChecklistApiResponse>(`/individual/checklist`, filteredPayload)
 
-    if (res.success && res.data && res.data.length > 0) {
+    if (res.success && res.data ) {
       return res // Return the fetched data
     } else {
       // Handle the case where results are not present

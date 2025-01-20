@@ -46,7 +46,7 @@ export const fetchIndividualJob = async (
   try {
     const res = await get<IndividualJobApiResponse>(`/individual/job`, filteredPayload)
 
-    if (res.success && res.data && res.data.length > 0) {
+    if (res.success && res.data ) {
       return res // Return the fetched data
     } else {
       // Handle the case where results are not present
