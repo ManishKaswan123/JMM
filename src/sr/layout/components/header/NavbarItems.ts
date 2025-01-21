@@ -18,6 +18,12 @@ export const userNavItems: NavItem[] = [
     iconPath: 'M12 2C8.134 2 5 5.134 5 9c0 3.865 7 13 7 13s7-9.135 7-13c0-3.866-3.134-7-7-7z', // Location pin
   },
   {
+    label: 'Job',
+    path: '/user/job',
+    name: 'job',
+    iconPath: 'M3 12h18M9 3v18', // Wallet outline
+  },
+  {
     label: 'Checklists',
     path: '/user/checklist',
     name: 'checklist',
@@ -29,12 +35,7 @@ export const userNavItems: NavItem[] = [
     name: 'tasklist',
     iconPath: 'M3 12h18M9 3v18', // Wallet outline
   },
-  {
-    label: 'Job',
-    path: '/user/job',
-    name: 'job',
-    iconPath: 'M3 12h18M9 3v18', // Wallet outline
-  },
+
   {
     label: 'Job Category',
     path: '/user/jobCategory',

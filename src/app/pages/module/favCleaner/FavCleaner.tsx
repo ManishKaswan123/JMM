@@ -1,4 +1,4 @@
-import React, {useState, useMemo} from 'react'
+import React, {useState, useMemo, useEffect, useCallback} from 'react'
 import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
 import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
@@ -18,16 +18,18 @@ import {
 } from 'sr/utils/api/individualFavCleanerApi'
 import {useParams} from 'react-router-dom'
 import CleanerTable from '../cleaner/CleanerTable'
+import {useSelector} from 'react-redux'
+import {RootState} from 'sr/redux/store'
+import {useActions} from 'sr/utils/helpers/useActions'
 
-// interface IndividualFavCleanerCreatePayload {
-//   cleaner_id: string
-//   job_type: string[]
-//   rate: number
-//   additional_information: string
-// }
-// interface IndividualFavCleanerFormPayload extends Omit<IndividualFavCleanerCreatePayload, 'job_type'> {
-//   job_type: string
-// }
+interface IndividualFavCleanerCreatePayload {
+  individual_id: string
+  cleaner_ids: string[]
+}
+interface IndividualFavCleanerFormPayload
+  extends Omit<IndividualFavCleanerCreatePayload, 'cleaner_ids'> {
+  cleaner_id: string
+}
 // interface IndividualFavCleanerUpdatePayload extends IndividualFavCleanerCreatePayload {
 //   id: string
 // }
@@ -43,18 +45,24 @@ const IndividualFavCleanerCard: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
   const [itemsPerPage, setItemsPerPage] = useState<number>(8)
+  const cleanerData = useSelector((state: RootState) => state.cleaner.data)
+  const cleanerStatus = useSelector((state: RootState) => state.cleaner.status)
+  const {fetchCleanerData} = useActions()
   const createMutation = useCreateIndividualFavCleaner()
   const updateMutation = useUpdateIndividualFavCleaner()
 
   const createAndUpdateFields: FieldsArray = useMemo(
     () => [
-      // {
-      //   type: 'text',
-      //   label: 'Job Type',
-      //   name: 'job_type',
-      //   placeholder: 'Job Type',
-      //   required: true,
-      // },
+      {
+        type: 'dropdown',
+        label: 'cleaner_id',
+        name: cleanerData,
+        topLabel: 'Cleaner',
+        placeholder: 'Select Cleaner',
+        labelKey: 'cleaner_name',
+        id: 'id',
+        required: true,
+      },
       // {
       //   type: 'number',
       //   label: 'Rate',
@@ -70,7 +78,7 @@ const IndividualFavCleanerCard: React.FC = () => {
       //   required: true,
       // },
     ],
-    []
+    [cleanerData]
   )
 
   const fields: FieldsArray = useMemo(
@@ -84,6 +92,15 @@ const IndividualFavCleanerCard: React.FC = () => {
     ],
     []
   )
+  useEffect(() => {
+    fetchUserDataIfNeeded()
+  }, [])
+
+  const fetchUserDataIfNeeded = useCallback(() => {
+    if (cleanerStatus !== 'succeeded') {
+      fetchCleanerData({})
+    }
+  }, [cleanerStatus, fetchCleanerData])
 
   const {data, isLoading} = useQuery({
     queryKey: ['individualFavCleaner', {limit: itemsPerPage, page: currentPage, ...filters}],
@@ -109,15 +126,13 @@ const IndividualFavCleanerCard: React.FC = () => {
     setIsFilterVisible(false)
   }
 
-  // const handleCreateIndividualFavCleaner = async (payload: IndividualFavCleanerFormPayload) => {
-  //   const data: IndividualFavCleanerCreatePayload = {
-  //     cleaner_id: cleanerId || '',
-  //     job_type: [payload.job_type],
-  //     rate: payload.rate,
-  //     additional_information: payload.additional_information,
-  //   }
-  //   createMutation.mutate({payload: data, onSuccess})
-  // }
+  const handleCreateIndividualFavCleaner = async (payload: IndividualFavCleanerFormPayload) => {
+    const data: IndividualFavCleanerCreatePayload = {
+      individual_id: userId || '',
+      cleaner_ids: [payload.cleaner_id],
+    }
+    createMutation.mutate({payload: data, onSuccess})
+  }
   // const handleEditIndividualFavCleaner = async (payload: IndividualFavCleanerFormPayload) => {
   //   if (!selectedData) {
   //     setIsUpdateModalOpen(false)
@@ -160,13 +175,13 @@ const IndividualFavCleanerCard: React.FC = () => {
               Favourite Cleaner
             </h2>
             <div className='flex items-center'>
-              {/* <Button
-                label='Create new'
+              <Button
+                label='Add new'
                 Icon={AiOutlinePlus}
                 onClick={() => setIsCreateModalOpen(true)}
                 className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
               ></Button>
-              <Button
+              {/* <Button
                 label={`${isFilterVisible ? 'Close' : 'Filters'}`}
                 Icon={!isFilterVisible ? AiOutlineFilter : AiOutlineClose}
                 onClick={() => setIsFilterVisible(!isFilterVisible)}
@@ -212,16 +227,16 @@ const IndividualFavCleanerCard: React.FC = () => {
           )
         )}
       </div>
-      {/* {isCreateModalOpen && (
+      {isCreateModalOpen && (
         <DynamicModal
-          label='Create Cleaner JobType'
+          label='Add New Cleaner'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           fields={createAndUpdateFields}
           onSubmit={handleCreateIndividualFavCleaner}
         />
       )}
-      {isUpdateModalOpen && defaultValues && (
+      {/* {isUpdateModalOpen && defaultValues && (
         <DynamicModal
           label='Update Cleaner JobType'
           isOpen={isUpdateModalOpen}
@@ -230,7 +245,7 @@ const IndividualFavCleanerCard: React.FC = () => {
           defaultValues={defaultValues}
           onSubmit={handleEditIndividualFavCleaner}
         />
-      )} */}
+      )}  */}
     </>
   )
 }

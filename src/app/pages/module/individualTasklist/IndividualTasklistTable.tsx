@@ -52,7 +52,7 @@ const IndividualTasklistTable: React.FC<IndividualTasklistTableProps> = ({
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <Link
-                  to={`/user/details/${Tasklist.individual_id._id}`}
+                  to={`/user/details/${Tasklist.individual_id?._id}`}
                   className='text-blue-500 hover:font-medium'
                 >
                   {Tasklist.individual_id.username}
@@ -60,7 +60,7 @@ const IndividualTasklistTable: React.FC<IndividualTasklistTableProps> = ({
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <Link
-                  to={`/checklist/${Tasklist.checklist_id._id}`}
+                  to={`/checklist/${Tasklist.checklist_id?._id}`}
                   className='text-blue-500 hover:font-medium'
                 >
                   {Tasklist.checklist_id?.name}
