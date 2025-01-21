@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import {Button} from '../Button'
 import {NoResults} from '../NoResults'
 
@@ -26,6 +26,7 @@ const Pagination: React.FC<PaginationProps> = ({
 }) => {
   const [startItem, setStartItem] = useState(1)
   const [endItem, setEndItem] = useState(8)
+  const [jumpToPage, setJumpToPage] = useState('')
   const [inputLimit, setInputLimit] = useState(pagination.pageSize.toString())
   const totalPages = Math.ceil(pagination.total / pagination.pageSize)
 
@@ -40,6 +41,13 @@ const Pagination: React.FC<PaginationProps> = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputLimit(e.target.value)
+  }
+  const handleJumpToPage = () => {
+    const page = parseInt(jumpToPage, 10)
+    if (!isNaN(page) && page >= 1 && page <= totalPages) {
+      onPageChange(page)
+      setJumpToPage('') // Clear the input field after jumping
+    }
   }
 
   const paginationRange = (current: number, total: number) => {
@@ -94,6 +102,21 @@ const Pagination: React.FC<PaginationProps> = ({
                 label='Next'
                 className={`px-3 py-1.5 border-r border-t border-b border-gray-300  disabled:cursor-not-allowed disabled:!text-gray disabled:!bg-white bg-white text-blue-500 `}
               />
+              <div className='flex items-center space-x-2'>
+                <input
+                  type='number'
+                  value={jumpToPage}
+                  onChange={(e) => setJumpToPage(e.target.value)}
+                  placeholder='Jump'
+                  className='ml-2  py-1.5 pl-1.5 border border-gray-300 w-16 placeholder:text-sm'
+                />
+                <Button
+                  onClick={handleJumpToPage}
+                  disabled={disabled || !jumpToPage || parseInt(jumpToPage, 10) <= 0}
+                  label='Go'
+                  className='px-3 py-1.5 border border-gray-300 !bg-blue-500 disabled:cursor-not-allowed disabled:!text-gray  text-white disabled:!bg-white '
+                />
+              </div>
             </div>
           </div>
         </div>

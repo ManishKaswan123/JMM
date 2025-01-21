@@ -32,7 +32,7 @@ interface IndividualCreatePayload {
   no_of_bath: number
   total_area: number
   remark: string
-  address: Omit<Address, '_id'>
+  address?: Omit<Address, '_id'>
 }
 interface IndividualFormPayload extends Omit<IndividualCreatePayload, 'address'> {
   address_line_1: string
@@ -131,48 +131,48 @@ const User: React.FC = () => {
         labelKey: 'name',
         required: true,
       },
-      {
-        type: 'text',
-        label: 'Address Line 1',
-        name: 'address_line_1',
-        placeholder: 'Address Line 1',
-        required: true,
-      },
-      {
-        type: 'text',
-        label: 'Address Line 2',
-        name: 'address_line_2',
-        placeholder: 'Address Line 2',
-        required: true,
-      },
-      {
-        type: 'text',
-        label: 'Country',
-        name: 'country',
-        placeholder: 'country',
-        required: true,
-      },
-      {
-        type: 'text',
-        label: 'City',
-        name: 'city',
-        placeholder: 'City',
-        required: true,
-      },
-      {
-        type: 'text',
-        label: 'State',
-        name: 'state',
-        placeholder: 'State',
-        required: true,
-      },
-      {
-        type: 'number',
-        label: 'Postal Code',
-        name: 'postal',
-        placeholder: 'Postal Code',
-        required: true,
-      },
+      // {
+      //   type: 'text',
+      //   label: 'Address Line 1',
+      //   name: 'address_line_1',
+      //   placeholder: 'Address Line 1',
+      //   required: true,
+      // },
+      // {
+      //   type: 'text',
+      //   label: 'Address Line 2',
+      //   name: 'address_line_2',
+      //   placeholder: 'Address Line 2',
+      //   required: true,
+      // },
+      // {
+      //   type: 'text',
+      //   label: 'Country',
+      //   name: 'country',
+      //   placeholder: 'country',
+      //   required: true,
+      // },
+      // {
+      //   type: 'text',
+      //   label: 'City',
+      //   name: 'city',
+      //   placeholder: 'City',
+      //   required: true,
+      // },
+      // {
+      //   type: 'text',
+      //   label: 'State',
+      //   name: 'state',
+      //   placeholder: 'State',
+      //   required: true,
+      // },
+      // {
+      //   type: 'number',
+      //   label: 'Postal Code',
+      //   name: 'postal',
+      //   placeholder: 'Postal Code',
+      //   required: true,
+      // },
       {
         type: 'number',
         label: 'Rooms Count',
@@ -191,7 +191,7 @@ const User: React.FC = () => {
         type: 'number',
         label: 'Total Area',
         name: 'total_area',
-        placeholder: 'Total Area',
+        placeholder: 'Total Area in Sq.ft.',
         required: true,
       },
 
@@ -247,17 +247,17 @@ const User: React.FC = () => {
       no_of_bath: payload.no_of_bath,
       total_area: payload.total_area,
       remark: payload.remark,
-      address: {
-        address_line_1: payload.address_line_1,
-        address_line_2: payload.address_line_2,
-        country: payload.country,
-        city: payload.city,
-        state: payload.state,
-        postal: payload.postal,
+      // address: {
+      //   address_line_1: payload.address_line_1,
+      //   address_line_2: payload.address_line_2,
+      //   country: payload.country,
+      //   city: payload.city,
+      //   state: payload.state,
+      //   postal: payload.postal,
 
-        lat: 0,
-        lng: 0,
-      },
+      //   lat: 0,
+      //   lng: 0,
+      // },
     }
     createMutation.mutate({payload: data, onSuccess})
   }
@@ -277,17 +277,17 @@ const User: React.FC = () => {
       no_of_bath: payload.no_of_bath,
       total_area: payload.total_area,
       remark: payload.remark,
-      address: {
-        address_line_1: payload.address_line_1,
-        address_line_2: payload.address_line_2,
-        country: payload.country,
-        city: payload.city,
-        state: payload.state,
-        postal: payload.postal,
+      // address: {
+      //   address_line_1: payload.address_line_1,
+      //   address_line_2: payload.address_line_2,
+      //   country: payload.country,
+      //   city: payload.city,
+      //   state: payload.state,
+      //   postal: payload.postal,
 
-        lat: selectedUser.address?.lat || 0,
-        lng: selectedUser.address?.lng || 0,
-      },
+      //   lat: selectedUser.address?.lat || 0,
+      //   lng: selectedUser.address?.lng || 0,
+      // },
       id: selectedUser.id,
     }
     updateMutation.mutate({payload: data, onSuccess})
@@ -301,12 +301,12 @@ const User: React.FC = () => {
       first_name: selectedUser.first_name,
       last_name: selectedUser.last_name,
       status: selectedUser.status,
-      address_line_1: selectedUser.address?.address_line_1,
-      address_line_2: selectedUser.address?.address_line_2,
-      country: selectedUser.address?.country,
-      city: selectedUser.address?.city,
-      state: selectedUser.address?.state,
-      postal: selectedUser.address?.postal,
+      // address_line_1: selectedUser.address?.address_line_1,
+      // address_line_2: selectedUser.address?.address_line_2,
+      // country: selectedUser.address?.country,
+      // city: selectedUser.address?.city,
+      // state: selectedUser.address?.state,
+      // postal: selectedUser.address?.postal,
       no_of_rooms: selectedUser?.no_of_rooms,
       no_of_bath: selectedUser?.no_of_bath,
       total_area: selectedUser?.total_area,

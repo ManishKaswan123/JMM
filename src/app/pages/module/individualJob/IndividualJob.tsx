@@ -21,6 +21,7 @@ import {useParams} from 'react-router-dom'
 import {useSelector} from 'react-redux'
 import {RootState} from 'sr/redux/store'
 import {useActions} from 'sr/utils/helpers/useActions'
+import {jobTypes} from 'sr/constants/jobsConstants'
 
 interface IndividualJobCreatePayload {
   title: string
@@ -31,7 +32,7 @@ interface IndividualJobCreatePayload {
   schedule_date: string
   work_status: string
   cleaner_id: string
-  // start_time: string
+  start_time: string
 }
 interface IndividualJobUpdatePayload extends IndividualJobCreatePayload {
   id: string
@@ -66,12 +67,17 @@ const IndividualJobCard: React.FC = () => {
         required: true,
       },
       {
-        type: 'text',
-        label: 'Title',
-        name: 'title',
-        placeholder: 'Title',
+        type: 'dropdown',
+        label: 'title',
+        name: jobTypes,
+        topLabel: 'Title',
+        placeholder: 'Select Title',
+        labelKey: 'label',
+        valueKey: 'value',
+        id: 'id',
         required: true,
       },
+
       {
         type: 'text',
         label: 'Street Address',
@@ -98,6 +104,13 @@ const IndividualJobCard: React.FC = () => {
         label: 'Schedule Date',
         name: 'schedule_date',
         placeholder: 'Schedule Date',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Start Time',
+        name: 'start_time',
+        placeholder: 'Start time in HH:MM format',
         required: true,
       },
       {
@@ -189,7 +202,7 @@ const IndividualJobCard: React.FC = () => {
       schedule_date: payload.schedule_date,
       work_status: payload.work_status,
       cleaner_id: payload.cleaner_id,
-      // start_time: payload.start_time,
+      start_time: payload.start_time,
     }
     createMutation.mutate({payload: data, onSuccess})
   }
@@ -207,7 +220,7 @@ const IndividualJobCard: React.FC = () => {
       schedule_date: payload.schedule_date,
       work_status: payload.work_status,
       cleaner_id: payload.cleaner_id,
-      // start_time: payload.start_time,
+      start_time: payload.start_time,
       id: selectedData.id,
     }
     updateMutation.mutate({payload: data, onSuccess})
@@ -229,7 +242,7 @@ const IndividualJobCard: React.FC = () => {
       })(),
       work_status: selectedData.work_status || '',
       cleaner_id: selectedData.cleaner_id?._id,
-      // start_time: selectedData.start_time || '',
+      start_time: selectedData.start_time || '',
       id: selectedData.id,
     }
   }, [selectedData])
@@ -294,7 +307,7 @@ const IndividualJobCard: React.FC = () => {
         ) : (
           data?.pagination && (
             <Pagination
-            currentPage={currentPage}
+              currentPage={currentPage}
               pagination={data.pagination}
               onPageChange={onPageChange}
               name='individualJob'

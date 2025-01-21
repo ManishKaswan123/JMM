@@ -59,7 +59,7 @@ const HeaderDropdown = () => {
               className='flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
               onClick={() => {
                 DropdownShow()
-                navigate(`user/${user.id}`)
+                navigate(`user/details/${user.id}`)
               }}
             >
               <svg
@@ -76,7 +76,7 @@ const HeaderDropdown = () => {
                   d='M5.121 19a1.5 1.5 0 01-1.06-.44l-2.12-2.12a1.5 1.5 0 010-2.12l12-12a1.5 1.5 0 012.12 0l2.12 2.12a1.5 1.5 0 010 2.12l-12 12a1.5 1.5 0 01-1.06.44z'
                 />
               </svg>
-              {user.firstName}
+              {user.username}
             </button>
             <button
               className='flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'

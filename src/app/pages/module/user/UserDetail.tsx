@@ -28,7 +28,15 @@ const UserDetailCard: React.FC = () => {
     return (
       <SkeletonCard
         label='Individual Details'
-        col1={['ID', 'Username', 'First Name', 'Last Name', 'Email', 'Mobile Number', 'Status']}
+        col1={[
+          'Individual ID',
+          'Username',
+          'First Name',
+          'Last Name',
+          'Email',
+          'Mobile Number',
+          'Status',
+        ]}
         col2={[
           'Rooms Count',
           'Bathrooms Count',

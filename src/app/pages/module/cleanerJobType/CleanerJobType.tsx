@@ -156,7 +156,7 @@ const CleanerJobTypeCard: React.FC = () => {
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
             <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>
-              Cleaner JobType
+              Cleaner Job Type
             </h2>
             <div className='flex items-center'>
               <Button
@@ -206,7 +206,7 @@ const CleanerJobTypeCard: React.FC = () => {
         ) : (
           data?.pagination && (
             <Pagination
-            currentPage={currentPage}
+              currentPage={currentPage}
               pagination={data?.pagination}
               onPageChange={onPageChange}
               name='cleanerJobType'
