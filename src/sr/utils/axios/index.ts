@@ -36,10 +36,23 @@ export async function patch<T>(
   return (await axios.patch<T>(url, body, {headers})).data
 }
 
+// export async function remove<T>(
+//   url: string,
+//   params: Record<string, unknown> = {},
+//   headers?: AxiosRequestHeaders
+// ) {
+//   return (await axios.delete<T>(url, {params, headers})).data
+// }
+
 export async function remove<T>(
   url: string,
-  params: Record<string, unknown> = {},
+  data: Record<string, unknown> = {},
   headers?: AxiosRequestHeaders
-) {
-  return (await axios.delete<T>(url, {params, headers})).data
+): Promise<T> {
+  return (
+    await axios.delete<T>(url, {
+      data, // Include payload in the body
+      headers,
+    })
+  ).data
 }

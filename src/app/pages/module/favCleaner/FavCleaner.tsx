@@ -14,6 +14,7 @@ import {
   IndividualFavCleaner,
   IndividualFavCleanerFilters,
   useCreateIndividualFavCleaner,
+  useDeleteIndividualFavCleaner,
   useUpdateIndividualFavCleaner,
 } from 'sr/utils/api/individualFavCleanerApi'
 import {useParams} from 'react-router-dom'
@@ -21,6 +22,7 @@ import CleanerTable from '../cleaner/CleanerTable'
 import {useSelector} from 'react-redux'
 import {RootState} from 'sr/redux/store'
 import {useActions} from 'sr/utils/helpers/useActions'
+import {CleanerDetails} from 'sr/utils/api/fetchCleaner'
 
 interface IndividualFavCleanerCreatePayload {
   individual_id: string
@@ -36,7 +38,7 @@ interface IndividualFavCleanerFormPayload
 
 const IndividualFavCleanerCard: React.FC = () => {
   const {userId} = useParams<{userId: string | undefined}>()
-  const [selectedData, setSelectedData] = useState<IndividualFavCleaner>()
+  const [selectedData, setSelectedData] = useState<CleanerDetails>()
   const [selectedIndividualFavCleaner, setSelectedIndividualFavCleaner] =
     useState<IndividualFavCleaner>()
   const [currentPage, setCurrentPage] = useState<number>(1)
@@ -50,6 +52,7 @@ const IndividualFavCleanerCard: React.FC = () => {
   const {fetchCleanerData} = useActions()
   const createMutation = useCreateIndividualFavCleaner()
   const updateMutation = useUpdateIndividualFavCleaner()
+  const deleteMutation = useDeleteIndividualFavCleaner()
 
   const createAndUpdateFields: FieldsArray = useMemo(
     () => [
@@ -124,6 +127,12 @@ const IndividualFavCleanerCard: React.FC = () => {
     setFilters(newFilters)
     setCurrentPage(1)
     setIsFilterVisible(false)
+  }
+  const handleDeleteCreateIndividualFavCleaner = async (cleaner_id: string) => {
+    deleteMutation.mutate({
+      individual_id: userId || '',
+      cleaner_id: cleaner_id,
+    })
   }
 
   const handleCreateIndividualFavCleaner = async (payload: IndividualFavCleanerFormPayload) => {
@@ -209,7 +218,12 @@ const IndividualFavCleanerCard: React.FC = () => {
               columns={['Username', 'Mobile Number', 'Email', 'Date Of Birth', 'Status', 'Actions']}
             />
           ) : (
-            <CleanerTable<Record<string, any>> type='favcleaner' data={data?.data.cleaner_ids} />
+            <CleanerTable<Record<string, any>>
+              type='favcleaner'
+              data={data?.data.cleaner_ids}
+              handleDelete={handleDeleteCreateIndividualFavCleaner}
+              setSelectedData={setSelectedData}
+            />
           )}
         </div>
         {isLoading ? (

@@ -1,15 +1,22 @@
-import {FaEdit, FaEye} from 'react-icons/fa'
+import {FaEdit, FaEye, FaTrash} from 'react-icons/fa'
 import {useNavigate} from 'react-router-dom'
 import {CleanerDetails} from 'sr/utils/api/fetchCleaner'
 
 interface Props<T> {
   type: 'cleaner' | 'favcleaner'
   data?: T[]
+  handleDelete?: (cleaner_id: string) => void
   setSelectedData?: React.Dispatch<React.SetStateAction<CleanerDetails | undefined>>
   setIsUpdateModalOpen?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const CleanerTable = <T,>({type, data, setSelectedData, setIsUpdateModalOpen}: Props<T>) => {
+const CleanerTable = <T,>({
+  type,
+  data,
+  setSelectedData,
+  setIsUpdateModalOpen,
+  handleDelete,
+}: Props<T>) => {
   const navigate = useNavigate()
   const handleCleanerDetail = (cleaner: any) => {
     navigate(`/cleaner/details/${type === 'cleaner' ? cleaner.id : cleaner._id}`)
@@ -103,6 +110,15 @@ const CleanerTable = <T,>({type, data, setSelectedData, setIsUpdateModalOpen}: P
                       handleCleanerDetail(cleaner)
                     }}
                   />
+                  {handleDelete && (
+                    <FaTrash
+                      className='text-rose-600 cursor-pointer mr-4 h-4 w-4'
+                      onClick={() => {
+                        // setUser(type === 'cleaner' ? cleaner.id : cleaner._id)
+                        handleDelete(type === 'cleaner' ? cleaner.id : cleaner._id)
+                      }}
+                    />
+                  )}
                 </div>
               </td>
             </tr>
