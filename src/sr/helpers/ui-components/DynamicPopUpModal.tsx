@@ -36,7 +36,9 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
   const [uploading, setUploading] = useState<boolean>(false)
   const [loader, setLoader] = useState<boolean>(false)
   const [signendUrl, setSignedUrl] = useState<string>('')
-  const [multiSelectData, setMultiSelectData] = useState<Record<string, any>>({})
+  const [multiSelectData, setMultiSelectData] = useState<Record<string, any>>(
+    Object.fromEntries(Object.entries(defaultValues).filter(([key, value]) => Array.isArray(value)))
+  )
   const {
     register,
     handleSubmit,
@@ -51,14 +53,9 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
     // Check if defaultValues is not null or undefined
     if (defaultValues) {
       const fieldNames = new Set(
-        fields.map((field) => {
-          if (field.type === 'dropdown') return field.label
-          else if (field.type === 'multi') return ''
-          else return field.name
-        })
-      )
-      setMultiSelectData(
-        Object.keys(defaultValues).filter((key) => Array.isArray(defaultValues[key]))
+        fields
+          .filter((field) => field.type !== 'multi')
+          .map((field) => (field.type === 'dropdown' ? field.label : field.name))
       )
 
       const filteredDefaultValues = Object.keys(defaultValues).reduce<{[key: string]: any}>(
@@ -119,14 +116,19 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
     }
   }
 
-  const handleMultiSelect = (selectedOptions: OptionType[], label: string) => {
-    setMultiSelectData({...multiSelectData, [label]: selectedOptions.map((option) => option.value)})
-  }
-
   const onSubmitForm: SubmitHandler<any> = async (formData: FormData) => {
     // console.log({...formData, ...multiSelectData})
-    await onSubmit({...formData, ...multiSelectData})
+    await onSubmit({
+      ...formData,
+      ...Object.fromEntries(
+        Object.entries(multiSelectData).map(([key, value]) => [
+          key,
+          value.map((item: any) => item.value), // Extract `value` from each object in the array
+        ])
+      ),
+    })
   }
+  // console.log('defaultValues are : ', defaultValues)
 
   return (
     <div
@@ -159,10 +161,13 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
                     options={field.options || []}
                     label={field.label}
                     name={field.name}
-                    value={watch(field.label)} // Watch the field value dynamically
-                    onChange={(selectedOptions: OptionType[]) =>
-                      handleMultiSelect(selectedOptions, field.label)
-                    }
+                    value={multiSelectData[field.label] || []} // Watch the field value dynamically
+                    onChange={(selectedOptions: OptionType[], actionMeta: any) => {
+                      setMultiSelectData({
+                        ...multiSelectData,
+                        [field.label]: selectedOptions,
+                      })
+                    }}
                     placeholder={field.placeholder}
                   />
                 )

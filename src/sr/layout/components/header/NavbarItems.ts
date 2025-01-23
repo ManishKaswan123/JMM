@@ -158,6 +158,12 @@ export const customerNavItems: NavItem[] = [
     iconPath: 'M12 4v16m8-8H4', // Plus icon
   },
   {
+    label: 'Tasklists',
+    path: 'customer/tasklist',
+    name: 'tasklist',
+    iconPath: 'M12 4v16m8-8H4', // Plus icon
+  },
+  {
     label: 'Location',
     path: 'customer/location',
     name: 'location',

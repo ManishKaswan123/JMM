@@ -31,7 +31,7 @@ export interface Checklist {
   subtype: string
   company_id: ModifiedCompanyResponse
   customer_id: ModifiedCustomerResponse
-  task_ids: string[]
+  task_ids: Record<string, any>[]
   remarks?: string
   location_ids: string[]
   checklist_ids: string[]
