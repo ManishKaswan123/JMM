@@ -1,6 +1,4 @@
 import React, {ChangeEvent, FocusEvent} from 'react'
-import {StylesConfig} from 'react-select'
-import {OptionType} from '../Multiselect'
 
 interface Props {
   label?: string

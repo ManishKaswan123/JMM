@@ -12,34 +12,6 @@ const TaskListDetailsCard: React.FC = () => {
   const {id} = useParams<{id: string}>()
   const [data, setData] = useState<TaskListDetails>()
   const [isError, setIsError] = useState(false)
-  const companyMap = useSelector((state: RootState) => state.company.idNameMap)
-  const companyStatus = useSelector((state: RootState) => state.company.status)
-  const customerMap = useSelector((state: RootState) => state.customer.idNameMap)
-  const customerStatus = useSelector((state: RootState) => state.customer.status)
-  const checklistMap = useSelector((state: RootState) => state.checklist.idNameMap)
-  const checklistStatus = useSelector((state: RootState) => state.checklist.status)
-  const {fetchCompanyData, fetchCustomersData, fetchChecklistData} = useActions()
-  const fetchDataIfNeeded = useCallback(() => {
-    if (companyStatus !== 'succeeded') {
-      fetchCompanyData({})
-    }
-    if (customerStatus !== 'succeeded') {
-      fetchCustomersData({})
-    }
-    if (checklistStatus !== 'succeeded') {
-      fetchChecklistData({})
-    }
-  }, [
-    companyStatus,
-    fetchCompanyData,
-    customerStatus,
-    fetchCustomersData,
-    checklistStatus,
-    fetchChecklistData,
-  ])
-  useEffect(() => {
-    fetchDataIfNeeded()
-  }, [])
 
   useEffect(() => {
     fetchSingleTaskList(id || '')
@@ -52,7 +24,7 @@ const TaskListDetailsCard: React.FC = () => {
   }, [id])
 
   const onGoBack = () => {
-    navigate('/tasklist')
+    navigate('/task')
   }
 
   if (!data)
@@ -63,7 +35,7 @@ const TaskListDetailsCard: React.FC = () => {
         col2={'Company ID,Customer ID,Created At,Updated At'.split(',')}
       />
     )
-  if (isError) return <div>Error loading tasklist details.</div>
+  if (isError) return <div>Error loading task details.</div>
 
   return (
     <div className='bg-white rounded-lg p-6 shadow-lg border border-gray-300 mx-4 my-8 w-full relative'>
@@ -75,14 +47,14 @@ const TaskListDetailsCard: React.FC = () => {
       />
 
       {/* Title */}
-      <h2 className='text-4xl font-bold mb-6 text-center'>TaskList Details</h2>
+      <h2 className='text-4xl font-bold mb-6 text-center'>Task Details</h2>
 
       {/* Details Grid */}
       <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
         {/* Column 1 */}
         <div className='space-y-4'>
           <div className='flex items-center'>
-            <strong className='font-medium text-lg mr-2'>TaskList ID:</strong>
+            <strong className='font-medium text-lg mr-2'>Task ID:</strong>
             <p>{data.id}</p>
           </div>
           <div className='flex items-center'>
@@ -99,7 +71,7 @@ const TaskListDetailsCard: React.FC = () => {
           </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Checklist ID:</strong>
-            <p>{checklistMap[data.checklist_id]}</p>
+            <p>{data.checklist_id?.name}</p>
           </div>
         </div>
 
@@ -107,11 +79,11 @@ const TaskListDetailsCard: React.FC = () => {
         <div className='space-y-4'>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Company ID:</strong>
-            <p>{companyMap[data.company_id]}</p>
+            <p>{data.company_id?.company_name}</p>
           </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Customer ID:</strong>
-            <p>{customerMap[data.customer_id]}</p>
+            <p>{data.customer_id?.name}</p>
           </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Created At:</strong>

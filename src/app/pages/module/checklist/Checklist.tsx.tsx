@@ -50,15 +50,23 @@ const ChecklistCard: React.FC = () => {
   const companyStatus = useSelector((state: RootState) => state.company.status)
   const customerData = useSelector((state: RootState) => state.customer.data)
   const customerStatus = useSelector((state: RootState) => state.customer.status)
+  const taskStore = useSelector((state: RootState) => state.task)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const {fetchCompanyData, fetchCustomersData} = useActions()
+  const {fetchCompanyData, fetchCustomersData, fetchTaskData} = useActions()
   const [itemsPerPage, setItemsPerPage] = useState<number>(8)
   const createMutation = useCreateChecklist()
   const updateMutation = useUpdateChecklist()
 
   const createFields: FieldsArray = useMemo(
     () => [
+      {
+        type: 'multi',
+        options: taskStore.data?.map((item) => ({label: item.task_name, value: item.id})) || [],
+        label: 'task_ids',
+        name: 'Tasks',
+        placeholder: 'Select Tasks',
+      },
       {
         type: 'text',
         label: 'Name',
@@ -125,7 +133,7 @@ const ChecklistCard: React.FC = () => {
         required: true,
       },
     ],
-    [companyData, customerData]
+    [companyData, customerData, taskStore.data]
   )
 
   const fields: FieldsArray = useMemo(
@@ -211,7 +219,17 @@ const ChecklistCard: React.FC = () => {
     if (customerStatus !== 'succeeded') {
       fetchCustomersData({})
     }
-  }, [companyStatus, fetchCompanyData, customerStatus, fetchCustomersData])
+    if (taskStore.status !== 'succeeded') {
+      fetchTaskData({})
+    }
+  }, [
+    companyStatus,
+    fetchCompanyData,
+    customerStatus,
+    fetchCustomersData,
+    taskStore.status,
+    fetchTaskData,
+  ])
 
   const onPageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
@@ -233,7 +251,7 @@ const ChecklistCard: React.FC = () => {
       subtype: payload.subtype,
       company_id: payload.company_id,
       customer_id: payload.customer_id,
-      task_ids: [],
+      task_ids: payload.task_ids,
       status: payload.status,
     }
     createMutation.mutate({payload: data, onSuccess})
@@ -249,7 +267,7 @@ const ChecklistCard: React.FC = () => {
       subtype: payload.subtype,
       company_id: payload.company_id,
       customer_id: payload.customer_id,
-      task_ids: [],
+      task_ids: payload.task_ids,
       status: payload.status,
       id: selectedData.id,
     }
@@ -263,12 +281,11 @@ const ChecklistCard: React.FC = () => {
       subtype: selectedData.subtype,
       company_id: selectedData.company_id._id,
       customer_id: selectedData.customer_id._id,
-      task_ids: [] as string[],
+      task_ids: selectedData.task_ids,
       status: selectedData.status,
       id: selectedData.id,
     }
   }, [selectedData])
-  console.log('filters are  :', filters)
 
   return (
     <>
@@ -331,7 +348,7 @@ const ChecklistCard: React.FC = () => {
         ) : (
           data?.pagination && (
             <Pagination
-            currentPage={currentPage}
+              currentPage={currentPage}
               pagination={data.pagination}
               onPageChange={onPageChange}
               name='checklist'

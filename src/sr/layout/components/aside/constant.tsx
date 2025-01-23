@@ -55,8 +55,8 @@ export const normalMenuItems = [
       'M16.5 4.5l3 3m-2.121-2.121L8.25 16.5m5.25-11.25l-2.121 2.121M9.5 20.5H6l1.5-4.5 7.121-7.121 2.121 2.121L9.5 20.5z',
   },
   {
-    label: 'Task List',
-    path: '/tasklist',
+    label: 'Task',
+    path: '/task',
     iconPath: 'M5 13l4 4L19 7M5 3v6m0 0h6',
   },
   {

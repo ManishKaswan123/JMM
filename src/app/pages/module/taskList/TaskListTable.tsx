@@ -1,10 +1,7 @@
-import React, {useCallback, useEffect} from 'react'
+import React from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
-import {useSelector} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {RootState} from 'sr/redux/store'
 import {TaskListDetails} from 'sr/utils/api/fetchTaskList'
-import {useActions} from 'sr/utils/helpers/useActions'
 
 interface Props {
   data?: TaskListDetails[]
@@ -13,35 +10,6 @@ interface Props {
 }
 
 const TaskListTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalOpen}) => {
-  const companyMap = useSelector((state: RootState) => state.company.idNameMap)
-  const companyStatus = useSelector((state: RootState) => state.company.status)
-  const customerMap = useSelector((state: RootState) => state.customer.idNameMap)
-  const customerStatus = useSelector((state: RootState) => state.customer.status)
-  const checklistMap = useSelector((state: RootState) => state.checklist.idNameMap)
-  const checklistStatus = useSelector((state: RootState) => state.checklist.status)
-  const {fetchCompanyData, fetchCustomersData, fetchChecklistData} = useActions()
-  const fetchDataIfNeeded = useCallback(() => {
-    if (companyStatus !== 'succeeded') {
-      fetchCompanyData({})
-    }
-    if (customerStatus !== 'succeeded') {
-      fetchCustomersData({})
-    }
-    if (checklistStatus !== 'succeeded') {
-      fetchChecklistData({})
-    }
-  }, [
-    companyStatus,
-    fetchCompanyData,
-    customerStatus,
-    fetchCustomersData,
-    checklistStatus,
-    fetchChecklistData,
-  ])
-  useEffect(() => {
-    fetchDataIfNeeded()
-  }, [])
-
   return (
     <div className='inline-block min-w-full shadow rounded-lg overflow-hidden'>
       <table className='min-w-full leading-normal'>
@@ -83,26 +51,26 @@ const TaskListTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModal
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <Link
-                  to={`/checklist/${item.checklist_id}`}
+                  to={`/checklist/${item.checklist_id?._id}`}
                   className='text-blue-500 hover:font-medium'
                 >
-                  {checklistMap[item.checklist_id]}
+                  {item.checklist_id?.name}
                 </Link>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <Link
-                  to={`/company/${item.company_id}`}
+                  to={`/company/${item.company_id?._id}`}
                   className='text-blue-500 hover:font-medium'
                 >
-                  {companyMap[item.company_id]}
+                  {item.company_id?.company_name}
                 </Link>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <Link
-                  to={`/customer/${item.company_id}`}
+                  to={`/customer/${item.customer_id?._id}`}
                   className='text-blue-500 hover:font-medium'
                 >
-                  {customerMap[item.customer_id]}
+                  {item.customer_id?.name}
                 </Link>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
@@ -117,7 +85,7 @@ const TaskListTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModal
                       setIsUpdateModalOpen(true)
                     }}
                   />
-                  <Link to={`/tasklist/${item.id}`} className='text-blue-500 hover:font-medium'>
+                  <Link to={`/task/${item.id}`} className='text-blue-500 hover:font-medium'>
                     <FaEye
                       className='cursor-pointer text-blue-500 hover:text-gray-700'
                       style={{fontSize: '1.1rem'}}
