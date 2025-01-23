@@ -75,6 +75,7 @@ export const routeConfigs = [
   {path: '/customer', element: <CustomerCard />},
   {path: '/customer/details/:customer_id', element: <CustomerDetailsCard />},
   {path: '/customer/checklist/:customer_id', element: <ChecklistCard />},
+  {path: '/customer/tasklist/:customer_id', element: <TaskList />},
   {path: '/customer/location/:customer_id', element: <CustomerLocationCard />},
   {path: '/checklist', element: <ChecklistCard />},
   {path: '/checklist/:id', element: <ChecklistDetailsCard />},

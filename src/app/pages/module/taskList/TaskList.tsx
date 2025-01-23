@@ -15,6 +15,7 @@ import {fetchTaskList, TaskListDetails, TasklistFilters} from 'sr/utils/api/fetc
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 import {useCreateTasklist} from 'sr/utils/api/createTasklist'
 import {useUpdateTasklist} from 'sr/utils/api/updateTasklist'
+import {useParams} from 'react-router-dom'
 
 interface CreateTasklistPayload {
   name: string
@@ -31,9 +32,10 @@ interface UpdateTasklistPayload extends Omit<CreateTasklistPayload, 'password'> 
   id: string
 }
 const TaskList: React.FC = () => {
+  const {customer_id} = useParams<{customer_id: string}>()
   const [selectedData, setSelectedData] = useState<TaskListDetails>()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [filters, setFilters] = useState<TasklistFilters>()
+  const [filters, setFilters] = useState<TasklistFilters>({customer_id})
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const companyData = useSelector((state: RootState) => state.company.data)
   const companyStatus = useSelector((state: RootState) => state.company.status)
@@ -193,6 +195,12 @@ const TaskList: React.FC = () => {
     else if (action === 'update') setIsUpdateModalOpen(false)
   }
   useEffect(() => {
+    if (customer_id === undefined) {
+      const {customer_id, ...rest} = filters
+      setFilters(rest)
+    }
+  }, [customer_id])
+  useEffect(() => {
     fetchUserDataIfNeeded()
   }, [])
 
@@ -306,6 +314,7 @@ const TaskList: React.FC = () => {
                 setIsFilterVisible={setIsFilterVisible}
                 preFilters={filters || {}}
                 fields={fields}
+                handleClearFilter={() => handleApplyFilter({customer_id})}
               />
             </div>
           )}
@@ -344,6 +353,7 @@ const TaskList: React.FC = () => {
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           fields={createAndUpdateFields}
+          defaultValues={customer_id ? {customer_id} : undefined}
           onSubmit={handleCreateTasklist}
         />
       )}

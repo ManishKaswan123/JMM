@@ -264,7 +264,12 @@ const Addresses: React.FC = () => {
     if (action === 'create') setIsCreateModalOpen(false)
     else if (action === 'update') setIsUpdateModalOpen(false)
   }
-
+  useEffect(() => {
+    if (userId === undefined) {
+      const {individual_id, ...rest} = filters
+      setFilters(rest)
+    }
+  }, [userId])
   useEffect(() => {
     fetchUserDataIfNeeded()
   }, [])

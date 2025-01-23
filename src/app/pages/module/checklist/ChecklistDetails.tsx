@@ -1,27 +1,14 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
 import {Checklist, fetchSingleChecklist} from 'sr/utils/api/checklistApi'
 import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
-import {useSelector} from 'react-redux'
-import {RootState} from 'sr/redux/store'
-import {useActions} from 'sr/utils/helpers/useActions'
 
 const ChecklistDetailsCard: React.FC = () => {
   const navigate = useNavigate()
   const {id} = useParams<{id: string}>()
   const [data, setData] = useState<Checklist>()
   const [isError, setIsError] = useState(false)
-  const taskStore = useSelector((state: RootState) => state.task)
-  const {fetchTaskData} = useActions()
-  useEffect(() => {
-    fetchDataIfNeeded()
-  }, [])
-  const fetchDataIfNeeded = useCallback(() => {
-    if (taskStore.status !== 'succeeded') {
-      fetchTaskData({})
-    }
-  }, [fetchTaskData, taskStore.status])
 
   useEffect(() => {
     fetchSingleChecklist(id || '')
@@ -102,7 +89,7 @@ const ChecklistDetailsCard: React.FC = () => {
 
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Taks IDs:</strong>
-            <p>{data.task_ids.map((item) => taskStore.idNameMap[item]).join(', ') || 'No tasks'}</p>
+            <p>{data.task_ids.map((item) => item.name).join(', ') || 'No tasks'}</p>
           </div>
 
           <div className='flex items-center'>

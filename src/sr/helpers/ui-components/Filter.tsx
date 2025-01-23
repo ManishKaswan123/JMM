@@ -66,6 +66,7 @@ const Filter = ({
   // fields.map((field: any) => {
   //   console.log('filters is :', field)
   // })
+  console.log('filters are :- ', filters)
 
   return (
     <div className='w-full p-4 rounded-lg mt-4'>

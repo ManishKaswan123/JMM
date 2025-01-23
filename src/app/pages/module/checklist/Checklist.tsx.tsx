@@ -33,7 +33,7 @@ interface ChecklistCreatePayload {
   subtype: string
   company_id: string
   customer_id: string
-  task_ids: string[]
+  task_ids: Record<string, any>[]
   status: string
 }
 interface ChecklistUpdatePayload extends ChecklistCreatePayload {
@@ -281,7 +281,9 @@ const ChecklistCard: React.FC = () => {
       subtype: selectedData.subtype,
       company_id: selectedData.company_id._id,
       customer_id: selectedData.customer_id._id,
-      task_ids: selectedData.task_ids,
+      task_ids: selectedData.task_ids.map((item) => {
+        return {value: item._id, label: item.name}
+      }),
       status: selectedData.status,
       id: selectedData.id,
     }
@@ -364,6 +366,7 @@ const ChecklistCard: React.FC = () => {
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           fields={createFields}
+          defaultValues={customer_id ? {customer_id} : undefined}
           onSubmit={handleCreateChecklist}
         />
       )}
