@@ -32,7 +32,7 @@ export interface Checklist {
   company_id: ModifiedCompanyResponse
   customer_id: ModifiedCustomerResponse
   task_ids: string[]
-  remarks: string
+  remarks?: string
   location_ids: string[]
   checklist_ids: string[]
   status: string

@@ -17,7 +17,7 @@ type Field = {
 export type FieldsArray = Field[]
 
 export type ExtractFieldNames<T extends FieldsArray> = {
-  [K in keyof T]: T[K] extends {type: 'dropdown'}
+  [K in keyof T]: T[K] extends {type: 'dropdown||multi'}
     ? T[K] extends {label: infer U}
       ? U
       : never

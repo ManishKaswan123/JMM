@@ -37,6 +37,9 @@ interface ApplicationCreatePayload {
     | 'pause'
     | 'contacting'
 }
+interface ApplicationFormPayload extends Omit<ApplicationCreatePayload, 'answers'> {
+  answers: string
+}
 
 interface ApplicationUpdatePayload extends ApplicationCreatePayload {
   id: string
@@ -98,6 +101,13 @@ const Application: React.FC = () => {
         id: 'id',
         required: true,
       },
+      {
+        type: 'text',
+        label: 'Answer',
+        name: 'answers',
+        placeholder: 'Answers',
+        required: true,
+      },
     ],
     [jobData, cleanerData]
   )
@@ -139,6 +149,13 @@ const Application: React.FC = () => {
         placeholder: 'Select Status',
         labelKey: 'name',
         id: 'id',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Answer',
+        name: 'answers',
+        placeholder: 'Answers',
         required: true,
       },
     ],
@@ -229,16 +246,16 @@ const Application: React.FC = () => {
     setIsFilterVisible(false)
   }
 
-  const handleCreateApplication = async (payload: ApplicationCreatePayload) => {
+  const handleCreateApplication = async (payload: ApplicationFormPayload) => {
     const data: ApplicationCreatePayload = {
       job_id: payload.job_id,
       cleaner_id: payload.cleaner_id,
-      answers: [] as string[],
+      answers: [payload.answers],
       status: payload.status,
     }
     createMutation.mutate({payload: data, onSuccess})
   }
-  const handleEditApplication = async (payload: ApplicationUpdatePayload) => {
+  const handleEditApplication = async (payload: ApplicationFormPayload) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
@@ -246,7 +263,7 @@ const Application: React.FC = () => {
     const data: ApplicationUpdatePayload = {
       job_id: payload.job_id,
       cleaner_id: payload.cleaner_id,
-      answers: [] as string[],
+      answers: [payload.answers],
       status: payload.status,
       id: selectedData.id,
     }
@@ -259,7 +276,7 @@ const Application: React.FC = () => {
       job_id: selectedData.job_id._id,
       cleaner_id: selectedData.cleaner_id._id,
       status: selectedData.status,
-      answers: [] as string[],
+      answers: selectedData.answers[0],
       id: selectedData.id,
     }
   }, [selectedData])
@@ -321,7 +338,7 @@ const Application: React.FC = () => {
         ) : (
           data?.pagination && (
             <Pagination
-            currentPage={currentPage}
+              currentPage={currentPage}
               pagination={data.pagination}
               onPageChange={onPageChange}
               name='Application'

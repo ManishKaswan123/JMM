@@ -267,9 +267,9 @@ const TaskList: React.FC = () => {
       name: selectedData.name,
       description: selectedData.description,
       type: selectedData.type,
-      checklist_id: selectedData.checklist_id,
-      company_id: selectedData.company_id,
-      customer_id: selectedData.customer_id,
+      checklist_id: selectedData.checklist_id?._id,
+      company_id: selectedData.company_id?._id,
+      customer_id: selectedData.customer_id?._id,
       images: selectedData.images,
       videos: selectedData.videos,
       status: selectedData.status,
@@ -281,7 +281,7 @@ const TaskList: React.FC = () => {
       <div className='container mx-auto px-4 sm:px-8'>
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
-            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>TaskList</h2>
+            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>Task</h2>
             <div className='flex items-center'>
               <Button
                 label='Create new'
@@ -328,7 +328,7 @@ const TaskList: React.FC = () => {
         ) : (
           data?.pagination && (
             <Pagination
-            currentPage={currentPage}
+              currentPage={currentPage}
               pagination={data.pagination}
               onPageChange={onPageChange}
               name='TaskList'

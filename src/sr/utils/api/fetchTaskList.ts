@@ -5,9 +5,9 @@ export interface TaskListDetails {
   name: string
   description: string
   type: string
-  checklist_id: string
-  company_id: string
-  customer_id: string
+  checklist_id: Record<string, any>
+  company_id: Record<string, any>
+  customer_id: Record<string, any>
   images: string[]
   videos: string[]
   status?: string
@@ -39,7 +39,7 @@ export const fetchTaskList = async (payload: TasklistFilters): Promise<FetchTask
   const filteredPayload = filterPayload(payload)
 
   try {
-    const res = await get<FetchTaskListResponse>(`/customer/tasklist`, filteredPayload)
+    const res = await get<FetchTaskListResponse>(`/task`, filteredPayload)
 
     if (res.success === true && res.data) {
       return res // Return the fetched data
@@ -52,7 +52,7 @@ export const fetchTaskList = async (payload: TasklistFilters): Promise<FetchTask
 }
 export const fetchSingleTaskList = async (id: string): Promise<FetchSingleTaskListResponse> => {
   try {
-    const res = await get<FetchSingleTaskListResponse>(`/customer/tasklist`, {id})
+    const res = await get<FetchSingleTaskListResponse>(`/task`, {id})
 
     if (res.success === true && res.data) {
       return res // Return the fetched data

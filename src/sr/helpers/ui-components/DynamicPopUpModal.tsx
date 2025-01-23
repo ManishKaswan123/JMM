@@ -9,7 +9,7 @@ import {uploadMedia} from 'sr/utils/api/media'
 import {ExtractFieldNames, FieldsArray} from 'sr/constants/fields'
 import getSignedURL from 'sr/utils/helpers/getSignedURL'
 import {Spinner} from './Spinner'
-import MultiSelectField from 'sr/partials/widgets/widgets-components/Multiselect'
+import MultiSelectField, {OptionType} from 'sr/partials/widgets/widgets-components/Multiselect'
 
 interface DynamicModalProps {
   imageType?: string
@@ -31,11 +31,12 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
   onSubmit,
 }) => {
   type FormFields = {
-    [K in ExtractFieldNames<typeof fields>]: string
+    [K in ExtractFieldNames<typeof fields>]: any
   }
   const [uploading, setUploading] = useState<boolean>(false)
   const [loader, setLoader] = useState<boolean>(false)
   const [signendUrl, setSignedUrl] = useState<string>('')
+  const [multiSelectData, setMultiSelectData] = useState<Record<string, any>>({})
   const {
     register,
     handleSubmit,
@@ -50,78 +51,30 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
     // Check if defaultValues is not null or undefined
     if (defaultValues) {
       const fieldNames = new Set(
-        fields.map((field) => (field.type === 'dropdown' ? field.label : field.name))
+        fields.map((field) => {
+          if (field.type === 'dropdown') return field.label
+          else if (field.type === 'multi') return ''
+          else return field.name
+        })
+      )
+      setMultiSelectData(
+        Object.keys(defaultValues).filter((key) => Array.isArray(defaultValues[key]))
       )
 
       const filteredDefaultValues = Object.keys(defaultValues).reduce<{[key: string]: any}>(
         (acc, key) => {
-          if (fieldNames.has(key)) {
+          if (fieldNames.has(key) && fieldNames) {
             acc[key] = defaultValues[key]
           }
           return acc
         },
         {}
       )
-      // console.log('Fields: ', fields)
-      // console.log('Default values: ', defaultValues)
-      // console.log('Filtered default values: ', filteredDefaultValues)
+
       reset(filteredDefaultValues)
-      // if (getValues('imagePath') != '') {
-      //   console.log('inside if statement : ', getValues('imagePath'))
-      //   getSignedURL(defaultValues.imagePath).then((photoRes) => setSignedUrl(photoRes))
-      // }
-      // console.log('default values are ', defaultValues)
     }
-  }, [fields])
+  }, [fields, defaultValues, reset])
 
-  // const handleFileSelect = async (e: any) => {
-  //   const file: File | null = e.target.files?.[0] || null
-  //   const formData = new FormData()
-  //   if (file) {
-  //     let fileType = ''
-  //     const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png']
-  //     const validDocumentTypes = ['application/pdf', 'text/plain']
-  //     if (validImageTypes.includes(file.type)) {
-  //       fileType = 'image'
-  //     } else if (validDocumentTypes.includes(file.type)) {
-  //       fileType = 'document'
-  //     } else {
-  //       toast.error('File type should be jpeg, jpg, png, txt, or pdf')
-  //       return false
-  //     }
-  //     let fileNameIs = file.name
-  //     fileNameIs = fileNameIs.replace(/[^a-zA-Z0-9. ]/g, '').replace(/ /g, '-')
-  //     formData.append('file', file, fileNameIs)
-  //     formData.append('file_type', fileType)
-
-  //     const uploadFile = async (retryCount = 3) => {
-  //       setUploading(true)
-  //       try {
-  //         const res: any = await uploadMedia(formData)
-  //         if (res && res.status) {
-  //           if (imageType === 'image') {
-  //             // @ts-expect-error
-  //             setValue('images', [res.results.fileName])
-  //           } else {
-  //             setValue('imagePath', res.results.fileName)
-  //           }
-  //           // console.log('File name is ', res.results.fileName)
-  //         } else {
-  //           toast.error(res?.error)
-  //         }
-  //       } catch (error) {
-  //         if (retryCount > 0) {
-  //           await uploadFile(retryCount - 1)
-  //         } else {
-  //           toast.error('Failed to upload file after multiple attempts.')
-  //         }
-  //       } finally {
-  //         setUploading(false)
-  //       }
-  //     }
-  //     await uploadFile()
-  //   }
-  // }
   const handleFileSelect = async (e: any) => {
     e.preventDefault()
     const file: File | null = e.target.files?.[0] || null
@@ -154,7 +107,6 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
         setSignedUrl(photoRes)
         // console.log('photoRes is : ', photoRes)
         if (imageType === 'images') {
-          // @ts-expect-error
           setValue('images', [res.results.fileName])
         } else {
           setValue('imagePath', res.results.fileName)
@@ -167,10 +119,14 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
     }
   }
 
-  const onSubmitForm: SubmitHandler<any> = async (data: FormData) => {
-    await onSubmit(data)
+  const handleMultiSelect = (selectedOptions: OptionType[], label: string) => {
+    setMultiSelectData({...multiSelectData, [label]: selectedOptions.map((option) => option.value)})
   }
-  // console.log('default values are ', Object.keys(defaultValues).length)
+
+  const onSubmitForm: SubmitHandler<any> = async (formData: FormData) => {
+    // console.log({...formData, ...multiSelectData})
+    await onSubmit({...formData, ...multiSelectData})
+  }
 
   return (
     <div
@@ -199,15 +155,15 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
               case 'multi':
                 return (
                   <MultiSelectField
+                    key={index}
                     options={field.options || []}
                     label={field.label}
                     name={field.name}
-                    value={field.value || []}
-                    onChange={field.onChange}
+                    value={watch(field.label)} // Watch the field value dynamically
+                    onChange={(selectedOptions: OptionType[]) =>
+                      handleMultiSelect(selectedOptions, field.label)
+                    }
                     placeholder={field.placeholder}
-                    error={errors[field.name] && !watch(field.name)}
-                    errorText='Please select a value'
-                    required={field.required}
                   />
                 )
               case 'dropdown':
@@ -247,9 +203,9 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
                       error={errors.fileField}
                       errorText={`Please select a file`}
                     />
-                    {imageType == 'imagePath' && watch('imagePath') && (
+                    {imageType === 'imagePath' && watch('imagePath') && (
                       <div className='flex justify-center items-center space-x-4'>
-                        {Object.keys(defaultValues).length == 0 && (
+                        {Object.keys(defaultValues).length === 0 && (
                           <a
                             href={signendUrl}
                             target='_blank'
@@ -262,7 +218,6 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
                         <button
                           type='button'
                           onClick={() => {
-                            // @ts-expect-error
                             setValue('imagePath', undefined) // Clear the attachment value
                             setSignedUrl('')
                           }}
@@ -272,9 +227,9 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
                         </button>
                       </div>
                     )}
-                    {imageType == 'images' && watch('images') && watch('images').length > 0 && (
+                    {imageType === 'images' && watch('images') && watch('images').length > 0 && (
                       <div className='flex justify-center items-center space-x-4'>
-                        {Object.keys(defaultValues).length == 0 && (
+                        {Object.keys(defaultValues).length === 0 && (
                           <a
                             href={signendUrl}
                             target='_blank'
@@ -287,7 +242,6 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
                         <button
                           type='button'
                           onClick={() => {
-                            // @ts-expect-error
                             setValue('images', []) // Clear the attachment value
                             setSignedUrl('')
                           }}
@@ -333,40 +287,6 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
                     errorText={`Please enter ${field.placeholder}`}
                   />
                 )
-              // case 'number':
-              //   return (
-              //     <TextField
-              //       key={index}
-              //       type={field.type}
-              //       labelStyle='style1'
-              //       label={field.label}
-              //       className='custom-input form-input p-2 border rounded mb-2'
-              //       id={field.name}
-              //       required={field.required}
-              //       name={field.name}
-              //       placeholder={field.placeholder}
-              //       register={register(field.name, {required: field.required})}
-              //       error={errors[field.name] && !watch(field.name)}
-              //       errorText={`Please enter ${field.placeholder}`}
-              //     />
-              //   )
-              // case 'datetime-local':
-              //   return (
-              //     <TextField
-              //       key={index}
-              //       type={field.type}
-              //       labelStyle='style1'
-              //       label={field.label}
-              //       className='custom-input form-input p-2 border rounded mb-2'
-              //       id={field.name}
-              //       required={field.required}
-              //       name={field.name}
-              //       placeholder={field.placeholder}
-              //       register={register(field.name, {required: field.required})}
-              //       error={errors[field.name] && !watch(field.name)}
-              //       errorText={`Please enter ${field.placeholder}`}
-              //     />
-              //   )
             }
           })}
           <div className='flex justify-around items-center mt-4'>

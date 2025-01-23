@@ -1,14 +1,27 @@
-import React, {useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
 import {Checklist, fetchSingleChecklist} from 'sr/utils/api/checklistApi'
 import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
+import {useSelector} from 'react-redux'
+import {RootState} from 'sr/redux/store'
+import {useActions} from 'sr/utils/helpers/useActions'
 
 const ChecklistDetailsCard: React.FC = () => {
   const navigate = useNavigate()
   const {id} = useParams<{id: string}>()
   const [data, setData] = useState<Checklist>()
   const [isError, setIsError] = useState(false)
+  const taskStore = useSelector((state: RootState) => state.task)
+  const {fetchTaskData} = useActions()
+  useEffect(() => {
+    fetchDataIfNeeded()
+  }, [])
+  const fetchDataIfNeeded = useCallback(() => {
+    if (taskStore.status !== 'succeeded') {
+      fetchTaskData({})
+    }
+  }, [fetchTaskData, taskStore.status])
 
   useEffect(() => {
     fetchSingleChecklist(id || '')
@@ -28,7 +41,7 @@ const ChecklistDetailsCard: React.FC = () => {
     return (
       <SkeletonCard
         label='Checklist Details'
-        col1={'Checklist ID,Name,Type,Subtype,Status'.split(',')}
+        col1={'Checklist ID,Name,Type,Subtype,Status,Remarks'.split(',')}
         col2={'Company Name,Customer Name,Task IDs,Created At,Updated At'.split(',')}
       />
     )
@@ -70,6 +83,10 @@ const ChecklistDetailsCard: React.FC = () => {
             <strong className='font-medium text-lg mr-2'>Status:</strong>
             <p>{data.status}</p>
           </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Remarks:</strong>
+            <p>{data.remarks}</p>
+          </div>
         </div>
 
         {/* Column 2 */}
@@ -85,8 +102,9 @@ const ChecklistDetailsCard: React.FC = () => {
 
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Taks IDs:</strong>
-            <p>{data.task_ids.join(', ') || 'No tasks'}</p>
+            <p>{data.task_ids.map((item) => taskStore.idNameMap[item]).join(', ') || 'No tasks'}</p>
           </div>
+
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Created At:</strong>
             <p>{new Date(data.createdAt).toLocaleString()}</p>

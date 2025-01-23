@@ -15,11 +15,12 @@ export interface MultiSelectFieldProps {
   label: string
   name: string
   value: OptionType[]
-  onChange: (selectedOptions: OptionType[], actionMeta: ActionMeta<OptionType>) => void
+  onChange?: (selectedOptions: OptionType[], actionMeta: ActionMeta<OptionType>) => void
   placeholder?: string
   error?: boolean
   errorText?: string
   required?: boolean
+  register?: any
 }
 
 const customStyles: StylesConfig<OptionType, true> = {
@@ -28,7 +29,7 @@ const customStyles: StylesConfig<OptionType, true> = {
     padding: '4px',
     borderRadius: '4px',
     border: state.isFocused ? '1px solid #7747ff' : '1px solid #ccc',
-    boxShadow: state.isFocused ? '0 0 3px rgba(119, 71, 255, 0.5)' : 'none',
+    // boxShadow: state.isFocused ? '0 0 3px rgba(0, 0, , 0.5)' : 'none',
     fontSize: '14px',
     minHeight: '40px',
   }),
@@ -64,6 +65,7 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
   placeholder,
   error,
   errorText,
+  register,
 }) => {
   return (
     <div
@@ -96,6 +98,7 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
         className={`basic-single  ${error ? 'border-red-500' : ''}`}
         classNamePrefix='select'
         placeholder={placeholder}
+        {...register}
       />
 
       {/* Error message */}
