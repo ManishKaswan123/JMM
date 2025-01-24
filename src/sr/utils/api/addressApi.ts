@@ -21,7 +21,7 @@ interface PayloadType {
 export interface Address {
   address_line_1: string
   address_line_2: string
-  country: string
+  country?: string
   city: string
   state: string
   postal: number

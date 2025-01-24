@@ -347,7 +347,7 @@ const Addresses: React.FC = () => {
     return {
       address_line_1: selectedData.address.address_line_1,
       address_line_2: selectedData.address.address_line_2,
-      country: selectedData.address.country,
+      country: selectedData.address.country || '',
       city: selectedData.address.city,
       state: selectedData.address.state,
       postal: selectedData.address.postal,

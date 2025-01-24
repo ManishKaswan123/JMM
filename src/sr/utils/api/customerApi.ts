@@ -7,24 +7,36 @@ import {
   InvalidateQueryFilters,
 } from '@tanstack/react-query'
 import {toast} from 'react-toastify'
+import {Address} from './addressApi'
 interface PayloadType {
   limit?: number
   page?: number
   company_id?: string
   status?: string
 }
+export interface ContactsType {
+  first_name: string
+  last_name: string
+  phone: string
+  email: string
+  type: string
+  _id: string
+}
 
 export interface Customer {
   company_id: string
   email: string
   mobile_number: string
+  username?: string
+  contacts?: ContactsType[]
   name: string
   type: string
   remarks: string
+  head_office_address?: Address
+  billing_address?: Address
   location_ids: string[]
   checklist_ids: string[]
   status: string
-  contacts: string[]
   createdAt: string
   updatedAt: string
   id: string

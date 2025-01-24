@@ -295,7 +295,7 @@ const Branch: React.FC = () => {
       isDefaultBranch: selectedData.isDefaultBranch || false,
       address_line_1: selectedData.address.address_line_1,
       address_line_2: selectedData.address.address_line_2,
-      country: selectedData.address.country,
+      country: selectedData.address.country || '',
       city: selectedData.address.city,
       state: selectedData.address.state,
       postal: selectedData.address.postal,
@@ -365,7 +365,7 @@ const Branch: React.FC = () => {
         ) : (
           data?.pagination && (
             <Pagination
-            currentPage={currentPage}
+              currentPage={currentPage}
               pagination={data.pagination}
               onPageChange={onPageChange}
               name='branch'
