@@ -78,7 +78,7 @@ const DropdownField = ({
         className={` w-full basic-single px-2 py-3 rounded-md border-2 border-gray-200 ${
           error ? 'border-red-500' : ''
         }`}
-        placeholder=' '
+        placeholder={placeholder}
         onChange={onChange}
         onBlur={onBlur}
         disabled={disabled}
