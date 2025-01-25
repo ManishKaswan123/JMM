@@ -32,11 +32,8 @@ interface CustomerCreatePayload {
   email: string
   mobile_number: string
   type: string
-  contacts: string[]
   status: string
   remarks: string
-  location_ids: string[]
-  checklist_ids: string[]
 }
 interface CustomerUpdatePayload extends CustomerCreatePayload {
   id: string
@@ -210,11 +207,8 @@ const CustomerCard: React.FC = () => {
       email: payload.email,
       mobile_number: payload.mobile_number,
       type: payload.type,
-      contacts: [],
       status: payload.status,
       remarks: payload.remarks,
-      location_ids: [],
-      checklist_ids: [],
     }
     createMutation.mutate({payload: data, onSuccess})
   }
@@ -229,14 +223,11 @@ const CustomerCard: React.FC = () => {
       email: payload.email,
       mobile_number: payload.mobile_number,
       type: payload.type,
-      contacts: [],
       status: payload.status,
       remarks: payload.remarks,
-      location_ids: [],
-      checklist_ids: [],
       id: selectedData.id,
     }
-    updateMutation.mutate({payload: data, onSuccess})
+    updateMutation.mutate({payload: {...selectedData, ...data}, onSuccess})
   }
   const defaultValues: CustomerUpdatePayload | undefined = useMemo(() => {
     if (!selectedData) return undefined
@@ -307,7 +298,7 @@ const CustomerCard: React.FC = () => {
         ) : (
           data?.pagination && (
             <Pagination
-            currentPage={currentPage}
+              currentPage={currentPage}
               pagination={data.pagination}
               onPageChange={onPageChange}
               name='customer'
