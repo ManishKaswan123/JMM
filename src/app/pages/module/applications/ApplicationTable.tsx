@@ -137,7 +137,7 @@ const ApplicationTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateMo
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <Link
-                  to={`/cleaner/${job?.cleaner_id._id}`}
+                  to={`/cleaner/details/${job?.cleaner_id._id}`}
                   className='text-blue-500 hover:font-medium'
                 >
                   {`${job.cleaner_id.first_name} ${job.cleaner_id.last_name}`}

@@ -354,6 +354,7 @@ const Application: React.FC = () => {
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           fields={createFields}
+          defaultValues={cleanerId ? {cleaner_id: cleanerId} : undefined}
           onSubmit={handleCreateApplication}
         />
       )}

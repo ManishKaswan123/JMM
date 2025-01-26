@@ -123,12 +123,12 @@ const CustomerDetailsCard: React.FC = () => {
       </div>
 
       {/* Additional Details */}
-      <div className='mt-6'>
+      {/* <div className='mt-6'>
         <div className='flex items-center'>
           <strong className='font-medium text-lg mr-2'>Contacts:</strong>
           <p>{data.contacts?.join(', ') || 'No contacts available'}</p>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

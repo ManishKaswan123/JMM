@@ -1,7 +1,6 @@
 import React, {useEffect, useMemo, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
-import {NoResults} from 'sr/helpers/ui-components/NoResults'
 import {FieldsArray} from 'sr/constants/fields'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
@@ -174,7 +173,7 @@ const CustomerAddressCard: React.FC<any> = () => {
             <h3 className='text-2xl font-semibold'>Head Office Address</h3>
             <Button
               onClick={() => setIsUpdateModalOpenHO(true)}
-              label='Edit Address'
+              label={defaultValuesHO ? 'Edit Address' : 'Add Address'}
               className='bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-full'
             />
           </div>
@@ -224,7 +223,7 @@ const CustomerAddressCard: React.FC<any> = () => {
             <h3 className='text-2xl font-semibold'>Billing Address</h3>
             <Button
               onClick={() => setIsUpdateModalOpenBilling(true)}
-              label='Edit Address'
+              label={defaultValuesBilling ? 'Edit Address' : 'Add Address'}
               className='bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-full'
             />
           </div>
@@ -269,7 +268,7 @@ const CustomerAddressCard: React.FC<any> = () => {
       </div>
 
       {/* Update Modals */}
-      {isUpdateModalOpenBilling && defaultValuesBilling && (
+      {isUpdateModalOpenBilling && (
         <DynamicModal
           label='Update Billing Address'
           isOpen={isUpdateModalOpenBilling}
@@ -279,7 +278,7 @@ const CustomerAddressCard: React.FC<any> = () => {
           onSubmit={handleAddBillingAddress}
         />
       )}
-      {isUpdateModalOpenHO && defaultValuesHO && (
+      {isUpdateModalOpenHO && (
         <DynamicModal
           label='Update HO Address'
           isOpen={isUpdateModalOpenHO}

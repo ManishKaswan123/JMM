@@ -27,11 +27,11 @@ interface CustomerLocationCreatePayload {
   name: string
   customer_id: string
   company_id: string
-  address: Record<string, any>
-  contacts: Record<string, any>[]
+  address?: Record<string, any>
+  contacts?: Record<string, any>[]
   type: string
-  checklist_ids: string[]
-  geofence_ids: string[]
+  // checklist_ids?: string[]
+  geofence_ids?: string[]
 }
 interface CustomerLocationUpdatePayload extends CustomerLocationCreatePayload {
   id: string
@@ -55,57 +55,30 @@ const CustomerLocationCard: React.FC = () => {
 
   const createAndUpdateFields: FieldsArray = useMemo(
     () => [
-      // {
-      //   type: 'text',
-      //   label: 'Name',
-      //   name: 'name',
-      //   placeholder: 'Name',
-      //   required: true,
-      // },
-      // {
-      //   type: 'dropdown',
-      //   label: 'type',
-      //   name: [
-      //     {name: 'Mandatory', id: 'Mandatory'},
-      //     {name: 'Optional', id: 'Optional'},
-      //   ],
-      //   topLabel: 'Type',
-      //   placeholder: 'Select Type',
-      //   labelKey: 'name',
-      //   id: 'id',
-      //   required: true,
-      // },
-      // {
-      //   type: 'dropdown',
-      //   label: 'checklist_id',
-      //   name: checklistData,
-      //   topLabel: 'Checklist',
-      //   placeholder: 'Select Checklist',
-      //   labelKey: 'checklist_name',
-      //   id: 'id',
-      //   required: true,
-      // },
-      // {
-      //   type: 'text',
-      //   label: 'Description',
-      //   name: 'description',
-      //   placeholder: 'Description',
-      //   required: true,
-      // },
-      // {
-      //   type: 'dropdown',
-      //   label: 'status',
-      //   name: [
-      //     {name: 'Active', id: 'active'},
-      //     {name: 'Draft', id: 'draft'},
-      //     {name: 'Deleted', id: 'deleted'},
-      //   ],
-      //   topLabel: 'Status',
-      //   placeholder: 'Select Status',
-      //   labelKey: 'name',
-      //   id: 'id',
-      //   required: true,
-      // },
+      {
+        type: 'dropdown',
+        label: 'company_id',
+        name: companyData,
+        topLabel: 'Company',
+        placeholder: 'Select Company',
+        labelKey: 'company_name',
+        id: 'id',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Name',
+        name: 'name',
+        placeholder: 'Name',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Type',
+        name: 'type',
+        placeholder: 'Type',
+        required: true,
+      },
     ],
     []
   )
@@ -134,7 +107,7 @@ const CustomerLocationCard: React.FC = () => {
     }
   }, [companyStatus, fetchCompanyData])
 
-  const {data, isLoading} = useQuery({
+  const {data, isLoading, refetch} = useQuery({
     queryKey: ['customerLocation', {limit: itemsPerPage, page: currentPage, ...filters}],
     queryFn: async () =>
       fetchCustomerLocations({limit: itemsPerPage, page: currentPage, ...filters}),
@@ -158,48 +131,45 @@ const CustomerLocationCard: React.FC = () => {
     setIsFilterVisible(false)
   }
 
-  // const handleCreatecustomerLocation = async (payload: customerLocationCreatePayload) => {
-  //   const data: customerLocationCreatePayload = {
-  //     name: payload.name,
-  //     type: payload.type,
-  //     individual_id: userId || '',
-  //     checklist_id: payload.checklist_id,
-  //     description: payload.description,
-  //     status: payload.status,
-  //   }
-  //   createMutation.mutate({payload: data, onSuccess})
-  // }
-  // const handleEditcustomerLocation = async (payload: customerLocationUpdatePayload) => {
-  //   if (!selectedData) {
-  //     setIsUpdateModalOpen(false)
-  //     return
-  //   }
-  //   const data: customerLocationUpdatePayload = {
-  //     name: payload.name,
-  //     type: payload.type,
-  //     individual_id: userId || '',
-  //     checklist_id: payload.checklist_id,
-  //     description: payload.description,
-  //     status: payload.status,
-  //     id: selectedData.id,
-  //   }
-  //   updateMutation.mutate({payload: data, onSuccess})
-  // }
-  // const defaultValues: customerLocationUpdatePayload | undefined = useMemo(() => {
-  //   if (!selectedData) return undefined
-  //   return {
-  //     name: selectedData.name,
-  //     type: selectedData.type,
-  //     individual_id: selectedData.individual_id._id,
-  //     checklist_id: selectedData.checklist_id?._id,
-  //     description: selectedData.description,
-  //     status: selectedData.status,
-  //     id: selectedData.id,
-  //   }
-  // }, [selectedData])
+  const handleCreatecustomerLocation = async (payload: Record<string, any>) => {
+    if (!customer_id) return
+    const data: CustomerLocationCreatePayload = {
+      name: payload.name,
+      customer_id: customer_id,
+      company_id: payload.company_id,
+      type: payload.type,
+    }
+    createMutation.mutate({payload: data, onSuccess})
+  }
+  const handleEditcustomerLocation = async (payload: Record<string, any>) => {
+    if (!selectedData) {
+      setIsUpdateModalOpen(false)
+      return
+    }
+    const data: CustomerLocationUpdatePayload = {
+      name: payload.name,
+      customer_id: selectedData.customer_id,
+      company_id: payload.company_id,
+      type: payload.type,
+      id: selectedData.id,
+    }
+    updateMutation.mutate({payload: data, onSuccess})
+  }
+  const defaultValues: Record<string, any> = useMemo(() => {
+    if (!selectedData) return {} as Record<string, any>
+    return {
+      name: selectedData.name,
+      company_id: selectedData.company_id,
+      customer_id: selectedData.customer_id,
+      type: selectedData.type,
+      id: selectedData.id,
+    }
+  }, [selectedData])
   if (selectedCustomerLocation) {
     return (
       <CustomerLocationDetailsCard
+        // refetch={refetch}
+        setSelectedCustomerLocation={setSelectedCustomerLocation}
         data={selectedCustomerLocation}
         onGoBack={() => setSelectedCustomerLocation(undefined)}
       />
@@ -215,12 +185,12 @@ const CustomerLocationCard: React.FC = () => {
               Customer Location
             </h2>
             <div className='flex items-center'>
-              {/* <Button
+              <Button
                 label='Create new'
                 Icon={AiOutlinePlus}
                 onClick={() => setIsCreateModalOpen(true)}
                 className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
-              ></Button> */}
+              ></Button>
               <Button
                 label={`${isFilterVisible ? 'Close' : 'Filters'}`}
                 Icon={!isFilterVisible ? AiOutlineFilter : AiOutlineClose}
@@ -259,7 +229,7 @@ const CustomerLocationCard: React.FC = () => {
         ) : (
           data?.pagination && (
             <Pagination
-            currentPage={currentPage}
+              currentPage={currentPage}
               pagination={data.pagination}
               onPageChange={onPageChange}
               name='customerLocation'
@@ -269,9 +239,9 @@ const CustomerLocationCard: React.FC = () => {
           )
         )}
       </div>
-      {/* {isCreateModalOpen && (
+      {isCreateModalOpen && (
         <DynamicModal
-          label='Create Individual Tasklist'
+          label='Create Customer Location'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           fields={createAndUpdateFields}
@@ -280,14 +250,14 @@ const CustomerLocationCard: React.FC = () => {
       )}
       {isUpdateModalOpen && defaultValues && (
         <DynamicModal
-          label='Update Individual Tasklist'
+          label='Update Customer Location'
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
           fields={createAndUpdateFields}
           defaultValues={defaultValues}
           onSubmit={handleEditcustomerLocation}
         />
-      )} */}
+      )}
     </>
   )
 }
