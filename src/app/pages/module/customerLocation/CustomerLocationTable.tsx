@@ -86,13 +86,13 @@ const CustomerLocationTable: React.FC<CustomerLocationTableProps> = ({
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <div className='flex'>
-                  {/* <FaEdit
+                  <FaEdit
                     className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
                     onClick={() => {
                       setSelectedData(location)
                       setIsUpdateModalOpen(true)
                     }}
-                  /> */}
+                  />
                   <FaEye
                     className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
                     onClick={() => {

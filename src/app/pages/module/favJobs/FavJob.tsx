@@ -1,4 +1,4 @@
-import React, {useState, useMemo} from 'react'
+import React, {useState, useMemo, useEffect, useCallback} from 'react'
 import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
 import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
@@ -18,6 +18,9 @@ import {
 } from 'sr/utils/api/cleanerFavJobApi'
 import {useParams} from 'react-router-dom'
 import JobsTable from '../jobs/JobsTable'
+import {useSelector} from 'react-redux'
+import {RootState} from 'sr/redux/store'
+import {useActions} from 'sr/utils/helpers/useActions'
 //   Job_id: string
 //   job_type: string[]
 //   rate: number
@@ -40,34 +43,25 @@ const CleanerFavJobCard: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
   const [itemsPerPage, setItemsPerPage] = useState<number>(8)
+  const jobStore = useSelector((state: RootState) => state.job)
+  const {fetchJobData} = useActions()
   const createMutation = useCreateCleanerFavJob()
   const updateMutation = useUpdateCleanerFavJob()
 
   const createAndUpdateFields: FieldsArray = useMemo(
     () => [
-      // {
-      //   type: 'text',
-      //   label: 'Job Type',
-      //   name: 'job_type',
-      //   placeholder: 'Job Type',
-      //   required: true,
-      // },
-      // {
-      //   type: 'number',
-      //   label: 'Rate',
-      //   name: 'rate',
-      //   placeholder: 'Rate',
-      //   required: true,
-      // },
-      // {
-      //   type: 'text',
-      //   label: 'Additional Info',
-      //   name: 'additional_information',
-      //   placeholder: 'Additional Info',
-      //   required: true,
-      // },
+      {
+        type: 'dropdown',
+        label: 'job_id',
+        name: jobStore.data,
+        topLabel: 'Job',
+        placeholder: 'Select Job',
+        labelKey: 'job_title',
+        id: 'id',
+        required: true,
+      },
     ],
-    []
+    [jobStore.data]
   )
 
   const fields: FieldsArray = useMemo(
@@ -81,6 +75,15 @@ const CleanerFavJobCard: React.FC = () => {
     ],
     []
   )
+  useEffect(() => {
+    fetchUserDataIfNeeded()
+  }, [])
+
+  const fetchUserDataIfNeeded = useCallback(() => {
+    if (jobStore.status !== 'succeeded') {
+      fetchJobData({})
+    }
+  }, [jobStore.status, fetchJobData])
 
   const {data, isLoading} = useQuery({
     queryKey: ['cleanerFavJob', {limit: itemsPerPage, page: currentPage, ...filters}],
@@ -105,15 +108,14 @@ const CleanerFavJobCard: React.FC = () => {
     setIsFilterVisible(false)
   }
 
-  // const handleCreateCleanerFavJob = async (payload: CleanerFavJobFormPayload) => {
-  //   const data: CleanerFavJobCreatePayload = {
-  //     Job_id: JobId || '',
-  //     job_type: [payload.job_type],
-  //     rate: payload.rate,
-  //     additional_information: payload.additional_information,
-  //   }
-  //   createMutation.mutate({payload: data, onSuccess})
-  // }
+  const handleCreateCleanerFavJob = async (payload: {job_id: string}) => {
+    if (!cleanerId) return
+    const data: {job_id: string; cleaner_id: string} = {
+      job_id: payload.job_id,
+      cleaner_id: cleanerId,
+    }
+    createMutation.mutate({payload: data, onSuccess})
+  }
   // const handleEditCleanerFavJob = async (payload: CleanerFavJobFormPayload) => {
   //   if (!selectedData) {
   //     setIsUpdateModalOpen(false)
@@ -156,13 +158,13 @@ const CleanerFavJobCard: React.FC = () => {
               Favourite Job
             </h2>
             <div className='flex items-center'>
-              {/* <Button
+              <Button
                 label='Create new'
                 Icon={AiOutlinePlus}
                 onClick={() => setIsCreateModalOpen(true)}
                 className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
               ></Button>
-              <Button
+              {/* <Button
                 label={`${isFilterVisible ? 'Close' : 'Filters'}`}
                 Icon={!isFilterVisible ? AiOutlineFilter : AiOutlineClose}
                 onClick={() => setIsFilterVisible(!isFilterVisible)}
@@ -224,7 +226,7 @@ const CleanerFavJobCard: React.FC = () => {
           )
         )}
       </div>
-      {/* {isCreateModalOpen && (
+      {isCreateModalOpen && (
         <DynamicModal
           label='Create Job JobType'
           isOpen={isCreateModalOpen}
@@ -233,7 +235,7 @@ const CleanerFavJobCard: React.FC = () => {
           onSubmit={handleCreateCleanerFavJob}
         />
       )}
-      {isUpdateModalOpen && defaultValues && (
+      {/* {isUpdateModalOpen && defaultValues && (
         <DynamicModal
           label='Update Job JobType'
           isOpen={isUpdateModalOpen}

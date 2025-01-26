@@ -61,7 +61,7 @@ const createCleanerFavJob = async (
   onSuccess: (action: string) => void
 ): Promise<boolean> => {
   try {
-    const res = await post<any>(`/cleaner/favoritejobs `, payload)
+    const res = await post<any>(`/cleaner/favoritejob `, payload)
     if (res.success === true) {
       toast.success('Cleaner FavJob Created Successfully')
       onSuccess('create')
@@ -99,7 +99,7 @@ const updateCleanerFavJob = async (
   onSuccess: (action: string) => void
 ): Promise<boolean> => {
   try {
-    const res = await put<any>(`/cleaner/favoritejobs`, payload)
+    const res = await put<any>(`/cleaner/favoritejob`, payload)
     if (res.success === true) {
       onSuccess('update')
       return true

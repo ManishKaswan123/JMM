@@ -94,6 +94,20 @@ const createCustomerLocation = async (
     throw new Error(e.message)
   }
 }
+
+export const createLocationGeoFence = async (payload: Record<string, any>) => {
+  try {
+    const res = await post<any>(`/customer/location/geofence`, payload)
+    if (res.success === true) {
+      toast.success('GeoFence Created Successfully')
+      return res.data
+    }
+    throw new Error('Create failed')
+  } catch (e: any) {
+    throw new Error(e.message)
+  }
+}
+
 // The useMutation hook with correct typing
 export const useCreateCustomerLocation = (): UseMutationResult<
   boolean, // The type of the data returned on success
@@ -117,12 +131,12 @@ export const useCreateCustomerLocation = (): UseMutationResult<
 // Define the function with correct typing
 const updateCustomerLocation = async (
   payload: Record<string, any>,
-  onSuccess: (action: string) => void
+  onSuccess: (action: string, data?: any) => void
 ): Promise<boolean> => {
   try {
     const res = await put<any>(`/customer/location`, payload)
     if (res.success === true) {
-      onSuccess('update')
+      onSuccess('update', payload)
       return true
     }
     throw new Error('Update failed')
