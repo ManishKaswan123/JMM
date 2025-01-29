@@ -1,4 +1,4 @@
-import {get, post, put} from 'sr/utils/axios/index'
+import {get, post, put, remove} from 'sr/utils/axios/index'
 import {toast} from 'react-toastify'
 import {
   InvalidateQueryFilters,
@@ -64,7 +64,7 @@ const createCleanerFavWorkorder = async (
   onSuccess: (action: string) => void
 ): Promise<boolean> => {
   try {
-    const res = await post<any>(`/cleaner/favoriteworkorders `, payload)
+    const res = await post<any>(`/cleaner/favoriteworkorder`, payload)
     if (res.success === true) {
       toast.success('Cleaner FavWorkorder Created Successfully')
       onSuccess('create')
@@ -102,7 +102,7 @@ const updateCleanerFavWorkorder = async (
   onSuccess: (action: string) => void
 ): Promise<boolean> => {
   try {
-    const res = await put<any>(`/cleaner/favoriteworkorders`, payload)
+    const res = await put<any>(`/cleaner/favoriteworkorder`, payload)
     if (res.success === true) {
       onSuccess('update')
       return true
@@ -128,6 +128,38 @@ export const useUpdateCleanerFavWorkorder = (): UseMutationResult<
     onSuccess: () => {
       queryClient.invalidateQueries(['cleanerFavWorkorder'] as InvalidateQueryFilters)
       toast.success('Cleaner FavWorkorder Updated Successfully')
+    },
+    onError: (error: Error) => {
+      toast.error(error.message)
+    },
+  })
+}
+
+const deleteCleanerFavWorkorder = async (payload: Record<string, string>): Promise<boolean> => {
+  try {
+    const res = await remove<any>(`/cleaner/favoriteworkorder`, payload)
+    if (res.success === true) {
+      return true
+    } else {
+      throw new Error('Delete failed')
+    }
+  } catch (e: any) {
+    throw new Error(e.message)
+  }
+}
+export const useDeleteCleanerFavWorkorder = (): UseMutationResult<
+  boolean, // The type of the data returned on success
+  Error, // The type of the error that could be thrown
+  Record<string, string> // The type of the variables passed to the mutation
+> => {
+  const queryClient = useQueryClient()
+
+  return useMutation<boolean, Error, Record<string, string>>({
+    mutationFn: async (payload: Record<string, string>) => deleteCleanerFavWorkorder(payload),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries(['cleanerFavWorkorder'] as InvalidateQueryFilters)
+      toast.success('Cleaner FavWorkorder Deleted Successfully')
     },
     onError: (error: Error) => {
       toast.error(error.message)

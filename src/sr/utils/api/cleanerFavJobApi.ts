@@ -1,4 +1,4 @@
-import {get, post, put} from 'sr/utils/axios/index'
+import {get, post, put, remove} from 'sr/utils/axios/index'
 import {toast} from 'react-toastify'
 import {
   InvalidateQueryFilters,
@@ -125,6 +125,38 @@ export const useUpdateCleanerFavJob = (): UseMutationResult<
     onSuccess: () => {
       queryClient.invalidateQueries(['cleanerFavJob'] as InvalidateQueryFilters)
       toast.success('Cleaner FavJob Updated Successfully')
+    },
+    onError: (error: Error) => {
+      toast.error(error.message)
+    },
+  })
+}
+
+const deleteCleanerFavJob = async (payload: Record<string, string>): Promise<boolean> => {
+  try {
+    const res = await remove<any>(`/cleaner/favoritejob`, payload)
+    if (res.success === true) {
+      return true
+    } else {
+      throw new Error('Delete failed')
+    }
+  } catch (e: any) {
+    throw new Error(e.message)
+  }
+}
+export const useDeleteCleanerFavJob = (): UseMutationResult<
+  boolean, // The type of the data returned on success
+  Error, // The type of the error that could be thrown
+  Record<string, string> // The type of the variables passed to the mutation
+> => {
+  const queryClient = useQueryClient()
+
+  return useMutation<boolean, Error, Record<string, string>>({
+    mutationFn: async (payload: Record<string, string>) => deleteCleanerFavJob(payload),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries(['cleanerFavJob'] as InvalidateQueryFilters)
+      toast.success('Cleaner FavJob Deleted Successfully')
     },
     onError: (error: Error) => {
       toast.error(error.message)

@@ -128,7 +128,7 @@ const IndividualFavCleanerCard: React.FC = () => {
     setCurrentPage(1)
     setIsFilterVisible(false)
   }
-  const handleDeleteCreateIndividualFavCleaner = async (cleaner_id: string) => {
+  const handleDeleteIndividualFavCleaner = async (cleaner_id: string) => {
     deleteMutation.mutate({
       individual_id: userId || '',
       cleaner_id: cleaner_id,
@@ -221,7 +221,7 @@ const IndividualFavCleanerCard: React.FC = () => {
             <CleanerTable<Record<string, any>>
               type='favcleaner'
               data={data?.data.cleaner_ids}
-              handleDelete={handleDeleteCreateIndividualFavCleaner}
+              handleDelete={handleDeleteIndividualFavCleaner}
               setSelectedData={setSelectedData}
             />
           )}

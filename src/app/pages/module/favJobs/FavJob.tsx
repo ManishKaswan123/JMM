@@ -15,6 +15,7 @@ import {
   CleanerFavJobFilters,
   useCreateCleanerFavJob,
   useUpdateCleanerFavJob,
+  useDeleteCleanerFavJob,
 } from 'sr/utils/api/cleanerFavJobApi'
 import {useParams} from 'react-router-dom'
 import JobsTable from '../jobs/JobsTable'
@@ -47,6 +48,7 @@ const CleanerFavJobCard: React.FC = () => {
   const {fetchJobData} = useActions()
   const createMutation = useCreateCleanerFavJob()
   const updateMutation = useUpdateCleanerFavJob()
+  const deleteMutation = useDeleteCleanerFavJob()
 
   const createAndUpdateFields: FieldsArray = useMemo(
     () => [
@@ -116,6 +118,13 @@ const CleanerFavJobCard: React.FC = () => {
     }
     createMutation.mutate({payload: data, onSuccess})
   }
+  const handleDelete = async (job_id: string) => {
+    if (!cleanerId) return
+    deleteMutation.mutate({
+      cleaner_id: cleanerId,
+      job_id: job_id,
+    })
+  }
   // const handleEditCleanerFavJob = async (payload: CleanerFavJobFormPayload) => {
   //   if (!selectedData) {
   //     setIsUpdateModalOpen(false)
@@ -159,7 +168,7 @@ const CleanerFavJobCard: React.FC = () => {
             </h2>
             <div className='flex items-center'>
               <Button
-                label='Create new'
+                label='Add new'
                 Icon={AiOutlinePlus}
                 onClick={() => setIsCreateModalOpen(true)}
                 className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
@@ -208,6 +217,7 @@ const CleanerFavJobCard: React.FC = () => {
               type='favjobs'
               //   handleDelete={onDeleteChat}
               //   handleView={handleView}
+              handleDelete={handleDelete}
             />
           )}
         </div>
@@ -228,7 +238,7 @@ const CleanerFavJobCard: React.FC = () => {
       </div>
       {isCreateModalOpen && (
         <DynamicModal
-          label='Create Job JobType'
+          label='Add Fav Job'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           fields={createAndUpdateFields}

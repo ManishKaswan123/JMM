@@ -1,4 +1,4 @@
-import React, {useState, useMemo} from 'react'
+import React, {useState, useMemo, useEffect, useCallback} from 'react'
 import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
 import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
@@ -15,9 +15,13 @@ import {
   CleanerFavWorkorderFilters,
   useCreateCleanerFavWorkorder,
   useUpdateCleanerFavWorkorder,
+  useDeleteCleanerFavWorkorder,
 } from 'sr/utils/api/cleanerFavWorkorderApi'
 import {useParams} from 'react-router-dom'
 import WorkOrderTable from '../workOrder/WorkOrderTable'
+import {useSelector} from 'react-redux'
+import {RootState} from 'sr/redux/store'
+import {useActions} from 'sr/utils/helpers/useActions'
 //   Workorder_id: string
 //   Workorder_type: string[]
 //   rate: number
@@ -41,34 +45,26 @@ const CleanerFavWorkorderCard: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
   const [itemsPerPage, setItemsPerPage] = useState<number>(8)
+  const workorderStore = useSelector((state: RootState) => state.workorder)
+  const {fetchWorkorderData} = useActions()
   const createMutation = useCreateCleanerFavWorkorder()
   const updateMutation = useUpdateCleanerFavWorkorder()
+  const deleteMutation = useDeleteCleanerFavWorkorder()
 
   const createAndUpdateFields: FieldsArray = useMemo(
     () => [
-      // {
-      //   type: 'text',
-      //   label: 'Workorder Type',
-      //   name: 'Workorder_type',
-      //   placeholder: 'Workorder Type',
-      //   required: true,
-      // },
-      // {
-      //   type: 'number',
-      //   label: 'Rate',
-      //   name: 'rate',
-      //   placeholder: 'Rate',
-      //   required: true,
-      // },
-      // {
-      //   type: 'text',
-      //   label: 'Additional Info',
-      //   name: 'additional_information',
-      //   placeholder: 'Additional Info',
-      //   required: true,
-      // },
+      {
+        type: 'dropdown',
+        label: 'workorder_id',
+        name: workorderStore.data,
+        topLabel: 'Workorder',
+        placeholder: 'Select Workorder',
+        labelKey: 'workorder_name',
+        id: 'id',
+        required: true,
+      },
     ],
-    []
+    [workorderStore.data]
   )
 
   const fields: FieldsArray = useMemo(
@@ -82,6 +78,15 @@ const CleanerFavWorkorderCard: React.FC = () => {
     ],
     []
   )
+  useEffect(() => {
+    fetchUserDataIfNeeded()
+  }, [])
+
+  const fetchUserDataIfNeeded = useCallback(() => {
+    if (workorderStore.status !== 'succeeded') {
+      fetchWorkorderData({})
+    }
+  }, [workorderStore.status, fetchWorkorderData])
 
   const {data, isLoading} = useQuery({
     queryKey: ['cleanerFavWorkorder', {limit: itemsPerPage, page: currentPage, ...filters}],
@@ -107,15 +112,21 @@ const CleanerFavWorkorderCard: React.FC = () => {
     setIsFilterVisible(false)
   }
 
-  // const handleCreateCleanerFavWorkorder = async (payload: CleanerFavWorkorderFormPayload) => {
-  //   const data: CleanerFavWorkorderCreatePayload = {
-  //     Workorder_id: WorkorderId || '',
-  //     Workorder_type: [payload.Workorder_type],
-  //     rate: payload.rate,
-  //     additional_information: payload.additional_information,
-  //   }
-  //   createMutation.mutate({payload: data, onSuccess})
-  // }
+  const handleCreateCleanerFavWorkorder = async (payload: {workorder_id: string}) => {
+    if (!cleanerId) return
+    const data: {workorder_id: string; cleaner_id: string} = {
+      workorder_id: payload.workorder_id,
+      cleaner_id: cleanerId,
+    }
+    createMutation.mutate({payload: data, onSuccess})
+  }
+  const handleDelete = async (workorder_id: string) => {
+    if (!cleanerId) return
+    deleteMutation.mutate({
+      cleaner_id: cleanerId,
+      workorder_id: workorder_id,
+    })
+  }
   // const handleEditCleanerFavWorkorder = async (payload: CleanerFavWorkorderFormPayload) => {
   //   if (!selectedData) {
   //     setIsUpdateModalOpen(false)
@@ -158,13 +169,13 @@ const CleanerFavWorkorderCard: React.FC = () => {
               Favourite Workorder
             </h2>
             <div className='flex items-center'>
-              {/* <Button
-                label='Create new'
+              <Button
+                label='Add new'
                 Icon={AiOutlinePlus}
                 onClick={() => setIsCreateModalOpen(true)}
                 className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
               ></Button>
-              <Button
+              {/* <Button
                 label={`${isFilterVisible ? 'Close' : 'Filters'}`}
                 Icon={!isFilterVisible ? AiOutlineFilter : AiOutlineClose}
                 onClick={() => setIsFilterVisible(!isFilterVisible)}
@@ -207,6 +218,7 @@ const CleanerFavWorkorderCard: React.FC = () => {
               data={data?.data.workorder_ids}
               //   handleDelete={onDeleteChat}
               //   handleView={handleView}
+              handleDelete={handleDelete}
             />
           )}
         </div>
@@ -225,16 +237,16 @@ const CleanerFavWorkorderCard: React.FC = () => {
           )
         )}
       </div>
-      {/* {isCreateModalOpen && (
+      {isCreateModalOpen && (
         <DynamicModal
-          label='Create Workorder WorkorderType'
+          label='Add Fav Workorder'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           fields={createAndUpdateFields}
           onSubmit={handleCreateCleanerFavWorkorder}
         />
       )}
-      {isUpdateModalOpen && defaultValues && (
+      {/* {isUpdateModalOpen && defaultValues && (
         <DynamicModal
           label='Update Workorder WorkorderType'
           isOpen={isUpdateModalOpen}

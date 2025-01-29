@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react'
-import {FaEye} from 'react-icons/fa'
+import {FaEye, FaTractor, FaTrash} from 'react-icons/fa'
 import {useSelector} from 'react-redux'
 import {Link, useNavigate} from 'react-router-dom'
 import {RootState} from 'sr/redux/store'
@@ -8,8 +8,9 @@ import {useActions} from 'sr/utils/helpers/useActions'
 interface Props<T> {
   type: 'workorder' | 'favworkorder'
   data?: T[]
+  handleDelete?: (workorder_id: string) => void
 }
-const WorkOrderTable = <T,>({type, data}: Props<T>) => {
+const WorkOrderTable = <T,>({type, data, handleDelete}: Props<T>) => {
   const navigate = useNavigate()
   const handleWorkorderDetail = (workorder: any) => {
     navigate(`/workorder/${type === 'workorder' ? workorder.id : workorder._id}`)
@@ -131,13 +132,23 @@ const WorkOrderTable = <T,>({type, data}: Props<T>) => {
                 </Link>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <FaEye
-                  className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
-                  onClick={() => {
-                    // setUser(type === 'cleaner' ? cleaner.id : cleaner._id)
-                    handleWorkorderDetail(workorder)
-                  }}
-                />
+                <div className='flex'>
+                  <FaEye
+                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                    onClick={() => {
+                      // setUser(type === 'cleaner' ? cleaner.id : cleaner._id)
+                      handleWorkorderDetail(workorder)
+                    }}
+                  />
+                  {handleDelete && (
+                    <FaTrash
+                      className='text-rose-600 cursor-pointer mr-4 h-4 w-4'
+                      onClick={() => {
+                        handleDelete(type === 'workorder' ? workorder.id : workorder._id)
+                      }}
+                    />
+                  )}
+                </div>
               </td>
             </tr>
           ))}

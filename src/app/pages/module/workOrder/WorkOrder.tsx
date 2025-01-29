@@ -8,60 +8,22 @@ import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
 import {deleteChat} from 'sr/utils/api/deleteChat'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
-import {createChat} from 'sr/utils/api/createChat'
 import {getPreSignedURL} from 'sr/utils/api/media'
-import {updateChat} from 'sr/utils/api/updateChat'
 import {FieldsArray} from 'sr/constants/fields'
-import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import WorkOrderTable from './WorkOrderTable'
 import {fetchWorkOrder, WorkOrderResponse} from 'sr/utils/api/fetchWorkOrder'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 import {useParams} from 'react-router-dom'
-import {set} from 'react-hook-form'
-import {locations} from 'sr/constants/jobsConstants'
-
-interface chatApiResponse {
-  eightySixResponseId?: any
-  senderId?: UserInterface
-  receiverId?: UserInterface
-  sourceType?: string
-  message?: string
-  images?: string[]
-  msgType?: number
-  createdAt: string
-  updatedAt: string
-  id: string
-}
-
-interface chatFilters {
-  senderId?: string
-  receiverId?: string
-  eightySixResponseId?: string
-  sourceType?: string
-}
-interface chatCreatePayload {
-  eightySixResponseId: string
-  receiverId: string
-  sourceType: string
-  message: string
-  images: string[]
-  msgType: number
-}
-interface defaultData {
-  eightySixResponseId?: string
-  receiverId?: string
-  sourceType?: string
-  message?: string
-  images?: string[]
-  msgType?: number
-}
-interface chatUpdatePayload extends chatCreatePayload {}
+import {jobTypes, locations} from 'sr/constants/jobsConstants'
+import {fetchCustomers} from 'sr/utils/api/customerApi'
+import {fetchCustomerLocations} from 'sr/utils/api/customerLocationApi'
+import {useCreateWorkorder} from 'sr/utils/api/createWorkorder'
 
 const WorkOrder: React.FC = () => {
   const {cleanerId} = useParams<{cleanerId: string}>()
-  const [selectedData, setSelectedData] = useState<chatApiResponse>()
+  const [selectedData, setSelectedData] = useState()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<any>({
     cleaner_id: cleanerId,
@@ -69,128 +31,237 @@ const WorkOrder: React.FC = () => {
     max_pay_type_rate: 100,
   })
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
-  const userData = useSelector((state: RootState) => state.user.data)
-  const userStatus = useSelector((state: RootState) => state.user.status)
   const companyData = useSelector((state: RootState) => state.company.data)
   const companyStatus = useSelector((state: RootState) => state.company.status)
   const customerData = useSelector((state: RootState) => state.customer.data)
   const customerStatus = useSelector((state: RootState) => state.customer.status)
   const checklistData = useSelector((state: RootState) => state.checklist.data)
   const checklistStatus = useSelector((state: RootState) => state.checklist.status)
+  const [selectedCompany, setSelectedCompany] = useState<string>()
+  const [selectedCustomer, setSelectedCustomer] = useState<string>()
+  const [filteredCustomerData, setFilteredCustomerData] =
+    useState<{customer_name: string; id: string}[]>()
+  const [filteredCustomerLocationData, setFilteredCustomerLocationData] =
+    useState<{customer_location_name: string; id: string}[]>()
+
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
   const {fetchUserData, fetchCustomersData, fetchChecklistData, fetchCompanyData} = useActions()
   const [itemsPerPage, setItemsPerPage] = useState(8)
-
-  const eightySixResponse = useMemo(
-    () => [
-      {firstName: 'Devid', id: '65bbf2df9aa9785b019d87b2'},
-      {firstName: 'Devid', id: '65bbf2df9aa9785b019d87b2'},
-    ],
-    []
-  )
-  const msgType = useMemo(
-    () => [
-      {name: '1', id: 1},
-      {name: '2', id: 2},
-      {name: '3', id: 3},
-    ],
-    []
-  )
+  const createMutation = useCreateWorkorder()
 
   const createFields: FieldsArray = useMemo(
     () => [
       {
         type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
+        label: 'status',
+        name: [
+          {name: 'Draft', id: 'draft'},
+          {name: 'Publish', id: 'publist'},
+        ],
+        topLabel: 'Status',
+        placeholder: 'Select Status',
+        labelKey: 'name',
+        id: 'id',
         required: true,
       },
-      {
-        type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'msgType',
-        name: msgType,
-        topLabel: 'Msg Type',
-        placeholder: 'Select Msg Type',
-        required: true,
-      },
-      {type: 'text', label: 'Message', name: 'message', placeholder: 'Message', required: true},
       {
         type: 'text',
-        label: 'Source Type',
-        name: 'sourceType',
-        placeholder: 'Source Type',
+        label: 'Title',
+        name: 'title',
+        placeholder: 'Title',
         required: true,
       },
       {
-        type: 'file',
-        label: 'Images',
-        name: 'images',
-        wrapperLabel: 'Upload image',
-        topLabel: 'Images',
-        placeholder: 'Select Images',
+        type: 'dropdown',
+        label: 'company_id',
+        name: companyData,
+        topLabel: 'Company',
+        placeholder: 'Select Company',
+        labelKey: 'company_name',
+        id: 'id',
+        onChange: (e: any) => setSelectedCompany(e.target.value),
+        required: true,
+      },
+      {
+        type: 'dropdown',
+        label: 'customer_id',
+        name: filteredCustomerData,
+        topLabel: 'Customer',
+        placeholder: 'Select Customer',
+        labelKey: 'customer_name',
+        id: 'id',
+        onChange: (e: any) => setSelectedCustomer(e.target.value),
+        required: true,
+      },
+      {
+        type: 'dropdown',
+        label: 'customer_location_id',
+        name: filteredCustomerLocationData,
+        topLabel: 'Customer Location',
+        placeholder: 'Select Customer Location',
+        labelKey: 'customer_location_name',
+        id: 'id',
+        required: true,
+      },
+      {
+        type: 'dropdown',
+        label: 'type',
+        name: [
+          {name: 'Open', id: 'open'},
+          {name: 'Individual', id: 'individual'},
+        ],
+        topLabel: 'Type',
+        placeholder: 'Select Type',
+        labelKey: 'name',
+        id: 'id',
+        required: true,
+      },
+      {
+        type: 'number',
+        label: 'Work Completion Time',
+        name: 'time_for_work_completion',
+        placeholder: 'Work Completion Time',
+        required: true,
+      },
+      {
+        type: 'dropdown',
+        label: 'pay_type',
+        name: [
+          {value: 'Fixed Rate', label: 'Fixed Rate'},
+          {value: 'Hourly Rate', label: 'Hourly Rate'},
+        ],
+        topLabel: 'Pay Type',
+        placeholder: 'Select Pay Type',
+        labelKey: 'label',
+        valueKey: 'value',
+        id: 'id',
+        required: true,
+      },
+
+      {
+        type: 'number',
+        label: 'Pay type rate',
+        name: 'pay_type_rate',
+        placeholder: 'Pay type rate in $',
+        required: true,
+      },
+      {
+        type: 'dropdown',
+        label: 'job_type',
+        name: jobTypes,
+        topLabel: 'Job Type',
+        placeholder: 'Select Job Type',
+        labelKey: 'label',
+        valueKey: 'value',
+        id: 'id',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Entry Time',
+        name: 'entry_time',
+        placeholder: 'HH:MM format',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Exit Time',
+        name: 'exit_time',
+        placeholder: 'HH:MM format',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Description',
+        name: 'description',
+        placeholder: 'Description',
+        required: true,
+      },
+      {
+        type: 'dropdown',
+        label: 'recurring',
+        name: [
+          {name: 'Yes', id: true},
+          {name: 'No', id: false},
+        ],
+        topLabel: 'Recurring',
+        placeholder: 'Select Recurring',
+        labelKey: 'name',
+        id: 'id',
+        required: true,
+      },
+      {
+        type: 'date',
+        label: 'One Time Date',
+        name: 'one_time_date',
+        placeholder: 'One Time Date',
+        required: true,
+      },
+      {
+        type: 'dropdown',
+        label: 'workorder_status',
+        name: [
+          {name: 'Scheduled', id: 'scheduled'},
+          {name: 'Pending', id: 'pending'},
+          {name: 'Completed', id: 'completed'},
+        ],
+        topLabel: 'WorkOrder Status',
+        placeholder: 'Select WorkOrder Status',
+        labelKey: 'name',
+        id: 'id',
         required: true,
       },
     ],
-    [userData, msgType, eightySixResponse]
+    [companyData, filteredCustomerData, filteredCustomerLocationData]
   )
 
-  const updateFields: FieldsArray = useMemo(
-    () => [
-      {
-        type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'msgType',
-        name: msgType,
-        topLabel: 'Msg Type',
-        placeholder: 'Select Msg Type',
-        required: true,
-      },
-      {type: 'text', label: 'Message', name: 'message', placeholder: 'Message', required: true},
-      {
-        type: 'text',
-        label: 'Source Type',
-        name: 'sourceType',
-        placeholder: 'Source Type',
-        required: true,
-      },
-      {
-        type: 'file',
-        label: 'Images',
-        name: 'images',
-        wrapperLabel: 'Upload image',
-        topLabel: 'Images',
-        placeholder: 'Select Images',
-        required: true,
-      },
-    ],
-    [userData, msgType, eightySixResponse]
-  )
+  // const updateFields: FieldsArray = useMemo(
+  //   () => [
+  //     {
+  //       type: 'dropdown',
+  //       label: 'receiverId',
+  //       name: userData?.results || [],
+  //       topLabel: 'Receiver',
+  //       placeholder: 'Select Receiver',
+  //       required: true,
+  //     },
+  //     {
+  //       type: 'dropdown',
+  //       label: 'eightySixResponseId',
+  //       name: eightySixResponse,
+  //       topLabel: '86 Response',
+  //       placeholder: 'Select 86 Response',
+  //       required: true,
+  //     },
+  //     {
+  //       type: 'dropdown',
+  //       label: 'msgType',
+  //       name: msgType,
+  //       topLabel: 'Msg Type',
+  //       placeholder: 'Select Msg Type',
+  //       required: true,
+  //     },
+  //     {type: 'text', label: 'Message', name: 'message', placeholder: 'Message', required: true},
+  //     {
+  //       type: 'text',
+  //       label: 'Source Type',
+  //       name: 'sourceType',
+  //       placeholder: 'Source Type',
+  //       required: true,
+  //     },
+  //     {
+  //       type: 'file',
+  //       label: 'Images',
+  //       name: 'images',
+  //       wrapperLabel: 'Upload image',
+  //       topLabel: 'Images',
+  //       placeholder: 'Select Images',
+  //       required: true,
+  //     },
+  //   ],
+  //   [userData, msgType, eightySixResponse]
+  // )
 
   const fields: FieldsArray = useMemo(
     () => [
@@ -321,9 +392,45 @@ const WorkOrder: React.FC = () => {
         placeholder: 'Work Completion Time',
       },
     ],
-    [userData?.results, eightySixResponse, companyData, customerData, checklistData]
+    [companyData, customerData, checklistData]
   )
 
+  useEffect(() => {
+    if (selectedCompany === undefined) {
+      setFilteredCustomerData([])
+      return
+    }
+    fetchCustomers({limit: 0, company_id: selectedCompany})
+      .then((res) => {
+        setFilteredCustomerData(
+          res.data.map((item) => {
+            return {
+              customer_name: item.name,
+              id: item.id,
+            }
+          })
+        )
+      })
+      .catch((err) => console.log(err))
+  }, [selectedCompany])
+  useEffect(() => {
+    if (selectedCustomer === undefined) {
+      setFilteredCustomerLocationData([])
+      return
+    }
+    fetchCustomerLocations({limit: 0, customer_id: selectedCustomer})
+      .then((res) => {
+        setFilteredCustomerLocationData(
+          res.data.map((item) => {
+            return {
+              customer_location_name: item.name,
+              id: item.id,
+            }
+          })
+        )
+      })
+      .catch((err) => console.log(err))
+  }, [selectedCustomer])
   const {data, error, isLoading, isError, refetch} = useQuery({
     queryKey: ['workorder', {limit: itemsPerPage, page: currentPage, ...filters}],
     queryFn: async () => fetchWorkOrder({limit: itemsPerPage, page: currentPage, ...filters}),
@@ -340,21 +447,18 @@ const WorkOrder: React.FC = () => {
     }
   }, [cleanerId])
 
-  const defaultValues: defaultData | undefined = useMemo(() => {
-    if (!selectedData) return undefined
-    return {
-      eightySixResponseId: selectedData.eightySixResponseId?.id,
-      sourceType: selectedData.sourceType,
-      message: selectedData.message,
-      images: selectedData.images,
-      msgType: selectedData.msgType,
-      receiverId: selectedData.receiverId?.id,
-    }
-  }, [selectedData])
+  // const defaultValues: defaultData | undefined = useMemo(() => {
+  //   if (!selectedData) return undefined
+  //   return {
+  //     eightySixResponseId: selectedData.eightySixResponseId?.id,
+  //     sourceType: selectedData.sourceType,
+  //     message: selectedData.message,
+  //     images: selectedData.images,
+  //     msgType: selectedData.msgType,
+  //     receiverId: selectedData.receiverId?.id,
+  //   }
+  // }, [selectedData])
   const fetchUserDataIfNeeded = useCallback(() => {
-    if (userStatus !== 'succeeded') {
-      fetchUserData({})
-    }
     if (companyStatus !== 'succeeded') {
       fetchCompanyData({})
     }
@@ -365,8 +469,6 @@ const WorkOrder: React.FC = () => {
       fetchChecklistData({})
     }
   }, [
-    userStatus,
-    fetchUserData,
     companyStatus,
     fetchCompanyData,
     customerStatus,
@@ -374,6 +476,18 @@ const WorkOrder: React.FC = () => {
     checklistStatus,
     fetchChecklistData,
   ])
+
+  const onCloseCreateModal = () => {
+    setIsCreateModalOpen(false)
+    setSelectedCompany(undefined)
+    setFilteredCustomerData([])
+    setSelectedCustomer(undefined)
+    setFilteredCustomerLocationData([])
+  }
+  const onSuccess = (action: string) => {
+    if (action === 'create') onCloseCreateModal()
+    else if (action === 'update') setIsUpdateModalOpen(false)
+  }
 
   const onDeleteChat = async (id: string) => {
     const res = await deleteChat(id)
@@ -395,28 +509,22 @@ const WorkOrder: React.FC = () => {
     setIsFilterVisible(false)
   }
 
-  const handleCreateChat = async (payload: chatCreatePayload) => {
-    setIsCreateModalOpen(false)
-    const res = await createChat(payload)
-    if (!res) {
-      setIsCreateModalOpen(false)
-      return
-    }
-    refetch()
+  const handleCreateWorkorder = async (payload: Record<string, any>) => {
+    createMutation.mutate({payload, onSuccess})
   }
-  const handleEditChat = async (payload: chatUpdatePayload) => {
-    if (!selectedData) {
-      setIsUpdateModalOpen(false)
-      return
-    }
-    setIsUpdateModalOpen(false)
-    const res = await updateChat(payload, selectedData.id)
-    if (!res) {
-      setIsUpdateModalOpen(false)
-      return
-    }
-    refetch()
-  }
+  // const handleEditChat = async (payload: chatUpdatePayload) => {
+  //   if (!selectedData) {
+  //     setIsUpdateModalOpen(false)
+  //     return
+  //   }
+  //   setIsUpdateModalOpen(false)
+  //   const res = await updateChat(payload, selectedData.id)
+  //   if (!res) {
+  //     setIsUpdateModalOpen(false)
+  //     return
+  //   }
+  //   refetch()
+  // }
 
   const handleView = async (fileUrl: string) => {
     const response: any = await getPreSignedURL({fileName: fileUrl})
@@ -494,7 +602,7 @@ const WorkOrder: React.FC = () => {
         ) : (
           data?.pagination && (
             <Pagination
-            currentPage={currentPage}
+              currentPage={currentPage}
               pagination={data.pagination}
               onPageChange={onPageChange}
               name='Work Order'
@@ -507,14 +615,14 @@ const WorkOrder: React.FC = () => {
       {isCreateModalOpen && (
         <DynamicModal
           label='Create Work Order'
-          imageType='images'
+          // imageType='images'
           isOpen={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
+          onClose={onCloseCreateModal}
           fields={createFields}
-          onSubmit={handleCreateChat}
+          onSubmit={handleCreateWorkorder}
         />
       )}
-      {isUpdateModalOpen && (
+      {/* {isUpdateModalOpen && (
         <DynamicModal
           imageType='images'
           label='Update Job'
@@ -524,7 +632,7 @@ const WorkOrder: React.FC = () => {
           defaultValues={defaultValues}
           onSubmit={handleEditChat}
         />
-      )}
+      )} */}
     </>
   )
 }
