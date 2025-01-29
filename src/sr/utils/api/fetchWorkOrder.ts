@@ -71,10 +71,10 @@ export interface WorkOrderResponse {
   title: string
   description: string
   type: string
-  contractor_id: Record<string, any>
-  checklist_id: ChecklistDetails
-  company_id: CompanyDetails
-  customer_id: CustomerDetails
+  contractor_id?: Record<string, any>
+  checklist_id?: ChecklistDetails
+  company_id?: CompanyDetails
+  customer_id?: CustomerDetails
   customer_location_id: CustomerLocationDetails
   job_type: string
   pay_type: string
@@ -90,19 +90,6 @@ export interface WorkOrderResponse {
   createdAt: string
   updatedAt: string
   id: string
-}
-
-interface Pagination {
-  total: number
-  page: number
-  pageSize: number
-  sort: Record<string, number>
-  counts: {
-    statusCounts: Record<string, number>
-    approvalStatusCounts: Record<string, number>
-    paymentStatusCounts: Record<string, number>
-    workorderStatusCounts: Record<string, number>
-  }
 }
 
 export type FetchSingleWorkOrderResponse = JmmApiResponse<WorkOrderResponse>

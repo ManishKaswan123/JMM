@@ -39,6 +39,14 @@ export const AddressDetailsCard: React.FC<AddressDetailsProps> = ({address: data
             </Link>
           </div>
           <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Address Line 1:</strong>
+            <p>{data.address.address_line_1}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Address Line 2:</strong>
+            <p>{data.address.address_line_2}</p>
+          </div>
+          <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Rooms Count:</strong>
             <p>{data.no_of_rooms}</p>
           </div>
@@ -50,10 +58,7 @@ export const AddressDetailsCard: React.FC<AddressDetailsProps> = ({address: data
             <strong className='font-medium text-lg mr-2'>Total Area:</strong>
             <p>{data.total_area}</p>
           </div>
-          <div className='flex items-center'>
-            <strong className='font-medium text-lg mr-2'>Remark:</strong>
-            <p>{data.remark}</p>
-          </div>
+
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Status:</strong>
             <p>{data.status}</p>
@@ -62,14 +67,6 @@ export const AddressDetailsCard: React.FC<AddressDetailsProps> = ({address: data
 
         {/* Column 2 */}
         <div className='space-y-4'>
-          <div className='flex items-center'>
-            <strong className='font-medium text-lg mr-2'>Address Line 1:</strong>
-            <p>{data.address.address_line_1}</p>
-          </div>
-          <div className='flex items-center'>
-            <strong className='font-medium text-lg mr-2'>Address Line 2:</strong>
-            <p>{data.address.address_line_2}</p>
-          </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Country:</strong>
             <p>{data.address.country}</p>
@@ -93,6 +90,10 @@ export const AddressDetailsCard: React.FC<AddressDetailsProps> = ({address: data
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Longitude:</strong>
             <p>{data.address.lng}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Remark:</strong>
+            <p>{data.remark}</p>
           </div>
         </div>
       </div>

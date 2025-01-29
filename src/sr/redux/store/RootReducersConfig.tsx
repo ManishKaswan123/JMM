@@ -19,6 +19,7 @@ import checklistTypeReducer from '../slice/checklistSlice'
 import cleanerTypeReducer from '../slice/cleanerSlice'
 import jobTypeReducer from '../slice/jobSlice'
 import taskTypeReducer from '../slice/taskSlice'
+import workorderTypeReducer from '../slice/workorderSlice'
 export const rootReducer = combineReducers({
   sendOtp: sendOtpReducer,
   otp: otpReducer,
@@ -40,4 +41,5 @@ export const rootReducer = combineReducers({
   cleaner: cleanerTypeReducer,
   job: jobTypeReducer,
   task: taskTypeReducer,
+  workorder: workorderTypeReducer,
 })

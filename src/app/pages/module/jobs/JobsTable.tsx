@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react'
-import {FaEye} from 'react-icons/fa'
+import {FaEye, FaTrash} from 'react-icons/fa'
 import {useSelector} from 'react-redux'
 import {Link, useNavigate} from 'react-router-dom'
 import {RootState} from 'sr/redux/store'
@@ -8,9 +8,10 @@ import {useActions} from 'sr/utils/helpers/useActions'
 interface Props<T> {
   type: 'jobs' | 'favjobs'
   data?: T[]
+  handleDelete?: (job_id: string) => void
 }
 
-const JobsTable = <T,>({type, data}: Props<T>) => {
+const JobsTable = <T,>({type, data, handleDelete}: Props<T>) => {
   const navigate = useNavigate()
   const handleJobDetails = (job: any) => {
     navigate(`/job/${type === 'jobs' ? job.id : job._id}`)
@@ -107,13 +108,24 @@ const JobsTable = <T,>({type, data}: Props<T>) => {
               </td>
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <FaEye
-                  className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
-                  onClick={() => {
-                    // setUser(type === 'cleaner' ? cleaner.id : cleaner._id)
-                    handleJobDetails(job)
-                  }}
-                />
+                <div className='flex'>
+                  <FaEye
+                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                    onClick={() => {
+                      // setUser(type === 'cleaner' ? cleaner.id : cleaner._id)
+                      handleJobDetails(job)
+                    }}
+                  />
+                  {handleDelete && (
+                    <FaTrash
+                      className='text-rose-600 cursor-pointer mr-4 h-4 w-4'
+                      onClick={() => {
+                        // setUser(type === 'cleaner' ? cleaner.id : cleaner._id)
+                        handleDelete(type === 'jobs' ? job.id : job._id)
+                      }}
+                    />
+                  )}
+                </div>
               </td>
             </tr>
           ))}

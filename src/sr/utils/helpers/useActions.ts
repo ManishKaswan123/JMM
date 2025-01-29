@@ -17,6 +17,7 @@ import {fetchBusinessTypeData} from 'sr/redux/action/businessTypeActions'
 import {fetchCleanerData} from 'sr/redux/action/cleanerActions'
 import {fetchJobData} from 'sr/redux/action/jobActions'
 import {fetchTaskData} from 'sr/redux/action/taskActions'
+import {fetchWorkorderData} from 'sr/redux/action/workorderActions'
 
 export const useActions = () => {
   const dispatch = useDispatch()
@@ -38,6 +39,7 @@ export const useActions = () => {
       fetchCleanerData,
       fetchJobData,
       fetchTaskData,
+      fetchWorkorderData,
     },
     dispatch
   )

@@ -133,15 +133,11 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
   return (
     <div
       className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 
-    transition-opacity duration-[6000ms] ease-in-out ${
-      isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-    }`}
+   `}
     >
       <div
         className={`bg-white px-6 pb-6 rounded-lg w-full max-w-2xl max-h-[95vh] overflow-y-auto 
-      transform transition-all duration-[6000ms] ease-in-out ${
-        isOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'
-      }`}
+      transform `}
       >
         <div className='sticky top-0 z-10 py-2 bg-white flex justify-between items-center'>
           <h2 className='text-xl text-gray-900 font-bold'>{label}</h2>
