@@ -1,12 +1,18 @@
 import React from 'react'
-import {FaEye} from 'react-icons/fa'
+import {FaEdit, FaEye} from 'react-icons/fa'
 import {Link, useNavigate} from 'react-router-dom'
 import {WorkorderApplication} from 'sr/utils/api/workorderApplicationApi'
 
 interface Props {
+  setSelectedData: React.Dispatch<React.SetStateAction<WorkorderApplication | undefined>>
+  setIsUpdateModalOpen: React.Dispatch<React.SetStateAction<boolean>>
   data?: WorkorderApplication[]
 }
-const WorkorderApplicationTable: React.FC<Props> = ({data}) => {
+const WorkorderApplicationTable: React.FC<Props> = ({
+  data,
+  setIsUpdateModalOpen,
+  setSelectedData,
+}) => {
   const navigate = useNavigate()
   const handleWorkorderApplicationDetail = (workorderApplicagtion: WorkorderApplication) => {
     navigate(`/workorderapplication/${workorderApplicagtion.id}`)
@@ -45,22 +51,32 @@ const WorkorderApplicationTable: React.FC<Props> = ({data}) => {
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <Link
-                  to={`/cleaner/details/${workorder.cleaner_id._id}`}
+                  to={`/cleaner/details/${workorder.cleaner_id?._id}`}
                   className='text-blue-500 hover:font-medium'
                 >
-                  {workorder.cleaner_id.first_name} {workorder.cleaner_id.last_name}
+                  {workorder.cleaner_id?.first_name} {workorder.cleaner_id?.last_name}
                 </Link>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>{workorder.status}</td>
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <FaEye
-                  className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
-                  onClick={() => {
-                    // setUser(type === 'cleaner' ? cleaner.id : cleaner._id)
-                    handleWorkorderApplicationDetail(workorder)
-                  }}
-                />
+                <div className='flex'>
+                  <FaEye
+                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                    onClick={() => {
+                      // setUser(type === 'cleaner' ? cleaner.id : cleaner._id)
+                      handleWorkorderApplicationDetail(workorder)
+                    }}
+                  />
+                  <FaEdit
+                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                    onClick={() => {
+                      // setUser(type === 'cleaner' ? cleaner.id : cleaner._id)
+                      setSelectedData(workorder)
+                      setIsUpdateModalOpen(true)
+                    }}
+                  />
+                </div>
               </td>
             </tr>
           ))}

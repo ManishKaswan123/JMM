@@ -16,9 +16,20 @@ import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 import {useParams} from 'react-router-dom'
 import {
   fetchWorkorderApplications,
+  useCreateWorkorderApplication,
+  useUpdateWorkorderApplication,
   WorkorderApplication,
 } from 'sr/utils/api/workorderApplicationApi'
 import WorkorderApplicationTable from './WorkOrderApplicationTable'
+interface WorkorderApplicationFormPayload {
+  workorder_id: string
+  status: string
+  cleaner_id: string
+}
+interface WorkoderApplicationCreatePayload extends WorkorderApplicationFormPayload {}
+interface WorkoderApplicationUpdatePayload extends WorkorderApplicationFormPayload {
+  id: string
+}
 
 const WorkOrderApplication: React.FC = () => {
   const {cleanerId} = useParams<{cleanerId: string}>()
@@ -27,30 +38,53 @@ const WorkOrderApplication: React.FC = () => {
   const [filters, setFilters] = useState<any>({cleaner_id: cleanerId})
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const cleanerStore = useSelector((state: RootState) => state.cleaner)
+  const workorderStore = useSelector((state: RootState) => state.workorder)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const {fetchCleanerData} = useActions()
+  const {fetchCleanerData, fetchWorkorderData} = useActions()
   const [itemsPerPage, setItemsPerPage] = useState(8)
+  const createMutation = useCreateWorkorderApplication()
+  const updateMutation = useUpdateWorkorderApplication()
 
-  const eightySixResponse = useMemo(
+  const createUpdateFields: FieldsArray = useMemo(
     () => [
-      {firstName: 'Devid', id: '65bbf2df9aa9785b019d87b2'},
-      {firstName: 'Devid', id: '65bbf2df9aa9785b019d87b2'},
+      {
+        type: 'dropdown',
+        label: 'workorder_id',
+        name: workorderStore.data,
+        topLabel: 'Workorder',
+        placeholder: 'Select workorder',
+        labelKey: 'workorder_name',
+        id: 'id',
+        required: true,
+      },
+      {
+        type: 'dropdown',
+        label: 'cleaner_id',
+        name: cleanerStore.data,
+        topLabel: 'Cleaner',
+        placeholder: 'Select cleaner',
+        labelKey: 'cleaner_name',
+        id: 'id',
+        required: true,
+      },
+      {
+        type: 'dropdown',
+        label: 'status',
+        name: [
+          {name: 'Active', id: 'active'},
+          {name: 'Accept', id: 'accept'},
+          {name: 'Publish', id: 'publist'},
+        ],
+        topLabel: 'Status',
+        placeholder: 'Select Status',
+        labelKey: 'name',
+        id: 'id',
+        required: true,
+      },
     ],
-    []
+    [workorderStore.data, cleanerStore.data]
   )
-  const msgType = useMemo(
-    () => [
-      {name: '1', id: 1},
-      {name: '2', id: 2},
-      {name: '3', id: 3},
-    ],
-    []
-  )
-
-  const createFields: FieldsArray = useMemo(() => [], [])
-
-  const updateFields: FieldsArray = useMemo(() => [], [])
 
   const fields: FieldsArray = useMemo(
     () => [
@@ -113,7 +147,14 @@ const WorkOrderApplication: React.FC = () => {
     if (cleanerStore.status !== 'succeeded') {
       fetchCleanerData({})
     }
-  }, [cleanerStore.status, fetchCleanerData])
+    if (workorderStore.status !== 'succeeded') {
+      fetchWorkorderData({})
+    }
+  }, [cleanerStore.status, fetchCleanerData, fetchWorkorderData, workorderStore.status])
+  const onSuccess = (action: string) => {
+    if (action === 'create') setIsCreateModalOpen(false)
+    else if (action === 'update') setIsUpdateModalOpen(false)
+  }
 
   const onDeleteChat = async (id: string) => {
     const res = await deleteChat(id)
@@ -135,28 +176,37 @@ const WorkOrderApplication: React.FC = () => {
     setIsFilterVisible(false)
   }
 
-  // const handleCreateChat = async (payload: chatCreatePayload) => {
-  //   setIsCreateModalOpen(false)
-  //   const res = await createChat(payload)
-  //   if (!res) {
-  //     setIsCreateModalOpen(false)
-  //     return
-  //   }
-  //   refetch()
-  // }
-  // const handleEditChat = async (payload: chatUpdatePayload) => {
-  //   if (!selectedData) {
-  //     setIsUpdateModalOpen(false)
-  //     return
-  //   }
-  //   setIsUpdateModalOpen(false)
-  //   const res = await updateChat(payload, selectedData.id)
-  //   if (!res) {
-  //     setIsUpdateModalOpen(false)
-  //     return
-  //   }
-  //   refetch()
-  // }
+  const handleCreateWorkorderApplication = async (payload: WorkorderApplicationFormPayload) => {
+    const data = {
+      cleaner_id: payload.cleaner_id,
+      status: payload.status,
+      workorder_id: payload.workorder_id,
+    }
+    createMutation.mutate({payload: data, onSuccess})
+  }
+  const handleEditWorkorderApplication = async (payload: WorkorderApplicationFormPayload) => {
+    if (!selectedData) {
+      setIsUpdateModalOpen(false)
+      return
+    }
+    const data = {
+      cleaner_id: payload.cleaner_id,
+      status: payload.status,
+      workorder_id: payload.workorder_id,
+      id: selectedData.id,
+    }
+    console.log(data)
+    updateMutation.mutate({payload: data, onSuccess})
+  }
+  const defaultValues: WorkorderApplicationFormPayload | undefined = useMemo(() => {
+    if (!selectedData) return undefined
+
+    return {
+      workorder_id: selectedData.workorder_id._id,
+      status: selectedData.status,
+      cleaner_id: selectedData.cleaner_id?._id,
+    }
+  }, [selectedData])
 
   const handleView = async (fileUrl: string) => {
     const response: any = await getPreSignedURL({fileName: fileUrl})
@@ -172,12 +222,12 @@ const WorkOrderApplication: React.FC = () => {
               Workorder Application
             </h2>
             <div className='flex items-center'>
-              {/* <Button
+              <Button
                 label='Create new'
                 Icon={AiOutlinePlus}
                 onClick={() => setIsCreateModalOpen(true)}
                 className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md inline-flex items-center mb-2 sm:mb-0 sm:mr-3'
-              ></Button> */}
+              ></Button>
               <Button
                 label={`${isFilterVisible ? 'Close' : 'Filters'}`}
                 Icon={!isFilterVisible ? AiOutlineFilter : AiOutlineClose}
@@ -205,8 +255,8 @@ const WorkOrderApplication: React.FC = () => {
             <SkeletonTable columns={['Workorder', 'Cleaner', 'Status', 'Actions']} />
           ) : (
             <WorkorderApplicationTable
-              //   setSelectedData={setSelectedData}
-              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              setSelectedData={setSelectedData}
+              setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
               //   handleDelete={onDeleteChat}
               //   handleView={handleView}
@@ -218,7 +268,7 @@ const WorkOrderApplication: React.FC = () => {
         ) : (
           data?.pagination && (
             <Pagination
-            currentPage={currentPage}
+              currentPage={currentPage}
               pagination={data.pagination}
               onPageChange={onPageChange}
               name='Work Order Application'
@@ -228,27 +278,26 @@ const WorkOrderApplication: React.FC = () => {
           )
         )}
       </div>
-      {/* {isCreateModalOpen && (
+      {isCreateModalOpen && (
         <DynamicModal
-          label='Create Work Order'
-          imageType='images'
+          label='Create Workorder Application'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
-          fields={createFields}
-          onSubmit={handleCreateChat}
+          fields={createUpdateFields}
+          defaultValues={{cleaner_id: cleanerId}}
+          onSubmit={handleCreateWorkorderApplication}
         />
       )}
       {isUpdateModalOpen && (
         <DynamicModal
-          imageType='images'
-          label='Update Job'
+          label='Update Workorder Application'
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
-          fields={updateFields}
+          fields={createUpdateFields}
           defaultValues={defaultValues}
-          onSubmit={handleEditChat}
+          onSubmit={handleEditWorkorderApplication}
         />
-      )} */}
+      )}
     </>
   )
 }
