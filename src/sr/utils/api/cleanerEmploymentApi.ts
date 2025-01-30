@@ -80,7 +80,7 @@ const createCleanerEmployment = async (
   onSuccess: (action: string) => void
 ): Promise<boolean> => {
   try {
-    const res = await post<any>(`/cleaner/employments`, payload)
+    const res = await post<any>(`/cleaner/employment`, payload)
     if (res.success === true) {
       toast.success('Cleaner Employment Created Successfully')
       onSuccess('create')
@@ -118,7 +118,7 @@ const updateCleanerEmployment = async (
   onSuccess: (action: string) => void
 ): Promise<boolean> => {
   try {
-    const res = await put<any>(`/cleaner/employments`, payload)
+    const res = await put<any>(`/cleaner/employment`, payload)
     if (res.success === true) {
       onSuccess('update')
       return true

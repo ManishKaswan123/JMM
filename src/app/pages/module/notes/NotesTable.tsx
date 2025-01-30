@@ -1,26 +1,18 @@
 import React, {useCallback, useEffect} from 'react'
-import {FaEye} from 'react-icons/fa'
+import {FaEdit, FaEye} from 'react-icons/fa'
 import {useSelector} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {RootState} from 'sr/redux/store'
+import {NotesResponse} from 'sr/utils/api/notesApi'
 import {useActions} from 'sr/utils/helpers/useActions'
-
-interface NotesResponse {
-  _id: string
-  company_id: string
-  applicant_id: string
-  notes: string
-  createdAt: string
-  updatedAt: string
-  __v: number
-  id: string
-}
 
 interface Props {
   data?: NotesResponse[]
+  setSelectedData: React.Dispatch<React.SetStateAction<NotesResponse | undefined>>
+  setIsUpdateModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const NotesTable: React.FC<Props> = ({data}) => {
+const NotesTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalOpen}) => {
   const companyMap = useSelector((state: RootState) => state.company.idNameMap)
   const companyStatus = useSelector((state: RootState) => state.company.status)
   const {fetchCompanyData} = useActions()
@@ -32,6 +24,10 @@ const NotesTable: React.FC<Props> = ({data}) => {
   useEffect(() => {
     fetchDataIfNeeded()
   }, [])
+  const navigate = useNavigate()
+  const handleNoteDetails = (note: NotesResponse) => {
+    navigate(`/notes/${note.id}`)
+  }
   return (
     <div className='inline-block min-w-full shadow rounded-lg overflow-hidden'>
       <table className='min-w-full leading-normal'>
@@ -62,7 +58,7 @@ const NotesTable: React.FC<Props> = ({data}) => {
             <tr key={notes?._id} className='odd:bg-white even:bg-gray-50'>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <Link
-                  to={`/company/${notes.company_id}`}
+                  to={`/company/details/${notes.company_id}`}
                   className='text-blue-500 hover:font-medium'
                 >
                   {companyMap[notes.company_id]}
@@ -86,12 +82,23 @@ const NotesTable: React.FC<Props> = ({data}) => {
                 </p>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <Link to={`/notes/${notes?.id}`} className='text-blue-500 hover:font-medium'>
+                <div className='flex'>
                   <FaEye
-                    className='cursor-pointer text-blue-500 hover:text-gray-700'
-                    style={{fontSize: '1.1rem'}}
+                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                    onClick={() => {
+                      // setUser(type === 'cleaner' ? cleaner.id : cleaner._id)
+                      handleNoteDetails(notes)
+                    }}
                   />
-                </Link>
+                  {/* <FaEdit
+                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                    onClick={() => {
+                      // setUser(type === 'cleaner' ? cleaner.id : cleaner._id)
+                      setSelectedData(notes)
+                      setIsUpdateModalOpen(true)
+                    }}
+                  /> */}
+                </div>
               </td>
             </tr>
           ))}

@@ -1,6 +1,7 @@
 // import TestMultiSelect from 'app/pages/module/test/Test'
 import {lazy} from 'react'
 
+const NotesDetails = lazy(() => import('app/pages/module/notes/NotesDetails'))
 const CustomerAddressCard = lazy(() => import('app/pages/module/customer/CustomerAddress'))
 const CustomerContactCard = lazy(() => import('app/pages/module/customerContact/CustomerContact'))
 const IndividualFavCleanerCard = lazy(() => import('app/pages/module/favCleaner/FavCleaner'))
@@ -99,6 +100,7 @@ export const routeConfigs = [
   {path: '/cleaner/workorder/:cleanerId', element: <WorkOrder />},
   {path: '/cleaner/savedworkorder/:cleanerId', element: <CleanerFavWorkorderCard />},
   {path: '/cleaner/appliedwordorder/:cleanerId', element: <WorkOrderApplication />},
+  {path: '/cleaner/proposaldetails/:cleanerId', element: <ProposalDetails />},
   {path: '/cleaner/appliedjobs/:cleanerId', element: <Application />},
   {path: '/task', element: <TaskList />},
   {path: '/task/:id', element: <TaskListDetailsCard />},
@@ -119,6 +121,7 @@ export const routeConfigs = [
   {path: '/user/jobCategory/:userId', element: <IndividualJobCategoryCard />},
   {path: '/user/favcleaner/:userId', element: <IndividualFavCleanerCard />},
   {path: '/notes', element: <Notes />},
+  {path: '/notes/:id', element: <NotesDetails />},
   {path: '/message', element: <Messages />},
   {path: '/supervisor', element: <Supervisor />},
   {path: '/address', element: <Address />},

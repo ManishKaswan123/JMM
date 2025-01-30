@@ -27,8 +27,8 @@ const WorkOrder: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<any>({
     cleaner_id: cleanerId,
-    min_pay_type_rate: 1,
-    max_pay_type_rate: 100,
+    // min_pay_type_rate: 1,
+    // max_pay_type_rate: 100,
   })
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const companyData = useSelector((state: RootState) => state.company.data)
@@ -37,6 +37,7 @@ const WorkOrder: React.FC = () => {
   const customerStatus = useSelector((state: RootState) => state.customer.status)
   const checklistData = useSelector((state: RootState) => state.checklist.data)
   const checklistStatus = useSelector((state: RootState) => state.checklist.status)
+  const cleanerStore = useSelector((state: RootState) => state.cleaner)
   const [selectedCompany, setSelectedCompany] = useState<string>()
   const [selectedCustomer, setSelectedCustomer] = useState<string>()
   const [filteredCustomerData, setFilteredCustomerData] =
@@ -46,7 +47,7 @@ const WorkOrder: React.FC = () => {
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const {fetchUserData, fetchCustomersData, fetchChecklistData, fetchCompanyData} = useActions()
+  const {fetchCleanerData, fetchCustomersData, fetchChecklistData, fetchCompanyData} = useActions()
   const [itemsPerPage, setItemsPerPage] = useState(8)
   const createMutation = useCreateWorkorder()
 
@@ -101,6 +102,16 @@ const WorkOrder: React.FC = () => {
         topLabel: 'Customer Location',
         placeholder: 'Select Customer Location',
         labelKey: 'customer_location_name',
+        id: 'id',
+        required: true,
+      },
+      {
+        type: 'dropdown',
+        label: 'cleaner_id',
+        name: cleanerStore.data,
+        topLabel: 'Cleaner',
+        placeholder: 'Select Cleaner',
+        labelKey: 'cleaner_name',
         id: 'id',
         required: true,
       },
@@ -468,6 +479,9 @@ const WorkOrder: React.FC = () => {
     if (checklistStatus !== 'succeeded') {
       fetchChecklistData({})
     }
+    if (cleanerStore.status !== 'succeeded') {
+      fetchCleanerData({})
+    }
   }, [
     companyStatus,
     fetchCompanyData,
@@ -475,6 +489,8 @@ const WorkOrder: React.FC = () => {
     fetchCustomersData,
     checklistStatus,
     fetchChecklistData,
+    cleanerStore.status,
+    fetchCleanerData,
   ])
 
   const onCloseCreateModal = () => {
@@ -566,8 +582,6 @@ const WorkOrder: React.FC = () => {
                 handleClearFilter={() => {
                   handleApplyFilter({
                     cleaner_id: cleanerId,
-                    min_pay_type_rate: 1,
-                    max_pay_type_rate: 100,
                   })
                 }}
               />

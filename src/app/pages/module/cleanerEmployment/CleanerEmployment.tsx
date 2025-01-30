@@ -80,7 +80,7 @@ const CleanerEmploymentCard: React.FC = () => {
         name: companyStore.data,
         topLabel: 'Company Name',
         placeholder: 'Select Company Name',
-        labelKey: 'name',
+        labelKey: 'company_name',
         id: 'name',
         required: true,
       },
@@ -260,7 +260,7 @@ const CleanerEmploymentCard: React.FC = () => {
         ) : (
           data?.pagination && (
             <Pagination
-            currentPage={currentPage}
+              currentPage={currentPage}
               pagination={data?.pagination}
               onPageChange={onPageChange}
               name='CleanerEmployment'

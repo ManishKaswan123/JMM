@@ -87,6 +87,12 @@ export const cleanerNavItems: NavItem[] = [
     iconPath: 'M12 4v16m8-8H4', // Plus icon
   },
   {
+    label: 'Proposal Details',
+    path: 'cleaner/proposaldetails',
+    name: 'proposaldetails',
+    iconPath: 'M12 4v16m8-8H4', // Plus icon
+  },
+  {
     label: 'Reference',
     path: 'cleaner/reference',
     name: 'reference',

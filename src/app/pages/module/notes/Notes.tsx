@@ -16,168 +16,67 @@ import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import NotesTable from './NotesTable'
-import {fetchNotes} from 'sr/utils/api/fetchNotes'
+import {
+  fetchNotes,
+  NotesFilters,
+  NotesResponse,
+  useCreateNote,
+  useUpdateNote,
+} from 'sr/utils/api/notesApi'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
-interface chatApiResponse {
-  eightySixResponseId?: any
-  senderId?: UserInterface
-  receiverId?: UserInterface
-  sourceType?: string
-  message?: string
-  images?: string[]
-  msgType?: number
-  createdAt: string
-  updatedAt: string
+interface NotesFormPayload {
+  company_id: string
+  applicant_id: string
+  notes: string
+}
+interface NotesCreatePayload extends NotesFormPayload {}
+interface NotesUpdatePayload extends NotesCreatePayload {
   id: string
 }
-
-interface chatFilters {
-  senderId?: string
-  receiverId?: string
-  eightySixResponseId?: string
-  sourceType?: string
-}
-interface chatCreatePayload {
-  eightySixResponseId: string
-  receiverId: string
-  sourceType: string
-  message: string
-  images: string[]
-  msgType: number
-}
-interface defaultData {
-  eightySixResponseId?: string
-  receiverId?: string
-  sourceType?: string
-  message?: string
-  images?: string[]
-  msgType?: number
-}
-interface chatUpdatePayload extends chatCreatePayload {}
-
 const Notes: React.FC = () => {
-  const [selectedData, setSelectedData] = useState<chatApiResponse>()
+  const [selectedData, setSelectedData] = useState<NotesResponse>()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [filters, setFilters] = useState<chatFilters>()
+  const [filters, setFilters] = useState<NotesFilters>()
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
-  const userData = useSelector((state: RootState) => state.user.data)
-  const userStatus = useSelector((state: RootState) => state.user.status)
+
   const companyData = useSelector((state: RootState) => state.company.data)
   const companyStatus = useSelector((state: RootState) => state.company.status)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const {fetchUserData, fetchCompanyData} = useActions()
+  const {fetchCompanyData} = useActions()
   const [itemsPerPage, setItemsPerPage] = useState(8)
+  const createMutation = useCreateNote()
+  const updateMutation = useUpdateNote()
 
-  const eightySixResponse = useMemo(
-    () => [
-      {firstName: 'Devid', id: '65bbf2df9aa9785b019d87b2'},
-      {firstName: 'Devid', id: '65bbf2df9aa9785b019d87b2'},
-    ],
-    []
-  )
-  const msgType = useMemo(
-    () => [
-      {name: '1', id: 1},
-      {name: '2', id: 2},
-      {name: '3', id: 3},
-    ],
-    []
-  )
-
-  const createFields: FieldsArray = useMemo(
+  const createUpdateFields: FieldsArray = useMemo(
     () => [
       {
         type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
+        label: 'company_id',
+        name: companyData,
+        topLabel: 'Company',
+        placeholder: 'Select Company',
+        labelKey: 'company_name',
+        id: 'id',
         required: true,
       },
-      {
-        type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'msgType',
-        name: msgType,
-        topLabel: 'Msg Type',
-        placeholder: 'Select Msg Type',
-        required: true,
-      },
-      {type: 'text', label: 'Message', name: 'message', placeholder: 'Message', required: true},
       {
         type: 'text',
-        label: 'Source Type',
-        name: 'sourceType',
-        placeholder: 'Source Type',
+        label: 'Applicant Id',
+        name: 'applicant_id',
+        placeholder: 'Applicant Id',
         required: true,
       },
-      {
-        type: 'file',
-        label: 'Images',
-        name: 'images',
-        wrapperLabel: 'Upload image',
-        topLabel: 'Images',
-        placeholder: 'Select Images',
-        required: true,
-      },
-    ],
-    [userData, msgType, eightySixResponse]
-  )
-
-  const updateFields: FieldsArray = useMemo(
-    () => [
-      {
-        type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'msgType',
-        name: msgType,
-        topLabel: 'Msg Type',
-        placeholder: 'Select Msg Type',
-        required: true,
-      },
-      {type: 'text', label: 'Message', name: 'message', placeholder: 'Message', required: true},
       {
         type: 'text',
-        label: 'Source Type',
-        name: 'sourceType',
-        placeholder: 'Source Type',
-        required: true,
-      },
-      {
-        type: 'file',
-        label: 'Images',
-        name: 'images',
-        wrapperLabel: 'Upload image',
-        topLabel: 'Images',
-        placeholder: 'Select Images',
+        label: 'Notes',
+        name: 'notes',
+        placeholder: 'Notes',
         required: true,
       },
     ],
-    [userData, msgType, eightySixResponse]
+    [companyData]
   )
 
   const fields: FieldsArray = useMemo(
@@ -195,41 +94,24 @@ const Notes: React.FC = () => {
     [companyData]
   )
 
-  const {data, error, isLoading, isError, refetch} = useQuery({
-    queryKey: ['notes', {...filters}],
-    queryFn: async () => fetchNotes({...filters}),
+  const {data, isLoading, refetch} = useQuery({
+    queryKey: ['notes', {limit: itemsPerPage, page: currentPage, ...filters}],
+    queryFn: async () => fetchNotes({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
   useEffect(() => {
     fetchUserDataIfNeeded()
   }, [])
 
-  const defaultValues: defaultData | undefined = useMemo(() => {
-    if (!selectedData) return undefined
-    return {
-      eightySixResponseId: selectedData.eightySixResponseId?.id,
-      sourceType: selectedData.sourceType,
-      message: selectedData.message,
-      images: selectedData.images,
-      msgType: selectedData.msgType,
-      receiverId: selectedData.receiverId?.id,
-    }
-  }, [selectedData])
   const fetchUserDataIfNeeded = useCallback(() => {
-    if (userStatus !== 'succeeded') {
-      fetchUserData({})
-    }
     if (companyStatus !== 'succeeded') {
       fetchCompanyData({})
     }
-  }, [userStatus, fetchUserData, companyStatus, fetchCompanyData])
+  }, [companyStatus, fetchCompanyData])
 
-  const onDeleteChat = async (id: string) => {
-    const res = await deleteChat(id)
-    if (!res) {
-      return
-    }
-    refetch()
+  const onSuccess = (action: string) => {
+    if (action === 'create') setIsCreateModalOpen(false)
+    else if (action === 'update') setIsUpdateModalOpen(false)
   }
   const onPageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
@@ -244,33 +126,36 @@ const Notes: React.FC = () => {
     setIsFilterVisible(false)
   }
 
-  const handleCreateChat = async (payload: chatCreatePayload) => {
-    setIsCreateModalOpen(false)
-    const res = await createChat(payload)
-    if (!res) {
-      setIsCreateModalOpen(false)
-      return
+  const handleCreateNote = async (payload: NotesFormPayload) => {
+    const data: NotesCreatePayload = {
+      company_id: payload.company_id,
+      applicant_id: payload.applicant_id,
+      notes: payload.notes,
     }
-    refetch()
+    createMutation.mutate({payload: data, onSuccess})
   }
-  const handleEditChat = async (payload: chatUpdatePayload) => {
+  const handleEditNote = async (payload: NotesFormPayload) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
     }
-    setIsUpdateModalOpen(false)
-    const res = await updateChat(payload, selectedData.id)
-    if (!res) {
-      setIsUpdateModalOpen(false)
-      return
+    const data: NotesUpdatePayload = {
+      company_id: payload.company_id,
+      applicant_id: payload.applicant_id,
+      notes: payload.notes,
+      id: selectedData.id,
     }
-    refetch()
+    updateMutation.mutate({payload: data, onSuccess})
   }
+  const defaultValues: NotesFormPayload | undefined = useMemo(() => {
+    if (!selectedData) return undefined
 
-  const handleView = async (fileUrl: string) => {
-    const response: any = await getPreSignedURL({fileName: fileUrl})
-    window.open(response.results.url.toString(), '_blank')
-  }
+    return {
+      company_id: selectedData.company_id,
+      applicant_id: selectedData.applicant_id,
+      notes: selectedData.notes,
+    }
+  }, [selectedData])
 
   return (
     <>
@@ -318,8 +203,8 @@ const Notes: React.FC = () => {
             />
           ) : (
             <NotesTable
-              //   setSelectedData={setSelectedData}
-              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              setSelectedData={setSelectedData}
+              setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
               //   handleDelete={onDeleteChat}
               //   handleView={handleView}
@@ -331,7 +216,7 @@ const Notes: React.FC = () => {
         ) : (
           data?.pagination && (
             <Pagination
-            currentPage={currentPage}
+              currentPage={currentPage}
               pagination={data.pagination}
               onPageChange={onPageChange}
               name='Notes'
@@ -344,22 +229,20 @@ const Notes: React.FC = () => {
       {isCreateModalOpen && (
         <DynamicModal
           label='Create Notes'
-          imageType='images'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
-          fields={createFields}
-          onSubmit={handleCreateChat}
+          fields={createUpdateFields}
+          onSubmit={handleCreateNote}
         />
       )}
       {isUpdateModalOpen && (
         <DynamicModal
-          imageType='images'
           label='Update Notes'
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
-          fields={updateFields}
+          fields={createUpdateFields}
           defaultValues={defaultValues}
-          onSubmit={handleEditChat}
+          onSubmit={handleEditNote}
         />
       )}
     </>
