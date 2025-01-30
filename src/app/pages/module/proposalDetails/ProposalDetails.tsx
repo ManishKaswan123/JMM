@@ -6,179 +6,75 @@ import Filter from 'sr/helpers/ui-components/Filter'
 import {useSelector} from 'react-redux'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
-import DashboardWrapper from 'app/pages/dashboard/DashboardWrapper'
-import {deleteChat} from 'sr/utils/api/deleteChat'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
-import {createChat} from 'sr/utils/api/createChat'
-import {getPreSignedURL} from 'sr/utils/api/media'
-import {updateChat} from 'sr/utils/api/updateChat'
 import {FieldsArray} from 'sr/constants/fields'
-import {UserInterface} from 'sr/constants/User'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import ProposalDetailsTable from './ProposalDetailsTable'
-import {fetchProposalDetails} from 'sr/utils/api/fetchProposalDetails'
+import {
+  fetchProposalDetails,
+  ProposalDetails,
+  ProposalDetailsFilters,
+  useCreateProposalDetails,
+  useUpdateProposalDetails,
+} from 'sr/utils/api/proposalDetailsApi'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
+import {useParams} from 'react-router-dom'
 
-interface chatApiResponse {
-  eightySixResponseId?: any
-  senderId?: UserInterface
-  receiverId?: UserInterface
-  sourceType?: string
-  message?: string
-  images?: string[]
-  msgType?: number
-  createdAt: string
-  updatedAt: string
+interface ProposalDetailsFormPayload {
+  cleaner_id: string
+  descrption: string
+  expected_rate: string
+}
+interface ProposalDetailsCreatePyload extends ProposalDetailsFormPayload {}
+interface ProposalDetailsUpdatePayload extends ProposalDetailsFormPayload {
   id: string
 }
 
-interface chatFilters {
-  senderId?: string
-  receiverId?: string
-  eightySixResponseId?: string
-  sourceType?: string
-}
-interface chatCreatePayload {
-  eightySixResponseId: string
-  receiverId: string
-  sourceType: string
-  message: string
-  images: string[]
-  msgType: number
-}
-interface defaultData {
-  eightySixResponseId?: string
-  receiverId?: string
-  sourceType?: string
-  message?: string
-  images?: string[]
-  msgType?: number
-}
-interface chatUpdatePayload extends chatCreatePayload {}
-
-const ProposalDetails: React.FC = () => {
-  const [selectedData, setSelectedData] = useState<chatApiResponse>()
+const CleanerProposalDetails: React.FC = () => {
+  const {cleanerId} = useParams<{cleanerId: string}>()
+  const [selectedData, setSelectedData] = useState<ProposalDetails>()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [filters, setFilters] = useState<chatFilters>()
+  const [filters, setFilters] = useState<ProposalDetailsFilters>({cleaner_id: cleanerId})
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
-  const userData = useSelector((state: RootState) => state.user.data)
-  const userStatus = useSelector((state: RootState) => state.user.status)
   const cleanerData = useSelector((state: RootState) => state.cleaner.data)
   const cleanerStatus = useSelector((state: RootState) => state.cleaner.status)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const {fetchUserData, fetchCleanerData} = useActions()
+  const {fetchCleanerData} = useActions()
   const [itemsPerPage, setItemsPerPage] = useState(8)
+  const createMutation = useCreateProposalDetails()
+  const updateMutation = useUpdateProposalDetails()
 
-  const eightySixResponse = useMemo(
+  const createUpdateFields: FieldsArray = useMemo(
     () => [
-      {firstName: 'Devid', id: '65bbf2df9aa9785b019d87b2'},
-      {firstName: 'Devid', id: '65bbf2df9aa9785b019d87b2'},
-    ],
-    []
-  )
-  const msgType = useMemo(
-    () => [
-      {name: '1', id: 1},
-      {name: '2', id: 2},
-      {name: '3', id: 3},
-    ],
-    []
-  )
+      {
+        type: 'dropdown',
+        label: 'cleaner_id',
+        name: cleanerData,
+        topLabel: 'Cleaner',
+        placeholder: 'Select cleaner',
+        labelKey: 'cleaner_name',
+        id: 'id',
+        required: true,
+      },
 
-  const createFields: FieldsArray = useMemo(
-    () => [
-      {
-        type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'msgType',
-        name: msgType,
-        topLabel: 'Msg Type',
-        placeholder: 'Select Msg Type',
-        required: true,
-      },
-      {type: 'text', label: 'Message', name: 'message', placeholder: 'Message', required: true},
       {
         type: 'text',
-        label: 'Source Type',
-        name: 'sourceType',
-        placeholder: 'Source Type',
+        label: 'Expected Rate',
+        name: 'expected_rate',
+        placeholder: 'Expected Rate',
         required: true,
       },
-      {
-        type: 'file',
-        label: 'Images',
-        name: 'images',
-        wrapperLabel: 'Upload image',
-        topLabel: 'Images',
-        placeholder: 'Select Images',
-        required: true,
-      },
-    ],
-    [userData, msgType, eightySixResponse]
-  )
-
-  const updateFields: FieldsArray = useMemo(
-    () => [
-      {
-        type: 'dropdown',
-        label: 'receiverId',
-        name: userData?.results || [],
-        topLabel: 'Receiver',
-        placeholder: 'Select Receiver',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'eightySixResponseId',
-        name: eightySixResponse,
-        topLabel: '86 Response',
-        placeholder: 'Select 86 Response',
-        required: true,
-      },
-      {
-        type: 'dropdown',
-        label: 'msgType',
-        name: msgType,
-        topLabel: 'Msg Type',
-        placeholder: 'Select Msg Type',
-        required: true,
-      },
-      {type: 'text', label: 'Message', name: 'message', placeholder: 'Message', required: true},
       {
         type: 'text',
-        label: 'Source Type',
-        name: 'sourceType',
-        placeholder: 'Source Type',
-        required: true,
-      },
-      {
-        type: 'file',
-        label: 'Images',
-        name: 'images',
-        wrapperLabel: 'Upload image',
-        topLabel: 'Images',
-        placeholder: 'Select Images',
+        label: 'Description',
+        name: 'descrption',
+        placeholder: 'Description',
         required: true,
       },
     ],
-    [userData, msgType, eightySixResponse]
+    [cleanerData]
   )
 
   const fields: FieldsArray = useMemo(
@@ -195,10 +91,10 @@ const ProposalDetails: React.FC = () => {
 
       {type: 'text', label: 'Expected Rate', name: 'expected_rate', placeholder: 'Expected Rate'},
     ],
-    [userData?.results, eightySixResponse, cleanerData]
+    [cleanerData]
   )
 
-  const {data, error, isLoading, isError, refetch} = useQuery({
+  const {data, isLoading} = useQuery({
     queryKey: ['proposalDetails', {limit: itemsPerPage, page: currentPage, ...filters}],
     queryFn: async () => fetchProposalDetails({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
@@ -206,34 +102,29 @@ const ProposalDetails: React.FC = () => {
   useEffect(() => {
     fetchUserDataIfNeeded()
   }, [])
-
-  const defaultValues: defaultData | undefined = useMemo(() => {
-    if (!selectedData) return undefined
-    return {
-      eightySixResponseId: selectedData.eightySixResponseId?.id,
-      sourceType: selectedData.sourceType,
-      message: selectedData.message,
-      images: selectedData.images,
-      msgType: selectedData.msgType,
-      receiverId: selectedData.receiverId?.id,
+  useEffect(() => {
+    if (cleanerId === undefined) {
+      const {cleaner_id, ...rest} = filters
+      setFilters(rest)
     }
-  }, [selectedData])
+  }, [cleanerId])
   const fetchUserDataIfNeeded = useCallback(() => {
-    if (userStatus !== 'succeeded') {
-      fetchUserData({})
-    }
     if (cleanerStatus !== 'succeeded') {
       fetchCleanerData({})
     }
-  }, [userStatus, fetchUserData, cleanerStatus, fetchCleanerData])
-
-  const onDeleteChat = async (id: string) => {
-    const res = await deleteChat(id)
-    if (!res) {
-      return
-    }
-    refetch()
+  }, [cleanerStatus, fetchCleanerData])
+  const onSuccess = (action: string) => {
+    if (action === 'create') setIsCreateModalOpen(false)
+    else if (action === 'update') setIsUpdateModalOpen(false)
   }
+
+  // const onDeleteChat = async (id: string) => {
+  //   const res = await deleteChat(id)
+  //   if (!res) {
+  //     return
+  //   }
+  //   refetch()
+  // }
   const onPageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
   }
@@ -246,34 +137,38 @@ const ProposalDetails: React.FC = () => {
     setCurrentPage(1)
     setIsFilterVisible(false)
   }
-
-  const handleCreateChat = async (payload: chatCreatePayload) => {
-    setIsCreateModalOpen(false)
-    const res = await createChat(payload)
-    if (!res) {
-      setIsCreateModalOpen(false)
-      return
+  const handleCreateProposalDetails = async (payload: ProposalDetailsFormPayload) => {
+    const data: ProposalDetailsCreatePyload = {
+      cleaner_id: payload.cleaner_id,
+      descrption: payload.descrption,
+      expected_rate: payload.expected_rate,
     }
-    refetch()
+    // console.log('data is ', data)
+    createMutation.mutate({payload: data, onSuccess})
   }
-  const handleEditChat = async (payload: chatUpdatePayload) => {
+  const handleEditProposalDetails = async (payload: ProposalDetailsFormPayload) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
     }
-    setIsUpdateModalOpen(false)
-    const res = await updateChat(payload, selectedData.id)
-    if (!res) {
-      setIsUpdateModalOpen(false)
-      return
+    const data: ProposalDetailsUpdatePayload = {
+      cleaner_id: payload.cleaner_id,
+      descrption: payload.descrption,
+      expected_rate: payload.expected_rate,
+      id: selectedData.id,
     }
-    refetch()
+    // console.log('data is ', data)
+    updateMutation.mutate({payload: data, onSuccess})
   }
+  const defaultValues: ProposalDetailsFormPayload | undefined = useMemo(() => {
+    if (!selectedData) return undefined
 
-  const handleView = async (fileUrl: string) => {
-    const response: any = await getPreSignedURL({fileName: fileUrl})
-    window.open(response.results.url.toString(), '_blank')
-  }
+    return {
+      cleaner_id: selectedData.cleaner_id,
+      descrption: selectedData.descrption,
+      expected_rate: selectedData.expected_rate,
+    }
+  }, [selectedData])
 
   return (
     <>
@@ -307,6 +202,9 @@ const ProposalDetails: React.FC = () => {
                 setIsFilterVisible={setIsFilterVisible}
                 preFilters={filters || {}}
                 fields={fields}
+                handleClearFilter={() => {
+                  handleApplyFilter({cleaner_id: cleanerId})
+                }}
               />
             </div>
           )}
@@ -323,8 +221,8 @@ const ProposalDetails: React.FC = () => {
             />
           ) : (
             <ProposalDetailsTable
-              //   setSelectedData={setSelectedData}
-              //   setIsUpdateModalOpen={setIsUpdateModalOpen}
+              setSelectedData={setSelectedData}
+              setIsUpdateModalOpen={setIsUpdateModalOpen}
               data={data?.data}
               //   handleDelete={onDeleteChat}
               //   handleView={handleView}
@@ -336,7 +234,7 @@ const ProposalDetails: React.FC = () => {
         ) : (
           data?.pagination && (
             <Pagination
-            currentPage={currentPage}
+              currentPage={currentPage}
               pagination={data.pagination}
               onPageChange={onPageChange}
               name='Notes'
@@ -349,26 +247,25 @@ const ProposalDetails: React.FC = () => {
       {isCreateModalOpen && (
         <DynamicModal
           label='Create Proposal Details'
-          imageType='images'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
-          fields={createFields}
-          onSubmit={handleCreateChat}
+          fields={createUpdateFields}
+          defaultValues={{cleaner_id: cleanerId}}
+          onSubmit={handleCreateProposalDetails}
         />
       )}
       {isUpdateModalOpen && (
         <DynamicModal
-          imageType='images'
           label='Update Proposal Details'
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
-          fields={updateFields}
+          fields={createUpdateFields}
           defaultValues={defaultValues}
-          onSubmit={handleEditChat}
+          onSubmit={handleEditProposalDetails}
         />
       )}
     </>
   )
 }
 
-export default ProposalDetails
+export default CleanerProposalDetails

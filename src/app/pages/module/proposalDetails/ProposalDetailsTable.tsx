@@ -1,24 +1,18 @@
 import React, {useCallback, useEffect, useState} from 'react'
-import {FaEye} from 'react-icons/fa'
+import {FaEdit, FaEye} from 'react-icons/fa'
 import {useSelector} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {RootState} from 'sr/redux/store'
+import {ProposalDetails} from 'sr/utils/api/proposalDetailsApi'
 import {useActions} from 'sr/utils/helpers/useActions'
 
-interface ProposalDetailsResponse {
-  cleaner_id: string
-  descrption: string
-  expected_rate: string
-  createdAt: string
-  updatedAt: string
-  id: string
-}
-
 interface Props {
-  data?: ProposalDetailsResponse[]
+  data?: ProposalDetails[]
+  setSelectedData: React.Dispatch<React.SetStateAction<ProposalDetails | undefined>>
+  setIsUpdateModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const ProposalDetailsTable: React.FC<Props> = ({data}) => {
+const ProposalDetailsTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalOpen}) => {
   const cleanerMap = useSelector((state: RootState) => state.cleaner.idNameMap)
   const cleanerStatus = useSelector((state: RootState) => state.cleaner.status)
   const {fetchCleanerData} = useActions()
@@ -30,6 +24,10 @@ const ProposalDetailsTable: React.FC<Props> = ({data}) => {
   useEffect(() => {
     fetchDataIfNeeded()
   }, [])
+  const navigate = useNavigate()
+  const handleProposalDetails = (pd: ProposalDetails) => {
+    navigate(`/proposaldetails/${pd.id}`)
+  }
   return (
     <div className='inline-block min-w-full shadow rounded-lg overflow-hidden'>
       <table className='min-w-full leading-normal'>
@@ -65,7 +63,7 @@ const ProposalDetailsTable: React.FC<Props> = ({data}) => {
                 </td>
                 <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                   <Link
-                    to={`/cleaner/${item.cleaner_id}`}
+                    to={`/cleaner/details/${item.cleaner_id}`}
                     className='text-blue-500 hover:font-medium'
                   >
                     {cleanerMap[item.cleaner_id]}
@@ -86,15 +84,22 @@ const ProposalDetailsTable: React.FC<Props> = ({data}) => {
                   </p>
                 </td>
                 <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                  <Link
-                    to={`/proposaldetails/${item.id}`}
-                    className='text-blue-500 hover:font-medium'
-                  >
+                  <div className='flex'>
                     <FaEye
-                      className='cursor-pointer text-blue-500 hover:text-gray-700'
-                      style={{fontSize: '1.1rem'}}
+                      className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                      onClick={() => {
+                        handleProposalDetails(item)
+                      }}
                     />
-                  </Link>
+                    <FaEdit
+                      className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                      onClick={() => {
+                        // setUser(type === 'cleaner' ? cleaner.id : cleaner._id)
+                        setSelectedData(item)
+                        setIsUpdateModalOpen(true)
+                      }}
+                    />
+                  </div>
                 </td>
               </tr>
             )

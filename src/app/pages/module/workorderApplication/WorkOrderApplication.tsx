@@ -74,7 +74,7 @@ const WorkOrderApplication: React.FC = () => {
         name: [
           {name: 'Active', id: 'active'},
           {name: 'Accept', id: 'accept'},
-          {name: 'Publish', id: 'publist'},
+          {name: 'Publish', id: 'publish'},
         ],
         topLabel: 'Status',
         placeholder: 'Select Status',
@@ -104,7 +104,7 @@ const WorkOrderApplication: React.FC = () => {
         name: [
           {name: 'Active', id: 'active'},
           {name: 'Accept', id: 'accept'},
-          {name: 'Publish', id: 'publist'},
+          {name: 'Publish', id: 'publish'},
         ],
         topLabel: 'Status',
         placeholder: 'Select Status',
@@ -132,17 +132,6 @@ const WorkOrderApplication: React.FC = () => {
     }
   }, [cleanerId])
 
-  // const defaultValues: defaultData | undefined = useMemo(() => {
-  //   if (!selectedData) return undefined
-  //   return {
-  //     eightySixResponseId: selectedData.eightySixResponseId?.id,
-  //     sourceType: selectedData.sourceType,
-  //     message: selectedData.message,
-  //     images: selectedData.images,
-  //     msgType: selectedData.msgType,
-  //     receiverId: selectedData.receiverId?.id,
-  //   }
-  // }, [selectedData])
   const fetchUserDataIfNeeded = useCallback(() => {
     if (cleanerStore.status !== 'succeeded') {
       fetchCleanerData({})
@@ -156,13 +145,13 @@ const WorkOrderApplication: React.FC = () => {
     else if (action === 'update') setIsUpdateModalOpen(false)
   }
 
-  const onDeleteChat = async (id: string) => {
-    const res = await deleteChat(id)
-    if (!res) {
-      return
-    }
-    refetch()
-  }
+  // const onDeleteChat = async (id: string) => {
+  //   const res = await deleteChat(id)
+  //   if (!res) {
+  //     return
+  //   }
+  //   refetch()
+  // }
   const onPageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
   }
@@ -177,7 +166,7 @@ const WorkOrderApplication: React.FC = () => {
   }
 
   const handleCreateWorkorderApplication = async (payload: WorkorderApplicationFormPayload) => {
-    const data = {
+    const data: WorkoderApplicationCreatePayload = {
       cleaner_id: payload.cleaner_id,
       status: payload.status,
       workorder_id: payload.workorder_id,
@@ -189,13 +178,13 @@ const WorkOrderApplication: React.FC = () => {
       setIsUpdateModalOpen(false)
       return
     }
-    const data = {
+    const data: WorkoderApplicationUpdatePayload = {
       cleaner_id: payload.cleaner_id,
       status: payload.status,
       workorder_id: payload.workorder_id,
       id: selectedData.id,
     }
-    console.log(data)
+
     updateMutation.mutate({payload: data, onSuccess})
   }
   const defaultValues: WorkorderApplicationFormPayload | undefined = useMemo(() => {
