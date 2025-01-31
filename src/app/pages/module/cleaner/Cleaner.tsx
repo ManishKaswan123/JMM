@@ -28,7 +28,7 @@ interface CleanerCreatePayload {
 interface CleanerFormPayload extends Omit<CleanerCreatePayload, 'address'> {
   address_line_1: string
   address_line_2: string
-  country: string
+  country?: string
   city: string
   state: string
   postal: number
@@ -330,7 +330,7 @@ const Cleaner: React.FC = () => {
         ) : (
           data?.pagination && (
             <Pagination
-            currentPage={currentPage}
+              currentPage={currentPage}
               pagination={data.pagination}
               onPageChange={onPageChange}
               name='Cleaner'

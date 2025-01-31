@@ -101,20 +101,28 @@ const CleanerDetailsCard: React.FC<any> = () => {
         <h3 className='text-2xl font-bold mb-4'>Address</h3>
         <div className='space-y-2'>
           <div className='flex items-center'>
-            <strong className='font-medium text-lg mr-2'>Street:</strong>
-            <p>{data?.address?.street || 'Not Available'}</p>
+            <strong className='font-medium text-lg mr-2'>Address Line 1:</strong>
+            <p>{data?.address?.address_line_1 || 'Not Available'}</p>
           </div>
           <div className='flex items-center'>
-            <strong className='font-medium text-lg mr-2'>City:</strong>
-            <p>{data?.address?.city || 'Not Available'}</p>
+            <strong className='font-medium text-lg mr-2'>Address Line 2:</strong>
+            <p>{data?.address?.address_line_2 || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Country:</strong>
+            <p>{data?.address?.country || 'Not Available'}</p>
           </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>State:</strong>
             <p>{data?.address?.state || 'Not Available'}</p>
           </div>
           <div className='flex items-center'>
-            <strong className='font-medium text-lg mr-2'>Country:</strong>
-            <p>{data?.address?.country || 'Not Available'}</p>
+            <strong className='font-medium text-lg mr-2'>City:</strong>
+            <p>{data?.address?.city || 'Not Available'}</p>
+          </div>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Postal:</strong>
+            <p>{data?.address?.postal || 'Not Available'}</p>
           </div>
         </div>
       </div>

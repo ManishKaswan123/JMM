@@ -84,11 +84,11 @@ export const normalMenuItems = [
   //   path: '/task',
   //   iconPath: 'M8 7h8M8 11h8M8 15h8M8 19h8',
   // },
-  {
-    label: 'Proposal Details',
-    path: '/proposaldetails',
-    iconPath: 'M6 5h12M6 10h12M6 15h8M6 20h4',
-  },
+  // {
+  //   label: 'Proposal Details',
+  //   path: '/proposaldetails',
+  //   iconPath: 'M6 5h12M6 10h12M6 15h8M6 20h4',
+  // },
   {
     label: 'Notes',
     path: '/notes',
