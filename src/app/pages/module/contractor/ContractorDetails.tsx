@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
-import {Contractor, fetchSingleContractor} from 'sr/utils/api/fetchContractor'
+import {ContractorDetails, fetchSingleContractor} from 'sr/utils/api/contractorApi'
 import {Link} from 'react-router-dom'
 
 const ContractorDetailsCard: React.FC<any> = () => {
   const navigate = useNavigate()
   const {id} = useParams<{id: string}>()
-  const [data, setData] = useState<Contractor>()
+  const [data, setData] = useState<ContractorDetails>()
   const [isError, setIsError] = useState(false)
 
   useEffect(() => {

@@ -1,18 +1,6 @@
 import {get} from 'sr/utils/axios/index'
 import {JmmApiResponse} from './contant'
-
-interface Address {
-  address_line_1: string
-  address_line_2: string
-  street: string
-  country: string
-  city: string
-  state: string
-  postal: number
-  lat: number
-  lng: number
-  _id: string
-}
+import {Address} from './addressApi'
 
 export interface CleanerDetails {
   username: string

@@ -1,71 +1,19 @@
 import React from 'react'
-import {FaEye} from 'react-icons/fa'
-import {Link} from 'react-router-dom'
+import {FaEdit, FaEye} from 'react-icons/fa'
+import {Link, useNavigate} from 'react-router-dom'
+import {ContractorDetails} from 'sr/utils/api/contractorApi'
 
-interface Address {
-  address_line_1: string
-  address_line_2?: string
-  country: string
-  city: string
-  state: string
-  postal: string
-  lat: number
-  lng: number
-  _id: string
-}
-
-interface Cleaner {
-  _id: string
-  username: string
-  first_name: string
-  last_name: string
-  mobile_number: string
-  email: string
-  date_of_birth: string
-  user_id: string
-  status: string
-  createdAt: string
-  updatedAt: string
-  __v: number
-  address: Address
-}
-
-interface Company {
-  _id: string
-  username: string
-  email: string
-  mobile_number: string
-  company_name: string
-  business_type: string[]
-  intent: string[]
-  candidate_msg: boolean
-  user_id: string
-  status: string
-  createdAt: string
-  updatedAt: string
-  __v: number
-}
-
-interface Contractor {
-  cleaner_id: Cleaner
-  first_name: string
-  last_name: string
-  mobile_number: string
-  email?: string
-  date_of_birth: string
-  address: Address
-  customer_location_ids: string[]
-  company_id: Company
-  status: string
-  createdAt: string
-  updatedAt: string
-  id: string
-}
 interface Props {
-  data?: Contractor[]
+  data?: ContractorDetails[]
+  setSelectedData: React.Dispatch<React.SetStateAction<ContractorDetails | undefined>>
+  setIsUpdateModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const ContractorTable: React.FC<Props> = ({data}) => {
+const ContractorTable: React.FC<Props> = ({data, setIsUpdateModalOpen, setSelectedData}) => {
+  const navigate = useNavigate()
+  const handleContractorDetails = (contractor: ContractorDetails) => {
+    navigate(`/contractor/${contractor.id}`)
+  }
   return (
     <div className='inline-block min-w-full shadow rounded-lg overflow-hidden'>
       <table className='min-w-full leading-normal'>
@@ -113,7 +61,7 @@ const ContractorTable: React.FC<Props> = ({data}) => {
                   to={`/company/${contractor.company_id?._id}`}
                   className='text-blue-500 hover:font-medium'
                 >
-                  {contractor.company_id?.company_name}
+                  {contractor.company_id.company_name}
                 </Link>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
@@ -142,15 +90,22 @@ const ContractorTable: React.FC<Props> = ({data}) => {
               </td>
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <Link
-                  to={`/contractor/${contractor.id}`}
-                  className='text-blue-500 hover:font-medium'
-                >
+                <div className='flex'>
                   <FaEye
-                    className='cursor-pointer text-blue-500 hover:text-gray-700'
-                    style={{fontSize: '1.1rem'}}
+                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                    onClick={() => {
+                      handleContractorDetails(contractor)
+                    }}
                   />
-                </Link>
+                  <FaEdit
+                    className='text-blue-500 cursor-pointer mr-4 h-4 w-4'
+                    onClick={() => {
+                      // setUser(type === 'cleaner' ? cleaner.id : cleaner._id)
+                      setSelectedData(contractor)
+                      setIsUpdateModalOpen(true)
+                    }}
+                  />
+                </div>
               </td>
             </tr>
           ))}
