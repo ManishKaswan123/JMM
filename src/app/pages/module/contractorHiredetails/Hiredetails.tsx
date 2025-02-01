@@ -1,56 +1,60 @@
-import React, {useState, useEffect, useMemo, useCallback} from 'react'
+import React, {useState, useMemo, useCallback, useEffect} from 'react'
 import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
 import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
-import {useSelector} from 'react-redux'
-import {useActions} from 'sr/utils/helpers/useActions'
-import {RootState} from 'sr/redux/store'
+
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {FieldsArray} from 'sr/constants/fields'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
-import {
-  ContractorDetails,
-  ContractorListPayload,
-  fetchContractor,
-  useCreateContractor,
-  useUpdateContractor,
-} from 'sr/utils/api/contractorApi'
-import ContractorTable from './ContractorTable'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 
-interface ContractorFormPayload {
-  cleaner_id: string
+import {useParams} from 'react-router-dom'
+import HiredetailsTable from './HiredetailsTable'
+import {
+  ContractorHiredetailsDetails,
+  ContractorHiredetailsListPayload,
+  fetchContractorHiredetails,
+  useCreateContractorHiredetails,
+  useUpdateContractorHiredetails,
+} from 'sr/utils/api/contractorHiredetailsApi'
+import {useSelector} from 'react-redux'
+import {RootState} from 'sr/redux/store'
+import {useActions} from 'sr/utils/helpers/useActions'
+import {employmentTypes} from 'sr/constants/jobsConstants'
+import {HiredetailsDetailsCard} from './HiredetailsDetails'
+
+interface HiredetailsFormPayload {
   company_id: string
-  first_name: string
-  last_name: string
-  mobile_number: string
-  email: string
-  date_of_birth: string
-  status: string
+  destination: string
+  joining_date: string
+  employment_type: string
+  rate: number
 }
-interface ContractorCreatePayload extends ContractorFormPayload {}
-interface ContractorUpdatePayload extends ContractorFormPayload {
+interface HiredetailsCreatePayload extends HiredetailsFormPayload {
+  contractor_id: string
+}
+interface HiredetailsUpdatePayload extends HiredetailsCreatePayload {
   id: string
 }
 
-const Contractor: React.FC = () => {
-  const [selectedData, setSelectedData] = useState<ContractorDetails>()
+const HiredetailsCard: React.FC = () => {
+  const {contractor_id} = useParams<{contractor_id: string | undefined}>()
+  const [selectedData, setSelectedData] = useState<ContractorHiredetailsDetails>()
+  const [selectedHiredetail, setSelectedHiredetail] = useState<ContractorHiredetailsDetails>()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [filters, setFilters] = useState<ContractorListPayload>()
+  const [filters, setFilters] = useState<ContractorHiredetailsListPayload>({contractor_id})
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
-
-  const cleanerStore = useSelector((state: RootState) => state.cleaner)
   const companyStore = useSelector((state: RootState) => state.company)
+  const {fetchCompanyData} = useActions()
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-  const {fetchCleanerData, fetchCompanyData} = useActions()
-  const [itemsPerPage, setItemsPerPage] = useState(8)
-  const createMutation = useCreateContractor()
-  const updateMutation = useUpdateContractor()
+  const [itemsPerPage, setItemsPerPage] = useState<number>(8)
+  const createMutation = useCreateContractorHiredetails()
+  const updateMutation = useUpdateContractorHiredetails()
 
-  const createUpdateFields: FieldsArray = useMemo(
+  const createAndUpdateFields: FieldsArray = useMemo(
     () => [
       {
         type: 'dropdown',
@@ -63,91 +67,45 @@ const Contractor: React.FC = () => {
         required: true,
       },
       {
-        type: 'dropdown',
-        label: 'cleaner_id',
-        name: cleanerStore.data,
-        topLabel: 'Cleaner',
-        placeholder: 'Select Cleaner',
-        labelKey: 'cleaner_name',
-        id: 'id',
-        required: true,
-      },
-      {
         type: 'text',
-        label: 'First Name',
-        name: 'first_name',
-        placeholder: 'First Name',
-        required: true,
-      },
-      {
-        type: 'text',
-        label: 'Last Name',
-        name: 'last_name',
-        placeholder: 'Last Name',
-        required: true,
-      },
-      {
-        type: 'text',
-        label: 'Mobile Number',
-        name: 'mobile_number',
-        placeholder: 'Mobile Number',
-        required: true,
-      },
-      {
-        type: 'text',
-        label: 'Email',
-        name: 'email',
-        placeholder: 'Email',
+        label: 'Destination',
+        name: 'destination',
+        placeholder: 'Destination',
         required: true,
       },
       {
         type: 'date',
-        label: 'DOB',
-        name: 'date_of_birth',
-        placeholder: 'Date of Birth',
+        label: 'Joining Date',
+        name: 'joining_date',
+        placeholder: 'Joining Date',
         required: true,
       },
-
       {
         type: 'dropdown',
-        label: 'status',
-        name: [
-          {
-            id: 'active',
-            status: 'Active',
-          },
-          {
-            id: 'deleted',
-            status: 'Deleted',
-          },
-          {
-            id: 'pending_otp',
-            status: 'Pending OTP',
-          },
-        ],
-        topLabel: 'Status',
-        placeholder: 'Select Status',
-        labelKey: 'status',
-        valueKey: 'id',
+        label: 'employment_type',
+        name: employmentTypes,
+        topLabel: 'Employment Type',
+        placeholder: 'Select Employment Type',
+        labelKey: 'label',
+        valueKey: 'value',
         id: 'id',
+        required: true,
+      },
+      {
+        type: 'text',
+        label: 'Rate',
+        name: 'rate',
+        placeholder: 'Rate in $',
+        required: true,
       },
     ],
-    [cleanerStore.data, companyStore.data]
+    [companyStore.data]
   )
 
   const fields: FieldsArray = useMemo(
     () => [
       {
         type: 'dropdown',
-        label: 'cleaner_id',
-        name: cleanerStore.data,
-        topLabel: 'Cleaner',
-        placeholder: 'Select Cleaner',
-        labelKey: 'cleaner_name',
-        id: 'id',
-      },
-      {
-        type: 'dropdown',
         label: 'company_id',
         name: companyStore.data,
         topLabel: 'Company',
@@ -156,35 +114,27 @@ const Contractor: React.FC = () => {
         id: 'id',
       },
       {
-        type: 'dropdown',
-        label: 'status',
-        name: [
-          {
-            id: 'active',
-            status: 'Active',
-          },
-          {
-            id: 'deleted',
-            status: 'Deleted',
-          },
-          {
-            id: 'pending_otp',
-            status: 'Pending OTP',
-          },
-        ],
-        topLabel: 'Status',
-        placeholder: 'Select Status',
-        labelKey: 'status',
-        valueKey: 'id',
-        id: 'id',
+        type: 'multi',
+        options: employmentTypes,
+        label: 'employment_type',
+        name: 'Employment type',
+        placeholder: 'Select Employment Type',
+      },
+      {
+        type: 'text',
+        label: 'Rate',
+        name: 'rate',
+        placeholder: 'Rate in $',
+        required: true,
       },
     ],
-    [cleanerStore.data, companyStore.data]
+    [companyStore.data]
   )
 
   const {data, isLoading} = useQuery({
-    queryKey: ['contractor', {limit: itemsPerPage, page: currentPage, ...filters}],
-    queryFn: async () => fetchContractor({limit: itemsPerPage, page: currentPage, ...filters}),
+    queryKey: ['contractorHiredetails', {limit: itemsPerPage, page: currentPage, ...filters}],
+    queryFn: async () =>
+      fetchContractorHiredetails({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
   useEffect(() => {
@@ -192,13 +142,10 @@ const Contractor: React.FC = () => {
   }, [])
 
   const fetchUserDataIfNeeded = useCallback(() => {
-    if (cleanerStore.status !== 'succeeded') {
-      fetchCleanerData({})
-    }
     if (companyStore.status !== 'succeeded') {
       fetchCompanyData({})
     }
-  }, [cleanerStore, fetchCleanerData, companyStore, fetchCompanyData])
+  }, [companyStore, fetchCompanyData])
   const onSuccess = (action: string) => {
     if (action === 'create') setIsCreateModalOpen(false)
     else if (action === 'update') setIsUpdateModalOpen(false)
@@ -216,56 +163,58 @@ const Contractor: React.FC = () => {
     setCurrentPage(1)
     setIsFilterVisible(false)
   }
-  const handleCreateContractor = async (payload: ContractorFormPayload) => {
-    const data: ContractorCreatePayload = {
-      cleaner_id: payload.cleaner_id,
+
+  const handleCreateHiredetails = async (payload: HiredetailsFormPayload) => {
+    const data: HiredetailsCreatePayload = {
+      contractor_id: contractor_id || '',
       company_id: payload.company_id,
-      first_name: payload.first_name,
-      last_name: payload.last_name,
-      mobile_number: payload.mobile_number,
-      email: payload.email,
-      date_of_birth: payload.date_of_birth,
-      status: payload.status,
+      destination: payload.destination,
+      joining_date: payload.joining_date,
+      employment_type: payload.employment_type,
+      rate: payload.rate,
     }
     createMutation.mutate({payload: data, onSuccess})
   }
-  const handleEditContractor = async (payload: ContractorFormPayload) => {
+  const handleEditHiredetails = async (payload: HiredetailsUpdatePayload) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
     }
-    const data: ContractorUpdatePayload = {
-      cleaner_id: payload.cleaner_id,
+    const data: HiredetailsUpdatePayload = {
+      contractor_id: contractor_id || '',
       company_id: payload.company_id,
-      first_name: payload.first_name,
-      last_name: payload.last_name,
-      mobile_number: payload.mobile_number,
-      email: payload.email,
-      date_of_birth: payload.date_of_birth,
-      status: payload.status,
+      destination: payload.destination,
+      joining_date: payload.joining_date,
+      employment_type: payload.employment_type,
+      rate: payload.rate,
       id: selectedData.id,
     }
     updateMutation.mutate({payload: data, onSuccess})
   }
-  const defaultValues: ContractorFormPayload | undefined = useMemo(() => {
+  const defaultValues: HiredetailsFormPayload | undefined = useMemo(() => {
     if (!selectedData) return undefined
     return {
-      cleaner_id: selectedData.cleaner_id?._id,
-      company_id: selectedData.company_id?._id,
-      first_name: selectedData.first_name,
-      last_name: selectedData.last_name,
-      mobile_number: selectedData.mobile_number,
-      email: selectedData.email || '',
-      date_of_birth: (() => {
-        const date = new Date(selectedData.date_of_birth)
+      joining_date: (() => {
+        const date = new Date(selectedData.joining_date || '')
         const month = String(date.getMonth() + 1).padStart(2, '0') // Months are 0-indexed
         const day = String(date.getDate()).padStart(2, '0')
         const year = date.getFullYear()
         return `${year}-${month}-${day}`
       })(),
-      status: selectedData.status,
+      company_id: selectedData.company_id?._id || '',
+      destination: selectedData.destination || '',
+      employment_type: selectedData.employment_type || '',
+      rate: selectedData.rate || 0,
     }
   }, [selectedData])
+  if (selectedHiredetail) {
+    return (
+      <HiredetailsDetailsCard
+        data={selectedHiredetail}
+        onGoBack={() => setSelectedHiredetail(undefined)}
+      />
+    )
+  }
 
   return (
     <>
@@ -273,7 +222,7 @@ const Contractor: React.FC = () => {
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
             <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>
-              Contractor
+              Contractor Hire Details
             </h2>
             <div className='flex items-center'>
               <Button
@@ -299,17 +248,23 @@ const Contractor: React.FC = () => {
                 setIsFilterVisible={setIsFilterVisible}
                 preFilters={filters || {}}
                 fields={fields}
+                handleClearFilter={() => {
+                  handleApplyFilter({
+                    contractor_id: contractor_id,
+                  })
+                }}
               />
             </div>
           )}
           {isLoading ? (
             <SkeletonTable
-              columns={['Name', 'Cleaner Id', 'Company Id', 'Email', 'DOB', 'Status', 'Actions']}
+              columns={['Contractor', 'Company', 'Employment Type', 'Rate', 'Actions']}
             />
           ) : (
-            <ContractorTable
+            <HiredetailsTable
               setSelectedData={setSelectedData}
               setIsUpdateModalOpen={setIsUpdateModalOpen}
+              onSelectHiredetails={setSelectedHiredetail}
               data={data?.data}
               //   handleDelete={onDeleteChat}
               //   handleView={handleView}
@@ -324,7 +279,7 @@ const Contractor: React.FC = () => {
               currentPage={currentPage}
               pagination={data.pagination}
               onPageChange={onPageChange}
-              name='Contractor'
+              name='Hiredetails'
               onLimitChange={onLimitChange}
               disabled={isLoading}
             />
@@ -333,25 +288,25 @@ const Contractor: React.FC = () => {
       </div>
       {isCreateModalOpen && (
         <DynamicModal
-          label='Create Contractor'
+          label='Create Hire Details'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
-          fields={createUpdateFields}
-          onSubmit={handleCreateContractor}
+          fields={createAndUpdateFields}
+          onSubmit={handleCreateHiredetails}
         />
       )}
-      {isUpdateModalOpen && (
+      {isUpdateModalOpen && defaultValues && (
         <DynamicModal
-          label='Update Contractor'
+          label='Update Hire Details'
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
-          fields={createUpdateFields}
+          fields={createAndUpdateFields}
           defaultValues={defaultValues}
-          onSubmit={handleEditContractor}
+          onSubmit={handleEditHiredetails}
         />
       )}
     </>
   )
 }
 
-export default Contractor
+export default HiredetailsCard

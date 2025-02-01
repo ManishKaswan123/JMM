@@ -189,3 +189,17 @@ export const customerNavItems: NavItem[] = [
     iconPath: 'M12 4v16m8-8H4', // Plus icon
   },
 ]
+export const contractorNavItems: NavItem[] = [
+  {
+    label: 'Details',
+    path: 'contractor/details',
+    name: 'details',
+    iconPath: 'M12 4v16m8-8H4', // Plus icon
+  },
+  {
+    label: 'Hire Details',
+    path: 'contractor/hiredetails',
+    name: 'hiredetails',
+    iconPath: 'M12 4v16m8-8H4', // Plus icon
+  },
+]

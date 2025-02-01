@@ -11,9 +11,7 @@ import {RootState} from 'sr/redux/store'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {Address} from 'sr/utils/api/addressApi'
 import {FieldsArray} from 'sr/constants/fields'
-import {useUpdateCustomer} from 'sr/utils/api/customerApi'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
-import {set} from 'react-hook-form'
 interface CustomerLocationDetailsProps {
   // refetch: () => void
   setSelectedCustomerLocation: React.Dispatch<React.SetStateAction<CustomerLocation | undefined>>

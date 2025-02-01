@@ -3,6 +3,7 @@ import NavBar from '../components/header/NavBar'
 import {
   cleanerNavItems,
   companyNavItems,
+  contractorNavItems,
   customerNavItems,
   userNavItems,
 } from '../components/header/NavbarItems'
@@ -26,6 +27,9 @@ export default function MasterNavBar() {
       )}
       {urlItems.length > 2 && urlItems[0] === 'customer' && (
         <NavBar onGoBack={() => navigate('/customer')} navItems={customerNavItems} />
+      )}
+      {urlItems.length > 2 && urlItems[0] === 'contractor' && (
+        <NavBar onGoBack={() => navigate('/contractor')} navItems={contractorNavItems} />
       )}
       {/* End Navbar */}
     </>
