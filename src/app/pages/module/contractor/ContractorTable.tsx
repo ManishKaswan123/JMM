@@ -12,7 +12,7 @@ interface Props {
 const ContractorTable: React.FC<Props> = ({data, setIsUpdateModalOpen, setSelectedData}) => {
   const navigate = useNavigate()
   const handleContractorDetails = (contractor: ContractorDetails) => {
-    navigate(`/contractor/${contractor.id}`)
+    navigate(`/contractor/details/${contractor.id}`)
   }
   return (
     <div className='inline-block min-w-full shadow rounded-lg overflow-hidden'>
