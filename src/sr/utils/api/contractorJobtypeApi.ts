@@ -18,87 +18,83 @@ interface UpdatedCompany extends Omit<CompanyResponse, 'id'> {
   _id: string
 }
 
-export interface ContractorHiredetailsDetails {
+export interface ContractorJobtypeDetails {
   contractor_id: UpdatedContractor
   company_id?: UpdatedCompany
-  destination?: string
-  joining_date?: string
-  employment_type?: string
-  rate?: number
+  job_type?: string
+  additional_information?: string
+  rate?: string
   createdAt: string
   updatedAt: string
   id: string
 }
 
-export type FetchContractorHiredetailsResponse = JmmApiResponse<ContractorHiredetailsDetails>
-export type FetchSingleContractorHiredetailsResponse = JmmApiResponse<ContractorHiredetailsDetails>
+export type FetchContractorJobtypeResponse = JmmApiResponse<ContractorJobtypeDetails[]>
+export type FetchSingleContractorJobtypeResponse = JmmApiResponse<ContractorJobtypeDetails>
 
-export interface ContractorHiredetailsListPayload {
+export interface ContractorJobtypeListPayload {
   limit?: number
   page?: number
   sortBy?: string
   contractor_id?: string
   company_id?: string
-  employment_type?: string
+  job_type?: string
   rate?: string
 }
 
-export const fetchContractorHiredetails = async (
-  payload: ContractorHiredetailsListPayload
-): Promise<FetchContractorHiredetailsResponse> => {
+export const fetchContractorJobtype = async (
+  payload: ContractorJobtypeListPayload
+): Promise<FetchContractorJobtypeResponse> => {
   const filteredPayload = transformPayloadToFilter(payload)
 
   try {
-    const res = await get<FetchContractorHiredetailsResponse>(
-      `/contractor/hiredetails`,
-      filteredPayload
-    )
+    const res = await get<FetchContractorJobtypeResponse>(`/contractor/jobtype`, filteredPayload)
 
     if (res.success === true && res.data) {
       return res
     } else {
-      throw new Error('No Contractor Hiredetails found')
+      throw new Error('No Contractor Jobtype found')
     }
   } catch (error) {
     throw new Error(
-      `Failed to fetch Contractor Hiredetails: ${
+      `Failed to fetch Contractor Jobtype: ${
         error instanceof Error ? error.message : 'Unknown error'
       }`
     )
   }
 }
 
-export const fetchSingleContractorHiredetails = async (
+export const fetchSingleContractorJobtype = async (
   id: string
-): Promise<FetchSingleContractorHiredetailsResponse> => {
+): Promise<FetchSingleContractorJobtypeResponse> => {
   try {
-    const res = await get<FetchSingleContractorHiredetailsResponse>(`/contractor/hiredetails`, {id})
+    const res = await get<FetchSingleContractorJobtypeResponse>(`/contractor/jobtype`, {id})
 
     if (res.success === true && res.data) {
       return res
     } else {
-      throw new Error('No Contractor Hiredetails found')
+      throw new Error('No Contractor Jobtype found')
     }
   } catch (error) {
     throw new Error(
-      `Failed to fetch Contractor Hiredetails: ${
+      `Failed to fetch Contractor Jobtype: ${
         error instanceof Error ? error.message : 'Unknown error'
       }`
     )
   }
 }
-interface ContractorHiredetailsVariables {
+interface ContractorJobtypeVariables {
   payload: Record<string, any>
   onSuccess: (action: string) => void
 }
-const createContractorHiredetails = async (
+const createContractorJobtype = async (
   payload: Record<string, any>,
   onSuccess: (action: string) => void
 ): Promise<boolean> => {
   try {
-    const res = await post<any>(`/contractor/hiredetails`, payload)
+    const res = await post<any>(`/contractor/jobtype`, payload)
     if (res.success === true) {
-      toast.success('Contractor Hiredetails Created Successfully')
+      toast.success('Contractor Jobtype Created Successfully')
       onSuccess('create')
       return true
     }
@@ -109,18 +105,18 @@ const createContractorHiredetails = async (
 }
 
 // The useMutation hook with correct typing
-export const useCreateContractorHiredetails = (): UseMutationResult<
+export const useCreateContractorJobtype = (): UseMutationResult<
   boolean, // The type of the data returned on success
   Error, // The type of the error that could be thrown
-  ContractorHiredetailsVariables // The type of the variables passed to the mutation
+  ContractorJobtypeVariables // The type of the variables passed to the mutation
 > => {
   const queryClient = useQueryClient()
 
-  return useMutation<boolean, Error, ContractorHiredetailsVariables>({
-    mutationFn: async ({payload, onSuccess}) => createContractorHiredetails(payload, onSuccess),
+  return useMutation<boolean, Error, ContractorJobtypeVariables>({
+    mutationFn: async ({payload, onSuccess}) => createContractorJobtype(payload, onSuccess),
 
     onSuccess: () => {
-      queryClient.invalidateQueries(['contractorHiredetails'] as InvalidateQueryFilters)
+      queryClient.invalidateQueries(['contractorJobtype'] as InvalidateQueryFilters)
     },
     onError: (error: Error) => {
       toast.error(error.message)
@@ -129,12 +125,12 @@ export const useCreateContractorHiredetails = (): UseMutationResult<
 }
 
 // Define the function with correct typing
-const updateContractorHiredetails = async (
+const updateContractorJobtype = async (
   payload: Record<string, any>,
   onSuccess: (action: string) => void
 ): Promise<boolean> => {
   try {
-    const res = await put<any>(`/contractor/hiredetails`, payload)
+    const res = await put<any>(`/contractor/jobtype`, payload)
     if (res.success === true) {
       onSuccess('update')
       return true
@@ -145,20 +141,20 @@ const updateContractorHiredetails = async (
   }
 }
 // The useMutation hook with correct typing
-export const useUpdateContractorHiredetails = (): UseMutationResult<
+export const useUpdateContractorJobtype = (): UseMutationResult<
   boolean, // The type of the data returned on success
   Error, // The type of the error that could be thrown
-  ContractorHiredetailsVariables // The type of the variables passed to the mutation
+  ContractorJobtypeVariables // The type of the variables passed to the mutation
 > => {
   const queryClient = useQueryClient()
 
-  return useMutation<boolean, Error, ContractorHiredetailsVariables>({
-    mutationFn: async ({payload, onSuccess}: ContractorHiredetailsVariables) =>
-      updateContractorHiredetails(payload, onSuccess),
+  return useMutation<boolean, Error, ContractorJobtypeVariables>({
+    mutationFn: async ({payload, onSuccess}: ContractorJobtypeVariables) =>
+      updateContractorJobtype(payload, onSuccess),
 
     onSuccess: () => {
-      queryClient.invalidateQueries(['contractorHiredetails'] as InvalidateQueryFilters)
-      toast.success('Contractor Hiredetails Updated Successfully')
+      queryClient.invalidateQueries(['contractorJobtype'] as InvalidateQueryFilters)
+      toast.success('Contractor Jobtype Updated Successfully')
     },
     onError: (error: Error) => {
       toast.error(error.message)

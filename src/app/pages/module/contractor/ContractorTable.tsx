@@ -61,7 +61,7 @@ const ContractorTable: React.FC<Props> = ({data, setIsUpdateModalOpen, setSelect
                   to={`/company/${contractor.company_id?._id}`}
                   className='text-blue-500 hover:font-medium'
                 >
-                  {contractor.company_id.company_name}
+                  {contractor.company_id?.company_name}
                 </Link>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>

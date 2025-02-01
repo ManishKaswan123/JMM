@@ -3,56 +3,54 @@ import Pagination from 'sr/helpers/ui-components/dashboardComponents/Pagination'
 import {AiOutlineClose, AiOutlineFilter, AiOutlinePlus} from 'react-icons/ai'
 import {Button} from 'sr/helpers'
 import Filter from 'sr/helpers/ui-components/Filter'
-
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {FieldsArray} from 'sr/constants/fields'
 import {useQuery} from '@tanstack/react-query'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
-
 import {useParams} from 'react-router-dom'
-import HiredetailsTable from './HiredetailsTable'
-import {
-  ContractorHiredetailsDetails,
-  ContractorHiredetailsListPayload,
-  fetchContractorHiredetails,
-  useCreateContractorHiredetails,
-  useUpdateContractorHiredetails,
-} from 'sr/utils/api/contractorHiredetailsApi'
+import ContractorJobtypeTable from './ContractorJobtypeTable'
 import {useSelector} from 'react-redux'
 import {RootState} from 'sr/redux/store'
 import {useActions} from 'sr/utils/helpers/useActions'
-import {employmentTypes} from 'sr/constants/jobsConstants'
-import {HiredetailsDetailsCard} from './HiredetailsDetails'
+import {
+  ContractorJobtypeDetails,
+  ContractorJobtypeListPayload,
+  fetchContractorJobtype,
+  useCreateContractorJobtype,
+  useUpdateContractorJobtype,
+} from 'sr/utils/api/contractorJobtypeApi'
+import {ContractorJobtypeDetailsCard} from './ContractorJobtypeDetails'
+import {jobTypes} from 'sr/constants/jobsConstants'
 
-interface HiredetailsFormPayload {
+interface ContractorJobtypeFormPayload {
   company_id: string
-  destination: string
-  joining_date: string
-  employment_type: string
-  rate: number
+  job_type: string
+  additional_information: string
+
+  rate: string
 }
-interface HiredetailsCreatePayload extends HiredetailsFormPayload {
+interface ContractorJobtypeCreatePayload extends ContractorJobtypeFormPayload {
   contractor_id: string
 }
-interface HiredetailsUpdatePayload extends HiredetailsCreatePayload {
+interface ContractorJobtypeUpdatePayload extends ContractorJobtypeCreatePayload {
   id: string
 }
 
-const HiredetailsCard: React.FC = () => {
+const ContractorJobtypeCard: React.FC = () => {
   const {contractor_id} = useParams<{contractor_id: string | undefined}>()
-  const [selectedData, setSelectedData] = useState<ContractorHiredetailsDetails>()
-  const [selectedHiredetail, setSelectedHiredetail] = useState<ContractorHiredetailsDetails>()
+  const [selectedData, setSelectedData] = useState<ContractorJobtypeDetails>()
+  const [selectedJobtype, setSelectedJobtype] = useState<ContractorJobtypeDetails>()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [filters, setFilters] = useState<ContractorHiredetailsListPayload>({contractor_id})
+  const [filters, setFilters] = useState<ContractorJobtypeListPayload>({contractor_id})
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
   const companyStore = useSelector((state: RootState) => state.company)
   const {fetchCompanyData} = useActions()
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
   const [itemsPerPage, setItemsPerPage] = useState<number>(8)
-  const createMutation = useCreateContractorHiredetails()
-  const updateMutation = useUpdateContractorHiredetails()
+  const createMutation = useCreateContractorJobtype()
+  const updateMutation = useUpdateContractorJobtype()
 
   const createAndUpdateFields: FieldsArray = useMemo(
     () => [
@@ -67,30 +65,24 @@ const HiredetailsCard: React.FC = () => {
         required: true,
       },
       {
-        type: 'text',
-        label: 'Destination',
-        name: 'destination',
-        placeholder: 'Destination',
-        required: true,
-      },
-      {
-        type: 'date',
-        label: 'Joining Date',
-        name: 'joining_date',
-        placeholder: 'Joining Date',
-        required: true,
-      },
-      {
         type: 'dropdown',
-        label: 'employment_type',
-        name: employmentTypes,
-        topLabel: 'Employment Type',
-        placeholder: 'Select Employment Type',
+        label: 'job_type',
+        name: jobTypes,
+        topLabel: 'Job Type',
+        placeholder: 'Select Job Type',
         labelKey: 'label',
         valueKey: 'value',
         id: 'id',
         required: true,
       },
+      {
+        type: 'text',
+        label: 'Additional Info',
+        name: 'additional_information',
+        placeholder: 'Additional Info',
+        required: true,
+      },
+
       {
         type: 'text',
         label: 'Rate',
@@ -115,9 +107,9 @@ const HiredetailsCard: React.FC = () => {
       },
       {
         type: 'multi',
-        options: employmentTypes,
-        label: 'employment_type',
-        name: 'Employment type',
+        options: jobTypes,
+        label: 'job_type',
+        name: 'Job Type',
         placeholder: 'Select Employment Type',
       },
       {
@@ -131,9 +123,9 @@ const HiredetailsCard: React.FC = () => {
   )
 
   const {data, isLoading} = useQuery({
-    queryKey: ['contractorHiredetails', {limit: itemsPerPage, page: currentPage, ...filters}],
+    queryKey: ['contractorJobtype', {limit: itemsPerPage, page: currentPage, ...filters}],
     queryFn: async () =>
-      fetchContractorHiredetails({limit: itemsPerPage, page: currentPage, ...filters}),
+      fetchContractorJobtype({limit: itemsPerPage, page: currentPage, ...filters}),
     // placeholderData: keepPreviousData,
   })
   useEffect(() => {
@@ -163,54 +155,45 @@ const HiredetailsCard: React.FC = () => {
     setIsFilterVisible(false)
   }
 
-  const handleCreateHiredetails = async (payload: HiredetailsFormPayload) => {
-    const data: HiredetailsCreatePayload = {
+  const handleCreateContractorJobtype = async (payload: ContractorJobtypeFormPayload) => {
+    const data: ContractorJobtypeCreatePayload = {
       contractor_id: contractor_id || '',
       company_id: payload.company_id,
-      destination: payload.destination,
-      joining_date: payload.joining_date,
-      employment_type: payload.employment_type,
+      job_type: payload.job_type,
+      additional_information: payload.additional_information,
       rate: payload.rate,
     }
     createMutation.mutate({payload: data, onSuccess})
   }
-  const handleEditHiredetails = async (payload: HiredetailsUpdatePayload) => {
+  const handleEditContractorJobtype = async (payload: ContractorJobtypeUpdatePayload) => {
     if (!selectedData) {
       setIsUpdateModalOpen(false)
       return
     }
-    const data: HiredetailsUpdatePayload = {
+    const data: ContractorJobtypeUpdatePayload = {
+      id: selectedData.id,
       contractor_id: contractor_id || '',
       company_id: payload.company_id,
-      destination: payload.destination,
-      joining_date: payload.joining_date,
-      employment_type: payload.employment_type,
+      job_type: payload.job_type,
+      additional_information: payload.additional_information,
       rate: payload.rate,
-      id: selectedData.id,
     }
     updateMutation.mutate({payload: data, onSuccess})
   }
-  const defaultValues: HiredetailsFormPayload | undefined = useMemo(() => {
+  const defaultValues: ContractorJobtypeFormPayload | undefined = useMemo(() => {
     if (!selectedData) return undefined
     return {
-      joining_date: (() => {
-        const date = new Date(selectedData.joining_date || '')
-        const month = String(date.getMonth() + 1).padStart(2, '0') // Months are 0-indexed
-        const day = String(date.getDate()).padStart(2, '0')
-        const year = date.getFullYear()
-        return `${year}-${month}-${day}`
-      })(),
       company_id: selectedData.company_id?._id || '',
-      destination: selectedData.destination || '',
-      employment_type: selectedData.employment_type || '',
-      rate: selectedData.rate || 0,
+      job_type: selectedData.job_type || '',
+      additional_information: selectedData.additional_information || '',
+      rate: selectedData.rate || '',
     }
   }, [selectedData])
-  if (selectedHiredetail) {
+  if (selectedJobtype) {
     return (
-      <HiredetailsDetailsCard
-        data={selectedHiredetail}
-        onGoBack={() => setSelectedHiredetail(undefined)}
+      <ContractorJobtypeDetailsCard
+        data={selectedJobtype}
+        onGoBack={() => setSelectedJobtype(undefined)}
       />
     )
   }
@@ -221,7 +204,7 @@ const HiredetailsCard: React.FC = () => {
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
             <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>
-              Contractor Hire Details
+              Contractor Job Type
             </h2>
             <div className='flex items-center'>
               <Button
@@ -256,14 +239,12 @@ const HiredetailsCard: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonTable
-              columns={['Contractor', 'Company', 'Employment Type', 'Rate', 'Actions']}
-            />
+            <SkeletonTable columns={['Contractor', 'Company', 'Job Type', 'Rate', 'Actions']} />
           ) : (
-            <HiredetailsTable
+            <ContractorJobtypeTable
               setSelectedData={setSelectedData}
               setIsUpdateModalOpen={setIsUpdateModalOpen}
-              onSelectHiredetails={setSelectedHiredetail}
+              onSelectContractorJobtype={setSelectedJobtype}
               data={data?.data}
               //   handleDelete={onDeleteChat}
               //   handleView={handleView}
@@ -278,7 +259,7 @@ const HiredetailsCard: React.FC = () => {
               currentPage={currentPage}
               pagination={data.pagination}
               onPageChange={onPageChange}
-              name='Hiredetails'
+              name='ContractorJobtype'
               onLimitChange={onLimitChange}
               disabled={isLoading}
             />
@@ -287,25 +268,25 @@ const HiredetailsCard: React.FC = () => {
       </div>
       {isCreateModalOpen && (
         <DynamicModal
-          label='Create Hire Details'
+          label='Create Job Type'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           fields={createAndUpdateFields}
-          onSubmit={handleCreateHiredetails}
+          onSubmit={handleCreateContractorJobtype}
         />
       )}
       {isUpdateModalOpen && defaultValues && (
         <DynamicModal
-          label='Update Hire Details'
+          label='Update Job Type'
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
           fields={createAndUpdateFields}
           defaultValues={defaultValues}
-          onSubmit={handleEditHiredetails}
+          onSubmit={handleEditContractorJobtype}
         />
       )}
     </>
   )
 }
 
-export default HiredetailsCard
+export default ContractorJobtypeCard
