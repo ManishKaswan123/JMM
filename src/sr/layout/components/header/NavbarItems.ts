@@ -202,4 +202,10 @@ export const contractorNavItems: NavItem[] = [
     name: 'hiredetails',
     iconPath: 'M12 4v16m8-8H4', // Plus icon
   },
+  {
+    label: 'Job Types',
+    path: 'contractor/jobtype',
+    name: 'jobtype',
+    iconPath: 'M12 4v16m8-8H4', // Plus icon
+  },
 ]
