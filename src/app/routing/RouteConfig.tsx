@@ -1,6 +1,7 @@
 // import TestMultiSelect from 'app/pages/module/test/Test'
 import {lazy} from 'react'
 
+const SupervisorDetailsCard = lazy(() => import('app/pages/module/supervisor/SupervisorDetails'))
 const ContractorJobtypeCard = lazy(
   () => import('app/pages/module/contractorJobtype/ContractorJobtype')
 )
@@ -130,6 +131,7 @@ export const routeConfigs = [
   {path: '/notes/:id', element: <NotesDetails />},
   {path: '/message', element: <Messages />},
   {path: '/supervisor', element: <Supervisor />},
+  {path: '/supervisor/:supervisor_id', element: <SupervisorDetailsCard />},
   {path: '/address', element: <Address />},
   {path: '/user/address/:userId', element: <Address />},
   {path: '/application', element: <Application />},

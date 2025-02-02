@@ -59,7 +59,7 @@ export default function Signin() {
       <div className='flex flex-col justify-center items-center'>
         <div className='rounded-lg bg-[#FFFFFF] px-4 py-2 w-80 '>
           <img src={companyLogo} alt='Company Logo' className='image rounded-lg' />
-          <div className='text-center font-bold text-4xl pt-1'>Login</div>
+          <div className='text-center font-bold text-4xl  pt-1'>Login</div>
           <div className='text-center text-slate-500 text-md pt-2 px-4 pb-2'>
             Enter your credentials to access your account
           </div>
