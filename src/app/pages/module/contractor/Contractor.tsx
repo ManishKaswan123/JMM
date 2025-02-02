@@ -304,7 +304,7 @@ const Contractor: React.FC = () => {
           )}
           {isLoading ? (
             <SkeletonTable
-              columns={['Name', 'Cleaner Id', 'Company Id', 'Email', 'DOB', 'Status', 'Actions']}
+              columns={['Name', 'Cleaner', 'Company Id', 'Email', 'DOB', 'Status', 'Actions']}
             />
           ) : (
             <ContractorTable

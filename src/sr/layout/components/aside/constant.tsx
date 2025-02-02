@@ -4,20 +4,6 @@ export const masterMenuItems: {label: string; path: string; iconPath: string}[] 
     path: '/business-category',
     iconPath: 'M9 12h6m2 4H7m12-8H5m16 8a9 9 0 11-18 0 9 9 0 0118 0z',
   },
-]
-export const normalMenuItems = [
-  // {
-  //   label: 'Test',
-  //   path: '/test',
-  //   iconPath:
-  //     'M17 9V7a4 4 0 00-8 0v2M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z',
-  // },
-  {
-    label: 'Individuals',
-    path: '/user',
-    iconPath:
-      'M17 9V7a4 4 0 00-8 0v2M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z',
-  },
   {
     label: 'Job Application',
     path: '/application',
@@ -27,12 +13,6 @@ export const normalMenuItems = [
   {
     label: 'Checklists',
     path: '/checklist',
-    iconPath:
-      'M17 9V7a4 4 0 00-8 0v2M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z',
-  },
-  {
-    label: 'Customers',
-    path: '/customer',
     iconPath:
       'M17 9V7a4 4 0 00-8 0v2M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z',
   },
@@ -49,26 +29,11 @@ export const normalMenuItems = [
       'M17 9V7a4 4 0 00-8 0v2M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z',
   },
   {
-    label: 'Cleaner',
-    path: '/cleaner',
-    iconPath:
-      'M16.5 4.5l3 3m-2.121-2.121L8.25 16.5m5.25-11.25l-2.121 2.121M9.5 20.5H6l1.5-4.5 7.121-7.121 2.121 2.121L9.5 20.5z',
-  },
-  {
     label: 'Task',
     path: '/task',
     iconPath: 'M5 13l4 4L19 7M5 3v6m0 0h6',
   },
-  {
-    label: 'Company',
-    path: '/company',
-    iconPath: 'M4 6h16M4 10h16M10 14h10M4 14h4v7H4z',
-  },
-  // {
-  //   label: 'Company Branch',
-  //   path: '/company/branch',
-  //   iconPath: 'M4 6h16M4 10h16M10 14h10M4 14h4v7H4z',
-  // },
+
   {
     label: 'Workorder',
     path: '/workorder',
@@ -79,6 +44,46 @@ export const normalMenuItems = [
     path: '/workorderapplication',
     iconPath: 'M9 17v-2a4 4 0 00-8 0v2h8zm13 0v-2a4 4 0 00-8 0v2h8zm-13 4h8m-8-2h8m0-2H6',
   },
+]
+export const normalMenuItems = [
+  // {
+  //   label: 'Test',
+  //   path: '/test',
+  //   iconPath:
+  //     'M17 9V7a4 4 0 00-8 0v2M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z',
+  // },
+  {
+    label: 'Individuals',
+    path: '/user',
+    iconPath:
+      'M17 9V7a4 4 0 00-8 0v2M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z',
+  },
+
+  {
+    label: 'Customers',
+    path: '/customer',
+    iconPath:
+      'M17 9V7a4 4 0 00-8 0v2M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z',
+  },
+
+  {
+    label: 'Cleaner',
+    path: '/cleaner',
+    iconPath:
+      'M16.5 4.5l3 3m-2.121-2.121L8.25 16.5m5.25-11.25l-2.121 2.121M9.5 20.5H6l1.5-4.5 7.121-7.121 2.121 2.121L9.5 20.5z',
+  },
+  {
+    label: 'Company',
+    path: '/company',
+    iconPath: 'M4 6h16M4 10h16M10 14h10M4 14h4v7H4z',
+  },
+
+  // {
+  //   label: 'Company Branch',
+  //   path: '/company/branch',
+  //   iconPath: 'M4 6h16M4 10h16M10 14h10M4 14h4v7H4z',
+  // },
+
   // {
   //   label: 'Task',
   //   path: '/task',
@@ -89,6 +94,20 @@ export const normalMenuItems = [
   //   path: '/proposaldetails',
   //   iconPath: 'M6 5h12M6 10h12M6 15h8M6 20h4',
   // },
+
+  {
+    label: 'Contractor',
+    path: '/contractor',
+    iconPath:
+      'M4 2h12a2 2 0 012 2v16a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2zm0 2v16h12V4H4zm9 6a1 1 0 100-2 1 1 0 000 2zM6 5h6v1H6V5zm0 3h6v1H6V8zm0 3h6v1H6v-1zm8.5 8.793l3.207-3.207a1 1 0 000-1.414l-2-2a1 1 0 00-1.414 0l-3.207 3.207L14.5 18.793zM16 19.5V21h1.5l3.207-3.207-1.5-1.5L16 19.5z',
+  },
+
+  {
+    label: 'Supervisor',
+    path: '/supervisor',
+    iconPath:
+      'M17 9V7a4 4 0 00-8 0v2M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z',
+  },
   {
     label: 'Notes',
     path: '/notes',
@@ -96,21 +115,9 @@ export const normalMenuItems = [
       'M4 2h12a2 2 0 012 2v16a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2zm0 2v16h12V4H4zm9 6a1 1 0 100-2 1 1 0 000 2zM6 5h6v1H6V5zm0 3h6v1H6V8zm0 3h6v1H6v-1zm8.5 8.793l3.207-3.207a1 1 0 000-1.414l-2-2a1 1 0 00-1.414 0l-3.207 3.207L14.5 18.793zM16 19.5V21h1.5l3.207-3.207-1.5-1.5L16 19.5z',
   },
   {
-    label: 'Contractor',
-    path: '/contractor',
-    iconPath:
-      'M4 2h12a2 2 0 012 2v16a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2zm0 2v16h12V4H4zm9 6a1 1 0 100-2 1 1 0 000 2zM6 5h6v1H6V5zm0 3h6v1H6V8zm0 3h6v1H6v-1zm8.5 8.793l3.207-3.207a1 1 0 000-1.414l-2-2a1 1 0 00-1.414 0l-3.207 3.207L14.5 18.793zM16 19.5V21h1.5l3.207-3.207-1.5-1.5L16 19.5z',
-  },
-  {
     label: 'Messages',
     path: '/message',
     iconPath: 'M6 5h12M6 10h12M6 15h8M6 20h4',
-  },
-  {
-    label: 'Supervisor',
-    path: '/supervisor',
-    iconPath:
-      'M17 9V7a4 4 0 00-8 0v2M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z',
   },
 
   // Add other menu items here

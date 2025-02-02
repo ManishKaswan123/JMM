@@ -18,7 +18,7 @@ interface DynamicModalProps {
   onClose: () => void
   fields: FieldsArray
   defaultValues?: {[key: string]: any}
-  onSubmit: (payload: any) => Promise<void>
+  onSubmit: (payload: any) => any
 }
 
 const DynamicModal: React.FC<DynamicModalProps> = ({
@@ -117,7 +117,6 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
   }
 
   const onSubmitForm: SubmitHandler<any> = async (formData: FormData) => {
-    // console.log({...formData, ...multiSelectData})
     await onSubmit({
       ...formData,
       ...Object.fromEntries(
@@ -128,7 +127,6 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
       ),
     })
   }
-  // console.log('defaultValues are : ', defaultValues)
 
   return (
     <div

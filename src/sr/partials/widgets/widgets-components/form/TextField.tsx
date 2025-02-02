@@ -65,7 +65,7 @@ const TextField = ({
           className={`${
             labelStyle === 'style1'
               ? 'text-sm font-medium text-gray-700 mb-1 block'
-              : 'text-center text-sm font-medium text-[#7747ff]'
+              : 'text-center text-sm font-medium '
           }`}
         >
           {label}
