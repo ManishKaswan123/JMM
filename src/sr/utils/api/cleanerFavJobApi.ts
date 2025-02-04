@@ -7,7 +7,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import {JobResponse} from './fetchJobs'
-import {JmmApiResponse} from './contant'
+import {JmmApiResponse} from './globalInterface'
 
 export interface CleanerFavJobFilters {
   limit?: number

@@ -1,6 +1,10 @@
 // import TestMultiSelect from 'app/pages/module/test/Test'
 import {lazy} from 'react'
 
+const TaskMgmtDetailsCard = lazy(
+  () => import('app/pages/module/taskMgmt/taskMgmtComponents/TaskMgmtDetails')
+)
+const TaskMgmt = lazy(() => import('app/pages/module/taskMgmt/taskMgmtComponents/TaskMgmt'))
 const SupervisorDetailsCard = lazy(() => import('app/pages/module/supervisor/SupervisorDetails'))
 const ContractorJobtypeCard = lazy(
   () => import('app/pages/module/contractorJobtype/ContractorJobtype')
@@ -109,6 +113,8 @@ export const routeConfigs = [
   {path: '/cleaner/appliedjobs/:cleanerId', element: <Application />},
   {path: '/task', element: <TaskList />},
   {path: '/task/:id', element: <TaskListDetailsCard />},
+  {path: '/taskmgmt', element: <TaskMgmt />},
+  {path: '/taskmgmt/:id', element: <TaskMgmtDetailsCard />},
   {path: '/company', element: <Company />},
   {path: '/company/details/:company_id', element: <CompanyDetailCard />},
   {path: '/company/additionalInfo/:company_id', element: <CompanyAddInfoCard />},

@@ -7,7 +7,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import {WorkOrderResponse} from './fetchWorkOrder'
-import {JmmApiResponse} from './contant'
+import {JmmApiResponse} from './globalInterface'
 
 export interface CleanerFavWorkorderFilters {
   limit?: number

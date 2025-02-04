@@ -1,5 +1,5 @@
 import {get} from 'sr/utils/axios/index'
-import {JmmApiResponse} from './contant'
+import {JmmApiResponse} from './globalInterface'
 import {Address} from './addressApi'
 
 export interface CleanerDetails {

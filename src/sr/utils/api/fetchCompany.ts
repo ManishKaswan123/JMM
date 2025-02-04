@@ -1,6 +1,6 @@
 import {get} from 'sr/utils/axios/index'
 import {transformPayloadToFilter} from '../helpers/processFilter'
-import {JmmApiResponse} from './contant'
+import {JmmApiResponse} from './globalInterface'
 
 export interface CompanyResponse {
   username: string

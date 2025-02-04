@@ -1,58 +1,129 @@
-// import Input from '../input'
-// import Checkbox from '../checkbox'
+import React from 'react'
+import {Link} from 'react-router-dom'
+import {IconType} from 'react-icons'
 
-type Props = {
-  label: any
-  labelClass?: any
-  thead: any
-  tbody: any
-  actionButton?: any
-  topMargin?: any
-  rounded?: any
-  color?: any
-  bgColor?: any
+interface TableAction<T> {
+  icon: IconType
+  onClick?: (item: T) => void
+  linkPrefix?: string
+  tooltip?: string
 }
 
-export function index({
-  label,
-  thead,
-  tbody,
-  labelClass,
-  actionButton,
-  topMargin,
-  rounded,
-  color,
-  bgColor,
-}: Props) {
+interface TableColumn<T> {
+  label: string
+  key: keyof T
+  isLink?: boolean
+  linkPrefix?: string
+  statusColors?: Record<string, string>
+  getStatusName?: (statusId: any) => string
+  render?: (item: T) => React.ReactNode
+  actions?: TableAction<T>[] // New: Support for dynamic actions
+}
+
+interface TableProps<T> {
+  data: T[] | undefined
+  columns: TableColumn<T>[]
+}
+
+const GlobalTable = <T,>({data, columns}: TableProps<T>) => {
   return (
-    <>
-      <div>
-        <h4
-          className={`  ${labelClass} capitalize text-xl px-2 py-4 ${color}  ${topMargin} rounded-sm flex justify-between`}
-        >
-          {label}
-          {actionButton}
-        </h4>
-        <div className='flex flex-col overflow-x-auto'>
-          <div className={`shadow-md sm:rounded-${rounded} ${bgColor}`}>
-            <div className='inline-block min-w-full align-middle '>
-              <div className='max-h-screen'>
-                <table className='border-collapse min-w-full divide-y p-2 border-[0.5px] divide-gray-200 table-fixed '>
-                  {thead}
-                  {tbody}
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
+    <div className='inline-block min-w-full shadow rounded-lg overflow-hidden'>
+      <table className='min-w-full leading-normal'>
+        <thead>
+          <tr>
+            {columns.map((col) => (
+              <th
+                key={col.key as string}
+                className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'
+              >
+                {col.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data?.map((item, index) => (
+            <tr key={index} className='odd:bg-white even:bg-gray-50'>
+              {columns.map((col) => {
+                let cellContent: React.ReactNode
+
+                // Ensure the value is safe for rendering
+                const value = item[col.key]
+                if (value === undefined || value === null) {
+                  cellContent = ''
+                } else if (typeof value === 'object' && !col.isLink) {
+                  cellContent = JSON.stringify(value) // Convert objects to strings if not a link
+                } else {
+                  cellContent = value as React.ReactNode
+                }
+
+                // If column is a link
+                if (col.isLink && typeof value === 'object' && (value as any)?._id) {
+                  cellContent = (
+                    <Link
+                      to={`${col.linkPrefix}/${(value as any)._id}`}
+                      className='text-blue-500 hover:font-medium'
+                    >
+                      {(value as any)?.title || (value as any)?.name}
+                    </Link>
+                  )
+                }
+
+                // If column is a status with colors
+                if (col.statusColors && typeof value === 'string') {
+                  cellContent = (
+                    <span className={`${col.statusColors?.[value]} font-semibold text-sm`}>
+                      {col.getStatusName ? col.getStatusName(value) : value}
+                    </span>
+                  )
+                }
+
+                // If column has actions (icons)
+                if (col.actions) {
+                  cellContent = (
+                    <div className='flex space-x-3'>
+                      {col.actions.map((action, actionIndex) =>
+                        action.linkPrefix ? (
+                          <Link
+                            key={actionIndex}
+                            to={`${action.linkPrefix}/${(item as any).id}`}
+                            title={action.tooltip}
+                          >
+                            <action.icon className='cursor-pointer text-blue-500 hover:text-gray-700 h-4 w-4' />
+                          </Link>
+                        ) : (
+                          <action.icon
+                            key={actionIndex}
+                            className='cursor-pointer text-blue-500 hover:text-gray-700 h-4 w-4'
+                            onClick={() => action.onClick?.(item)}
+                            title={action.tooltip}
+                          />
+                        )
+                      )}
+                    </div>
+                  )
+                }
+
+                // If custom render is provided
+                if (col.render) {
+                  cellContent = col.render(item)
+                }
+
+                return (
+                  <td
+                    key={col.key as string}
+                    className='px-5 py-5 border-b border-gray-200 text-sm'
+                  >
+                    {cellContent}
+                  </td>
+                )
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
 
-index.defaultProps = {
-  topMargin: 'mt-4',
-  rounded: 'lg',
-  bgColor: 'bg-white',
-  color: 'bg-gray-300',
-}
+export default GlobalTable

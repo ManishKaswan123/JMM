@@ -6,7 +6,7 @@ import {
   UseMutationResult,
   useQueryClient,
 } from '@tanstack/react-query'
-import {JmmApiResponse} from './contant'
+import {JmmApiResponse} from './globalInterface'
 
 export interface IndividualFavCleanerFilters {
   limit?: number

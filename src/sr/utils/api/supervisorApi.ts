@@ -1,5 +1,5 @@
 import {get, post, put} from 'sr/utils/axios/index'
-import {JmmApiResponse} from './contant'
+import {JmmApiResponse} from './globalInterface'
 import {CompanyResponse} from './fetchCompany'
 import {toast} from 'react-toastify'
 import {
