@@ -57,7 +57,7 @@ const TaskMgmtTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModal
         },
         {
           icon: FaEye,
-          linkPrefix: '/task',
+          linkPrefix: '/taskmgmt',
           tooltip: 'View Task',
         },
       ],

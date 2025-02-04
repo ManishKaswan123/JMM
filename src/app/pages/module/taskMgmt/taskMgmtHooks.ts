@@ -1,12 +1,17 @@
 import {useSelector} from 'react-redux'
 import {RootState} from 'sr/redux/store'
-import {fetchTaskMgmt, useCreateTaskMgmt, useUpdateTaskMgmt} from './taskMgmtApi'
+import {
+  fetchSingleTaskMgmt,
+  fetchTaskMgmt,
+  useCreateTaskMgmt,
+  useUpdateTaskMgmt,
+} from './taskMgmtApi'
 import {useActions} from 'sr/utils/helpers/useActions'
-import {useCallback, useEffect, useMemo} from 'react'
+import {useCallback, useEffect, useMemo, useState} from 'react'
 import {generateTaskMgmtFields} from './taskMgmtHelpers'
 import {useQuery} from '@tanstack/react-query'
 import {TaskMgmtDetails, UseTaskMgmtQueryProps} from './taskMgmtInterfaces'
-import {fetchTaskList} from 'sr/utils/api/fetchTaskList'
+import {useParams} from 'react-router-dom'
 
 export const useTaskMgmtMutations = () => {
   const createMutation = useCreateTaskMgmt()
@@ -73,7 +78,20 @@ export const useTaskMgmtQuery = ({pagination, filters}: UseTaskMgmtQueryProps) =
 
   return {data, isLoading}
 }
+export const useFetchSingleTaskMgmt = () => {
+  const {id} = useParams<{id: string}>()
+  const [data, setData] = useState<TaskMgmtDetails | null>(null)
+  const [isError, setIsError] = useState(false)
 
+  useEffect(() => {
+    if (!id) return
+    fetchSingleTaskMgmt(id)
+      .then((res) => setData(res.data))
+      .catch(() => setIsError(true))
+  }, [id])
+
+  return {data, isError}
+}
 export const useTaskMgmtDefaultValues = (selectedData: TaskMgmtDetails | null) => {
   return useMemo(() => {
     if (selectedData === null) return undefined
