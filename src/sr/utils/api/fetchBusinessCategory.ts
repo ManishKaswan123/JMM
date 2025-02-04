@@ -1,6 +1,6 @@
 // import ApiResponse from 'sr/models/ApiResponse'
 import {get} from 'sr/utils/axios/index'
-import {JmmApiResponse} from './contant'
+import {JmmApiResponse} from './globalInterface'
 // import {alertService} from 'sr/utils/services/alert.service'
 // import {toast} from 'react-toastify'
 

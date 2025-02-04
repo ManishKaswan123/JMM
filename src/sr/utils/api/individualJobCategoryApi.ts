@@ -1,5 +1,5 @@
 import {get, post, put} from 'sr/utils/axios/index'
-import {JmmApiResponse} from './contant'
+import {JmmApiResponse} from './globalInterface'
 import {toast} from 'react-toastify'
 import {
   InvalidateQueryFilters,
@@ -40,7 +40,7 @@ export const fetchIndividualJobCategory = async (
       filteredPayload
     )
 
-    if (res.success && res.data ) {
+    if (res.success && res.data) {
       return res // Return the fetched data
     } else {
       // Handle the case where results are not present

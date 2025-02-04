@@ -1,5 +1,5 @@
 import {get, post, put} from 'sr/utils/axios/index'
-import {JmmApiResponse} from './contant'
+import {JmmApiResponse} from './globalInterface'
 import {Address} from './addressApi'
 import {CleanerDetails} from './fetchCleaner'
 import {CompanyResponse} from './fetchCompany'

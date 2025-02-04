@@ -1,5 +1,5 @@
 import {get, post, put} from 'sr/utils/axios/index'
-import {JmmApiResponse} from './contant'
+import {JmmApiResponse} from './globalInterface'
 import {toast} from 'react-toastify'
 import {
   InvalidateQueryFilters,
@@ -41,7 +41,7 @@ export const fetchIndividualChecklist = async (
   try {
     const res = await get<IndividualChecklistApiResponse>(`/individual/checklist`, filteredPayload)
 
-    if (res.success && res.data ) {
+    if (res.success && res.data) {
       return res // Return the fetched data
     } else {
       // Handle the case where results are not present

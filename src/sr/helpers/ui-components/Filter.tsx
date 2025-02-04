@@ -6,7 +6,7 @@ import DropdownField from 'sr/partials/widgets/widgets-components/form/DropdownF
 import MultiSelectField, {OptionType} from 'sr/partials/widgets/widgets-components/Multiselect'
 interface FilterProps {
   onApplyFilter: any
-  setIsFilterVisible: any
+  setIsFilterVisible: (action: boolean) => void
   preFilters: any
   fields: any
   handleClearFilter?: () => void
