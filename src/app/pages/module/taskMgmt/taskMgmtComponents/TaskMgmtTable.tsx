@@ -14,16 +14,31 @@ interface Props {
 const TaskMgmtTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalOpen}) => {
   const columns = [
     {
+      label: 'Contractor',
+      key: 'contractor_id' as keyof TaskMgmtDetails,
+      linkProps: {
+        isLink: true,
+        linkPrefix: '/contractor/details',
+        linkValueKey: 'first_name',
+      },
+    },
+    {
       label: 'Workorder',
       key: 'workorder_id' as keyof TaskMgmtDetails,
-      isLink: true,
-      linkPrefix: '/workorder',
+      linkProps: {
+        isLink: true,
+        linkPrefix: '/workorder',
+        linkValueKey: 'title',
+      },
     },
     {
       label: 'Task',
       key: 'task_id' as keyof TaskMgmtDetails,
-      isLink: true,
-      linkPrefix: '/task',
+      linkProps: {
+        isLink: true,
+        linkPrefix: '/task',
+        linkValueKey: 'name',
+      },
     },
     {
       label: 'Contractor Status',

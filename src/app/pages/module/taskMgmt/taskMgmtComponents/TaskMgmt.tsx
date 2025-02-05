@@ -25,6 +25,7 @@ const TaskMgmt: React.FC = () => {
   const [selectedData, setSelectedData] = useState<TaskMgmtDetails | null>(null)
   const [pagination, setPagination] = useState({currentPage: 1, itemsPerPage: 8})
   const [filters, setFilters] = useState<TaskMgmtFilters>({})
+  const [isCreatingUpdating, setIsCreatingUpdating] = useState(false)
   const [modals, setModals] = useState({create: false, update: false, filter: false})
   const {createMutation, updateMutation} = useTaskMgmtMutations()
   const {createAndUpdateFields, filterFields} = useTaskMgmtFields()
@@ -69,6 +70,7 @@ const TaskMgmt: React.FC = () => {
           {isLoading ? (
             <SkeletonTable
               columns={[
+                'Contractor',
                 'Workorder',
                 'Task',
                 'Contractor Status',
@@ -111,8 +113,9 @@ const TaskMgmt: React.FC = () => {
           onClose={() => toggleModal('create', false, setModals)}
           fields={createAndUpdateFields}
           onSubmit={(payload) => {
-            handleCreateTaskMgmt(payload, setModals, createMutation)
+            handleCreateTaskMgmt(payload, setModals, createMutation, setIsCreatingUpdating)
           }}
+          isCreatingUpdating={isCreatingUpdating}
         />
       )}
       {modals.update && (
@@ -123,8 +126,15 @@ const TaskMgmt: React.FC = () => {
           fields={createAndUpdateFields}
           defaultValues={defaultValues}
           onSubmit={(payload) => {
-            handleEditTaskMgmt(payload, setModals, updateMutation, selectedData)
+            handleEditTaskMgmt(
+              payload,
+              setModals,
+              updateMutation,
+              selectedData,
+              setIsCreatingUpdating
+            )
           }}
+          isCreatingUpdating={isCreatingUpdating}
         />
       )}
     </>

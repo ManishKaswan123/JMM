@@ -24,3 +24,10 @@ export interface Modals {
   update: boolean
   filter: boolean
 }
+export type ApiMethod = 'post' | 'put' | 'delete'
+export interface UseApiQueryProps<T> {
+  queryKey: string
+  fetchFunction: (params: Record<string, any>) => Promise<T>
+  pagination?: {currentPage: number; itemsPerPage: number}
+  filters?: Record<string, any>
+}

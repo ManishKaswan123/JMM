@@ -12,8 +12,12 @@ interface TableAction<T> {
 interface TableColumn<T> {
   label: string
   key: keyof T
-  isLink?: boolean
-  linkPrefix?: string
+  linkProps?: {
+    isLink: boolean
+    linkPrefix: string
+    linkValueKey: string
+  }
+
   statusColors?: Record<string, string>
   getStatusName?: (statusId: any) => string
   render?: (item: T) => React.ReactNode
@@ -51,20 +55,20 @@ const GlobalTable = <T,>({data, columns}: TableProps<T>) => {
                 const value = item[col.key]
                 if (value === undefined || value === null) {
                   cellContent = ''
-                } else if (typeof value === 'object' && !col.isLink) {
+                } else if (typeof value === 'object' && !col.linkProps?.isLink) {
                   cellContent = JSON.stringify(value) // Convert objects to strings if not a link
                 } else {
                   cellContent = value as React.ReactNode
                 }
 
                 // If column is a link
-                if (col.isLink && typeof value === 'object' && (value as any)?._id) {
+                if (col.linkProps?.isLink && typeof value === 'object' && (value as any)?._id) {
                   cellContent = (
                     <Link
-                      to={`${col.linkPrefix}/${(value as any)._id}`}
+                      to={`${col.linkProps.linkPrefix}/${(value as any)._id}`}
                       className='text-blue-500 hover:font-medium'
                     >
-                      {(value as any)?.title || (value as any)?.name}
+                      {(value as any)[col.linkProps.linkValueKey]}
                     </Link>
                   )
                 }

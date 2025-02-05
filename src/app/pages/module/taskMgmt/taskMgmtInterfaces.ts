@@ -42,7 +42,7 @@ export interface TaskMgmtFilters {
 }
 export type TaskMgmtStatus = 'active' | 'in progress' | 'publish'
 export type TaskMgmtSubStatus = 'completed' | 'pending'
-export interface GenerateFieldsProps {
+export interface GenerateTaskMmgtFieldsProps {
   workorderData: {workorder_name: string; id: string}[]
   taskData: {task_name: string; id: string}[]
   isFilter?: boolean

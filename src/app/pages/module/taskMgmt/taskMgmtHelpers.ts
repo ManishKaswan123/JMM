@@ -1,6 +1,6 @@
 import {FieldsArray} from 'sr/constants/fields'
 import {
-  GenerateFieldsProps,
+  GenerateTaskMmgtFieldsProps,
   TaskMgmtDetails,
   TaskMgmtFilters,
   TaskMgmtStatus,
@@ -14,7 +14,7 @@ export const generateTaskMgmtFields = ({
   workorderData,
   taskData,
   isFilter = false,
-}: GenerateFieldsProps): FieldsArray => {
+}: GenerateTaskMmgtFieldsProps): FieldsArray => {
   const dropdowns = [
     {label: 'workorder_id', topLabel: 'Workorder', data: workorderData, key: 'workorder_name'},
     {label: 'task_id', topLabel: 'Task', data: taskData, key: 'task_name'},
@@ -65,21 +65,34 @@ export const handleApplyTaskMgmtFilter = (
 export const handleCreateTaskMgmt = (
   payload: Record<string, any>,
   setModals: React.Dispatch<React.SetStateAction<Modals>>,
-  createMutation: QueryMutationReturnType
+  createMutation: QueryMutationReturnType,
+  setIsCreatingUpdating: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
-  createMutation.mutate({payload, onSuccess: () => toggleModal('create', false, setModals)})
+  setIsCreatingUpdating(true)
+  createMutation.mutate({
+    payload,
+    onSuccess: () => {
+      setIsCreatingUpdating(false)
+      toggleModal('create', false, setModals)
+    },
+  })
 }
 
 export const handleEditTaskMgmt = (
   payload: Record<string, any>,
   setModals: React.Dispatch<React.SetStateAction<Modals>>,
   updateMutation: QueryMutationReturnType,
-  selectedData: TaskMgmtDetails | null
+  selectedData: TaskMgmtDetails | null,
+  setIsCreatingUpdating: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   if (selectedData === null) return toggleModal('update', false, setModals)
+  setIsCreatingUpdating(true)
   updateMutation.mutate({
     payload: {...payload, id: selectedData.id},
-    onSuccess: () => toggleModal('update', false, setModals),
+    onSuccess: () => {
+      setIsCreatingUpdating(false)
+      toggleModal('update', false, setModals)
+    },
   })
 }
 // Function to get the display name for the status
