@@ -1,14 +1,17 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import {Button} from './Button'
+import {getStatusName} from '../globalHelpers'
+import {Status} from 'sr/utils/api/globalInterface'
 
 interface DetailItemProps {
   label: string
   value?: string | number | null
   link?: string // Optional link
+  isStatus?: boolean
 }
 
-const DetailItem: React.FC<DetailItemProps> = ({label, value, link}) => {
+const DetailItem: React.FC<DetailItemProps> = ({label, value, link, isStatus}) => {
   return (
     <div className='flex items-center'>
       <strong className='font-medium text-lg mr-2'>{label}:</strong>
@@ -16,6 +19,8 @@ const DetailItem: React.FC<DetailItemProps> = ({label, value, link}) => {
         <Link to={link} className='text-blue-500 hover:font-medium'>
           {value}
         </Link>
+      ) : isStatus ? (
+        <p>{getStatusName(value as Status)}</p>
       ) : (
         <p>{value ?? 'N/A'}</p>
       )}
@@ -25,7 +30,7 @@ const DetailItem: React.FC<DetailItemProps> = ({label, value, link}) => {
 
 interface DetailCardProps {
   title: string
-  details: {label: string; value?: string | number | null; link?: string}[][]
+  details: {label: string; value?: string | number | null; link?: string; isStatus?: boolean}[][]
   onGoBack: () => void
 }
 
@@ -45,7 +50,13 @@ const DetailCard: React.FC<DetailCardProps> = ({title, details, onGoBack}) => {
         {details.map((column, index) => (
           <div key={index} className='space-y-4'>
             {column.map((item, i) => (
-              <DetailItem key={i} label={item.label} value={item.value} link={item.link} />
+              <DetailItem
+                key={i}
+                label={item.label}
+                value={item.value}
+                link={item.link}
+                isStatus={item.isStatus}
+              />
             ))}
           </div>
         ))}

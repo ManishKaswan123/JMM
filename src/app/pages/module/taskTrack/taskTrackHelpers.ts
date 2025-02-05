@@ -1,14 +1,14 @@
 import {FieldsArray} from 'sr/constants/fields'
-import {TaskMgmtDetails, TaskMgmtFilters} from './taskMgmtInterfaces'
+import {TaskTrackDetails, TaskTrackFilters} from './taskTrackInterfaces'
 import {applyFilterAndResetPagination, toggleModal} from 'sr/helpers/globalHelpers'
 import {Modals, PaginationType, QueryMutationReturnType} from 'sr/utils/api/globalInterface'
 import {statuses} from 'sr/constants/common'
 
-export const generateTaskMgmtFields = (
+export const generateTaskTrackFields = (
   stores: Record<string, any>,
   isFilter = false
 ): FieldsArray => {
-  const {workorderStore, taskStore} = stores
+  const {workorderStore} = stores
   const dropdowns = [
     {
       label: 'workorder_id',
@@ -16,7 +16,6 @@ export const generateTaskMgmtFields = (
       data: workorderStore.data,
       key: 'workorder_name',
     },
-    {label: 'task_id', topLabel: 'Task', data: taskStore.data, key: 'task_name'},
   ].map(({label, topLabel, data, key}) => ({
     type: 'dropdown',
     label,
@@ -49,20 +48,27 @@ export const generateTaskMgmtFields = (
       labelKey: 'name',
       required: !isFilter,
     },
+    {
+      type: 'text',
+      label: 'Work Completion Time',
+      name: 'work_completion_time',
+      placeholder: 'Enter Work Completion Time',
+      required: !isFilter,
+    },
   ]
 }
 
-export const handleApplyTaskMgmtFilter = (
-  newFilters: TaskMgmtFilters,
-  setFilters: React.Dispatch<React.SetStateAction<TaskMgmtFilters>>,
+export const handleApplyTaskTrackFilter = (
+  newFilters: TaskTrackFilters,
+  setFilters: React.Dispatch<React.SetStateAction<TaskTrackFilters>>,
   setPagination: React.Dispatch<React.SetStateAction<PaginationType>>,
   setModals: React.Dispatch<React.SetStateAction<Modals>>
 ) => {
-  applyFilterAndResetPagination<TaskMgmtFilters>(newFilters, setFilters, setPagination)
+  applyFilterAndResetPagination<TaskTrackFilters>(newFilters, setFilters, setPagination)
   toggleModal('filter', false, setModals)
 }
 
-export const handleCreateTaskMgmt = (
+export const handleCreateTaskTrack = (
   payload: Record<string, any>,
   setModals: React.Dispatch<React.SetStateAction<Modals>>,
   createMutation: QueryMutationReturnType,
@@ -78,11 +84,11 @@ export const handleCreateTaskMgmt = (
   })
 }
 
-export const handleEditTaskMgmt = (
+export const handleEditTaskTrack = (
   payload: Record<string, any>,
   setModals: React.Dispatch<React.SetStateAction<Modals>>,
   updateMutation: QueryMutationReturnType,
-  selectedData: TaskMgmtDetails | null,
+  selectedData: TaskTrackDetails | null,
   setIsCreatingUpdating: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   if (selectedData === null) return toggleModal('update', false, setModals)
@@ -96,23 +102,23 @@ export const handleEditTaskMgmt = (
   })
 }
 
-export const taskMgmtModalConfig = (
+export const taskTrackModalConfig = (
   setModals: React.Dispatch<React.SetStateAction<Modals>>,
   createMutation: QueryMutationReturnType,
   updateMutation: QueryMutationReturnType,
-  selectedData: TaskMgmtDetails | null,
+  selectedData: TaskTrackDetails | null,
   setIsCreatingUpdating: React.Dispatch<React.SetStateAction<boolean>>
 ) => [
   {
     key: 'create' as const,
-    label: 'Create TaskMgmt',
+    label: 'Create TaskTrack',
     onSubmit: (payload: any) =>
-      handleCreateTaskMgmt(payload, setModals, createMutation, setIsCreatingUpdating),
+      handleCreateTaskTrack(payload, setModals, createMutation, setIsCreatingUpdating),
   },
   {
     key: 'update' as const,
     label: 'Update TaskList',
     onSubmit: (payload: any) =>
-      handleEditTaskMgmt(payload, setModals, updateMutation, selectedData, setIsCreatingUpdating),
+      handleEditTaskTrack(payload, setModals, updateMutation, selectedData, setIsCreatingUpdating),
   },
 ]

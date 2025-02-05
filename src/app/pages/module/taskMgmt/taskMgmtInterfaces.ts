@@ -1,4 +1,4 @@
-import {JmmApiResponse} from 'sr/utils/api/globalInterface'
+import {JmmApiResponse, Status} from 'sr/utils/api/globalInterface'
 import {ContractorDetails} from 'sr/utils/api/contractorApi'
 import {TaskListDetails} from 'sr/utils/api/fetchTaskList'
 import {WorkOrderResponse} from 'sr/utils/api/fetchWorkOrder'
@@ -17,9 +17,9 @@ export interface TaskMgmtDetails {
   contractor_id?: UpdatedContractor
   workorder_id?: UpdatedWorkorder
   task_id?: UpdatedTask
-  contractor_status: string
-  supervisor_status: string
-  status: string
+  contractor_status: Status
+  supervisor_status: Status
+  status: Status
   images: string[]
   videos: string[]
   createdAt: string
@@ -37,11 +37,11 @@ export interface TaskMgmtFilters {
   contractor_id?: string
   workorder_id?: string
   task_id?: string
-  contractor_status?: string
-  supervisor_status?: string
+  contractor_status?: Status
+  supervisor_status?: Status
+  status?: Status
 }
-export type TaskMgmtStatus = 'active' | 'in progress' | 'publish'
-export type TaskMgmtSubStatus = 'completed' | 'pending'
+
 export interface GenerateTaskMmgtFieldsProps {
   workorderData: {workorder_name: string; id: string}[]
   taskData: {task_name: string; id: string}[]

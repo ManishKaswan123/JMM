@@ -72,11 +72,11 @@ export const useApiQuery = <T>({
       fetchFunction({limit: pagination?.itemsPerPage, page: pagination?.currentPage, ...filters}),
   })
 }
-interface UseFetchSingleItemProps<T> {
-  fetchFunction: (id: string) => Promise<T>
+interface UseFetchSingleItemProps<U> {
+  fetchFunction: (id: string) => Promise<U>
 }
 
-export const useFetchSingleItem = <T>({fetchFunction}: UseFetchSingleItemProps<T>) => {
+export const useFetchSingleItem = <T, U>({fetchFunction}: UseFetchSingleItemProps<U>) => {
   const {id} = useParams<{id: string}>()
   const [data, setData] = useState<T | null>(null)
   const [isError, setIsError] = useState(false)
@@ -84,7 +84,7 @@ export const useFetchSingleItem = <T>({fetchFunction}: UseFetchSingleItemProps<T
   useEffect(() => {
     if (!id) return
     fetchFunction(id)
-      .then((res) => setData(res))
+      .then((res) => setData((res as any).data))
       .catch(() => setIsError(true))
   }, [id, fetchFunction])
 

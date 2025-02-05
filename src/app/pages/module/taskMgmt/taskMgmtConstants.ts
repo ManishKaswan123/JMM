@@ -1,21 +1,60 @@
-import {TaskMgmtStatus, TaskMgmtSubStatus} from './taskMgmtInterfaces'
+import {statusColors} from 'sr/constants/common'
+import {TaskMgmtDetails} from './taskMgmtInterfaces'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 
-export const taskMgmtstatuses: {name: string; id: TaskMgmtStatus}[] = [
-  {name: 'Active', id: 'active'},
-  {name: 'In Progress', id: 'in progress'},
-  {name: 'Publish', id: 'publish'},
+export const taskMgmtTableColumns = [
+  {
+    label: 'Contractor',
+    key: 'contractor_id' as keyof TaskMgmtDetails,
+    linkProps: {
+      isLink: true,
+      linkPrefix: '/contractor/details',
+      linkValueKey: 'first_name',
+    },
+  },
+  {
+    label: 'Workorder',
+    key: 'workorder_id' as keyof TaskMgmtDetails,
+    linkProps: {
+      isLink: true,
+      linkPrefix: '/workorder',
+      linkValueKey: 'title',
+    },
+  },
+  {
+    label: 'Task',
+    key: 'task_id' as keyof TaskMgmtDetails,
+    linkProps: {
+      isLink: true,
+      linkPrefix: '/task',
+      linkValueKey: 'name',
+    },
+  },
+  {
+    label: 'Contractor Status',
+    key: 'contractor_status' as keyof TaskMgmtDetails,
+    statusColors: statusColors,
+    getStatusName,
+  },
+  {
+    label: 'Supervisor Status',
+    key: 'supervisor_status' as keyof TaskMgmtDetails,
+    statusColors: statusColors,
+    getStatusName,
+  },
+  {
+    label: 'Status',
+    key: 'status' as keyof TaskMgmtDetails,
+    statusColors: statusColors,
+    getStatusName,
+  },
 ]
-
-export const taskMgmtsubStatuses: {name: string; id: TaskMgmtSubStatus}[] = [
-  {name: 'Completed', id: 'completed'},
-  {name: 'Pending', id: 'pending'},
+export const taskMgmtSkeletonTableColumns = [
+  'Contractor',
+  'Workorder',
+  'Task',
+  'Contractor Status',
+  'Supervisor Status',
+  'Status',
+  'Actions',
 ]
-export const taskMgmtStatusColors: Record<TaskMgmtStatus, string> = {
-  active: 'text-green-700',
-  'in progress': 'text-yellow-700 ',
-  publish: 'text-blue-700 ',
-}
-export const taskMgmtSubStatusColors: Record<TaskMgmtSubStatus, string> = {
-  completed: 'text-green-700 ',
-  pending: 'text-yellow-700 ',
-}

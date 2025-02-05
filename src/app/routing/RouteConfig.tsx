@@ -1,6 +1,9 @@
 // import TestMultiSelect from 'app/pages/module/test/Test'
 import {lazy} from 'react'
-
+const TaskTrackDetailsCard = lazy(
+  () => import('app/pages/module/taskTrack/taskTrackComponents/TaskTrackDetails')
+)
+const TaskTrack = lazy(() => import('app/pages/module/taskTrack/taskTrackComponents/TaskTrack'))
 const TaskMgmtDetailsCard = lazy(
   () => import('app/pages/module/taskMgmt/taskMgmtComponents/TaskMgmtDetails')
 )
@@ -115,6 +118,8 @@ export const routeConfigs = [
   {path: '/task/:id', element: <TaskListDetailsCard />},
   {path: '/taskmgmt', element: <TaskMgmt />},
   {path: '/taskmgmt/:id', element: <TaskMgmtDetailsCard />},
+  {path: '/tasktrack', element: <TaskTrack />},
+  {path: '/tasktrack/:id', element: <TaskTrackDetailsCard />},
   {path: '/company', element: <Company />},
   {path: '/company/details/:company_id', element: <CompanyDetailCard />},
   {path: '/company/additionalInfo/:company_id', element: <CompanyAddInfoCard />},

@@ -1,3 +1,5 @@
+import {Status} from 'sr/utils/api/globalInterface'
+
 export const COMMON = {
   TOKEN_CHECK_INTERVAL: 30000,
   MIN_VALIDITY_BEFORE_EXPIRY: 60,
@@ -35,3 +37,23 @@ export const GET_WHATSAPPHANDLER_API = (message: string) => {
 
 export const WEBSITE_NAME = 'EightySixUI'
 export const WEBSITE_URL = 'https://abc.com'
+export const statuses: {name: string; id: Status}[] = [
+  {name: 'Active', id: 'active'},
+  {name: 'In Progress', id: 'in progress'},
+  {name: 'Publish', id: 'publish'},
+  {name: 'Draft', id: 'draft'},
+  {name: 'Completed', id: 'completed'},
+  {name: 'Pending', id: 'pending'},
+  {name: 'Approved', id: 'approved'},
+  {name: 'Rejected', id: 'rejected'},
+]
+export const statusColors: Record<Status, string> = {
+  active: 'text-green-700',
+  'in progress': 'text-yellow-700 ',
+  publish: 'text-blue-700 ',
+  completed: 'text-green-700 ',
+  pending: 'text-yellow-700 ',
+  approved: 'text-blue-700',
+  rejected: 'text-red-700',
+  draft: 'text-gray-700',
+}

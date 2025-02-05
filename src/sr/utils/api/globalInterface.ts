@@ -31,3 +31,12 @@ export interface UseApiQueryProps<T> {
   pagination?: {currentPage: number; itemsPerPage: number}
   filters?: Record<string, any>
 }
+export type Status =
+  | 'active'
+  | 'in progress'
+  | 'publish'
+  | 'completed'
+  | 'pending'
+  | 'approved'
+  | 'draft'
+  | 'rejected'

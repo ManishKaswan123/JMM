@@ -1,6 +1,7 @@
 import {InvalidateQueryFilters, QueryClient} from '@tanstack/react-query'
 import {useMemo} from 'react'
-import {Modals, PaginationType} from 'sr/utils/api/globalInterface'
+import { statuses } from 'sr/constants/common'
+import {Modals, PaginationType, Status} from 'sr/utils/api/globalInterface'
 
 // Helper function for filtering payload
 export const filterPayload = (payload: Record<string, any>) =>
@@ -46,4 +47,24 @@ export const applyFilterAndResetPagination = <
 ) => {
   setFilters(newFilters)
   setPagination((prev) => ({...prev, currentPage: 1})) // Reset to page 1 when filters are applied
+}
+
+interface UseGenerateFieldsProps<T> {
+  stores: Record<string, any> // Store slices dynamically
+  generateFieldsFunction: (storeData: Record<string, any>, isFilter?: boolean) => T
+}
+
+export const useGenerateFields = <T>({
+  stores,
+  generateFieldsFunction,
+}: UseGenerateFieldsProps<T>) => {
+  const createAndUpdateFields = useMemo(() => generateFieldsFunction(stores, false), [stores])
+
+  const filterFields = useMemo(() => generateFieldsFunction(stores, true), [stores])
+
+  return {createAndUpdateFields, filterFields}
+}
+// Function to get the display name for the status
+export const getStatusName = (statusId: Status) => {
+  return statuses.find((status) => status.id === statusId)?.name || statusId
 }

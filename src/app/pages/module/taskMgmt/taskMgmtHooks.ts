@@ -16,6 +16,7 @@ import {
   UseTaskMgmtQueryProps,
 } from './taskMgmtInterfaces'
 import {useApiQuery, useFetchSingleItem} from 'sr/utils/api/apiService'
+import {useGenerateFields} from 'sr/helpers/globalHelpers'
 
 export const useTaskMgmtMutations = () => {
   const createMutation = useCreateTaskMgmt()
@@ -47,24 +48,12 @@ export const useTaskMgmtStoreData = () => {
 }
 
 export const useTaskMgmtFields = () => {
-  const {workorderStore, taskStore} = useTaskMgmtStoreData()
+  const stores = useTaskMgmtStoreData() // Fetch workorder and task store data
 
-  const createAndUpdateFields = useMemo(
-    () => generateTaskMgmtFields({workorderData: workorderStore.data, taskData: taskStore.data}),
-    [workorderStore.data, taskStore.data]
-  )
-
-  const filterFields = useMemo(
-    () =>
-      generateTaskMgmtFields({
-        workorderData: workorderStore.data,
-        taskData: taskStore.data,
-        isFilter: true,
-      }),
-    [workorderStore.data, taskStore.data]
-  )
-
-  return {createAndUpdateFields, filterFields}
+  return useGenerateFields({
+    stores,
+    generateFieldsFunction: generateTaskMgmtFields,
+  })
 }
 export const useTaskMgmtQuery = (props: UseTaskMgmtQueryProps) =>
   useApiQuery<FetchTaskMgmtResponse>({
@@ -75,7 +64,9 @@ export const useTaskMgmtQuery = (props: UseTaskMgmtQueryProps) =>
   })
 
 export const useFetchSingleTaskMgmt = () =>
-  useFetchSingleItem<FetchSingleTaskMgmtResponse>({fetchFunction: fetchSingleTaskMgmt})
+  useFetchSingleItem<TaskMgmtDetails, FetchSingleTaskMgmtResponse>({
+    fetchFunction: fetchSingleTaskMgmt,
+  })
 
 export const useTaskMgmtDefaultValues = (selectedData: TaskMgmtDetails | null) => {
   return useMemo(() => {

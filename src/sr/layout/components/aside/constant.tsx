@@ -38,6 +38,11 @@ export const masterMenuItems: {label: string; path: string; iconPath: string}[] 
     path: '/taskmgmt',
     iconPath: 'M5 13l4 4L19 7M5 3v6m0 0h6',
   },
+  {
+    label: 'Task Track',
+    path: '/tasktrack',
+    iconPath: 'M5 13l4 4L19 7M5 3v6m0 0h6',
+  },
 
   {
     label: 'Workorder',

@@ -2,37 +2,32 @@ import React from 'react'
 import {useNavigate} from 'react-router-dom'
 import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
 import DetailCard from 'sr/helpers/ui-components/DetailCard'
-import {useFetchSingleTaskMgmt} from '../taskMgmtHooks'
+import {useFetchSingleTaskTrack} from '../taskTrackHooks'
 import {getStatusName} from 'sr/helpers/globalHelpers'
 import {Status} from 'sr/utils/api/globalInterface'
 
-const TaskMgmtDetailsCard: React.FC = () => {
+const TaskTrackDetailsCard: React.FC = () => {
   const navigate = useNavigate()
-  const {data, isError} = useFetchSingleTaskMgmt()
+  const {data, isError} = useFetchSingleTaskTrack()
 
   if (isError)
-    return <div className='text-red-500 text-center'>Error loading task mgmt details.</div>
+    return <div className='text-red-500 text-center'>Error loading task Track details.</div>
 
   if (!data)
     return (
       <SkeletonCard
-        label='TaskMgmt Details'
-        col1={['ID', 'Contractor Status', 'Supervisor Status', 'Status', 'Contractor']}
-        col2={['Workorder', 'Task', 'Created At', 'Updated At']}
+        label='TaskTrack Details'
+        col1={['ID', 'Supervisor Status', 'Contractor Status', 'Status']}
+        col2={['Workorder', 'Work Completion Time', 'Created At', 'Updated At']}
       />
     )
 
   const details = [
     [
       {label: 'ID', value: data.id},
-      {label: 'Contractor Status', value: data.contractor_status, isStatus: true},
       {label: 'Supervisor Status', value: data.supervisor_status, isStatus: true},
+      {label: 'Contractor Status', value: data.contractor_status, isStatus: true},
       {label: 'Status', value: data.status, isStatus: true},
-      {
-        label: 'Contractor',
-        value: data.contractor_id?.first_name + ' ' + data.contractor_id?.last_name,
-        link: `/contractor/details/${data.contractor_id?._id}`,
-      },
     ],
     [
       {
@@ -40,11 +35,8 @@ const TaskMgmtDetailsCard: React.FC = () => {
         value: data.workorder_id?.title,
         link: `/workorder/${data.workorder_id?._id}`,
       },
-      {
-        label: 'Task',
-        value: data.task_id?.name,
-        link: `/task/${data.task_id?._id}`,
-      },
+      {label: 'Work Completion Time', value: data.work_completion_time},
+
       {label: 'Created At', value: new Date(data.createdAt).toLocaleString()},
       {label: 'Updated At', value: new Date(data.updatedAt).toLocaleString()},
     ],
@@ -52,11 +44,11 @@ const TaskMgmtDetailsCard: React.FC = () => {
 
   return (
     <DetailCard
-      title='Task Management Details'
+      title='Task Track Details'
       details={details}
-      onGoBack={() => navigate('/taskmgmt')}
+      onGoBack={() => navigate('/tasktrack')}
     />
   )
 }
 
-export default TaskMgmtDetailsCard
+export default TaskTrackDetailsCard
