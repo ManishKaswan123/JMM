@@ -1,6 +1,12 @@
 // import TestMultiSelect from 'app/pages/module/test/Test'
-import {lazy} from 'react'
 
+import Feedback from 'app/pages/module/feedback/feedbackComponents/Feedback'
+import FeedbackDetailsCard from 'app/pages/module/feedback/feedbackComponents/FeedbackDetails'
+import {lazy} from 'react'
+const TaskTrackDetailsCard = lazy(
+  () => import('app/pages/module/taskTrack/taskTrackComponents/TaskTrackDetails')
+)
+const TaskTrack = lazy(() => import('app/pages/module/taskTrack/taskTrackComponents/TaskTrack'))
 const TaskMgmtDetailsCard = lazy(
   () => import('app/pages/module/taskMgmt/taskMgmtComponents/TaskMgmtDetails')
 )
@@ -115,6 +121,8 @@ export const routeConfigs = [
   {path: '/task/:id', element: <TaskListDetailsCard />},
   {path: '/taskmgmt', element: <TaskMgmt />},
   {path: '/taskmgmt/:id', element: <TaskMgmtDetailsCard />},
+  {path: '/tasktrack', element: <TaskTrack />},
+  {path: '/tasktrack/:id', element: <TaskTrackDetailsCard />},
   {path: '/company', element: <Company />},
   {path: '/company/details/:company_id', element: <CompanyDetailCard />},
   {path: '/company/additionalInfo/:company_id', element: <CompanyAddInfoCard />},
@@ -142,5 +150,7 @@ export const routeConfigs = [
   {path: '/user/address/:userId', element: <Address />},
   {path: '/application', element: <Application />},
   {path: '/application/:id', element: <ApplicationDetailsCard />},
+  {path: '/feedback', element: <Feedback />},
+  {path: '/feedback/:id', element: <FeedbackDetailsCard />},
   // {path: '/test', element: <TestMultiSelect />},
 ]

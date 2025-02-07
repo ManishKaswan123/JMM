@@ -13,6 +13,8 @@ import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 import {Address} from 'sr/utils/api/addressApi'
 import {useCreateCleaner} from 'sr/utils/api/createCleaner'
 import {useUpdateCleaner} from 'sr/utils/api/updateCleaner'
+import {Status} from 'sr/utils/api/globalInterface'
+import {statuses} from 'sr/constants/common'
 
 interface CleanerCreatePayload {
   username: string
@@ -22,7 +24,7 @@ interface CleanerCreatePayload {
   password?: string
   email: string
   date_of_birth: string
-  status: string
+  status: Status
   address: Omit<Address, '_id'>
 }
 interface CleanerFormPayload extends Omit<CleanerCreatePayload, 'address'> {
@@ -146,7 +148,7 @@ const Cleaner: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [{name: 'Pending OTP', id: 'pending_otp'}],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',

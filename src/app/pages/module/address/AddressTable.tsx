@@ -1,5 +1,7 @@
 import React from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
+import {statusColors} from 'sr/constants/common'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 import {AddressData} from 'sr/utils/api/addressApi'
 
 interface AddressTableProps {
@@ -66,16 +68,8 @@ const AddressTable: React.FC<AddressTableProps> = (props) => {
                   <p>{address.address.country}</p>
                 </td>
                 <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                  <p
-                    className={`whitespace-no-wrap ${
-                      address.status === 'active'
-                        ? 'text-green-500'
-                        : address.status === 'inactive'
-                        ? 'text-red-500'
-                        : 'text-gray-500' // Default color for unknown statuses
-                    }`}
-                  >
-                    {address.status}
+                  <p className={`${statusColors[address.status]} font-semibold text-sm`}>
+                    {getStatusName(address.status)}
                   </p>
                 </td>
                 <td className='px-5 py-5 border-b border-gray-200 text-sm'>

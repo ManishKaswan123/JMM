@@ -1,7 +1,10 @@
 import React from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
 import {Link} from 'react-router-dom'
+import {statusColors} from 'sr/constants/common'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 import {TaskListDetails} from 'sr/utils/api/fetchTaskList'
+import {Status} from 'sr/utils/api/globalInterface'
 
 interface Props {
   data?: TaskListDetails[]
@@ -74,7 +77,9 @@ const TaskListTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModal
                 </Link>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <p className='text-gray-900 text-ellipsis'>{item.status}</p>
+                <p className={`${statusColors[item.status as Status]} font-semibold text-sm`}>
+                  {getStatusName(item.status as Status)}
+                </p>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <div className='flex'>

@@ -1,6 +1,8 @@
 import React from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
 import {Link, useNavigate} from 'react-router-dom'
+import {statusColors} from 'sr/constants/common'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 import {SupervisorDetails} from 'sr/utils/api/supervisorApi'
 
 interface Props {
@@ -59,18 +61,8 @@ const SupervisorTable: React.FC<Props> = ({data, setIsUpdateModalOpen, setSelect
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>{supervisor.email}</td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <p
-                  className={`whitespace-no-wrap ${
-                    supervisor.status === 'active'
-                      ? 'text-green-500'
-                      : supervisor.status === 'deleted'
-                      ? 'text-red-600'
-                      : supervisor.status === 'pending'
-                      ? 'text-yellow-500'
-                      : 'text-gray-500' // Default for unknown or undefined statuses
-                  }`}
-                >
-                  {supervisor.status || 'Unknown'} {/* Fallback text for undefined statuses */}
+                <p className={`${statusColors[supervisor.status]} font-semibold text-sm`}>
+                  {getStatusName(supervisor.status)}
                 </p>
               </td>
 

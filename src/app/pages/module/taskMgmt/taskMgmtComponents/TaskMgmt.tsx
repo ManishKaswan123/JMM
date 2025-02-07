@@ -14,22 +14,27 @@ import {
   useTaskMgmtQuery,
 } from '../taskMgmtHooks'
 import {onLimitChange, onPageChange, toggleModal} from 'sr/helpers/globalHelpers'
-import {
-  handleApplyTaskMgmtFilter,
-  handleCreateTaskMgmt,
-  handleEditTaskMgmt,
-} from '../taskMgmtHelpers'
+import {handleApplyTaskMgmtFilter, useTaskMgmtModalConfig} from '../taskMgmtHelpers'
 import TaskMgmtTable from './TaskMgmtTable'
+import {taskMgmtSkeletonTableColumns} from '../taskMgmtConstants'
 
 const TaskMgmt: React.FC = () => {
   const [selectedData, setSelectedData] = useState<TaskMgmtDetails | null>(null)
   const [pagination, setPagination] = useState({currentPage: 1, itemsPerPage: 8})
   const [filters, setFilters] = useState<TaskMgmtFilters>({})
+  const [isCreatingUpdating, setIsCreatingUpdating] = useState(false)
   const [modals, setModals] = useState({create: false, update: false, filter: false})
   const {createMutation, updateMutation} = useTaskMgmtMutations()
   const {createAndUpdateFields, filterFields} = useTaskMgmtFields()
   const {data, isLoading} = useTaskMgmtQuery({pagination, filters})
   const defaultValues = useTaskMgmtDefaultValues(selectedData)
+  const modalConfig = useTaskMgmtModalConfig(
+    setModals,
+    createMutation,
+    updateMutation,
+    selectedData,
+    setIsCreatingUpdating
+  )
 
   return (
     <>
@@ -67,16 +72,7 @@ const TaskMgmt: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonTable
-              columns={[
-                'Workorder',
-                'Task',
-                'Contractor Status',
-                'Supervisor Status',
-                'Status',
-                'Actions',
-              ]}
-            />
+            <SkeletonTable columns={taskMgmtSkeletonTableColumns} />
           ) : (
             <TaskMgmtTable
               setSelectedData={setSelectedData}
@@ -104,28 +100,19 @@ const TaskMgmt: React.FC = () => {
           )
         )}
       </div>
-      {modals.create && (
-        <DynamicModal
-          label='Create TaskMgmt'
-          isOpen={modals.create}
-          onClose={() => toggleModal('create', false, setModals)}
-          fields={createAndUpdateFields}
-          onSubmit={(payload) => {
-            handleCreateTaskMgmt(payload, setModals, createMutation)
-          }}
-        />
-      )}
-      {modals.update && (
-        <DynamicModal
-          label='Update TaskList'
-          isOpen={modals.update}
-          onClose={() => toggleModal('update', false, setModals)}
-          fields={createAndUpdateFields}
-          defaultValues={defaultValues}
-          onSubmit={(payload) => {
-            handleEditTaskMgmt(payload, setModals, updateMutation, selectedData)
-          }}
-        />
+      {modalConfig.map(({key, label, onSubmit}) =>
+        modals[key] ? (
+          <DynamicModal
+            key={key}
+            label={label}
+            isOpen={modals[key]}
+            onClose={() => toggleModal(key, false, setModals)}
+            fields={createAndUpdateFields}
+            defaultValues={key === 'update' ? defaultValues : undefined} // Only pass `defaultValues` for update
+            onSubmit={onSubmit}
+            isCreatingUpdating={isCreatingUpdating}
+          />
+        ) : null
       )}
     </>
   )

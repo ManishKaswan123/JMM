@@ -7,6 +7,7 @@ import {useActions} from 'sr/utils/helpers/useActions'
 import {RootState} from 'sr/redux/store'
 import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
 import {UserContext} from 'sr/context/UserContext'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 
 const CustomerDetailsCard: React.FC = () => {
   const navigate = useNavigate()
@@ -97,7 +98,7 @@ const CustomerDetailsCard: React.FC = () => {
         <div className='space-y-4'>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Status:</strong>
-            <p>{data.status}</p>
+            <p>{getStatusName(data.status)}</p>
           </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Remarks:</strong>

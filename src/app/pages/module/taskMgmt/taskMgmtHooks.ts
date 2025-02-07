@@ -7,16 +7,22 @@ import {
   useUpdateTaskMgmt,
 } from './taskMgmtApi'
 import {useActions} from 'sr/utils/helpers/useActions'
-import {useCallback, useEffect, useMemo, useState} from 'react'
+import {useCallback, useEffect, useMemo} from 'react'
 import {generateTaskMgmtFields} from './taskMgmtHelpers'
-import {useQuery} from '@tanstack/react-query'
-import {TaskMgmtDetails, UseTaskMgmtQueryProps} from './taskMgmtInterfaces'
-import {useParams} from 'react-router-dom'
+import {
+  FetchSingleTaskMgmtResponse,
+  FetchTaskMgmtResponse,
+  TaskMgmtDetails,
+  UseTaskMgmtQueryProps,
+} from './taskMgmtInterfaces'
+import {useApiQuery, useFetchSingleItem} from 'sr/utils/api/apiService'
+import {useGenerateFields} from 'sr/helpers/globalHelpers'
 
 export const useTaskMgmtMutations = () => {
   const createMutation = useCreateTaskMgmt()
   const updateMutation = useUpdateTaskMgmt()
-  return {createMutation, updateMutation}
+
+  return useMemo(() => ({createMutation, updateMutation}), [createMutation, updateMutation])
 }
 
 export const useTaskMgmtStoreData = () => {
@@ -43,55 +49,26 @@ export const useTaskMgmtStoreData = () => {
 }
 
 export const useTaskMgmtFields = () => {
-  const {workorderStore, taskStore} = useTaskMgmtStoreData()
+  const stores = useTaskMgmtStoreData() // Fetch workorder and task store data
 
-  const createAndUpdateFields = useMemo(
-    () => generateTaskMgmtFields({workorderData: workorderStore.data, taskData: taskStore.data}),
-    [workorderStore.data, taskStore.data]
-  )
-
-  const filterFields = useMemo(
-    () =>
-      generateTaskMgmtFields({
-        workorderData: workorderStore.data,
-        taskData: taskStore.data,
-        isFilter: true,
-      }),
-    [workorderStore.data, taskStore.data]
-  )
-
-  return {createAndUpdateFields, filterFields}
+  return useGenerateFields({
+    stores,
+    generateFieldsFunction: useCallback(generateTaskMgmtFields, []),
+  })
 }
-export const useTaskMgmtQuery = ({pagination, filters}: UseTaskMgmtQueryProps) => {
-  const {data, isLoading} = useQuery({
-    queryKey: [
-      'taskMgmt',
-      {limit: pagination.itemsPerPage, page: pagination.currentPage, ...filters},
-    ],
-    queryFn: async () =>
-      fetchTaskMgmt({
-        limit: pagination.itemsPerPage,
-        page: pagination.currentPage,
-        ...filters,
-      }),
+export const useTaskMgmtQuery = (props: UseTaskMgmtQueryProps) =>
+  useApiQuery<FetchTaskMgmtResponse>({
+    queryKey: 'taskMgmt',
+    fetchFunction: fetchTaskMgmt,
+    pagination: props.pagination,
+    filters: props.filters,
   })
 
-  return {data, isLoading}
-}
-export const useFetchSingleTaskMgmt = () => {
-  const {id} = useParams<{id: string}>()
-  const [data, setData] = useState<TaskMgmtDetails | null>(null)
-  const [isError, setIsError] = useState(false)
+export const useFetchSingleTaskMgmt = () =>
+  useFetchSingleItem<TaskMgmtDetails, FetchSingleTaskMgmtResponse>({
+    fetchFunction: fetchSingleTaskMgmt,
+  })
 
-  useEffect(() => {
-    if (!id) return
-    fetchSingleTaskMgmt(id)
-      .then((res) => setData(res.data))
-      .catch(() => setIsError(true))
-  }, [id])
-
-  return {data, isError}
-}
 export const useTaskMgmtDefaultValues = (selectedData: TaskMgmtDetails | null) => {
   return useMemo(() => {
     if (selectedData === null) return undefined

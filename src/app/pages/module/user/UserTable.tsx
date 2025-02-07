@@ -1,8 +1,10 @@
 import React, {useState, useEffect, useCallback, useContext} from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
 import {useNavigate} from 'react-router-dom'
+import {statusColors} from 'sr/constants/common'
 import {UserInterface} from 'sr/constants/User'
 import {UserContext} from 'sr/context/UserContext'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 import {fetchWalletBalance} from 'sr/utils/api/checkWalletBalanceApi'
 import {Individual} from 'sr/utils/api/individualApi'
 
@@ -88,18 +90,8 @@ const UserTable: React.FC<UserTableProps> = (props) => {
                   <p>{user.mobile_number}</p>
                 </td>
                 <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                  <p
-                    className={`whitespace-no-wrap ${
-                      user.status === 'active'
-                        ? 'text-green-500'
-                        : user.status === 'pending'
-                        ? 'text-yellow-500'
-                        : user.status === 'inactive'
-                        ? 'text-red-500'
-                        : 'text-gray-500' // Default color for unknown statuses
-                    }`}
-                  >
-                    {user.status}
+                  <p className={`${statusColors[user.status]} font-semibold text-sm`}>
+                    {getStatusName(user.status)}
                   </p>
                 </td>
 

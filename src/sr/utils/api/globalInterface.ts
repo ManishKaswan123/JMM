@@ -24,3 +24,31 @@ export interface Modals {
   update: boolean
   filter: boolean
 }
+export type ApiMethod = 'post' | 'put' | 'delete'
+export interface UseApiQueryProps<T> {
+  queryKey: string
+  fetchFunction: (params: Record<string, any>) => Promise<T>
+  pagination?: {currentPage: number; itemsPerPage: number}
+  filters?: Record<string, any>
+}
+export type Status =
+  | 'active'
+  | 'in progress'
+  | 'publish'
+  | 'completed'
+  | 'pending'
+  | 'approved'
+  | 'draft'
+  | 'rejected'
+  | 'hired'
+  | 'withdrawn'
+  | 'shortlist'
+  | 'awaiting-reviews'
+  | 'pause'
+  | 'contacting'
+  | 'inactive'
+  | 'deleted'
+  | 'open'
+  | 'closed'
+  | 'accept'
+  | 'pending_otp'

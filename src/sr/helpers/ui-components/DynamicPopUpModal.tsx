@@ -19,6 +19,7 @@ interface DynamicModalProps {
   fields: FieldsArray
   defaultValues?: {[key: string]: any}
   onSubmit: (payload: any) => any
+  isCreatingUpdating?: boolean
 }
 
 const DynamicModal: React.FC<DynamicModalProps> = ({
@@ -29,6 +30,7 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
   fields,
   defaultValues = {},
   onSubmit,
+  isCreatingUpdating = false,
 }) => {
   type FormFields = {
     [K in ExtractFieldNames<typeof fields>]: any
@@ -115,7 +117,7 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
       setUploading(false)
     }
   }
-
+  console.log('rerendering DynamicModal')
   const onSubmitForm: SubmitHandler<any> = async (formData: FormData) => {
     await onSubmit({
       ...formData,
@@ -296,6 +298,7 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
             />
             <Button
               disabled={
+                isCreatingUpdating ||
                 uploading ||
                 (getValues('images') == null && getValues('imagePath') == null && imageType != null)
               }

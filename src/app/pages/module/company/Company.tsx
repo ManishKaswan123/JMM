@@ -16,6 +16,8 @@ import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 import {useCreateCompany} from 'sr/utils/api/createCompany'
 import {useUpdateCompany} from 'sr/utils/api/updateCompany'
 import {businessTypes} from 'sr/constants/jobsConstants'
+import {Status} from 'sr/utils/api/globalInterface'
+import {statuses} from 'sr/constants/common'
 
 interface CompanyCreatePayload {
   username: string
@@ -26,7 +28,7 @@ interface CompanyCreatePayload {
   business_type: string[]
   intent: string[]
   candidate_msg: boolean
-  status?: string
+  status?: Status
 }
 interface CompanyUpdatePayload extends Omit<CompanyCreatePayload, 'password'> {
   id: string
@@ -120,10 +122,7 @@ const Company: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {name: 'Active', id: 'active'},
-          {name: 'Pending Otp', id: 'pending_otp'},
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',
@@ -171,17 +170,14 @@ const Company: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {name: 'Active', id: 'active'},
-          {name: 'Pending Otp', id: 'pending_otp'},
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',
         id: 'id',
       },
     ],
-    [businessData]
+    []
   )
 
   const {data, isLoading} = useQuery({
@@ -314,7 +310,7 @@ const Company: React.FC = () => {
         ) : (
           data?.pagination && (
             <Pagination
-            currentPage={currentPage}
+              currentPage={currentPage}
               pagination={data.pagination}
               onPageChange={onPageChange}
               name='company'

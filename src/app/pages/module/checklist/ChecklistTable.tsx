@@ -1,6 +1,8 @@
 import React from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
 import {Link} from 'react-router-dom'
+import {statusColors} from 'sr/constants/common'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 import {Checklist} from 'sr/utils/api/checklistApi'
 interface ChecklistTableProps {
   data: Checklist[] | undefined
@@ -72,16 +74,8 @@ const ChecklistTable: React.FC<ChecklistTableProps> = ({
               </td>
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <p
-                  className={`whitespace-no-wrap ${
-                    checklist.status === 'active'
-                      ? 'text-green-500'
-                      : checklist?.status === 'draft'
-                      ? 'text-orange-500'
-                      : 'text-gray-500' // Default color for unknown statuses
-                  }`}
-                >
-                  {checklist.status}
+                <p className={`${statusColors[checklist.status]} font-semibold text-sm`}>
+                  {getStatusName(checklist.status)}
                 </p>
               </td>
 

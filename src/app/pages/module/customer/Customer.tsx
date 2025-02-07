@@ -18,12 +18,14 @@ import {
 } from 'sr/utils/api/customerApi'
 import CustomerTable from './CustomerTable'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
+import {Status} from 'sr/utils/api/globalInterface'
+import {statuses} from 'sr/constants/common'
 
 interface Filters {
   limit?: number
   page?: number
   company_id?: string
-  status?: string
+  status?: Status
 }
 
 interface CustomerCreatePayload {
@@ -32,7 +34,7 @@ interface CustomerCreatePayload {
   email: string
   mobile_number: string
   type: string
-  status: string
+  status: Status
   remarks: string
 }
 interface CustomerUpdatePayload extends CustomerCreatePayload {
@@ -83,11 +85,7 @@ const CustomerCard: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {name: 'Active', id: 'active'},
-          {name: 'Pending OTP', id: 'pending_otp'},
-          {name: 'Closed', id: 'closed'},
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',
@@ -154,10 +152,7 @@ const CustomerCard: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {name: 'Pending OTP', id: 'pending_otp'},
-          {name: 'Active', id: 'active'},
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',

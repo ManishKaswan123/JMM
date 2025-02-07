@@ -1,5 +1,5 @@
 import {get, post, put} from 'sr/utils/axios/index'
-import {JmmApiResponse} from './globalInterface'
+import {JmmApiResponse, Status} from './globalInterface'
 import {
   useMutation,
   useQueryClient,
@@ -14,7 +14,7 @@ export interface WorkoderApplicationFilters {
   page?: number
   wordorder_id?: string
   cleaner_id?: string
-  status?: string
+  status?: Status
 }
 interface ModifiedWorkorderResponse extends Omit<WorkOrderResponse, 'id'> {
   _id: string
@@ -26,7 +26,7 @@ interface ModifiedCleanerResponse extends Omit<CleanerDetails, 'id'> {
 export interface WorkorderApplication {
   workorder_id: ModifiedWorkorderResponse
   cleaner_id: ModifiedCleanerResponse
-  status: string
+  status: Status
   createdAt: string
   updatedAt: string
   id: string

@@ -2,6 +2,8 @@ import React, {useCallback, useEffect} from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
 import {useSelector} from 'react-redux'
 import {Link, useNavigate} from 'react-router-dom'
+import {statusColors} from 'sr/constants/common'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 import {RootState} from 'sr/redux/store'
 import {Customer} from 'sr/utils/api/customerApi'
 import {useActions} from 'sr/utils/helpers/useActions'
@@ -88,18 +90,8 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
               </td>
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <p
-                  className={`whitespace-no-wrap ${
-                    customer.status === 'active'
-                      ? 'text-green-500'
-                      : customer?.status === 'pending_otp'
-                      ? 'text-orange-500'
-                      : customer?.status === 'closed'
-                      ? 'text-red-500'
-                      : 'text-gray-500' // Default color for unknown statuses
-                  }`}
-                >
-                  {customer.status}
+                <p className={`${statusColors[customer.status]} font-semibold text-sm`}>
+                  {getStatusName(customer.status)}
                 </p>
               </td>
               {/* <td className='px-5 py-5 border-b border-gray-200 text-sm'>

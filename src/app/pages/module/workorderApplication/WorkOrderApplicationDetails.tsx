@@ -7,6 +7,7 @@ import {
   WorkorderApplication,
 } from 'sr/utils/api/workorderApplicationApi'
 import {Link} from 'react-router-dom'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 
 const WorkOrderApplicationDetailsCard: React.FC = () => {
   const navigate = useNavigate()
@@ -82,7 +83,7 @@ const WorkOrderApplicationDetailsCard: React.FC = () => {
         <div className='space-y-4'>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Status:</strong>
-            <p>{data.status}</p>
+            <p>{getStatusName(data.status)}</p>
           </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Created At:</strong>

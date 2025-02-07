@@ -38,6 +38,11 @@ export const masterMenuItems: {label: string; path: string; iconPath: string}[] 
     path: '/taskmgmt',
     iconPath: 'M5 13l4 4L19 7M5 3v6m0 0h6',
   },
+  {
+    label: 'Task Track',
+    path: '/tasktrack',
+    iconPath: 'M5 13l4 4L19 7M5 3v6m0 0h6',
+  },
 
   {
     label: 'Workorder',
@@ -122,6 +127,11 @@ export const normalMenuItems = [
   {
     label: 'Messages',
     path: '/message',
+    iconPath: 'M6 5h12M6 10h12M6 15h8M6 20h4',
+  },
+  {
+    label: 'Feedback',
+    path: '/feedback',
     iconPath: 'M6 5h12M6 10h12M6 15h8M6 20h4',
   },
 

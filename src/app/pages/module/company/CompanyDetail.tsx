@@ -4,6 +4,7 @@ import {useNavigate, useParams} from 'react-router-dom'
 import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
 import {CompanyResponse, fetchSingleCompany} from 'sr/utils/api/fetchCompany'
 import {UserContext} from 'sr/context/UserContext'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 
 const CompanyDetailCard: React.FC<any> = () => {
   const navigate = useNavigate()
@@ -73,7 +74,7 @@ const CompanyDetailCard: React.FC<any> = () => {
           </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Status:</strong>
-            <p>{data.status}</p>
+            <p>{getStatusName(data.status)}</p>
           </div>
         </div>
 

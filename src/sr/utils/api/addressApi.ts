@@ -1,5 +1,5 @@
 import {get, post, put} from 'sr/utils/axios/index'
-import {JmmApiResponse} from './globalInterface'
+import {JmmApiResponse, Status} from './globalInterface'
 import {toast} from 'react-toastify'
 import {
   useMutation,
@@ -15,7 +15,7 @@ interface PayloadType {
   no_of_rooms?: number
   no_of_bath?: number
   total_area?: number
-  status?: string
+  status?: Status
 }
 
 export interface Address {
@@ -40,7 +40,7 @@ export interface IndividualId {
   last_name: string
   mobile_number: string
   email: string
-  statue: string
+  statue: Status
   user_id: string
   createdAt: string
   updatedAt: string
@@ -56,7 +56,7 @@ export interface AddressData {
   remark: string
   createdAt: string
   updatedAt: string
-  status: string
+  status: Status
   id: string
 }
 export type AddressApiResponse = JmmApiResponse<AddressData[]>

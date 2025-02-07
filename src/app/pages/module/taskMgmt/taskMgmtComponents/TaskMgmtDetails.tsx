@@ -3,8 +3,6 @@ import {useNavigate} from 'react-router-dom'
 import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
 import DetailCard from 'sr/helpers/ui-components/DetailCard'
 import {useFetchSingleTaskMgmt} from '../taskMgmtHooks'
-import {getTaskMgmtStatusName} from '../taskMgmtHelpers'
-import {TaskMgmtStatus} from '../taskMgmtInterfaces'
 
 const TaskMgmtDetailsCard: React.FC = () => {
   const navigate = useNavigate()
@@ -25,9 +23,9 @@ const TaskMgmtDetailsCard: React.FC = () => {
   const details = [
     [
       {label: 'ID', value: data.id},
-      {label: 'Contractor Status', value: data.contractor_status},
-      {label: 'Supervisor Status', value: data.supervisor_status},
-      {label: 'Status', value: getTaskMgmtStatusName(data.status as TaskMgmtStatus)},
+      {label: 'Contractor Status', value: data.contractor_status, isStatus: true},
+      {label: 'Supervisor Status', value: data.supervisor_status, isStatus: true},
+      {label: 'Status', value: data.status, isStatus: true},
       {
         label: 'Contractor',
         value: data.contractor_id?.first_name + ' ' + data.contractor_id?.last_name,

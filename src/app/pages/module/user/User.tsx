@@ -19,6 +19,8 @@ import {
 } from 'sr/utils/api/individualApi'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 import {Address} from 'sr/utils/api/addressApi'
+import {Status} from 'sr/utils/api/globalInterface'
+import {statuses} from 'sr/constants/common'
 
 interface IndividualCreatePayload {
   username: string
@@ -27,7 +29,7 @@ interface IndividualCreatePayload {
   password: string
   first_name: string
   last_name: string
-  status: string
+  status: Status
   no_of_rooms: number
   no_of_bath: number
   total_area: number
@@ -62,11 +64,7 @@ const User: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {name: 'Active', id: 'active'},
-          {name: 'Inactive', id: 'inactive'},
-          {name: 'Pending', id: 'pending'},
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',
@@ -121,11 +119,7 @@ const User: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {name: 'Active', id: 'active'},
-          {name: 'Inactive', id: 'inactive'},
-          {name: 'Pending', id: 'pending'},
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',
@@ -350,9 +344,7 @@ const User: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonTable
-              columns={['User Name', 'Email', 'Phone', 'Status', 'View User', 'Update User']}
-            />
+            <SkeletonTable columns={['User Name', 'Email', 'Phone', 'Status', 'Actions']} />
           ) : (
             <UserTable
               userData={data?.data}

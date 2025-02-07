@@ -1,5 +1,5 @@
 import {get, post, put} from 'sr/utils/axios/index'
-import {JmmApiResponse} from './globalInterface'
+import {JmmApiResponse, Status} from './globalInterface'
 import {CompanyResponse} from './fetchCompany'
 import {Customer} from './customerApi'
 import {
@@ -16,7 +16,7 @@ interface PayloadType {
   subtype?: string
   company_id?: string
   customer_id?: string
-  status?: string
+  status?: Status
 }
 interface ModifiedCompanyResponse extends Omit<CompanyResponse, 'id'> {
   _id: string
@@ -35,7 +35,7 @@ export interface Checklist {
   remarks?: string
   location_ids: string[]
   checklist_ids: string[]
-  status: string
+  status: Status
   createdAt: string
   updatedAt: string
   id: string

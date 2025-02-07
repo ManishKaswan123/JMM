@@ -6,6 +6,8 @@ import {RootState} from 'sr/redux/store'
 import {useActions} from 'sr/utils/helpers/useActions'
 import {fetchSingleTaskList, TaskListDetails} from 'sr/utils/api/fetchTaskList'
 import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
+import {getStatusName} from 'sr/helpers/globalHelpers'
+import {Status} from 'sr/utils/api/globalInterface'
 
 const TaskListDetailsCard: React.FC = () => {
   const navigate = useNavigate()
@@ -32,7 +34,7 @@ const TaskListDetailsCard: React.FC = () => {
       <SkeletonCard
         label='TaskList Details'
         col1={'TaskList ID,Name,Description,Type,Checklist ID'.split(',')}
-        col2={'Company ID,Customer ID,Created At,Updated At'.split(',')}
+        col2={'Status,Company ID,Customer ID,Created At,Updated At'.split(',')}
       />
     )
   if (isError) return <div>Error loading task details.</div>
@@ -77,6 +79,10 @@ const TaskListDetailsCard: React.FC = () => {
 
         {/* Column 2 */}
         <div className='space-y-4'>
+          <div className='flex items-center'>
+            <strong className='font-medium text-lg mr-2'>Status:</strong>
+            <p>{getStatusName(data.status as Status)}</p>
+          </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Company ID:</strong>
             <p>{data.company_id?.company_name}</p>

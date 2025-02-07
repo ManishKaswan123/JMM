@@ -1,8 +1,7 @@
 import React from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
 import {TaskMgmtDetails} from '../taskMgmtInterfaces'
-import {getTaskMgmtStatusName, getTaskMgmtSubStatusName} from '../taskMgmtHelpers'
-import {taskMgmtStatusColors, taskMgmtSubStatusColors} from '../taskMgmtConstants'
+import {taskMgmtTableColumns} from '../taskMgmtConstants'
 import GlobalTable from 'sr/helpers/ui-components/Table'
 
 interface Props {
@@ -13,36 +12,7 @@ interface Props {
 
 const TaskMgmtTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalOpen}) => {
   const columns = [
-    {
-      label: 'Workorder',
-      key: 'workorder_id' as keyof TaskMgmtDetails,
-      isLink: true,
-      linkPrefix: '/workorder',
-    },
-    {
-      label: 'Task',
-      key: 'task_id' as keyof TaskMgmtDetails,
-      isLink: true,
-      linkPrefix: '/task',
-    },
-    {
-      label: 'Contractor Status',
-      key: 'contractor_status' as keyof TaskMgmtDetails,
-      statusColors: taskMgmtSubStatusColors,
-      getStatusName: getTaskMgmtSubStatusName,
-    },
-    {
-      label: 'Supervisor Status',
-      key: 'supervisor_status' as keyof TaskMgmtDetails,
-      statusColors: taskMgmtSubStatusColors,
-      getStatusName: getTaskMgmtSubStatusName,
-    },
-    {
-      label: 'Status',
-      key: 'status' as keyof TaskMgmtDetails,
-      statusColors: taskMgmtStatusColors,
-      getStatusName: getTaskMgmtStatusName,
-    },
+    ...taskMgmtTableColumns,
     {
       label: 'Actions',
       key: 'actions' as keyof TaskMgmtDetails,
@@ -53,12 +23,12 @@ const TaskMgmtTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModal
             setSelectedData(item)
             setIsUpdateModalOpen(true)
           },
-          tooltip: 'Edit Task',
+          tooltip: 'Edit',
         },
         {
           icon: FaEye,
           linkPrefix: '/taskmgmt',
-          tooltip: 'View Task',
+          tooltip: 'View',
         },
       ],
     },

@@ -1,23 +1,22 @@
 import {FieldsArray} from 'sr/constants/fields'
-import {
-  GenerateFieldsProps,
-  TaskMgmtDetails,
-  TaskMgmtFilters,
-  TaskMgmtStatus,
-  TaskMgmtSubStatus,
-} from './taskMgmtInterfaces'
-import {taskMgmtstatuses, taskMgmtsubStatuses} from './taskMgmtConstants'
+import {TaskMgmtDetails, TaskMgmtFilters} from './taskMgmtInterfaces'
 import {applyFilterAndResetPagination, toggleModal} from 'sr/helpers/globalHelpers'
 import {Modals, PaginationType, QueryMutationReturnType} from 'sr/utils/api/globalInterface'
+import {statuses} from 'sr/constants/common'
+import {useMemo} from 'react'
 
-export const generateTaskMgmtFields = ({
-  workorderData,
-  taskData,
-  isFilter = false,
-}: GenerateFieldsProps): FieldsArray => {
+export const generateTaskMgmtFields = (
+  stores: Record<string, any>
+): {createAndUpdateFields: FieldsArray; filterFields: FieldsArray} => {
+  const {workorderStore, taskStore} = stores
   const dropdowns = [
-    {label: 'workorder_id', topLabel: 'Workorder', data: workorderData, key: 'workorder_name'},
-    {label: 'task_id', topLabel: 'Task', data: taskData, key: 'task_name'},
+    {
+      label: 'workorder_id',
+      topLabel: 'Workorder',
+      data: workorderStore.data,
+      key: 'workorder_name',
+    },
+    {label: 'task_id', topLabel: 'Task', data: taskStore.data, key: 'task_name'},
   ].map(({label, topLabel, data, key}) => ({
     type: 'dropdown',
     label,
@@ -26,32 +25,35 @@ export const generateTaskMgmtFields = ({
     placeholder: `Select ${topLabel}`,
     labelKey: key,
     id: 'id',
-    required: !isFilter,
+    required: true,
   }))
 
-  return [
+  const createAndUpdateFields = [
     ...dropdowns,
     ...['contractor_status', 'supervisor_status'].map((label) => ({
       type: 'dropdown',
       label,
-      name: taskMgmtsubStatuses,
+      name: statuses,
       topLabel: label.replace('_', ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
       placeholder: `Select ${label.replace('_', ' ')}`,
       labelKey: 'name',
       id: 'id',
-      required: !isFilter,
+      required: true,
     })),
     {
       type: 'dropdown',
       label: 'status',
-      name: taskMgmtstatuses,
+      name: statuses,
       topLabel: 'Status',
       placeholder: 'Select Status',
       labelKey: 'name',
-      required: !isFilter,
+      required: true,
     },
   ]
+  const filterFields = createAndUpdateFields.map((field) => ({...field, required: false})) // Set required: false for all
+  return {createAndUpdateFields, filterFields}
 }
+
 export const handleApplyTaskMgmtFilter = (
   newFilters: TaskMgmtFilters,
   setFilters: React.Dispatch<React.SetStateAction<TaskMgmtFilters>>,
@@ -65,27 +67,64 @@ export const handleApplyTaskMgmtFilter = (
 export const handleCreateTaskMgmt = (
   payload: Record<string, any>,
   setModals: React.Dispatch<React.SetStateAction<Modals>>,
-  createMutation: QueryMutationReturnType
+  createMutation: QueryMutationReturnType,
+  setIsCreatingUpdating: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
-  createMutation.mutate({payload, onSuccess: () => toggleModal('create', false, setModals)})
+  setIsCreatingUpdating(true)
+  createMutation.mutate({
+    payload,
+    onSuccess: () => {
+      setIsCreatingUpdating(false)
+      toggleModal('create', false, setModals)
+    },
+  })
 }
 
 export const handleEditTaskMgmt = (
   payload: Record<string, any>,
   setModals: React.Dispatch<React.SetStateAction<Modals>>,
   updateMutation: QueryMutationReturnType,
-  selectedData: TaskMgmtDetails | null
+  selectedData: TaskMgmtDetails | null,
+  setIsCreatingUpdating: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   if (selectedData === null) return toggleModal('update', false, setModals)
+  setIsCreatingUpdating(true)
   updateMutation.mutate({
     payload: {...payload, id: selectedData.id},
-    onSuccess: () => toggleModal('update', false, setModals),
+    onSuccess: () => {
+      setIsCreatingUpdating(false)
+      toggleModal('update', false, setModals)
+    },
   })
 }
-// Function to get the display name for the status
-export const getTaskMgmtStatusName = (statusId: TaskMgmtStatus) => {
-  return taskMgmtstatuses.find((status) => status.id === statusId)?.name || statusId
-}
-export const getTaskMgmtSubStatusName = (statusId: TaskMgmtSubStatus) => {
-  return taskMgmtsubStatuses.find((status) => status.id === statusId)?.name || statusId
-}
+
+export const useTaskMgmtModalConfig = (
+  setModals: React.Dispatch<React.SetStateAction<Modals>>,
+  createMutation: QueryMutationReturnType,
+  updateMutation: QueryMutationReturnType,
+  selectedData: TaskMgmtDetails | null,
+  setIsCreatingUpdating: React.Dispatch<React.SetStateAction<boolean>>
+) =>
+  useMemo(
+    () => [
+      {
+        key: 'create' as const,
+        label: 'Create TaskMgmt',
+        onSubmit: (payload: any) =>
+          handleCreateTaskMgmt(payload, setModals, createMutation, setIsCreatingUpdating),
+      },
+      {
+        key: 'update' as const,
+        label: 'Update TaskList',
+        onSubmit: (payload: any) =>
+          handleEditTaskMgmt(
+            payload,
+            setModals,
+            updateMutation,
+            selectedData,
+            setIsCreatingUpdating
+          ),
+      },
+    ],
+    [setModals, createMutation, updateMutation, selectedData, setIsCreatingUpdating]
+  )

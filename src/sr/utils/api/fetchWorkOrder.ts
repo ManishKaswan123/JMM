@@ -99,7 +99,6 @@ export const fetchWorkOrder = async (
   payload: Record<string, any>
 ): Promise<FetchWorkOrderResponse> => {
   const {min_pay_type_rate, max_pay_type_rate, ...rest} = transformPayloadToFilter(payload)
-  console.log('payload', payload)
   if (min_pay_type_rate !== undefined && max_pay_type_rate !== undefined) {
     payload = {
       ...rest, // Include the rest of the payload fields

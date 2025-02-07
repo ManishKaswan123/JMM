@@ -2,6 +2,7 @@ import React from 'react'
 import {AddressData} from 'sr/utils/api/addressApi'
 import {Button} from 'sr/helpers'
 import {Link} from 'react-router-dom'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 interface AddressDetailsProps {
   address: AddressData
   onGoBack: () => void
@@ -61,7 +62,7 @@ export const AddressDetailsCard: React.FC<AddressDetailsProps> = ({address: data
 
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Status:</strong>
-            <p>{data.status}</p>
+            <p>{getStatusName(data.status)}</p>
           </div>
         </div>
 

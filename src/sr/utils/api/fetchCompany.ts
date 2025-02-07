@@ -1,6 +1,6 @@
 import {get} from 'sr/utils/axios/index'
 import {transformPayloadToFilter} from '../helpers/processFilter'
-import {JmmApiResponse} from './globalInterface'
+import {JmmApiResponse, Status} from './globalInterface'
 
 export interface CompanyResponse {
   username: string
@@ -12,7 +12,7 @@ export interface CompanyResponse {
   candidate_msg: boolean
   no_of_clients?: number
   user_id: string
-  status: string
+  status: Status
   createdAt: string
   updatedAt: string
   id: string
@@ -29,7 +29,7 @@ export interface CompanyFilters {
   business_type?: string
   intent?: string
   candidate_msg?: boolean
-  status?: string
+  status?: Status
 }
 
 export const fetchCompany = async (payload: Record<string, any>): Promise<FetchCompanyResponse> => {

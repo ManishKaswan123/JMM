@@ -1,5 +1,5 @@
 import {get} from 'sr/utils/axios/index'
-import {JmmApiResponse} from './globalInterface'
+import {JmmApiResponse, Status} from './globalInterface'
 import {Address} from './addressApi'
 
 export interface CleanerDetails {
@@ -10,7 +10,7 @@ export interface CleanerDetails {
   email: string
   date_of_birth: string
   user_id: string
-  status: string
+  status: Status
   createdAt: string
   updatedAt: string
   address: Address
@@ -23,7 +23,7 @@ export interface CleanerFilters {
   limit?: number
   page?: number
   sortBy?: string
-  status?: string
+  status?: Status
 }
 
 const filterPayload = (payload: CleanerFilters) => {

@@ -11,6 +11,7 @@ import {FieldsArray} from 'sr/constants/fields'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import {UserContext} from 'sr/context/UserContext'
 import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 
 interface ContractorFormPayload {
   address_line_1: string
@@ -201,7 +202,7 @@ const ContractorDetailsCard: React.FC<any> = () => {
             </div>
             <div className='flex items-center'>
               <strong className='font-medium text-lg mr-2'>Status:</strong>
-              <p>{data.status} </p>
+              <p>{getStatusName(data.status)} </p>
             </div>
 
             <div className='flex items-center'>

@@ -19,13 +19,15 @@ import {
 import ChecklistTable from './ChecklistTable'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 import {useParams} from 'react-router-dom'
+import {Status} from 'sr/utils/api/globalInterface'
+import {statuses} from 'sr/constants/common'
 
 interface Filters {
   company_id?: string
   customer_id?: string
   type?: string
   subtype?: string
-  status?: string
+  status?: Status
 }
 interface ChecklistCreatePayload {
   name: string
@@ -34,7 +36,7 @@ interface ChecklistCreatePayload {
   company_id: string
   customer_id: string
   task_ids: Record<string, any>[]
-  status: string
+  status: Status
 }
 interface ChecklistUpdatePayload extends ChecklistCreatePayload {
   id: string
@@ -122,10 +124,7 @@ const ChecklistCard: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {name: 'Active', id: 'active'},
-          {name: 'Draft', id: 'draft'},
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',
@@ -179,10 +178,7 @@ const ChecklistCard: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {name: 'Active', id: 'active'},
-          {name: 'Draft', id: 'draft'},
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',

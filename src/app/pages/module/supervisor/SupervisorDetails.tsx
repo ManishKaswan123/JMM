@@ -11,6 +11,7 @@ import {
   useUpdateSupervisor,
 } from 'sr/utils/api/supervisorApi'
 import {FaEdit} from 'react-icons/fa'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 
 interface Access {
   view: boolean
@@ -157,7 +158,7 @@ const SupervisorDetailsCard: React.FC = () => {
             },
             {label: 'UserId', value: data.user_id},
             {label: 'Username', value: data.username},
-            {label: 'Status', value: data.status},
+            {label: 'Status', value: getStatusName(data.status)},
             {label: 'Created At', value: data.createdAt},
             {label: 'Updated At', value: data.updatedAt},
           ].map(({label, value}) => (

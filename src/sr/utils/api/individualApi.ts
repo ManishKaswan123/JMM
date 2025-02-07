@@ -1,5 +1,5 @@
 import {get, post, put} from 'sr/utils/axios/index'
-import {JmmApiResponse} from './globalInterface'
+import {JmmApiResponse, Status} from './globalInterface'
 import {toast} from 'react-toastify'
 import {Address} from './addressApi'
 import {
@@ -12,7 +12,7 @@ import {
 export interface IndividualFilters {
   limit?: number
   page?: number
-  status?: string
+  status?: Status
 }
 
 export interface Individual {
@@ -22,7 +22,7 @@ export interface Individual {
   last_name: string
   mobile_number: string
   email: string
-  status: string
+  status: Status
   user_id: string
   no_of_rooms?: number
   no_of_bath?: number
