@@ -1,7 +1,10 @@
 import React, {useContext} from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
 import {Link, useNavigate} from 'react-router-dom'
+import {statusColors} from 'sr/constants/common'
 import {UserContext} from 'sr/context/UserContext'
+import {getStatusName} from 'sr/helpers/globalHelpers'
+import {Status} from 'sr/utils/api/globalInterface'
 
 interface CompanyResponse {
   username: string
@@ -13,7 +16,7 @@ interface CompanyResponse {
   candidate_msg: boolean
   no_of_clients?: number
   user_id: string
-  status: string
+  status: Status
   createdAt: string
   updatedAt: string
   id: string
@@ -75,18 +78,8 @@ const CompanyTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModalO
               </td>
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <p
-                  className={`whitespace-no-wrap ${
-                    company.status === 'active'
-                      ? 'text-green-500'
-                      : company?.status === 'pending_otp'
-                      ? 'text-orange-500'
-                      : company?.status === 'closed'
-                      ? 'text-red-500'
-                      : 'text-gray-500' // Default color for unknown statuses
-                  }`}
-                >
-                  {company.status}
+                <p className={`${statusColors[company.status]} font-semibold text-sm`}>
+                  {getStatusName(company.status)}
                 </p>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>

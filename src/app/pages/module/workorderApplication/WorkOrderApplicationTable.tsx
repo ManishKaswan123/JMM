@@ -1,6 +1,8 @@
 import React from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
 import {Link, useNavigate} from 'react-router-dom'
+import {statusColors} from 'sr/constants/common'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 import {WorkorderApplication} from 'sr/utils/api/workorderApplicationApi'
 
 interface Props {
@@ -57,7 +59,11 @@ const WorkorderApplicationTable: React.FC<Props> = ({
                   {workorder.cleaner_id?.first_name} {workorder.cleaner_id?.last_name}
                 </Link>
               </td>
-              <td className='px-5 py-5 border-b border-gray-200 text-sm'>{workorder.status}</td>
+              <td className='px-5 py-5 border-b border-gray-200 text-sm'>
+                <p className={`${statusColors[workorder.status]} font-semibold text-sm`}>
+                  {getStatusName(workorder.status)}
+                </p>
+              </td>
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <div className='flex'>

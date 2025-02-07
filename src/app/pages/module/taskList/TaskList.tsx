@@ -16,6 +16,8 @@ import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 import {useCreateTasklist} from 'sr/utils/api/createTasklist'
 import {useUpdateTasklist} from 'sr/utils/api/updateTasklist'
 import {useParams} from 'react-router-dom'
+import {Status} from 'sr/utils/api/globalInterface'
+import {statuses} from 'sr/constants/common'
 
 interface CreateTasklistPayload {
   name: string
@@ -26,7 +28,7 @@ interface CreateTasklistPayload {
   customer_id: string
   images: string[]
   videos: string[]
-  status: string
+  status: Status
 }
 interface UpdateTasklistPayload extends Omit<CreateTasklistPayload, 'password'> {
   id: string
@@ -112,11 +114,7 @@ const TaskList: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {name: 'Active', id: 'active'},
-          {name: 'Draft', id: 'draft'},
-          {name: 'Deleted', id: 'deleted'},
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',
@@ -171,11 +169,7 @@ const TaskList: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {name: 'Active', id: 'active'},
-          {name: 'Draft', id: 'draft'},
-          {name: 'Deleted', id: 'deleted'},
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',

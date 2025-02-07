@@ -1,6 +1,8 @@
 import React from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
 import {Link, useNavigate} from 'react-router-dom'
+import {statusColors} from 'sr/constants/common'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 import {ContractorDetails} from 'sr/utils/api/contractorApi'
 
 interface Props {
@@ -74,18 +76,8 @@ const ContractorTable: React.FC<Props> = ({data, setIsUpdateModalOpen, setSelect
               </td>
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <p
-                  className={`whitespace-no-wrap ${
-                    contractor.status === 'active'
-                      ? 'text-green-500'
-                      : contractor?.status === 'pending'
-                      ? 'text-orange-500'
-                      : contractor?.status === 'inactive'
-                      ? 'text-red-500'
-                      : 'text-gray-500'
-                  }`}
-                >
-                  {contractor.status}
+                <p className={`${statusColors[contractor.status]} font-semibold text-sm`}>
+                  {getStatusName(contractor.status)}
                 </p>
               </td>
 

@@ -1,5 +1,5 @@
 import {get} from 'sr/utils/axios/index'
-import {JmmApiResponse} from './globalInterface'
+import {JmmApiResponse, Status} from './globalInterface'
 
 export type FetchApplicationResponse = JmmApiResponse<JobApplication[]>
 export type FetchSingleApplicationResponse = JmmApiResponse<JobApplication>
@@ -8,15 +8,7 @@ export interface JobApplication {
   job_id: JobDetails
   cleaner_id: CleanerDetails
   answers: any[] // Update the type if answers structure is known
-  status:
-    | 'hired'
-    | 'active'
-    | 'withdrawn'
-    | 'shortlist'
-    | 'rejected'
-    | 'awaiting-reviews'
-    | 'pause'
-    | 'contacting'
+  status: Status
   createdAt: string
   updatedAt: string
   __v: number
@@ -41,7 +33,7 @@ interface JobDetails {
   notifications: boolean
   email: string
   application_ids: string[]
-  status: string
+  status: Status
   createdAt: string
   updatedAt: string
   __v: number
@@ -59,7 +51,7 @@ interface CompanyDetails {
   intent: string[]
   candidate_msg: boolean
   user_id: string
-  status: string
+  status: Status
   createdAt: string
   updatedAt: string
   __v: number
@@ -75,7 +67,7 @@ interface CleanerDetails {
   email: string
   date_of_birth: string
   user_id: string
-  status: string
+  status: Status
   createdAt: string
   updatedAt: string
   __v: number

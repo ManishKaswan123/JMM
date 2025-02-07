@@ -2,7 +2,10 @@ import React, {useCallback, useEffect} from 'react'
 import {FaEye, FaTrash} from 'react-icons/fa'
 import {useSelector} from 'react-redux'
 import {Link, useNavigate} from 'react-router-dom'
+import {statusColors} from 'sr/constants/common'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 import {RootState} from 'sr/redux/store'
+import {Status} from 'sr/utils/api/globalInterface'
 import {useActions} from 'sr/utils/helpers/useActions'
 
 interface Props<T> {
@@ -86,24 +89,8 @@ const JobsTable = <T,>({type, data, handleDelete}: Props<T>) => {
                 <p className='text-gray-900 whitespace-no-wrap'>{job?.rate}</p>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <p
-                  className={`whitespace-no-wrap ${
-                    job?.status === 'active'
-                      ? 'text-green-500'
-                      : job?.status === 'open'
-                      ? 'text-blue-500'
-                      : job?.status === 'assigned'
-                      ? 'text-yellow-500'
-                      : job?.status === 'pause'
-                      ? 'text-purple-500'
-                      : job?.status === 'closed'
-                      ? 'text-red-600'
-                      : job?.status === 'pending'
-                      ? 'text-orange-300'
-                      : 'text-gray-500' // Default color for unknown statuses
-                  }`}
-                >
-                  {job?.status}
+                <p className={`${statusColors[job.status as Status]} font-semibold text-sm`}>
+                  {getStatusName(job.status)}
                 </p>
               </td>
 

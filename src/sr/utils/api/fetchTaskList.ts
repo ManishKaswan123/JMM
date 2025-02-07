@@ -1,5 +1,5 @@
 import {get} from 'sr/utils/axios/index'
-import {JmmApiResponse} from './globalInterface'
+import {JmmApiResponse, Status} from './globalInterface'
 
 export interface TaskListDetails {
   name: string
@@ -10,7 +10,7 @@ export interface TaskListDetails {
   customer_id: Record<string, any>
   images: string[]
   videos: string[]
-  status?: string
+  status?: Status
   createdAt: string
   updatedAt: string
   id: string
@@ -23,7 +23,7 @@ export interface TasklistFilters {
   limit?: number
   page?: number
   sortBy?: string
-  status?: string
+  status?: Status
   company_id?: string
   customer_id?: string
   checklist_id?: string

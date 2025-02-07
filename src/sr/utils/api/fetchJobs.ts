@@ -1,6 +1,6 @@
 import {get} from 'sr/utils/axios/index'
 import {transformPayloadToFilter} from '../helpers/processFilter'
-import {JmmApiResponse} from './globalInterface'
+import {JmmApiResponse, Status} from './globalInterface'
 
 interface CompanyDetails {
   _id: string
@@ -12,7 +12,7 @@ interface CompanyDetails {
   intent: string[]
   candidate_msg: boolean
   user_id: string
-  status: string
+  status: Status
   createdAt: string
   updatedAt: string
 }
@@ -34,7 +34,7 @@ export interface JobAdvancedDetails {
   supplemental_pay: string[]
   recruitment_timeline: string
   application_deadline: string
-  status: string
+  status: Status
   createdAt: string
   updatedAt: string
 }
@@ -44,7 +44,7 @@ interface ApplicationDetails {
   job_id: string
   cleaner_id: string
   answers: string[]
-  status: string
+  status: Status
   createdAt: string
   updatedAt: string
 }
@@ -72,7 +72,7 @@ export interface JobResponse {
   notifications: boolean
   email: string
   application_ids: ApplicationDetails[]
-  status: string
+  status: Status
   createdAt: string
   updatedAt: string
   job_advanced_id: JobAdvancedDetails

@@ -1,5 +1,5 @@
 import {get, post, put} from 'sr/utils/axios/index'
-import {JmmApiResponse} from './globalInterface'
+import {JmmApiResponse, Status} from './globalInterface'
 import {
   useMutation,
   useQueryClient,
@@ -12,7 +12,7 @@ interface PayloadType {
   limit?: number
   page?: number
   company_id?: string
-  status?: string
+  status?: Status
 }
 export interface ContactsType {
   first_name: string
@@ -36,7 +36,7 @@ export interface Customer {
   billing_address?: Address
   location_ids: string[]
   checklist_ids: string[]
-  status: string
+  status: Status
   createdAt: string
   updatedAt: string
   id: string

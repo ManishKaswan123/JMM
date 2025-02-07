@@ -1,21 +1,16 @@
 import React from 'react'
 import {FaEdit, FaEye} from 'react-icons/fa'
 import {Link} from 'react-router-dom'
+import {statusColors} from 'sr/constants/common'
+import {getStatusName} from 'sr/helpers/globalHelpers'
+import {Status} from 'sr/utils/api/globalInterface'
 
 interface JobApplication {
   _id: string
   job_id: JobDetails
   cleaner_id: CleanerDetails
   answers: any[] // Update the type if answers structure is known
-  status:
-    | 'hired'
-    | 'active'
-    | 'withdrawn'
-    | 'shortlist'
-    | 'rejected'
-    | 'awaiting-reviews'
-    | 'pause'
-    | 'contacting'
+  status: Status
   createdAt: string
   updatedAt: string
   __v: number
@@ -40,7 +35,7 @@ interface JobDetails {
   notifications: boolean
   email: string
   application_ids: string[]
-  status: string
+  status: Status
   createdAt: string
   updatedAt: string
   __v: number
@@ -58,7 +53,7 @@ interface CompanyDetails {
   intent: string[]
   candidate_msg: boolean
   user_id: string
-  status: string
+  status: Status
   createdAt: string
   updatedAt: string
   __v: number
@@ -74,7 +69,7 @@ interface CleanerDetails {
   email: string
   date_of_birth: string
   user_id: string
-  status: string
+  status: Status
   createdAt: string
   updatedAt: string
   __v: number
@@ -115,12 +110,12 @@ const ApplicationTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateMo
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
               Status
             </th>
-            <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
+            {/* <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
               Created At
             </th>
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
               Updated At
-            </th>
+            </th> */}
 
             <th className='px-5 py-3 bg-gray-200 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider'>
               Actions
@@ -144,32 +139,12 @@ const ApplicationTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateMo
                 </Link>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <p
-                  className={`whitespace-no-wrap ${
-                    job?.status === 'active'
-                      ? 'text-green-500'
-                      : job?.status === 'hired'
-                      ? 'text-blue-600'
-                      : job?.status === 'withdrawn'
-                      ? 'text-gray-400'
-                      : job?.status === 'shortlist'
-                      ? 'text-yellow-500'
-                      : job?.status === 'rejected'
-                      ? 'text-red-500'
-                      : job?.status === 'awaiting-reviews'
-                      ? 'text-purple-500'
-                      : job?.status === 'pause'
-                      ? 'text-orange-400'
-                      : job?.status === 'contacting'
-                      ? 'text-cyan-500'
-                      : 'text-gray-500' // Default color for unknown statuses
-                  }`}
-                >
-                  {job?.status || 'Unknown'}
+                <p className={`${statusColors[job.status]} font-semibold text-sm`}>
+                  {getStatusName(job.status)}
                 </p>
               </td>
 
-              <td className='px-5 py-5 border-b border-gray-200 text-sm'>
+              {/* <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <p className='text-gray-900 whitespace-no-wrap'>
                   {new Date(job.createdAt).toLocaleDateString()}
                 </p>
@@ -178,7 +153,7 @@ const ApplicationTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateMo
                 <p className='text-gray-900 whitespace-no-wrap'>
                   {new Date(job.updatedAt).toLocaleDateString()}
                 </p>
-              </td>
+              </td> */}
 
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
                 <div className='flex'>

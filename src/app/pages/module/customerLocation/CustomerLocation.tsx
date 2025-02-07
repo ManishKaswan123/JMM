@@ -208,6 +208,7 @@ const CustomerLocationCard: React.FC = () => {
                 setIsFilterVisible={setIsFilterVisible}
                 preFilters={filters || {}}
                 fields={fields}
+                handleClearFilter={() => handleApplyFilter({customer_id})}
               />
             </div>
           )}

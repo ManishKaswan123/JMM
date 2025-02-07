@@ -3,6 +3,7 @@ import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
 import {fetchSingleApplication, JobApplication} from 'sr/utils/api/fetchApplications'
 import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 
 const ApplicationDetailsCard: React.FC = () => {
   const navigate = useNavigate()
@@ -64,7 +65,7 @@ const ApplicationDetailsCard: React.FC = () => {
           </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Status:</strong>
-            <p>{data.status}</p>
+            <p>{getStatusName(data.status)}</p>
           </div>
         </div>
 

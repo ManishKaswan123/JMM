@@ -1,5 +1,5 @@
 import {get, post, put} from 'sr/utils/axios/index'
-import {JmmApiResponse} from './globalInterface'
+import {JmmApiResponse, Status} from './globalInterface'
 import {Address} from './addressApi'
 import {CleanerDetails} from './fetchCleaner'
 import {CompanyResponse} from './fetchCompany'
@@ -29,7 +29,7 @@ export interface ContractorDetails {
   address: Address
   customer_location_ids: string[]
   company_id: UpdatedCompany
-  status: string
+  status: Status
   createdAt: string
   updatedAt: string
   id: string
@@ -42,7 +42,7 @@ export interface ContractorListPayload {
   limit?: number
   page?: number
   sortBy?: string
-  status?: string
+  status?: Status
   company_id?: string
   cleaner_id?: string
 }

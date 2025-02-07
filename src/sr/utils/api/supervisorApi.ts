@@ -1,5 +1,5 @@
 import {get, post, put} from 'sr/utils/axios/index'
-import {JmmApiResponse} from './globalInterface'
+import {JmmApiResponse, Status} from './globalInterface'
 import {CompanyResponse} from './fetchCompany'
 import {toast} from 'react-toastify'
 import {
@@ -49,7 +49,7 @@ export interface SupervisorDetails {
   email: string
   customer_location_ids?: string[]
   workorder_ids?: string[]
-  status: string
+  status: Status
   createdAt: string
   updatedAt: string
   user_id?: string
@@ -64,7 +64,7 @@ export interface SupervisorFilters {
   limit?: number
   page?: number
   company_id?: string
-  status?: string
+  status?: Status
 }
 
 const filterPayload = (payload: SupervisorFilters) => {

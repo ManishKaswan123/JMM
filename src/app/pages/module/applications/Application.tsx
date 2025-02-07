@@ -16,6 +16,8 @@ import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 import {useCreateApplication} from 'sr/utils/api/createApplication'
 import {useUpdateApplication} from 'sr/utils/api/updateApplication'
 import {useParams} from 'react-router-dom'
+import {Status} from 'sr/utils/api/globalInterface'
+import {statuses} from 'sr/constants/common'
 
 interface Filters {
   cleaner_id?: string
@@ -27,15 +29,7 @@ interface ApplicationCreatePayload {
   job_id: string
   cleaner_id: string
   answers: string[]
-  status:
-    | 'hired'
-    | 'active'
-    | 'withdrawn'
-    | 'shortlist'
-    | 'rejected'
-    | 'awaiting-reviews'
-    | 'pause'
-    | 'contacting'
+  status: Status
 }
 interface ApplicationFormPayload extends Omit<ApplicationCreatePayload, 'answers'> {
   answers: string
@@ -85,16 +79,7 @@ const Application: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {name: 'Hired', id: 'hired'},
-          {name: 'Active', id: 'active'},
-          {name: 'Withdrawn', id: 'withdrawn'},
-          {name: 'Shortlist', id: 'shortlist'},
-          {name: 'Rejected', id: 'rejected'},
-          {name: 'Awaiting Reviews', id: 'awaiting-reviews'},
-          {name: 'Pause', id: 'pause'},
-          {name: 'Contacting', id: 'contacting'},
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',
@@ -135,16 +120,7 @@ const Application: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {name: 'Hired', id: 'hired'},
-          {name: 'Active', id: 'active'},
-          {name: 'Withdrawn', id: 'withdrawn'},
-          {name: 'Shortlist', id: 'shortlist'},
-          {name: 'Rejected', id: 'rejected'},
-          {name: 'Awaiting Reviews', id: 'awaiting-reviews'},
-          {name: 'Pause', id: 'pause'},
-          {name: 'Contacting', id: 'contacting'},
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',
@@ -185,16 +161,7 @@ const Application: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {name: 'Hired', id: 'hired'},
-          {name: 'Active', id: 'active'},
-          {name: 'Withdrawn', id: 'withdrawn'},
-          {name: 'Shortlist', id: 'shortlist'},
-          {name: 'Rejected', id: 'rejected'},
-          {name: 'Awaiting Reviews', id: 'awaiting-reviews'},
-          {name: 'Pause', id: 'pause'},
-          {name: 'Contacting', id: 'contacting'},
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',
@@ -320,9 +287,7 @@ const Application: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonTable
-              columns={['Job Id', 'Cleaner Id', 'Status', 'Created At', 'Updated At', 'Actions']}
-            />
+            <SkeletonTable columns={['Job Id', 'Cleaner Id', 'Status', 'Actions']} />
           ) : (
             <ApplicationTable
               setSelectedData={setSelectedData}

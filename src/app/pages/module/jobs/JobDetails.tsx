@@ -3,6 +3,7 @@ import {Button} from 'sr/helpers/ui-components/Button'
 import {useNavigate, useParams} from 'react-router-dom'
 import {fetchSingleJob, JobResponse} from 'sr/utils/api/fetchJobs'
 import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 
 const JobDetailsCard: React.FC<any> = () => {
   const navigate = useNavigate()
@@ -115,7 +116,7 @@ const JobDetailsCard: React.FC<any> = () => {
           </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Status:</strong>
-            <p>{data.status || 'Not Available'}</p>
+            <p>{getStatusName(data.status)}</p>
           </div>
           <div className='flex items-center'>
             <strong className='font-medium text-lg mr-2'>Created At:</strong>

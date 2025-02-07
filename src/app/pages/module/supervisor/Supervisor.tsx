@@ -20,13 +20,15 @@ import {
   useUpdateSupervisor,
 } from 'sr/utils/api/supervisorApi'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
+import {Status} from 'sr/utils/api/globalInterface'
+import {statuses} from 'sr/constants/common'
 interface SupervisorFormPayload {
   company_id: string
   first_name: string
   last_name: string
   mobile_number: string
   email: string
-  status: string
+  status: Status
 }
 interface SupervisorCreatePayload extends SupervisorFormPayload {}
 interface SupervisorUpdatePayload extends SupervisorFormPayload {
@@ -91,20 +93,7 @@ const Supervisor: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {
-            id: 'active',
-            status: 'Active',
-          },
-          {
-            id: 'deleted',
-            status: 'Deleted',
-          },
-          {
-            id: 'pending',
-            status: 'Pending',
-          },
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'status',
@@ -129,20 +118,7 @@ const Supervisor: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {
-            id: 'active',
-            status: 'Active',
-          },
-          {
-            id: 'deleted',
-            status: 'Deleted',
-          },
-          {
-            id: 'pending',
-            status: 'Pending',
-          },
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'status',

@@ -1,6 +1,9 @@
 import {FaEdit, FaEye, FaTrash} from 'react-icons/fa'
 import {useNavigate} from 'react-router-dom'
+import {statusColors} from 'sr/constants/common'
+import {getStatusName} from 'sr/helpers/globalHelpers'
 import {CleanerDetails} from 'sr/utils/api/fetchCleaner'
+import {Status} from 'sr/utils/api/globalInterface'
 
 interface Props<T> {
   type: 'cleaner' | 'favcleaner'
@@ -76,18 +79,8 @@ const CleanerTable = <T,>({
                 </p>
               </td>
               <td className='px-5 py-5 border-b border-gray-200 text-sm'>
-                <p
-                  className={`whitespace-no-wrap ${
-                    cleaner?.status === 'active'
-                      ? 'text-green-500'
-                      : cleaner?.status === 'pending_otp'
-                      ? 'text-orange-500'
-                      : cleaner?.status === 'inactive'
-                      ? 'text-red-500'
-                      : 'text-gray-500'
-                  }`}
-                >
-                  {cleaner?.status}
+                <p className={`${statusColors[cleaner.status as Status]} font-semibold text-sm`}>
+                  {getStatusName(cleaner.status)}
                 </p>
               </td>
 

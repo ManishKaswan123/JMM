@@ -21,9 +21,11 @@ import {
   WorkorderApplication,
 } from 'sr/utils/api/workorderApplicationApi'
 import WorkorderApplicationTable from './WorkOrderApplicationTable'
+import {Status} from 'sr/utils/api/globalInterface'
+import {statuses} from 'sr/constants/common'
 interface WorkorderApplicationFormPayload {
   workorder_id: string
-  status: string
+  status: Status
   cleaner_id: string
 }
 interface WorkoderApplicationCreatePayload extends WorkorderApplicationFormPayload {}
@@ -71,11 +73,7 @@ const WorkOrderApplication: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {name: 'Active', id: 'active'},
-          {name: 'Accept', id: 'accept'},
-          {name: 'Publish', id: 'publish'},
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',
@@ -101,11 +99,7 @@ const WorkOrderApplication: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {name: 'Active', id: 'active'},
-          {name: 'Accept', id: 'accept'},
-          {name: 'Publish', id: 'publish'},
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',

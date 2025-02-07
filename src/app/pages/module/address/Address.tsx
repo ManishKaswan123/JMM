@@ -21,6 +21,8 @@ import {FieldsArray} from 'sr/constants/fields'
 import {useParams} from 'react-router-dom'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
+import {Status} from 'sr/utils/api/globalInterface'
+import {statuses} from 'sr/constants/common'
 
 interface AddressFilters {
   limit?: number
@@ -29,7 +31,7 @@ interface AddressFilters {
   no_of_rooms?: number
   no_of_bath?: number
   total_area?: number
-  status?: string
+  status?: Status
 }
 
 interface AddressCreatePayload {
@@ -40,7 +42,7 @@ interface AddressCreatePayload {
   remark: string
   address: Record<string, string | number>
   address_type: string
-  status: string
+  status: Status
 }
 
 interface AddressFormPayload extends Omit<AddressCreatePayload, 'address'> {
@@ -104,11 +106,7 @@ const Addresses: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {name: 'Active', id: 'active'},
-          {name: 'Inactive', id: 'inactive'},
-          {name: 'Deleted', id: 'deleted'},
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',
@@ -233,11 +231,7 @@ const Addresses: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {name: 'Active', id: 'active'},
-          {name: 'Inactive', id: 'inactive'},
-          {name: 'Deleted', id: 'deleted'},
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'name',

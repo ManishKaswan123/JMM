@@ -19,6 +19,8 @@ import {
 } from 'sr/utils/api/contractorApi'
 import ContractorTable from './ContractorTable'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
+import {Status} from 'sr/utils/api/globalInterface'
+import {statuses} from 'sr/constants/common'
 
 interface ContractorFormPayload {
   cleaner_id: string
@@ -28,7 +30,7 @@ interface ContractorFormPayload {
   mobile_number: string
   email: string
   date_of_birth: string
-  status: string
+  status: Status
 }
 interface ContractorCreatePayload extends ContractorFormPayload {}
 interface ContractorUpdatePayload extends ContractorFormPayload {
@@ -111,20 +113,7 @@ const Contractor: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {
-            id: 'active',
-            status: 'Active',
-          },
-          {
-            id: 'deleted',
-            status: 'Deleted',
-          },
-          {
-            id: 'pending_otp',
-            status: 'Pending OTP',
-          },
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'status',
@@ -158,20 +147,7 @@ const Contractor: React.FC = () => {
       {
         type: 'dropdown',
         label: 'status',
-        name: [
-          {
-            id: 'active',
-            status: 'Active',
-          },
-          {
-            id: 'deleted',
-            status: 'Deleted',
-          },
-          {
-            id: 'pending_otp',
-            status: 'Pending OTP',
-          },
-        ],
+        name: statuses,
         topLabel: 'Status',
         placeholder: 'Select Status',
         labelKey: 'status',
