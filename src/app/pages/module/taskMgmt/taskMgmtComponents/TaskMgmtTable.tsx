@@ -23,12 +23,12 @@ const TaskMgmtTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModal
             setSelectedData(item)
             setIsUpdateModalOpen(true)
           },
-          tooltip: 'Edit Task',
+          tooltip: 'Edit',
         },
         {
           icon: FaEye,
           linkPrefix: '/taskmgmt',
-          tooltip: 'View Task',
+          tooltip: 'View',
         },
       ],
     },

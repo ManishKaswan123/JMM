@@ -1,43 +1,27 @@
 import {FieldsArray} from 'sr/constants/fields'
-import {TaskTrackDetails, TaskTrackFilters} from './taskTrackInterfaces'
 import {applyFilterAndResetPagination, toggleModal} from 'sr/helpers/globalHelpers'
 import {Modals, PaginationType, QueryMutationReturnType} from 'sr/utils/api/globalInterface'
 import {statuses} from 'sr/constants/common'
 import {useMemo} from 'react'
+import {FeedbackDetails, FeedbackFilters} from './feedbackInterfaces'
 
-export const generateTaskTrackFields = (
-  stores: Record<string, any>
+export const generateFeedbackFields = (
 ): {createAndUpdateFields: FieldsArray; filterFields: FieldsArray} => {
-  const {workorderStore} = stores
-  const dropdowns = [
-    {
-      label: 'workorder_id',
-      topLabel: 'Workorder',
-      data: workorderStore.data,
-      key: 'workorder_name',
-    },
-  ].map(({label, topLabel, data, key}) => ({
-    type: 'dropdown',
-    label,
-    name: data,
-    topLabel,
-    placeholder: `Select ${topLabel}`,
-    labelKey: key,
-    id: 'id',
-    required: true,
-  }))
+  const fieldConfigs = [
+    {label: 'Contractor Rating', name: 'contractor_rating'},
+    {label: 'Contractor Feedback', name: 'contractor_feedback'},
+    {label: 'External Supervisor Rating', name: 'external_supervisor_rating'},
+    {label: 'External Supervisor Feedback', name: 'external_supervisor_feedback'},
+    {label: 'Internal Supervisor Rating', name: 'internal_supervisor_rating'},
+    {label: 'Internal Supervisor Feedback', name: 'internal_supervisor_feedback'},
+  ]
 
   const createAndUpdateFields = [
-    ...dropdowns,
-    ...['contractor_status', 'supervisor_status'].map((label) => ({
-      type: 'dropdown',
+    ...fieldConfigs.map(({label, name}) => ({
+      type: 'text',
       label,
-      name: statuses,
-      topLabel: label.replace('_', ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
-      placeholder: `Select ${label.replace('_', ' ')}`,
-      labelKey: 'name',
-      id: 'id',
-      required: true,
+      name,
+      placeholder: `Enter ${label}`,
     })),
     {
       type: 'dropdown',
@@ -46,31 +30,25 @@ export const generateTaskTrackFields = (
       topLabel: 'Status',
       placeholder: 'Select Status',
       labelKey: 'name',
-      required: true,
-    },
-    {
-      type: 'text',
-      label: 'Work Completion Time',
-      name: 'work_completion_time',
-      placeholder: 'Enter Work Completion Time',
-      required: true,
     },
   ]
-  const filterFields = createAndUpdateFields.map((field) => ({...field, required: false})) // Set required: false for all
+  const filterFields = createAndUpdateFields
+    .filter((field) => !field.label.includes('Feedback')) // Remove fields with 'Feedback'
+    .map((field) => ({...field, required: false})) // Set required: false for all
   return {createAndUpdateFields, filterFields}
 }
 
-export const handleApplyTaskTrackFilter = (
-  newFilters: TaskTrackFilters,
-  setFilters: React.Dispatch<React.SetStateAction<TaskTrackFilters>>,
+export const handleApplyFeedbackFilter = (
+  newFilters: FeedbackFilters,
+  setFilters: React.Dispatch<React.SetStateAction<FeedbackFilters>>,
   setPagination: React.Dispatch<React.SetStateAction<PaginationType>>,
   setModals: React.Dispatch<React.SetStateAction<Modals>>
 ) => {
-  applyFilterAndResetPagination<TaskTrackFilters>(newFilters, setFilters, setPagination)
+  applyFilterAndResetPagination<FeedbackFilters>(newFilters, setFilters, setPagination)
   toggleModal('filter', false, setModals)
 }
 
-export const handleCreateTaskTrack = (
+export const handleCreateFeedback = (
   payload: Record<string, any>,
   setModals: React.Dispatch<React.SetStateAction<Modals>>,
   createMutation: QueryMutationReturnType,
@@ -86,11 +64,11 @@ export const handleCreateTaskTrack = (
   })
 }
 
-export const handleEditTaskTrack = (
+export const handleEditFeedback = (
   payload: Record<string, any>,
   setModals: React.Dispatch<React.SetStateAction<Modals>>,
   updateMutation: QueryMutationReturnType,
-  selectedData: TaskTrackDetails | null,
+  selectedData: FeedbackDetails | null,
   setIsCreatingUpdating: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   if (selectedData === null) return toggleModal('update', false, setModals)
@@ -104,26 +82,26 @@ export const handleEditTaskTrack = (
   })
 }
 
-export const useTaskTrackModalConfig = (
+export const useFeedbackModalConfig = (
   setModals: React.Dispatch<React.SetStateAction<Modals>>,
   createMutation: QueryMutationReturnType,
   updateMutation: QueryMutationReturnType,
-  selectedData: TaskTrackDetails | null,
+  selectedData: FeedbackDetails | null,
   setIsCreatingUpdating: React.Dispatch<React.SetStateAction<boolean>>
 ) =>
   useMemo(
     () => [
       {
         key: 'create' as const,
-        label: 'Create TaskTrack',
+        label: 'Create Feedback',
         onSubmit: (payload: any) =>
-          handleCreateTaskTrack(payload, setModals, createMutation, setIsCreatingUpdating),
+          handleCreateFeedback(payload, setModals, createMutation, setIsCreatingUpdating),
       },
       {
         key: 'update' as const,
-        label: 'Update TaskList',
+        label: 'Update Feedback',
         onSubmit: (payload: any) =>
-          handleEditTaskTrack(
+          handleEditFeedback(
             payload,
             setModals,
             updateMutation,

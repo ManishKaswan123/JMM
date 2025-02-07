@@ -6,29 +6,29 @@ import Filter from 'sr/helpers/ui-components/Filter'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
-import {TaskMgmtDetails, TaskMgmtFilters} from '../taskMgmtInterfaces'
+import {FeedbackDetails, FeedbackFilters} from '../feedbackInterfaces'
 import {
-  useTaskMgmtDefaultValues,
-  useTaskMgmtFields,
-  useTaskMgmtMutations,
-  useTaskMgmtQuery,
-} from '../taskMgmtHooks'
+  useFeedbackDefaultValues,
+  useFeedbackFields,
+  useFeedbackMutations,
+  useFeedbackQuery,
+} from '../feedbackHooks'
 import {onLimitChange, onPageChange, toggleModal} from 'sr/helpers/globalHelpers'
-import {handleApplyTaskMgmtFilter, useTaskMgmtModalConfig} from '../taskMgmtHelpers'
-import TaskMgmtTable from './TaskMgmtTable'
-import {taskMgmtSkeletonTableColumns} from '../taskMgmtConstants'
+import {handleApplyFeedbackFilter, useFeedbackModalConfig} from '../feedbackHelpers'
+import FeedbackTable from './FeedbackTable'
+import {FeedbackSkeletonTableColumns} from '../feedbackConstants'
 
-const TaskMgmt: React.FC = () => {
-  const [selectedData, setSelectedData] = useState<TaskMgmtDetails | null>(null)
+const Feedback: React.FC = () => {
+  const [selectedData, setSelectedData] = useState<FeedbackDetails | null>(null)
   const [pagination, setPagination] = useState({currentPage: 1, itemsPerPage: 8})
-  const [filters, setFilters] = useState<TaskMgmtFilters>({})
+  const [filters, setFilters] = useState<FeedbackFilters>({})
   const [isCreatingUpdating, setIsCreatingUpdating] = useState(false)
   const [modals, setModals] = useState({create: false, update: false, filter: false})
-  const {createMutation, updateMutation} = useTaskMgmtMutations()
-  const {createAndUpdateFields, filterFields} = useTaskMgmtFields()
-  const {data, isLoading} = useTaskMgmtQuery({pagination, filters})
-  const defaultValues = useTaskMgmtDefaultValues(selectedData)
-  const modalConfig = useTaskMgmtModalConfig(
+  const {createMutation, updateMutation} = useFeedbackMutations()
+  const {createAndUpdateFields, filterFields} = useFeedbackFields()
+  const {data, isLoading} = useFeedbackQuery({pagination, filters})
+  const defaultValues = useFeedbackDefaultValues(selectedData)
+  const modalConfig = useFeedbackModalConfig(
     setModals,
     createMutation,
     updateMutation,
@@ -41,7 +41,7 @@ const TaskMgmt: React.FC = () => {
       <div className='container mx-auto px-4 sm:px-8'>
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
-            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>Task Mgmt</h2>
+            <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>Feedback</h2>
             <div className='flex items-center'>
               <Button
                 label='Create new'
@@ -62,8 +62,8 @@ const TaskMgmt: React.FC = () => {
           {modals.filter && (
             <div className='relative'>
               <Filter
-                onApplyFilter={(newFilters: TaskMgmtFilters) =>
-                  handleApplyTaskMgmtFilter(newFilters, setFilters, setPagination, setModals)
+                onApplyFilter={(newFilters: FeedbackFilters) =>
+                  handleApplyFeedbackFilter(newFilters, setFilters, setPagination, setModals)
                 }
                 setIsFilterVisible={(action: boolean) => toggleModal('filter', action, setModals)}
                 preFilters={filters}
@@ -72,9 +72,9 @@ const TaskMgmt: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonTable columns={taskMgmtSkeletonTableColumns} />
+            <SkeletonTable columns={FeedbackSkeletonTableColumns} />
           ) : (
-            <TaskMgmtTable
+            <FeedbackTable
               setSelectedData={setSelectedData}
               setIsUpdateModalOpen={(value: boolean) => toggleModal('update', value, setModals)}
               data={data?.data}
@@ -91,7 +91,7 @@ const TaskMgmt: React.FC = () => {
               onPageChange={(page) => {
                 onPageChange(page, setPagination)
               }}
-              name='TaskMgmt'
+              name='Feedback'
               onLimitChange={(limit) => {
                 onLimitChange(limit, setPagination)
               }}
@@ -118,4 +118,4 @@ const TaskMgmt: React.FC = () => {
   )
 }
 
-export default TaskMgmt
+export default Feedback

@@ -3,8 +3,6 @@ import {useNavigate} from 'react-router-dom'
 import SkeletonCard from 'sr/helpers/ui-components/SkeletonCard'
 import DetailCard from 'sr/helpers/ui-components/DetailCard'
 import {useFetchSingleTaskMgmt} from '../taskMgmtHooks'
-import {getStatusName} from 'sr/helpers/globalHelpers'
-import {Status} from 'sr/utils/api/globalInterface'
 
 const TaskMgmtDetailsCard: React.FC = () => {
   const navigate = useNavigate()

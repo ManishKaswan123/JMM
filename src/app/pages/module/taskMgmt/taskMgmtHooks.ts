@@ -21,7 +21,8 @@ import {useGenerateFields} from 'sr/helpers/globalHelpers'
 export const useTaskMgmtMutations = () => {
   const createMutation = useCreateTaskMgmt()
   const updateMutation = useUpdateTaskMgmt()
-  return {createMutation, updateMutation}
+
+  return useMemo(() => ({createMutation, updateMutation}), [createMutation, updateMutation])
 }
 
 export const useTaskMgmtStoreData = () => {
@@ -52,7 +53,7 @@ export const useTaskMgmtFields = () => {
 
   return useGenerateFields({
     stores,
-    generateFieldsFunction: generateTaskMgmtFields,
+    generateFieldsFunction: useCallback(generateTaskMgmtFields, []),
   })
 }
 export const useTaskMgmtQuery = (props: UseTaskMgmtQueryProps) =>

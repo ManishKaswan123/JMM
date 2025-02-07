@@ -32,7 +32,6 @@ export const useApiMutation = (
   queryKey?: string // Optional: Only required if we need to invalidate cache
 ): QueryMutationReturnType => {
   const queryClient = useQueryClient()
-
   return useMutation<boolean, Error, QueryPayloadVariables>({
     mutationFn: async ({payload, onSuccess}) => {
       try {

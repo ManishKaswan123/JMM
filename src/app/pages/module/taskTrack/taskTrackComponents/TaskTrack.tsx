@@ -14,7 +14,7 @@ import {
   useTaskTrackQuery,
 } from '../taskTrackHooks'
 import {onLimitChange, onPageChange, toggleModal} from 'sr/helpers/globalHelpers'
-import {handleApplyTaskTrackFilter, taskTrackModalConfig} from '../taskTrackHelpers'
+import {handleApplyTaskTrackFilter, useTaskTrackModalConfig} from '../taskTrackHelpers'
 import TaskTrackTable from './TaskTrackTable'
 import {taskTrackSkeletonTableColumns} from '../taskTrackConstants'
 
@@ -28,7 +28,7 @@ const TaskTrack: React.FC = () => {
   const {createAndUpdateFields, filterFields} = useTaskTrackFields()
   const {data, isLoading} = useTaskTrackQuery({pagination, filters})
   const defaultValues = useTaskTrackDefaultValues(selectedData)
-  const modalConfig = taskTrackModalConfig(
+  const modalConfig = useTaskTrackModalConfig(
     setModals,
     createMutation,
     updateMutation,

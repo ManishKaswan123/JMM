@@ -1,4 +1,7 @@
 // import TestMultiSelect from 'app/pages/module/test/Test'
+
+import Feedback from 'app/pages/module/feedback/feedbackComponents/Feedback'
+import FeedbackDetailsCard from 'app/pages/module/feedback/feedbackComponents/FeedbackDetails'
 import {lazy} from 'react'
 const TaskTrackDetailsCard = lazy(
   () => import('app/pages/module/taskTrack/taskTrackComponents/TaskTrackDetails')
@@ -147,5 +150,7 @@ export const routeConfigs = [
   {path: '/user/address/:userId', element: <Address />},
   {path: '/application', element: <Application />},
   {path: '/application/:id', element: <ApplicationDetailsCard />},
+  {path: '/feedback', element: <Feedback />},
+  {path: '/feedback/:id', element: <FeedbackDetailsCard />},
   // {path: '/test', element: <TestMultiSelect />},
 ]

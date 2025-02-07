@@ -3,11 +3,11 @@ import {TaskMgmtDetails, TaskMgmtFilters} from './taskMgmtInterfaces'
 import {applyFilterAndResetPagination, toggleModal} from 'sr/helpers/globalHelpers'
 import {Modals, PaginationType, QueryMutationReturnType} from 'sr/utils/api/globalInterface'
 import {statuses} from 'sr/constants/common'
+import {useMemo} from 'react'
 
 export const generateTaskMgmtFields = (
-  stores: Record<string, any>,
-  isFilter = false
-): FieldsArray => {
+  stores: Record<string, any>
+): {createAndUpdateFields: FieldsArray; filterFields: FieldsArray} => {
   const {workorderStore, taskStore} = stores
   const dropdowns = [
     {
@@ -25,10 +25,10 @@ export const generateTaskMgmtFields = (
     placeholder: `Select ${topLabel}`,
     labelKey: key,
     id: 'id',
-    required: !isFilter,
+    required: true,
   }))
 
-  return [
+  const createAndUpdateFields = [
     ...dropdowns,
     ...['contractor_status', 'supervisor_status'].map((label) => ({
       type: 'dropdown',
@@ -38,7 +38,7 @@ export const generateTaskMgmtFields = (
       placeholder: `Select ${label.replace('_', ' ')}`,
       labelKey: 'name',
       id: 'id',
-      required: !isFilter,
+      required: true,
     })),
     {
       type: 'dropdown',
@@ -47,9 +47,11 @@ export const generateTaskMgmtFields = (
       topLabel: 'Status',
       placeholder: 'Select Status',
       labelKey: 'name',
-      required: !isFilter,
+      required: true,
     },
   ]
+  const filterFields = createAndUpdateFields.map((field) => ({...field, required: false})) // Set required: false for all
+  return {createAndUpdateFields, filterFields}
 }
 
 export const handleApplyTaskMgmtFilter = (
@@ -96,23 +98,33 @@ export const handleEditTaskMgmt = (
   })
 }
 
-export const taskMgmtModalConfig = (
+export const useTaskMgmtModalConfig = (
   setModals: React.Dispatch<React.SetStateAction<Modals>>,
   createMutation: QueryMutationReturnType,
   updateMutation: QueryMutationReturnType,
   selectedData: TaskMgmtDetails | null,
   setIsCreatingUpdating: React.Dispatch<React.SetStateAction<boolean>>
-) => [
-  {
-    key: 'create' as const,
-    label: 'Create TaskMgmt',
-    onSubmit: (payload: any) =>
-      handleCreateTaskMgmt(payload, setModals, createMutation, setIsCreatingUpdating),
-  },
-  {
-    key: 'update' as const,
-    label: 'Update TaskList',
-    onSubmit: (payload: any) =>
-      handleEditTaskMgmt(payload, setModals, updateMutation, selectedData, setIsCreatingUpdating),
-  },
-]
+) =>
+  useMemo(
+    () => [
+      {
+        key: 'create' as const,
+        label: 'Create TaskMgmt',
+        onSubmit: (payload: any) =>
+          handleCreateTaskMgmt(payload, setModals, createMutation, setIsCreatingUpdating),
+      },
+      {
+        key: 'update' as const,
+        label: 'Update TaskList',
+        onSubmit: (payload: any) =>
+          handleEditTaskMgmt(
+            payload,
+            setModals,
+            updateMutation,
+            selectedData,
+            setIsCreatingUpdating
+          ),
+      },
+    ],
+    [setModals, createMutation, updateMutation, selectedData, setIsCreatingUpdating]
+  )

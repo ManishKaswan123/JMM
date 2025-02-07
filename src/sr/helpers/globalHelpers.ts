@@ -1,6 +1,7 @@
 import {InvalidateQueryFilters, QueryClient} from '@tanstack/react-query'
 import {useMemo} from 'react'
-import { statuses } from 'sr/constants/common'
+import {statuses} from 'sr/constants/common'
+import {FieldsArray} from 'sr/constants/fields'
 import {Modals, PaginationType, Status} from 'sr/utils/api/globalInterface'
 
 // Helper function for filtering payload
@@ -49,20 +50,16 @@ export const applyFilterAndResetPagination = <
   setPagination((prev) => ({...prev, currentPage: 1})) // Reset to page 1 when filters are applied
 }
 
-interface UseGenerateFieldsProps<T> {
+interface UseGenerateFieldsProps {
   stores: Record<string, any> // Store slices dynamically
-  generateFieldsFunction: (storeData: Record<string, any>, isFilter?: boolean) => T
+  generateFieldsFunction: (storeData: Record<string, any>) => {
+    createAndUpdateFields: FieldsArray
+    filterFields: FieldsArray
+  }
 }
 
-export const useGenerateFields = <T>({
-  stores,
-  generateFieldsFunction,
-}: UseGenerateFieldsProps<T>) => {
-  const createAndUpdateFields = useMemo(() => generateFieldsFunction(stores, false), [stores])
-
-  const filterFields = useMemo(() => generateFieldsFunction(stores, true), [stores])
-
-  return {createAndUpdateFields, filterFields}
+export const useGenerateFields = ({stores, generateFieldsFunction}: UseGenerateFieldsProps) => {
+  return useMemo(() => generateFieldsFunction(stores), [stores, generateFieldsFunction])
 }
 // Function to get the display name for the status
 export const getStatusName = (statusId: Status) => {

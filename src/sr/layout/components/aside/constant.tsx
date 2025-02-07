@@ -129,6 +129,11 @@ export const normalMenuItems = [
     path: '/message',
     iconPath: 'M6 5h12M6 10h12M6 15h8M6 20h4',
   },
+  {
+    label: 'Feedback',
+    path: '/feedback',
+    iconPath: 'M6 5h12M6 10h12M6 15h8M6 20h4',
+  },
 
   // Add other menu items here
 ]

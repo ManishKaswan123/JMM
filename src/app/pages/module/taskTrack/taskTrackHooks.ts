@@ -21,7 +21,7 @@ import {useGenerateFields} from 'sr/helpers/globalHelpers'
 export const useTaskTrackMutations = () => {
   const createMutation = useCreateTaskTrack()
   const updateMutation = useUpdateTaskTrack()
-  return {createMutation, updateMutation}
+  return useMemo(() => ({createMutation, updateMutation}), [createMutation, updateMutation])
 }
 
 export const useTaskTrackStoreData = () => {
@@ -50,7 +50,7 @@ export const useTaskTrackFields = () => {
 
   return useGenerateFields({
     stores,
-    generateFieldsFunction: generateTaskTrackFields,
+    generateFieldsFunction: useCallback(generateTaskTrackFields, []),
   })
 }
 export const useTaskTrackQuery = (props: UseTaskTrackQueryProps) =>

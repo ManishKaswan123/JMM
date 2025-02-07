@@ -117,7 +117,7 @@ const DynamicModal: React.FC<DynamicModalProps> = ({
       setUploading(false)
     }
   }
-
+  console.log('rerendering DynamicModal')
   const onSubmitForm: SubmitHandler<any> = async (formData: FormData) => {
     await onSubmit({
       ...formData,
