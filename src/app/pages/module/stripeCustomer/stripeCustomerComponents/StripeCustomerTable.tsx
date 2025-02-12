@@ -27,7 +27,8 @@ const StripeCustomerTable: React.FC<Props> = ({data, setSelectedData, setIsUpdat
         },
         {
           icon: FaEye,
-          linkPrefix: '/stripecustomer',
+          linkPrefix: '/stripecustomer/details',
+          key: 'stripe_customer_id',
           tooltip: 'View',
         },
       ],

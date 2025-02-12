@@ -49,7 +49,7 @@ export interface StripCustomerFormData {
 }
 // API Response Types
 export type FetchStripeCustomerResponse = JmmApiResponse<StripeCustomerDetails[]>
-export type FetchSingleStripeCustomerResponse = JmmApiResponse<StripeCustomerDetails>
+export type FetchSingleStripeCustomerResponse = JmmApiResponse<StripeCustomerDetails[]>
 
 export interface StripeCustomerFilters {
   limit?: number

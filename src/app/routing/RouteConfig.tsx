@@ -1,6 +1,10 @@
 // import TestMultiSelect from 'app/pages/module/test/Test'
 
 import {lazy} from 'react'
+const StripeCard = lazy(
+  () => import('app/pages/module/stripeCards/stripeCardComponents/StripeCard')
+)
+
 const Feedback = lazy(() => import('app/pages/module/feedback/feedbackComponents/Feedback'))
 const FeedbackDetailsCard = lazy(
   () => import('app/pages/module/feedback/feedbackComponents/FeedbackDetails')
@@ -161,6 +165,7 @@ export const routeConfigs = [
   {path: '/feedback', element: <Feedback />},
   {path: '/feedback/:id', element: <FeedbackDetailsCard />},
   {path: '/stripecustomer', element: <StripeCustomer />},
-  {path: '/stripecustomer/:id', element: <StripeCustomerDetailsCard />},
+  {path: '/stripecustomer/details/:stripe_customer_id', element: <StripeCustomerDetailsCard />},
+  {path: '/stripecustomer/card/:stripe_customer_id', element: <StripeCard />},
   // {path: '/test', element: <TestMultiSelect />},
 ]

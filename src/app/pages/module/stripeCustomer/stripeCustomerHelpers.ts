@@ -36,11 +36,20 @@ export const generateStripeCustomerFields = (
       required: true,
     },
   ]
-  const filterFields = createAndUpdateFields
-    .map((field) => ({...field, required: false}))
-    .filter((field) => {
-      return field.label === 'type'
-    }) // Set required: false for all
+
+  const filterFields = [
+    ...createAndUpdateFields
+      .map((field) => ({...field, required: false}))
+      .filter((field) => field.label === 'type'), // Ensure label is matched correctly
+    {
+      type: 'text',
+      label: 'Stripe Customer ID',
+      name: 'stripe_customer_id',
+      placeholder: 'Stripe Customer ID',
+      required: false,
+    },
+  ]
+
   return {createAndUpdateFields, filterFields}
 }
 

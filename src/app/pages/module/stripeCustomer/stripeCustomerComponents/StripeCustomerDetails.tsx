@@ -22,14 +22,14 @@ const StripeCustomerDetailsCard: React.FC = () => {
 
   const details = [
     [
-      {label: 'ID', value: data._id},
-      {label: 'CleanPig Id', value: data.cleanpig_id},
-      {label: 'Type', value: data.type},
+      {label: 'ID', value: data[0]._id},
+      {label: 'CleanPig Id', value: data[0].cleanpig_id},
+      {label: 'Type', value: data[0].type},
     ],
     [
-      {label: 'Stripe Customer Id', value: data.stripe_customer_id},
-      {label: 'Created At', value: new Date(data.createdAt).toLocaleString()},
-      {label: 'Updated At', value: new Date(data.updatedAt).toLocaleString()},
+      {label: 'Stripe Customer Id', value: data[0].stripe_customer_id},
+      {label: 'Created At', value: new Date(data[0].createdAt).toLocaleString()},
+      {label: 'Updated At', value: new Date(data[0].updatedAt).toLocaleString()},
     ],
   ]
 

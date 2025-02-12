@@ -9,7 +9,8 @@ import {
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query'
 import {toast} from 'react-toastify'
 import {useParams} from 'react-router-dom'
-import {useEffect, useState} from 'react'
+import {useContext, useEffect, useState} from 'react'
+import {UserContext} from 'sr/context/UserContext'
 
 export const apiService = async <T>(
   endpoint: string,
@@ -73,10 +74,16 @@ export const useApiQuery = <T>({
 }
 interface UseFetchSingleItemProps<U> {
   fetchFunction: (id: string) => Promise<U>
+  key?: string
 }
 
-export const useFetchSingleItem = <T, U>({fetchFunction}: UseFetchSingleItemProps<U>) => {
-  const {id} = useParams<{id: string}>()
+export const useFetchSingleItem = <T, U>({
+  fetchFunction,
+  key = 'id',
+}: UseFetchSingleItemProps<U>) => {
+  const {setUser} = useContext(UserContext)
+  const params = useParams<{[key: string]: string}>()
+  const id = params[key]
   const [data, setData] = useState<T | null>(null)
   const [isError, setIsError] = useState(false)
 
@@ -85,6 +92,7 @@ export const useFetchSingleItem = <T, U>({fetchFunction}: UseFetchSingleItemProp
     fetchFunction(id)
       .then((res) => setData((res as any).data))
       .catch(() => setIsError(true))
+    setUser(id)
   }, [id, fetchFunction])
 
   return {data, isError}

@@ -7,12 +7,13 @@ interface TableAction<T> {
   onClick?: (item: T) => void
   linkPrefix?: string
   tooltip?: string
+  key?: string
 }
 
 interface TableColumn<T> {
   label: string
   key: keyof T
-  nestedKey?: keyof T
+  nestedKey?: any // New: Support for nested keys
   linkProps?: {
     isLink: boolean
     linkPrefix: string
@@ -96,7 +97,9 @@ const GlobalTable = <T,>({data, columns}: TableProps<T>) => {
                         action.linkPrefix ? (
                           <Link
                             key={actionIndex}
-                            to={`${action.linkPrefix}/${(item as any).id || (item as any)._id}`}
+                            to={`${action.linkPrefix}/${
+                              (item as any)[action.key as keyof T] || (item as any)._id
+                            }`}
                             title={action.tooltip}
                           >
                             <action.icon className='cursor-pointer text-blue-500 hover:text-gray-700 h-4 w-4' />

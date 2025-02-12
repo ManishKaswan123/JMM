@@ -13,7 +13,9 @@ export const fetchStripeCustomer = (
 
 // Fetch Single Task Management Entry
 export const fetchSingleStripeCustomer = (id: string): Promise<FetchSingleStripeCustomerResponse> =>
-  apiService<FetchSingleStripeCustomerResponse>('/stripepayments/customer', {id})
+  apiService<FetchSingleStripeCustomerResponse>('/stripepayments/customer', {
+    stripe_customer_id: id,
+  })
 
 // Create Task Management Hook
 export const useCreateStripeCustomer = (): QueryMutationReturnType =>

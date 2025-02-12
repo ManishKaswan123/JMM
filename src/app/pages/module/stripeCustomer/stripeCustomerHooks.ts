@@ -39,8 +39,9 @@ export const useStripeCustomerQuery = (props: UseStripeCustomerQueryProps) =>
   })
 
 export const useFetchSingleStripeCustomer = () =>
-  useFetchSingleItem<StripeCustomerDetails, FetchSingleStripeCustomerResponse>({
+  useFetchSingleItem<StripeCustomerDetails[], FetchSingleStripeCustomerResponse>({
     fetchFunction: fetchSingleStripeCustomer,
+    key: 'stripe_customer_id',
   })
 
 export const useStripeCustomerDefaultValues = (selectedData: StripeCustomerDetails | null) => {
