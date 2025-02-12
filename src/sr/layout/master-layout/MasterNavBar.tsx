@@ -5,6 +5,7 @@ import {
   companyNavItems,
   contractorNavItems,
   customerNavItems,
+  stripeNavItems,
   userNavItems,
 } from '../components/header/NavbarItems'
 import {useUrlItems} from 'sr/utils/helpers/useUrlItems'
@@ -30,6 +31,9 @@ export default function MasterNavBar() {
       )}
       {urlItems.length > 2 && urlItems[0] === 'contractor' && (
         <NavBar onGoBack={() => navigate('/contractor')} navItems={contractorNavItems} />
+      )}
+      {urlItems.length > 2 && urlItems[0] === 'stripecustomer' && (
+        <NavBar onGoBack={() => navigate('/stripecustomer')} navItems={stripeNavItems} />
       )}
       {/* End Navbar */}
     </>

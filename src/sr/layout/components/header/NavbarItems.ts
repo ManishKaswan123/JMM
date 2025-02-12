@@ -209,3 +209,18 @@ export const contractorNavItems: NavItem[] = [
     iconPath: 'M12 4v16m8-8H4', // Plus icon
   },
 ]
+export const stripeNavItems: NavItem[] = [
+  {
+    label: 'Details',
+    path: 'stripecustomer/details',
+    name: 'details',
+    iconPath: 'M12 4v16m8-8H4', // Plus icon
+  },
+  {
+    label: 'Stripe Card',
+    path: 'stripecustomer/card',
+    name: 'card',
+    iconPath: 'M12 4v16m8-8H4', // Plus icon
+  },
+ 
+]

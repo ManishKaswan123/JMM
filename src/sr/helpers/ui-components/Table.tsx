@@ -7,11 +7,13 @@ interface TableAction<T> {
   onClick?: (item: T) => void
   linkPrefix?: string
   tooltip?: string
+  key?: string
 }
 
 interface TableColumn<T> {
   label: string
   key: keyof T
+  nestedKey?: any // New: Support for nested keys
   linkProps?: {
     isLink: boolean
     linkPrefix: string
@@ -52,7 +54,12 @@ const GlobalTable = <T,>({data, columns}: TableProps<T>) => {
                 let cellContent: React.ReactNode
 
                 // Ensure the value is safe for rendering
-                const value = item[col.key]
+                let value = item[col.key]
+                // If a nestedKey exists, extract the nested value
+                if (col.nestedKey && typeof value === 'object') {
+                  value = (value as any)[col.nestedKey] // Access nested field
+                }
+
                 if (value === undefined || value === null) {
                   cellContent = ''
                 } else if (typeof value === 'object' && !col.linkProps?.isLink) {
@@ -90,7 +97,9 @@ const GlobalTable = <T,>({data, columns}: TableProps<T>) => {
                         action.linkPrefix ? (
                           <Link
                             key={actionIndex}
-                            to={`${action.linkPrefix}/${(item as any).id}`}
+                            to={`${action.linkPrefix}/${
+                              (item as any)[action.key as keyof T] || (item as any)._id
+                            }`}
                             title={action.tooltip}
                           >
                             <action.icon className='cursor-pointer text-blue-500 hover:text-gray-700 h-4 w-4' />
