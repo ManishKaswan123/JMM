@@ -2,7 +2,9 @@ import {InvalidateQueryFilters, QueryClient} from '@tanstack/react-query'
 import {useMemo} from 'react'
 import {statuses} from 'sr/constants/common'
 import {FieldsArray} from 'sr/constants/fields'
+import {pathSet} from 'sr/layout/components/aside/constant'
 import {Modals, PaginationType, Status} from 'sr/utils/api/globalInterface'
+import {useUrlItems} from 'sr/utils/helpers/useUrlItems'
 
 // Helper function for filtering payload
 export const filterPayload = (payload: Record<string, any>) =>
@@ -64,4 +66,8 @@ export const useGenerateFields = ({stores, generateFieldsFunction}: UseGenerateF
 // Function to get the display name for the status
 export const getStatusName = (statusId: Status) => {
   return statuses.find((status) => status.id === statusId)?.name || statusId
+}
+export const useIsMasterInUse = () => {
+  const urlItems = useUrlItems()
+  return useMemo(() => pathSet.has(urlItems[0]), [urlItems])
 }

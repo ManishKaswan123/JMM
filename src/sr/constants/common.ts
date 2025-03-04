@@ -39,7 +39,7 @@ export const WEBSITE_NAME = 'EightySixUI'
 export const WEBSITE_URL = 'https://abc.com'
 export const statuses: {name: string; id: Status}[] = [
   {name: 'Active', id: 'active'},
-  {name: 'Active', id: 'ACTIVE'},
+  {name: 'ACTIVE', id: 'ACTIVE'},
   {name: 'In Progress', id: 'in progress'},
   {name: 'Publish', id: 'publish'},
   {name: 'Draft', id: 'draft'},

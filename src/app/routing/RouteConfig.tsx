@@ -1,5 +1,7 @@
 // import TestMultiSelect from 'app/pages/module/test/Test'
 
+import FabricTxn from 'app/pages/module/fabricTxn/fabricTxnComponents/FabricTxn'
+import FabricTxnDetailsCard from 'app/pages/module/fabricTxn/fabricTxnComponents/FabricTxnDetails'
 import {lazy} from 'react'
 
 const WalletDetailsCard = lazy(
@@ -175,5 +177,7 @@ export const routeConfigs = [
   {path: '/stripecustomer/card/:stripe_customer_id', element: <StripeCard />},
   {path: '/wallet', element: <Wallet />},
   {path: '/wallet/:id', element: <WalletDetailsCard />},
+  {path: '/fabrictxn', element: <FabricTxn />},
+  {path: '/fabrictxn/:id', element: <FabricTxnDetailsCard />},
   // {path: '/test', element: <TestMultiSelect />},
 ]

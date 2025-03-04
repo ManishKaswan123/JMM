@@ -10,6 +10,7 @@ export const fetchTaskData = createAsyncThunk('task/fetchTaskData', async (paylo
     data.push({
       task_name: task.name,
       id: task.id,
+      
     })
   })
   return {

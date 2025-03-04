@@ -6,46 +6,42 @@ import Filter from 'sr/helpers/ui-components/Filter'
 import DynamicModal from 'sr/helpers/ui-components/DynamicPopUpModal'
 import PaginationSkeleton from 'sr/helpers/ui-components/dashboardComponents/PaginationSkeleton'
 import SkeletonTable from 'sr/helpers/ui-components/SkeletonTable'
-import {StripeCustomerDetails, StripeCustomerFilters} from '../stripeCustomerInterfaces'
+import {FabricTxnDetails, FabricTxnFilters} from '../fabricTxnInterfaces'
 import {
-  useStripeCustomerDefaultValues,
-  useStripeCustomerFields,
-  useStripeCustomerMutations,
-  useStripeCustomerQuery,
-} from '../stripeCustomerHooks'
+  useFabricTxnDefaultValues,
+  useFabricTxnFields,
+  useFabricTxnMutations,
+  useFabricTxnQuery,
+} from '../fabricTxnHooks'
 import {onLimitChange, onPageChange, toggleModal} from 'sr/helpers/globalHelpers'
-import {
-  handleApplyStripeCustomerFilter,
-  useStripeCustomerModalConfig,
-} from '../stripeCustomerHelpers'
-import {StripeCustomerSkeletonTableColumns} from '../stripeCustomerConstants'
-import StripeCustomerTable from './StripeCustomerTable'
+import {handleApplyFabricTxnFilter, useFabricTxnModalConfig} from '../fabricTxnHelpers'
+import FabricTxnTable from './FabricTxnTable'
+import {fabricTxnSkeletonTableColumns} from '../fabricTxnConstants'
 
-const StripeCustomer: React.FC = () => {
-  const [selectedData, setSelectedData] = useState<StripeCustomerDetails | null>(null)
+const FabricTxn: React.FC = () => {
+  const [selectedData, setSelectedData] = useState<FabricTxnDetails | null>(null)
   const [pagination, setPagination] = useState({currentPage: 1, itemsPerPage: 8})
-  const [filters, setFilters] = useState<StripeCustomerFilters>({})
+  const [filters, setFilters] = useState<FabricTxnFilters>({})
   const [isCreatingUpdating, setIsCreatingUpdating] = useState(false)
   const [modals, setModals] = useState({create: false, update: false, filter: false})
-  const {createMutation, updateMutation} = useStripeCustomerMutations()
-  const {createAndUpdateFields, filterFields} = useStripeCustomerFields()
-  const {data, isLoading} = useStripeCustomerQuery({pagination, filters})
-  const defaultValues = useStripeCustomerDefaultValues(selectedData)
-  const modalConfig = useStripeCustomerModalConfig(
+  const {createMutation, updateMutation} = useFabricTxnMutations()
+  const {createAndUpdateFields, filterFields} = useFabricTxnFields()
+  const {data, isLoading} = useFabricTxnQuery({pagination, filters})
+  const defaultValues = useFabricTxnDefaultValues(selectedData)
+  const modalConfig = useFabricTxnModalConfig(
     setModals,
     createMutation,
     updateMutation,
     selectedData,
     setIsCreatingUpdating
   )
-
   return (
     <>
       <div className='container mx-auto px-4 sm:px-8'>
         <div className='py-4'>
           <div className='flex justify-between items-center flex-wrap mb-4'>
             <h2 className='text-2xl font-semibold leading-tight mb-2 sm:mb-0 sm:mr-4'>
-              Stripe Customer
+              Fabric Wallet Txn
             </h2>
             <div className='flex items-center'>
               <Button
@@ -67,8 +63,8 @@ const StripeCustomer: React.FC = () => {
           {modals.filter && (
             <div className='relative'>
               <Filter
-                onApplyFilter={(newFilters: StripeCustomerFilters) =>
-                  handleApplyStripeCustomerFilter(newFilters, setFilters, setPagination, setModals)
+                onApplyFilter={(newFilters: FabricTxnFilters) =>
+                  handleApplyFabricTxnFilter(newFilters, setFilters, setPagination, setModals)
                 }
                 setIsFilterVisible={(action: boolean) => toggleModal('filter', action, setModals)}
                 preFilters={filters}
@@ -77,9 +73,9 @@ const StripeCustomer: React.FC = () => {
             </div>
           )}
           {isLoading ? (
-            <SkeletonTable columns={StripeCustomerSkeletonTableColumns} />
+            <SkeletonTable columns={fabricTxnSkeletonTableColumns} />
           ) : (
-            <StripeCustomerTable
+            <FabricTxnTable
               setSelectedData={setSelectedData}
               setIsUpdateModalOpen={(value: boolean) => toggleModal('update', value, setModals)}
               data={data?.data}
@@ -96,7 +92,7 @@ const StripeCustomer: React.FC = () => {
               onPageChange={(page) => {
                 onPageChange(page, setPagination)
               }}
-              name='StripeCustomer'
+              name='FabricTxn'
               onLimitChange={(limit) => {
                 onLimitChange(limit, setPagination)
               }}
@@ -123,4 +119,4 @@ const StripeCustomer: React.FC = () => {
   )
 }
 
-export default StripeCustomer
+export default FabricTxn

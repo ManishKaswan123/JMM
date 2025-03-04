@@ -102,10 +102,10 @@ export default function Signin() {
               required={true}
               id='password'
               name='password'
-              minLength={8}
+              // minLength={8}
               register={register('password', {
                 required: 'Password is required',
-                minLength: {value: 8, message: 'Password must be at least 8 characters long'},
+                // minLength: {value: 8, message: 'Password must be at least 8 characters long'},
                 // pattern: {
                 //   value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
                 //   message:
