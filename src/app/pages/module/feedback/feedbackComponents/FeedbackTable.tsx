@@ -29,6 +29,7 @@ const FeedbackTable: React.FC<Props> = ({data, setSelectedData, setIsUpdateModal
           icon: FaEye,
           linkPrefix: '/Feedback',
           tooltip: 'View',
+          key: 'id',
         },
       ],
     },

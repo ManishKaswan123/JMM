@@ -55,13 +55,23 @@ export const masterMenuItems: {label: string; path: string; iconPath: string}[] 
     iconPath: 'M9 17v-2a4 4 0 00-8 0v2h8zm13 0v-2a4 4 0 00-8 0v2h8zm-13 4h8m-8-2h8m0-2H6',
   },
 ]
+/**
+ * An array of objects representing the menu items for the application.
+ * Each menu item contains the following properties:
+ *
+ * @property {string} label - The display name of the menu item.
+ * @property {string} path - The URL path to navigate to when the menu item is clicked.
+ * @property {string} iconPath - The SVG path data for the icon associated with the menu item.
+ *
+ * Example usage:
+ *
+ * ```typescript
+ * const menuItems = normalMenuItems.map(item => (
+ *   <MenuItem key={item.path} label={item.label} path={item.path} iconPath={item.iconPath} />
+ * ));
+ * ```
+ */
 export const normalMenuItems = [
-  // {
-  //   label: 'Test',
-  //   path: '/test',
-  //   iconPath:
-  //     'M17 9V7a4 4 0 00-8 0v2M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z',
-  // },
   {
     label: 'Individuals',
     path: '/user',
@@ -131,6 +141,18 @@ export const normalMenuItems = [
       'M4 2h12a2 2 0 012 2v16a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2zm0 2v16h12V4H4zm9 6a1 1 0 100-2 1 1 0 000 2zM6 5h6v1H6V5zm0 3h6v1H6V8zm0 3h6v1H6v-1zm8.5 8.793l3.207-3.207a1 1 0 000-1.414l-2-2a1 1 0 00-1.414 0l-3.207 3.207L14.5 18.793zM16 19.5V21h1.5l3.207-3.207-1.5-1.5L16 19.5z',
   },
   {
+    label: 'Fabric Wallet',
+    path: '/wallet',
+    iconPath:
+      'M4 2h12a2 2 0 012 2v16a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2zm0 2v16h12V4H4zm9 6a1 1 0 100-2 1 1 0 000 2zM6 5h6v1H6V5zm0 3h6v1H6V8zm0 3h6v1H6v-1zm8.5 8.793l3.207-3.207a1 1 0 000-1.414l-2-2a1 1 0 00-1.414 0l-3.207 3.207L14.5 18.793zM16 19.5V21h1.5l3.207-3.207-1.5-1.5L16 19.5z',
+  },
+  {
+    label: 'Fabric Wallet Txn',
+    path: '/fabrictxn',
+    iconPath:
+      'M4 2h12a2 2 0 012 2v16a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2zm0 2v16h12V4H4zm9 6a1 1 0 100-2 1 1 0 000 2zM6 5h6v1H6V5zm0 3h6v1H6V8zm0 3h6v1H6v-1zm8.5 8.793l3.207-3.207a1 1 0 000-1.414l-2-2a1 1 0 00-1.414 0l-3.207 3.207L14.5 18.793zM16 19.5V21h1.5l3.207-3.207-1.5-1.5L16 19.5z',
+  },
+  {
     label: 'Messages',
     path: '/message',
     iconPath: 'M6 5h12M6 10h12M6 15h8M6 20h4',
@@ -143,3 +165,4 @@ export const normalMenuItems = [
 
   // Add other menu items here
 ]
+export const pathSet = new Set(masterMenuItems.map(({path}) => path.replace(/\//g, '')))

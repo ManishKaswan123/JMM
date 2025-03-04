@@ -33,6 +33,7 @@ export interface UseApiQueryProps<T> {
 }
 export type Status =
   | 'active'
+  | 'ACTIVE'
   | 'in progress'
   | 'publish'
   | 'completed'

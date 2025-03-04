@@ -1,6 +1,14 @@
 // import TestMultiSelect from 'app/pages/module/test/Test'
 
+import FabricTxn from 'app/pages/module/fabricTxn/fabricTxnComponents/FabricTxn'
+import FabricTxnDetailsCard from 'app/pages/module/fabricTxn/fabricTxnComponents/FabricTxnDetails'
 import {lazy} from 'react'
+
+const WalletDetailsCard = lazy(
+  () => import('app/pages/module/fabricWallet/walletComponents/WalletDetails')
+)
+const Wallet = lazy(() => import('app/pages/module/fabricWallet/walletComponents/Wallet'))
+
 const StripeCard = lazy(
   () => import('app/pages/module/stripeCards/stripeCardComponents/StripeCard')
 )
@@ -167,5 +175,9 @@ export const routeConfigs = [
   {path: '/stripecustomer', element: <StripeCustomer />},
   {path: '/stripecustomer/details/:stripe_customer_id', element: <StripeCustomerDetailsCard />},
   {path: '/stripecustomer/card/:stripe_customer_id', element: <StripeCard />},
+  {path: '/wallet', element: <Wallet />},
+  {path: '/wallet/:id', element: <WalletDetailsCard />},
+  {path: '/fabrictxn', element: <FabricTxn />},
+  {path: '/fabrictxn/:id', element: <FabricTxnDetailsCard />},
   // {path: '/test', element: <TestMultiSelect />},
 ]

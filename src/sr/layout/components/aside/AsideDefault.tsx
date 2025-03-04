@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {Link, useLocation} from 'react-router-dom'
 import {MenuItem} from './MenuItem'
 import {masterMenuItems, normalMenuItems} from './constant'
+import {useIsMasterInUse} from 'sr/helpers/globalHelpers'
 
 type Props = {
   getScenarios?: any
@@ -10,6 +11,7 @@ type Props = {
 // import { useRouter } from "next/router";
 
 export default function AsideDefault({getScenarios, AdjustWidth}: Props) {
+  const isMasterInUse = useIsMasterInUse()
   const scenarios = getScenarios ? JSON.parse(getScenarios) : []
 
   // find current url
@@ -204,7 +206,11 @@ export default function AsideDefault({getScenarios, AdjustWidth}: Props) {
                       </svg>
 
                       {sideCollapseItem === 'show' ? (
-                        <span className='flex md:text-xs lg:text-sm uppercase py-3 font-semibold hover:text-rose-600 text-left text-gray-500'>
+                        <span
+                          className={`flex md:text-xs lg:text-sm uppercase py-3 font-semibold hover:text-rose-500 text-left text-${
+                            isMasterInUse ? 'rose-600' : 'gray-500'
+                          } `}
+                        >
                           Master Data
                         </span>
                       ) : (

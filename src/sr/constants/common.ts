@@ -39,6 +39,7 @@ export const WEBSITE_NAME = 'EightySixUI'
 export const WEBSITE_URL = 'https://abc.com'
 export const statuses: {name: string; id: Status}[] = [
   {name: 'Active', id: 'active'},
+  {name: 'ACTIVE', id: 'ACTIVE'},
   {name: 'In Progress', id: 'in progress'},
   {name: 'Publish', id: 'publish'},
   {name: 'Draft', id: 'draft'},
@@ -62,6 +63,7 @@ export const statuses: {name: string; id: Status}[] = [
 export const statusColors: Record<Status, string> = {
   active: 'text-green-600', // Indicates an active state (green for success/active)
   'in progress': 'text-yellow-600', // Ongoing process (yellow for progress)
+  ACTIVE: 'text-green-600', // Indicates an active state (green for success/active)
   publish: 'text-blue-600', // Published state (blue for information)
   draft: 'text-gray-500', // Draft state (gray for neutral/incomplete)
   completed: 'text-green-700', // Successfully completed (dark green for confirmation)
